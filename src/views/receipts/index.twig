@@ -1,0 +1,344 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <script>
+    var edited = false;
+    var currentUid = '{{currentUid}}';
+    $(function () {
+      $('.sampleInput').one('click', function () {
+        $(this).val('');
+      });
+      $('[name=day]').focus().change(function () {
+        $.post('/receipts/queryIsWeekend'
+          , {month: '{{month}}', day: $(this).val()}
+          , function (dat) {
+            $('#dayType').html(dat);
+          })
+      });
+      $('[name=type]').change(function () {
+        var type = $(this).val();
+        var $name = $('[name=scope]');
+        switch (type) {
+          case '저녁/휴일 식사비':
+          case '팀런치':
+          case '야근교통비':
+          case '동호회 지원비':
+            $name.val('개인비용').attr('disabled', 'disabled');
+            break;
+          case '업무차 식음료비':
+          case '업무차 교통비':
+          case '회식비':
+            $name.val('회사비용').attr('disabled', 'disabled');
+            break;
+          default:
+            $name.removeAttr('disabled');
+            break;
+        }
+      });
+      {% if editable %}
+      $('.receipt td[key]').each(function () {
+        var receiptid = $(this).parent().attr('receiptid');
+        var key = $(this).attr('key');
+        var submitdata = {receiptid: receiptid, key: key};
+        var args = {submitdata: submitdata};
+        if (key == 'cost') {
+          args['data'] = function (value, settings) {
+            return value.replace(/\D/gi, '');
+          };
+        }
+        else {
+          args['data'] = function (value) {
+            edited = true;
+            return value;
+          };
+        }
+
+
+        $(this).editable('/receipts/edit', args);
+      });
+      {% endif %}
+      $('select#js_super_edit')
+        .change(function () {
+          $.post('/usersession/superedit'
+            , {uid: $(this).val()}
+            , function (dat) {
+              if (dat == '1')
+                window.location.reload();
+              else
+                alert(dat);
+            }
+          );
+        })
+        .val(currentUid);
+      var $js_recipts_title = $('.js_recipts_title');
+      var text = $("select#js_super_edit option:selected").text();
+      if (text && text.length)
+        $js_recipts_title.text(text);
+    });
+    function receiptsPrint() {
+      if (edited) {
+        alert("수정된 내용이 있습니다.\n새로 고침 할테니, 다시 인쇄버튼을 눌러주세요");
+        location.reload();
+      }
+      else
+        window.print();
+    }
+  </script>
+{% endblock %}
+
+{% block body %}
+  <form
+    attrajax
+    data-aa-url='/receipts/add'
+    data-aa-datatype="text"
+    data-aa-method='post'
+    data-aa-success-if-result-is="1"
+    data-aa-onsuccess-msg="추가되었습니다"
+    data-aa-onsuccess="refresh"
+    data-aa-onfail-alert="true"
+    onsubmit="$('[name=scope]').removeAttr('disabled');"
+    >
+    <input type='hidden' name='month' value='{{ month }}'/>
+
+    <div class='receipts_info'>
+      <h2>[{{ month }}] <span class='js_recipts_title'>{{ user.name }}</span></h2>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <td colspan='9'>
+          <span>[{{ month }}] 영수증 목록 (<span class='js_recipts_title'>{{ user.name }}</span>)</span>
+				<span style='float:right'>
+					<a href='/receipts/index/{{ prevmonth }}' class='receipts_command'>전달</a>
+					<a href='/receipts/index/{{ nextmonth }}' class='receipts_command'>다음달</a>
+				</span>
+        </td>
+      </tr>
+      <tr>
+        <td>영수증번호</td>
+        <td>날짜</td>
+        <td>사용처</td>
+        <td>분류</td>
+        <td>용도</td>
+        <td>금액</td>
+        <td>지불방식</td>
+        <td>적요</td>
+        <td class='receipts_command'></td>
+      </tr>
+      </thead>
+      <tbody>
+      {% for key, receipt in receipts %}
+        <tr class='receipt' receiptid='{{ receipt.receiptid }}'>
+          <td>{{ key + 1 }}</td>
+          <td key='date'>{{ receipt.date }}</td>
+          <td key='title'>{{ receipt.title }}</td>
+          <td key='type'>{{ receipt.type }}</td>
+          <td key='scope'>{{ receipt.scope }}</td>
+          <td key='cost' align='right'>{{ receipt.cost | number_format }}원</td>
+          <td key='payment'>{{ receipt.payment }}</td>
+          <td key='note'>{{ receipt.note }}</td>
+          <td class='receipts_command'>
+            {% if editable %}
+              <input type='button' value='삭제'
+                     attrajax
+                     data-aa-url='/receipts/del/{{ receipt.receiptid }}'
+                     data-aa-confirm='정말 삭제하시겠습니까?'
+                     data-aa-datatype="text"
+                     data-aa-success-if-result-is="1"
+                     data-aa-onsuccess-msg="삭제되었습니다"
+                     data-aa-onsuccess="refresh"
+                     data-aa-onfail-alert="true"
+                />
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      {% if editable %}
+        <tr class='receipts_command'>
+          <td></td>
+          <td>
+            <input type='text' name='day' maxlength='2' size='2'/>일 <span id='dayType'></span>
+          </td>
+          <td><input type='text' name='title' value='웍앤박스' class='sampleInput' js_cookie_save/></td>
+          <td>
+            <select name='type' js_data_chosen>
+              <option value='저녁/휴일 식사비'/>
+              저녁/휴일 식사비
+              <option value='팀런치'/>
+              팀런치
+              <option value='야근교통비'/>
+              야근교통비
+              <option value='업무차 식음료비'/>
+              업무차 식음료비
+              <option value='업무차 교통비'/>
+              업무차 교통비
+              <option value='회식비'/>
+              회식비
+              <option value='동호회 지원비'/>
+              동호회 지원비
+              <option value='기타'/>
+              기타
+            </select>
+          </td>
+          <td>
+            <select name='scope' disabled='disabled'>
+              <option value='개인비용'/>
+              개인비용
+              <option value='회사비용'/>
+              회사비용
+            </select>
+          </td>
+          <td><input type='text' name='cost' js_number_format/>원</td>
+          <td>
+            <select name='payment' js_cookie_save js_data_chosen>
+              <option value='신용카드'/>
+              신용카드
+              <option value='직불/체크카드'/>
+              직불/체크카드
+              <option value='현금'/>
+              현금
+              <option value='현금영수증'/>
+              현금영수증
+              <option value='휴대폰 결제'/>
+              휴대폰 결제
+            </select>
+          </td>
+          <td><input type='text' name='note' value='저녁식사비' class='sampleInput'/></td>
+          <td>
+            <input type='submit' value='추가하기'/>
+          </td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </form>
+
+  <table>
+    <thead>
+    <tr>
+      <td colspan='{{ cols|length + 1 }}'>
+        [{{ month }}] 용도별 통계
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      {% for col, null in cols %}
+        <td>
+          {{ col }}
+        </td>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for row, costsWithCol in costs %}
+      <tr>
+        <td>{{ row }}</td>
+        {% for col, cost in costsWithCol %}
+          <td>
+            {{ cost.cost | number_format }} 원 ({{ cost.count }}건)
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <table>
+    <thead>
+    <tr>
+      <td colspan='2'>
+        [{{ month }}] 지불방식별 통계
+      </td>
+    </tr>
+    <tr>
+      <td>지불방식</td>
+      <td>금액</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for paymentCost in paymentCosts %}
+      <tr>
+        <td>{{ paymentCost.payment }}</td>
+        <td>{{ paymentCost.cost | number_format }} 원</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div id='receipts_notice'>
+	<pre>
+ [ 비고 ]
+
+ 1. 리디캐시 충전 내역은 [기타] – [개인비용] 으로 신청해주시고, 영수증 금액의 30% 금액을 기재해주세요.
+ 2. 리디캐시로 태블릿 PC를 구입한 경우라도 중복 지원이 가능합니다.
+ 3. [회식비]는 영수증에 참여 인원수와 참여자명을 모두 기재해주세요.
+ 4. [동호회 지원비]는 월 결제 금액의 80%를 기재해주세요.
+ 5. 지불방식, 적요 등 모든 입력 사항은 공란 없이 입력해주세요.
+
+
+ [ 사용법 ] 
+
+ 1. 이번달의 영수증을 모두 입력한 후
+ 2. 왼쪽에 표시되는 영수증 번호를, 영수증에 큼지막하게 기입
+ 3. 영수증들을 순서대로 A4용지에 부착
+ 4. 하단 인쇄버튼을 눌러서 나오는 화면을 인쇄(영수증의 겉표지용)
+ 5. 제출
+
+<b style='color:red'>
+  [ 수정기능 추가 됨 ]
+  - 가격을 클릭해보세요!
+  - 변경하세요!
+  - 엔터를 누르세요!
+</b>
+	</pre>
+    <div>
+      <input type="button" value=" 영수증 겉표지 인쇄! " onclick="receiptsPrint();return false;"/>
+    </div>
+    <br/>
+    {% if isSuperAdmin %}
+      <div>
+        <table>
+          <thead>
+          <tr>
+            <td>특수작업</td>
+            <td>실행</td>
+          <tr>
+          </thead>
+          <tr>
+            <td>
+              이번달 자료 모두 다운받기
+            </td>
+            <td>
+              <input type="button" value="받기"
+                     onclick="location.href='/receipts/download/{{ month }}'"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              이번년도 통계 다운받기
+            </td>
+            <td>
+              <input type="button" value="받기"
+                     onclick="location.href='/receipts/downloadYear/{{ month }}'"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              다른 사람 편집하기
+            </td>
+            <td>
+              <label>
+                <select id='js_super_edit' js_data_chosen style="width:100px">
+                  {% for user in allUsers %}
+                    <option value='{{ user.uid }}'>{{ user.name }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+            </td>
+          </tr>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,291 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <script type="text/javascript" src="/lib/dhtmlxScheduler/dhtmlxscheduler.js"></script>
+  <link rel="stylesheet" type="text/css" href="/lib/dhtmlxScheduler/dhtmlxscheduler.css"/>
+  {#<script type="text/javascript" src="/lib/dhtmlxScheduler/locale.js"></script>#}
+
+  <style type="text/css" media="screen">
+    html, body {
+      margin: 0px;
+      padding: 0px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .dhx_scale_holder_now.weekday, .dhx_scale_holder.weekday {
+      /*background-image: url(/lib/dhtmlxScheduler/common/week_bg.png);*/
+    }
+
+    .dhx_cal_event_cont_selected {
+      background-color: #9cc1db;
+      color: white;
+    }
+
+    .dhx_scale_hour_main {
+      float: left;
+      text-align: right;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .dhx_scale_hour_minute_cont {
+      float: left;
+      position: relative;
+      text-align: right;
+    }
+
+    .dhx_scale_hour_minute_top, .dhx_scale_hour_minute_bottom {
+      font-size: 10px;
+      padding-right: 5px;
+    }
+
+    .dhx_scale_hour_sep {
+      position: absolute;
+      height: 1px;
+      background-color: #8C929A;
+      right: 0;
+      top: 20px;
+      width: 20px;
+    }
+  </style>
+
+  <script type="text/javascript" charset="utf-8">
+    function init() {
+      scheduler.config.mark_now = true;
+      scheduler.config.time_step = 30;
+      scheduler.config.first_hour = 10;
+      scheduler.config.last_hour = 22;
+      scheduler.config.details_on_dblclick = false;
+      scheduler.config.mark_now = true;
+      scheduler.config.hour_size_px = 88;
+      scheduler.config.icons_select = ["icon_edit", "icon_delete"];
+
+      scheduler.templates.week_date_class = function (date, today) {
+        if (date.getDay() == 0 || date.getDay() == 6)
+          return "weekday";
+        return "";
+      };
+      function renderPc() {
+        $('.js_room_select_mobile').hide(0);
+        $('.js_room_select_pc').show(0);
+        {% for num, room in rooms %}
+        scheduler.locale.labels.room{{room.id}}_tab = "{{room.name}}";
+        scheduler.date.room{{room.id}}_start = scheduler.date.week_start;
+        scheduler.templates.room{{room.id}}_date = scheduler.templates.week_date;
+        scheduler.templates.room{{room.id}}_scale_date = scheduler.templates.week_scale_date;
+        scheduler.date.add_room{{room.id}} = function (date, inc) {
+          return scheduler.date.add(date, inc * 7, "day");
+        };
+        scheduler.date.get_room{{room.id}}_end = function (date) {
+          return scheduler.date.add(date, 5, "day");
+        };
+        {% endfor %}
+      }
+
+      function renderMobile() {
+        $('.js_room_select_mobile').show(0);
+        $('.js_room_select_pc').hide(0);
+        {% for num, room in rooms %}
+        scheduler.locale.labels.room{{room.id}}_tab = "{{room.name}}";
+        scheduler.date.room{{room.id}}_start = scheduler.date.day_start;
+        scheduler.templates.room{{room.id}}_date = scheduler.templates.day_date;
+        scheduler.templates.room{{room.id}}_scale_date = scheduler.templates.week_scale_date;
+        scheduler.date.add_room{{room.id}} = function (date, inc) {
+          return scheduler.date.add(date, inc, "day");
+        };
+        scheduler.date.get_room{{room.id}}_end = function (date) {
+          return scheduler.date.add(date, 1, "day");
+        };
+        {% endfor %}
+      }
+
+      {% for num, room in rooms %}
+      scheduler.locale.labels.room{{room.id}}_tab = "{{room.name}}";
+      {% endfor %}
+
+      scheduler.attachEvent("onTemplatesReady", function () {
+        renderPc()
+      });
+
+      scheduler.config.xml_date = "%Y-%m-%d %H:%i";
+      scheduler.init('scheduler_here', null, "week");
+      scheduler.setLoadMode("week");
+
+      function funcModPreWork(event_id) {
+        if (String(event_id).indexOf('#') >= 0)
+          return false;
+        try {
+          oldFrom = new Date(scheduler.getEventStartDate(event_id));
+          oldTo = new Date(scheduler.getEventEndDate(event_id));
+        } catch (e) {
+        }
+        return true;
+      }
+
+      function funcMod(event_id) {
+        var evs = scheduler.getEvents(scheduler.getEventStartDate(event_id), scheduler.getEventEndDate(event_id));
+        var evsCnt = 0;
+        for (var k in evs)
+          if (evs[k].id != event_id)
+            evsCnt++;
+        if (evsCnt > 0) {
+          alert('이미 예약된 시간입니다');
+          scheduler.setEventStartDate(event_id, oldFrom);
+          scheduler.setEventEndDate(event_id, oldTo);
+          return;
+        }
+
+        var from = scheduler.getEventStartDate(event_id);
+        var to = scheduler.getEventEndDate(event_id);
+        from = from.getFullYear() + "-" + (from.getMonth() + 1) + "-" + from.getDate() + " " + from.getHours() + ":" + from.getMinutes();
+        to = to.getFullYear() + "-" + (to.getMonth() + 1) + "-" + to.getDate() + " " + to.getHours() + ":" + to.getMinutes();
+
+        var postArg = {
+          desc: scheduler.getEventText(event_id), from: from, to: to, id: event_id
+          //			,rid : $('.dhx_cal_tab.active').attr('rid')
+        };
+
+        $.post('/rooms/mod', postArg, function (dat) {
+            if (dat != '1') {
+              alert(dat);
+              scheduler.setEventStartDate(event_id, oldFrom);
+              scheduler.setEventEndDate(event_id, oldTo);
+            }
+          }
+        );
+      }
+
+      scheduler.attachEvent("onBeforeDrag", funcModPreWork);
+      scheduler.attachEvent("onDblClick", funcModPreWork);
+      scheduler.attachEvent("onClick", funcModPreWork);
+      scheduler.attachEvent("onEventChanged", funcMod);
+
+      scheduler.attachEvent("onEventCreated", function (event_id) {
+        try {
+          scheduler.setEventText(event_id, "[예약자] {{ name }}\n[예약내용] ");
+        } catch (e) {
+        }
+        return true;
+      });
+
+      scheduler.attachEvent("onEventAdded", function (event_id, event_object) {
+        var evs = scheduler.getEvents(scheduler.getEventStartDate(event_id), scheduler.getEventEndDate(event_id));
+        var evsCnt = 0;
+        for (k in evs) {
+          if (evs[k].id != event_id)
+            evsCnt++;
+        }
+        if (evsCnt > 0) {
+          alert('이미 예약된 시간입니다');
+          scheduler.deleteEvent(event_id);
+          return;
+        }
+
+        var from = scheduler.getEventStartDate(event_id);
+        var to = scheduler.getEventEndDate(event_id);
+        from = from.getFullYear() + "-" + (from.getMonth() + 1) + "-" + from.getDate() + " " + from.getHours() + ":" + from.getMinutes();
+        to = to.getFullYear() + "-" + (to.getMonth() + 1) + "-" + to.getDate() + " " + to.getHours() + ":" + to.getMinutes();
+
+        $.post('/rooms/add', {
+            desc: scheduler.getEventText(event_id),
+            from: from,
+            to: to,
+            room_id: $('.dhx_cal_tab.active').attr('room_id')
+          }, function (dat) {
+            try {
+              var new_event_id = parseInt(dat);
+              if (isNaN(new_event_id) || new_event_id == 0) {
+                alert(dat);
+                scheduler.deleteEvent(event_id);
+              }
+              else
+                scheduler.changeEventId(event_id, new_event_id);
+            }
+            catch (e) {
+              alert('이벤트 추가가 실패하였습니다');
+              scheduler.deleteEvent(event_id);
+            }
+          }
+        );
+      });
+      scheduler.attachEvent("onBeforeEventDelete", function (event_id, event_obj) {
+        $.post('/rooms/del/id/' + event_id);
+        return true;
+      });
+      if (window.innerWidth < 980)
+        renderMobile();
+      else
+        renderPc();
+      var $dhxCalTab = $('.dhx_cal_tab');
+      $dhxCalTab.click(function () {
+        var room_id = $(this).attr('room_id');
+        scheduler.clearAll();
+        scheduler.load("/rooms/get/room_id/" + room_id);
+      });
+      $dhxCalTab.first().trigger('click');
+    }
+    $(init);
+    $(function () {
+      $('#js_howto_button').click(
+        function () {
+          $('#js_howto').toggle();
+        });
+      $('#js_room').on('change', function () {
+
+        var room_id = $(this).val();
+        $('.dhx_cal_tab[room_id=' + room_id + ']').click();
+        console.log(room_id);
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block body %}
+  <div id="scheduler_here" class="dhx_cal_container"
+       style='width:100%; height:100%;margin-top:35px;overflow: visible'>
+    <div class="dhx_cal_navline" style="margin-bottom: 100px;">
+      {% for num,room in rooms %}
+        <div class="dhx_cal_tab js_room_select_pc" room_id='{{ room.id }}' name="room{{ room.id }}_tab"
+             style="margin-left:-205px;"></div>
+      {% endfor %}
+      <div class="dhx_cal_prev_button" style="margin-top:-40px;">&nbsp;</div>
+      <div class="dhx_cal_next_button" style="margin-top:-40px;">&nbsp;</div>
+      <div class="dhx_cal_today_button" style="margin-top:-40px;"></div>
+      <div class="dhx_cal_date" style="text-align: left;padding-left: 7px;margin-top:-40px;"></div>
+    </div>
+    <div class="dhx_cal_header">
+    </div>
+    <div class="dhx_cal_data">
+    </div>
+  </div>
+  <div style="position:absolute;left:15px;top:100px;z-index: 1000;" class="js_room_select_mobile">
+    <label for="js_room">
+      <select id="js_room">
+        {% for num,room in rooms %}
+          <option value="{{ room.id }}">{{ room.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+  <div style="position:absolute;right:15px;top:100px;z-index: 1000;">
+    <div style="float:right;text-align: right">
+      <button id="js_howto_button" class="btn btn-default">사용법</button>
+  <pre id="js_howto" style="display: none;text-align: left;">#회의실 예약 방법
+1. 인트라넷에 로그인 후, [회의실 예약] 메뉴를 눌러주세요.
+2. 예약할 회의실을 선택한 후, 사용하실 시간을 드래그하여 지정해주세요.
+3. 예약자와 예약내용을 기재하시고, ‘Enter’키를 눌러 저장해주세요.
+4. 삭제 시 내가 저장한 시간을 클릭하고 왼쪽에 ‘휴지통’ 버튼을 눌러주세요. (수정 시에는 ‘펜’ 버튼을 눌러주세요.)
+
+*주의사항
+- 점심시간(12:50~14:00), 저녁시간(19:00~20:00)에는 9-3과 14-1 회의실은 예약이 불가합니다. (식사 용도)
+- 회의실 예약 후, 미팅이 취소된 경우 다른 사람을 위해 예약 내역을 꼭 삭제해주세요.
+
+- 모든 외부 손님의 미팅은 9층에서 진행해주세요. (예. 출판사 미팅, 면접 등)
+- 14층의 중요한 외부 손님(예. VIP, 중요한 기자 등) 방문의 경우, 방문자 및 방문내용에 대해 대표님 서면 승인이 있어야 출입이 가능하오니 유념하여 주세요.
+* 관련 문의는 CO팀(현정환 실장)에 해주시기 바랍니다.
+</pre>
+    </div>
+  </div>
+{% endblock %}

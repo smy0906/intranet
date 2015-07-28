@@ -1,0 +1,94 @@
+{% extends 'users.twig' %}
+
+{% macro input(name, value, type, size) %}
+  {% if type != 'textarea' %}
+    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}"/>
+  {% else %}
+    <textarea name="{{ name }}" style="width:200px;height:150px;">{{ value|e }}</textarea>
+  {% endif %}
+{% endmacro %}
+
+{% block body %}
+  <div style='width:100%'>
+    <div class='box _blue' style='width:300px;margin:0 auto;margin-top:100px;padding:20px;'>
+      <div style="padding:5px;border: 1px solid #999">
+        <div>1. 아이디에는, 이메일과 동일한 아이디를 입력</div>
+        <div>2. 이 후 비밀번호는 이메일과 동일하게</div>
+      </div>
+      <form
+        method='post'
+        action='{% block userForm_action %}/users/join.ajax{% endblock %}'
+        target='/'
+        message='{% block userForm_message %}가입되었습니다. 인프라팀의 가입승인 후 이용가능합니다.{% endblock %}'>
+        <table>
+          <tr>
+            <td>
+              이메일
+            </td>
+            <td>
+              {{ _self.input('email', null, 'text') }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              이름
+            </td>
+            <td>
+              {{ _self.input('name', null, 'text') }}
+            </td>
+          </tr>
+          <!--
+                    <tr>
+                        <td>
+                            아이디
+                        </td>
+                        <td>
+                            {{ _self.input('id', null, 'text') }}
+                        </td>
+                    </tr>
+				<tr>
+					<td>
+						비밀번호
+					</td>
+					<td>
+						{{ _self.input('pass', null, 'password') }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						비밀번호 한번 더!
+					</td>
+					<td>
+						{{ _self.input('pass2', null, 'password') }}
+					</td>
+				</tr>
+				-->
+          <tr>
+            <td>
+              생년월일
+            </td>
+            <td>
+              {{ _self.input('birth', '0000/00/00', 'text') }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              휴대전화
+            </td>
+            <td>
+              {{ _self.input('mobile', '010-0000-0000', 'text') }}
+            </td>
+          </tr>
+          {% block userForm_addon %}
+          {% endblock %}
+        </table>
+        <div>
+          <div>
+            <input value='{% block userForm_name %}Join!{% endblock %}' type='submit'/>
+            <input value='Back' type='button' href='javascript:history.go(-1)'/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

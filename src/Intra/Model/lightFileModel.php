@@ -1,0 +1,49 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: ridi
+ * Date: 2015-07-17
+ * Time: 오후 5:49
+ */
+
+namespace Intra\Model;
+
+
+use ConfigDevelop;
+
+class lightFileModel
+{
+	private $dir;
+
+	public function __construct($group)
+	{
+		$upload_dir = ConfigDevelop::$upload_dir;
+		if (!is_writable($upload_dir)) {
+			throw new \Exception('!is_writable($upload_dir)');
+		}
+		$this->dir = $upload_dir . '/' . $group;
+		if (!is_dir($this->dir) && is_file($this->dir)) {
+			throw new \Exception('!is_dir($this->dir) && is_file($this->dir)');
+		}
+		if (!is_dir($this->dir)) {
+			mkdir($this->dir);
+		}
+		if (!is_writable($this->dir)) {
+			throw new \Exception('!is_writable($this->dir)');
+		}
+	}
+
+	public function isExist($filename)
+	{
+		return file_exists($this->getLocation($filename));
+	}
+
+	/**
+	 * @param $filename
+	 * @return string
+	 */
+	public function getLocation($filename)
+	{
+		return $this->dir . '/' . $filename;
+	}
+}

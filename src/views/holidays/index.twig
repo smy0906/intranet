@@ -1,0 +1,288 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  {% include 'holidays/js.twig' %}
+  {% include 'holidays/css.twig' %}
+{% endblock %}
+
+{% block body %}
+  <table class="costtable">
+    <thead>
+    <tr>
+      <td>
+        {{ year }} ({{ today }} 기준)
+      </td>
+      <td>
+        <span style="float: right">{{ super_edit_user.user.name }}</span>
+      </td>
+    </tr>
+    </thead>
+    <tr>
+      <td>연차부여일수</td>
+      <td>{{ fullCost }}개</td>
+    </tr>
+    <tr>
+      <td>사용일수</td>
+      <td>{{ fullCost - remainCost }}개</td>
+    </tr>
+    <tr>
+      <td>잔여일수</td>
+      <td>{{ remainCost }}개</td>
+    </tr>
+  </table>
+  <br/>
+  <br/>
+  <br/>
+  <form
+    attrajax
+    data-aa-url='/holidays/add'
+    data-aa-datatype="text"
+    data-aa-method='post'
+    data-aa-success-if-result-is="1"
+    data-aa-onsuccess-msg="추가되었습니다"
+    data-aa-onsuccess="refresh"
+    data-aa-onfail-alert="true"
+    onsubmit="$('[name=scope]').removeAttr('disabled');"
+    >
+    <table>
+      <thead>
+      <tr>
+        <td colspan="11">
+          &lt;연차휴가 신청내역&gt;
+                    <span style='float:right'>
+                        <a href='/holidays/index/year/{{ yearPrev }}' class='receipts_command'>{{ yearPrev }}년</a>
+                        <a href='/holidays/index/year/{{ yearNext }}' class='receipts_command'>{{ yearNext }}년</a>
+                    </span>
+        </td>
+      </tr>
+      <tr>
+        <td>NO</td>
+        <td>신청날짜</td>
+        <td>신청자</td>
+        <td>결재자</td>
+        <td>종류</td>
+        <td>연차소모</td>
+        <td>사용날짜</td>
+        <td>업무인수인계자</td>
+        <td>비상시연락처</td>
+        <td>비고</td>
+        <td></td>
+      </tr>
+
+      </thead>
+      <tbody>
+
+      {% for index, holiday in holidays %}
+        <tr class='holiday' data-holidayid="{{ holiday.holidayid }}">
+          <td>{{ index + 1 }}</td>
+          <td>{{ holiday.request_date [:10] }}</td>
+          <td>{{ holiday.uid_name }}</td>
+          <td>{{ holiday.manager_uid_name }}</td>
+          <td data-key="type">{{ holiday.type }}</td>
+          <td data-key="cost">{{ holiday.cost }}</td>
+          <td>{{ holiday.date }}</td>
+          <td>{{ holiday.keeper_uid_name }}</td>
+          <td data-key="phone_emergency">{{ holiday.phone_emergency }}</td>
+          <td data-key="memo">{{ holiday.memo }}</td>
+          <td>
+            {% if editable %}
+              <input type='button' value='삭제'
+                     attrajax
+                     data-aa-url="/holidays/{{ holiday.holidayid }}/del"
+                     data-aa-confirm='정말 삭제하시겠습니까?'
+                     data-aa-datatype="text"
+                     data-aa-success-if-result-is="1"
+                     data-aa-onsuccess-msg="삭제되었습니다"
+                     data-aa-onsuccess="refresh"
+                     data-aa-onfail-alert="true"
+                />
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      <tr class='add'>
+        <td></td>
+        <td></td>
+        <td>{{ super_edit_user.name }}</td>
+        <td>
+          <label>
+            <select name='manager_uid' js_cookie_save js_data_chosen>
+              {% for managerUser in managerUsers %}
+                <option value='{{ managerUser.uid }}'>{{ managerUser.user.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </td>
+        <td>
+          <label>
+            <select name='type' id="js_type" js_cookie_save>
+              {% for type in holidayConst.types %}
+                <option value='{{ type }}'>{{ type }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </td>
+        <td>
+          <label>
+            <input name='cost' id="js_cost" style="display: none;width:50px;" placeholder="1"/>
+          </label>
+        </td>
+        <td><input type='text' name='date' style='width:80px' placeholder='0000-00-00'/></td>
+        <td>
+          <label>
+            <select name='keeper_uid' js_cookie_save js_data_chosen>
+              {% for availableUser in availableUsers %}
+                <option value='{{ availableUser.uid }}'>{{ availableUser.user.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </td>
+        <td><input type='text' name='phone_emergency' style='width:100px' placeholder='010-0000-0000'
+                   js_cookie_save/></td>
+        <td>
+          <label>
+            <select name='memo' id="js_memo">
+              {% for type in holidayConst.memos %}
+                <option value='{{ type }}'>{{ type }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </td>
+        <td><input type="submit" value="추가"/></td>
+      </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <pre>
+<b>[연차 휴가 신청 방법 안내]</b>
+
+    1) 결재자 - 본인 부서의 부서장을 선택해주세요.
+    2) 종류
+       – 공가(공적휴가) : 병역검사를 받거나 공무집행으로 인하여 국가기관에 소환된 때(예비군 훈련), 투표에 참가하고자 할 때, 자연재해나 교통 차단 등으로 출근을 할 수 없을 때 사용하게 됩니다.
+       – 경조 : 본인결혼, 자녀출생, 부모 사망(5일), 조부모, 형제자매 사망(3일), 본인졸업(1일)
+       – 기타 : 병가, 생리휴가 등
+    3) 업무인수인계자 - 업무인수인계자가 다수인 경우, 대표자 1명만 입력해주세요.
+    4) 하루 이상 휴가를 신청할 경우, 날짜별로 각각 신청해주셔야 합니다.
+    5) 한번 등록된 휴가 신청은 수정이 되지 않습니다. 수정을 원하실 경우, CO팀에 문의해주세요.
+
+<b>[회계연도기준 연차휴가 안내]</b>
+
+    1. 1년 미만 근무자의 경우, 1개월 개근 시 1일씩 부여됩니다.
+       1년 이상 근무자의 경우, 매년 기본일수 15일이 부여됩니다.
+       (입사일 기준으로 1년째가 되면 정상적으로 발생하는 휴가 15일에서 1년 미만일 때 쓴 휴가를 공제하여 부여됩니다.
+       즉, 15일을 2년 동안 나눠서 쓰는 셈입니다. 이 때, 1년 미만 근무자 자격으로 받을 수 있는 연차휴가는 모두 11개입니다.)
+       2년마다 기본일수 15일에 1일씩 가산되어 부여됩니다. 총 휴가일수의 최대 한도는 25일까지입니다.
+       (15일-15일-16일-16일-17일-----------------25일)
+
+    2. 회계연도 기준으로 연차휴가 계산하는 방법
+       1년 미만 근속자의 경우, 입사일을 기준으로 1년이 될 때까지는 1개월 개근 시 1일씩 부여하고, 이에 더해 입사 후 1년이 안되더라도 회계연도가 바뀔 때 일할 계산해서 연차휴가 부여됩니다.
+       (일할 계산: [15일 X 재직일/365일]에서 미리 당겨 쓴 날수를 공제하여 부여됩니다.)
+
+    3. 예시
+        1) 2012년 9월 1일에 입사한 ‘나리디’양의 경우, 2012년 12월 31일까지 매월 1일마다 1일씩 부여됩니다.
+           (2012년 9월 1일 ~ 2012년 12월 31: 3일) -> 사용할 경우, 아래의 일할 계산하여 부여되는 연차휴가(5일)에서 공제됩니다.
+        2) 2013년 1월 1일 회계연도가 바뀌면서 일할 계산한 연차휴가가 부여됩니다.
+           [15일 X 4/12: 5일]
+           이에 더해, 2013년 8월 31일(입사일 기준으로 1년)까지 매월 1일씩 부여됩니다.
+           [2013년 1월 1일 ~ 2013년 8월 31일: 8일] -> 사용할 경우, 아래의 기본일수 15일에서 공제됩니다.
+           (2013년 총 사용 가능 휴가 일수: 5일 + 8일 = 13일)
+        3) 2014년 1월 1일부터 기본일수 15일 부여됩니다.
+
+<b>[연차휴가 사용 시 주의사항]</b>
+
+    사용하지 못한 연차휴가는 자동소멸되어 다음해로 이월이 불가합니다.
+    휴가는 최소 0.5일 (반차) 단위로 사용이 가능합니다.
+        오후반차 : 10시 ~ 14시 근무 (14시 퇴근)  -> 단, 점심식사를 하는 경우, 10시 ~ 15시까지 근무입니다.
+        오전반차 : 15시 ~ 19시 근무 (15시 출근)
+    무급휴가 사용 시 CO팀으로 이메일 알림 부탁 드립니다.
+
+
+★ 연차휴가에 대해 더 궁금하신점이 있으신 분은 CO팀으로 방문해주시길 바랍니다.
+<span style="color: white">
+[세부연차 계산 내역]
+
+   입사일자 : {{ holidayInfo.ondate }}
+  {% if yearly == 1 %}
+    월차가산 (내년것 미리 쓸수 있는 갯수)  ({{ holidayInfo.dateOfOndate }} ~ 12/31) : {{ holidayInfo.worked_month_this_year }}개월 만근 = {{ holidayInfo.worked_month_this_year }}개
+  {% elseif yearly == 2 %}
+    월차가산 (내년것 미리 쓸수 있는 갯수) (작년 ~ {{ holidayInfo.dateOfOndate }}) : {{ holidayInfo.worked_month_from_first_day_in_this_year }}개월 만근 = {{ holidayInfo.worked_month_from_first_day_in_this_year }}개
+    연차 : 작년근무일수({{ holidayInfo.worked_day_last_year }}일) x 15 / 365 = {{ holidayInfo.base_holiday_count }}개
+    작년사용에의한 차감연차 : {{ holidayInfo.used_holiday_last_year }}개
+  {% elseif yearly == 3 %}
+    연차 : {{ yearly }}년차 = 15개
+    작년사용에의한 차감연차 : {{ holidayInfo.used_holiday_last_year }}개 (2년차에 생긴 연차 : {{ holidayInfo.last_year_remain_cost }}개, 1~2년차에 사용한 연차 : {{ holidayInfo.last_year_usable_holiday_count }}개)
+  {% else %}
+    연차 : {{ yearly }}년차 = {{ fullCost }}개
+  {% endif %}</span></pre>
+
+  {% if self.isSuperAdmin() %}
+    <div>
+      <table>
+        <thead>
+        <tr>
+          <td>특수작업</td>
+          <td>실행</td>
+        <tr>
+        </thead>
+        <tr>
+          <td>
+            다른 사람 편집하기
+          </td>
+          <td>
+            <script>
+              $(function () {
+                $('select.js_superedit')
+                  .val({{super_edit_user.uid}})
+                  .trigger("chosen:updated")
+                  .change(function () {
+                    $.post('/usersession/superedit'
+                      , {uid: $(this).val()}
+                      , function (dat) {
+                        if (dat == '1')
+                          window.location.reload();
+                        else
+                          alert(dat);
+                      }
+                    );
+                  });
+              });
+            </script>
+            <label>
+              <select class='js_superedit' js_data_chosen>
+                {% for availableUser in availableUsers %}
+                  <option value='{{ availableUser.uid }}'>{{ availableUser.user.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            금년 사용내역 다운받기
+          </td>
+          <td>
+            <label>
+              <a href="/holidays/download/{{ year }}">
+                <button>다운받기</button>
+              </a>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            금년 잔여일수 다운받기
+          </td>
+          <td>
+            <label>
+              <a href="/holidays/download_remain/{{ year }}">
+                <button>다운받기</button>
+              </a>
+            </label>
+          </td>
+        </tr>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

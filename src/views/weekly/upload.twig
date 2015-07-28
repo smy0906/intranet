@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<h3>엑셀(xlsx) 업로드시 주의사항</h3>
+<ol>
+  <li>비밀번호가 없을 것</li>
+  <li>빈 열(column)은 trim</li>
+</ol>
+<form method="post" enctype="multipart/form-data">
+  Select excel to upload:
+  <input type="file" name="fileToUpload" id="fileToUpload">
+  <input type="submit" value="Upload" name="submit">
+</form>
+
+<p>
+  <a href="/weekly">주간 업무 브리핑</a>
+</p>
+
+</body>
+</html>

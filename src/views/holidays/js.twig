@@ -1,0 +1,48 @@
+<script>
+  var edited = false;
+
+  $(function () {
+    $("input").on("keypress", function (e) {
+      return e.which != 13;
+    });
+
+    $('#js_memo').on('change', function () {
+      var memo_str = $(this).val();
+      if (memo_str.substr(0, 2) == '기타') {
+        var memo = prompt('간략하게 사유를 입력해주세요~');
+        if (!memo) {
+          $(this).val('개인용무');
+          return;
+        }
+        $('option:selected', this)
+          .text('기타(' + memo + ')')
+          .val('기타(' + memo + ')');
+      }
+    }).trigger('change');
+
+    $('#js_type').on('change', function () {
+      var type_str = $(this).val();
+      if (type_str == '연차')
+        $('#js_cost').show();
+      else
+        $('#js_cost').hide();
+    }).trigger('change');
+    {% if editable %}
+    $('.holiday td[data-key]').each(function () {
+      var holidayid = $(this).parent().data('holidayid');
+      var key = $(this).data('key');
+      var submitdata = {holidayid: holidayid, key: key};
+      var args = {submitdata: submitdata};
+
+      var isSelectInput = ($(this).data('keyselect') != undefined);
+      if (isSelectInput) {
+        args['type'] = 'select';
+        args['loadurl'] = '/holidays/const/key/' + key;
+        args['submit'] = "OK";
+      }
+
+      $(this).editable('/holidays/edit', args);
+    });
+    {% endif %}
+  });
+</script>

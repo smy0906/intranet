@@ -1,0 +1,126 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <script>
+  </script>
+  <style>
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th colspan="3">
+          설치 프로그램 목록
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for program, name_list in program_name_list %}
+        {% if program not in able_programs %}
+          <tr>
+            <td>
+              {{ program }}
+            </td>
+            <td>
+              <a href="add/program/{{ program | url_encode | url_encode }}" target="_blank">허용 목록에 추가</a>
+            </td>
+            <td>
+              <a href="#" onclick="$('#program_name_list_{{ loop.index }}').toggle()">
+                설치한 사람 보기
+                ({{ name_list |length }})
+              </a>
+
+              <div id="program_name_list_{{ loop.index }}" style="display: none">
+                {% for name, unused in name_list %}
+                  <div>{{ name }}</div>
+                {% endfor %}
+              </div>
+            </td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th colspan="3">
+          설치 폰트 목록
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for font, name_list in font_name_list %}
+        {% if font not in able_fonts %}
+          <tr>
+            <td>
+              {{ font }}
+            </td>
+            <td>
+              <a href="add/font/{{ font | url_encode | url_encode }}" target="_blank">허용 목록에 추가</a>
+            </td>
+            <td>
+              <a href="#" onclick="$('#font_name_list_{{ loop.index }}').toggle()">
+                설치한 사람 보기
+                ({{ name_list |length }})
+              </a>
+
+              <div id="font_name_list_{{ loop.index }}" style="display: none">
+                {% for name, unused in name_list %}
+                  <div>{{ name }}</div>
+                {% endfor %}
+              </div>
+            </td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th>
+          허용프로그램 목록 <a href="#" onclick="$('#able_programs').toggle()">보기</a>
+        </th>
+      </tr>
+      </thead>
+      <tbody id="able_programs" style="display: none">
+      {% for program in able_programs %}
+        <tr>
+          <td>
+            {{ program }}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th>
+          허용 폰트 목록 <a href="#" onclick="$('#able_fonts').toggle()">보기</a>
+        </th>
+      </tr>
+      </thead>
+      <tbody id="able_fonts" style="display: none">
+      {% for fonts in able_fonts %}
+        <tr>
+          <td>
+            {{ fonts }}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
