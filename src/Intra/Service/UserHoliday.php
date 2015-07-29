@@ -79,9 +79,9 @@ class UserHoliday
 	private function filterHolidays($holidays)
 	{
 		foreach ($holidays as $holiday) {
-			$holiday->uid_name = Users::getByUid($holiday->uid)->getName();
-			$holiday->manager_uid_name = Users::getByUid($holiday->manager_uid)->getName();
-			$holiday->keeper_uid_name = Users::getByUid($holiday->keeper_uid)->getName();
+			$holiday->uid_name = $this->getUserNameSafe($holiday->uid);
+			$holiday->manager_uid_name = $this->getUserNameSafe($holiday->manager_uid);
+			$holiday->keeper_uid_name = $this->getUserNameSafe($holiday->keeper_uid);
 		}
 	}
 
@@ -153,6 +153,14 @@ class UserHoliday
 
 		if ($this->isDuplicate($holidayRaw->date)) {
 			throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+		}
+
+		if ($holidayRaw->keeper_uid == 0) {
+			throw new \Exception("업무인수인계자를 선택해주세요");
+		}
+
+		if ($holidayRaw->manager_uid == 0) {
+			throw new \Exception("결재자를 선택해주세요");
 		}
 
 		if ($holidayRaw->type == 'PWT' && $this->isDuplicatePWT($holidayRaw->date)) {
@@ -339,5 +347,18 @@ class UserHoliday
 			$holidayRaw->cost = 1;
 		}
 		return $holidayRaw;
+	}
+
+	/**
+	 * @param $keeper_uid
+	 * @return mixed
+	 */
+	private function getUserNameSafe($keeper_uid)
+	{
+		$user = Users::getByUid($keeper_uid);
+		if ($user) {
+			return $user->getName();
+		}
+		return '';
 	}
 }
