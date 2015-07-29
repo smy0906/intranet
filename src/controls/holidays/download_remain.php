@@ -28,8 +28,8 @@ $rows = array(
 );
 
 foreach ($users as $user) {
-	$user_holiday = new UserHoliday($super_edit_user);
-	$user_holiday_policy = new UserHolidayPolicy($super_edit_user);
+	$user_holiday = new UserHoliday($user);
+	$user_holiday_policy = new UserHolidayPolicy($user);
 
 	$joinYear = $user_holiday->getYearByYearly(1);
 	$yearly = $year - $joinYear + 1;
