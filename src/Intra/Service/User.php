@@ -51,7 +51,7 @@ class User
 	public function getOnDate()
 	{
 		$db_dto = $this->user_model->getDbDto();
-		return $db_dto['onDate'];
+		return $db_dto['on_date'];
 	}
 
 	public function getDbDto()

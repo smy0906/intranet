@@ -71,8 +71,8 @@ class UserFactory
 		$db = IntraDb::getGnfDb();
 
 		$where = array();
-		$where['onDate'] = sqlLesserEqual(sqlNow());
-		$where['offDate'] = sqlGreaterEqual(sqlNow());
+		$where['on_date'] = sqlLesserEqual(sqlNow());
+		$where['off_date'] = sqlGreaterEqual(sqlNow());
 
 		$uids = $db->sqlDatas('select uid from users where ? order by name', sqlWhere($where));
 		return self::getUsersByUids($uids);
@@ -116,8 +116,8 @@ class UserFactory
 		$db = IntraDb::getGnfDb();
 
 		$where = array();
-		$where['onDate'] = sqlLesserEqual(sqlNow());
-		$where['offDate'] = sqlGreaterEqual(sqlNow());
+		$where['on_date'] = sqlLesserEqual(sqlNow());
+		$where['off_date'] = sqlGreaterEqual(sqlNow());
 		$where['position'] = array('팀장', 'CTO', 'CEO', '부사장');
 
 		$uids = $db->sqlDatas('select uid from users where ? order by name', sqlWhere($where));

@@ -85,8 +85,8 @@ class UserModel extends DomainCacheModel
 	{
 		$where = array();
 		$where['uid'] = $this->uid;
-		$where['onDate'] = sqlLesserEqual(sqlNow());
-		$where['offDate'] = sqlGreaterEqual(sqlNow());
+		$where['on_date'] = sqlLesserEqual(sqlNow());
+		$where['off_date'] = sqlGreaterEqual(sqlNow());
 		return $this->db->sqlCount(self::$table, $where);
 	}
 

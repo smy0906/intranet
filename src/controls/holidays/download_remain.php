@@ -43,8 +43,8 @@ foreach ($users as $user) {
 	$rows[] = array(
 		$year,
 		$user->getName(),
-		$user_row['onDate'],
-		$user_row['offDate'],
+		$user_row['on_date'],
+		$user_row['off_date'],
 		$fullCost,
 		$usedCost,
 		$remainCost
