@@ -35,7 +35,7 @@ foreach ($users as $user) {
 	$yearly = $year - $joinYear + 1;
 
 	$fullCost = $user_holiday_policy->getAvailableCost($yearly);
-	$usedCost = $user_holiday_policy->getUsedCostByYearly($yearly);
+	$usedCost = $user_holiday_policy->getUsedCost($yearly);
 	$remainCost = $fullCost - $usedCost;
 
 	$user_row = $user->getDbDto();

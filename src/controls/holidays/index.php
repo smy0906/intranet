@@ -42,8 +42,8 @@ if ($self->isSuperAdmin()) {
 	$yearlyTo = date('Y-m-d', $user_holiday_policy->getYearlyEndTimestamp($yearly));
 
 	$fullCost = $user_holiday_policy->getAvailableCost($yearly);
-	$usedCost = $user_holiday_policy->getUsedCostByYearly($yearly);
-	$remainCost = $fullCost - $usedCost;
+	$usedCost = $user_holiday_policy->getUsedCost($yearly);
+	$remainCost = $user_holiday_policy->getRemainCost($yearly);
 	$holidays = $user_holiday->getUserHolidays($yearly);
 	$holidayInfo = $user_holiday_policy->getDetailInfomationByYearly($yearly);
 

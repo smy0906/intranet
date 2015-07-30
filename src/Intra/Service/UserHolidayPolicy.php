@@ -95,11 +95,11 @@ class UserHolidayPolicy
 			$ret['worked_day_last_year'] = $diff->days - 1;
 		}
 		if ($yearly == 2) {
-			$ret['used_holiday_last_year'] = floatval($this->getUsedCostByYearly($yearly - 1));
+			$ret['used_holiday_last_year'] = floatval($this->getUsedCost($yearly - 1));
 		}
 		if ($yearly == 3) {
 			$info = $this->getDetailInfomationByYearly(2);
-			$last_year_usable_holiday_count = $this->getUsedCostByYearly(2) + $this->getUsedCostByYearly(1);
+			$last_year_usable_holiday_count = $this->getUsedCost(2) + $this->getUsedCost(1);
 			$last_year_remain_cost = $info['base_holiday_count'];
 			$exceeded_cost = $last_year_usable_holiday_count - $last_year_remain_cost;
 
@@ -138,10 +138,17 @@ class UserHolidayPolicy
 	 * @return int
 	 */
 
-	public function getUsedCostByYearly($yearly)
+	public function getUsedCost($yearly)
 	{
 		$begin = date('Y/m/d', $this->getYearlyBeginTimestamp($yearly));
 		$end = date('Y/m/d', $this->getYearlyEndTimestamp($yearly));
 		return $this->user_holiday_model->getUsedCost($this->user, $begin, $end);
+	}
+
+	public function getRemainCost($yearly)
+	{
+		$full_cost = $this->getAvailableCost($yearly);
+		$used_cost = $this->getUsedCost($yearly);
+		return $full_cost - $used_cost;
 	}
 }

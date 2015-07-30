@@ -17,7 +17,6 @@ $super_edit_user = UserSession::getSupereditUser();
 //input
 {
 	$holiday_raw = new HolidayRaw;
-	$holiday_raw->yearly = $user_holiday->getYearly();
 	$holiday_raw->date = $request->get('date');
 	$holiday_raw->keeper_uid = $request->get('keeper_uid');
 	$holiday_raw->manager_uid = $request->get('manager_uid');
@@ -31,6 +30,7 @@ $super_edit_user = UserSession::getSupereditUser();
 {
 	$holiday_raw->date = date('Y-m-d', strtotime($holiday_raw->date));
 	$holiday_raw->phone_emergency = trim($holiday_raw->phone_emergency);
+	$holiday_raw->yearly = $user_holiday->getYearly(strtotime($holiday_raw->date));
 }
 
 //finalize
