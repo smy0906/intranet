@@ -1,45 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>RIDI Corporation</title>
+
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.css" media="screen"/>
+  <link rel="stylesheet" href="/css/screen.css" media="screen"/>
+  <link rel="stylesheet" href="/css/print.css" media="print"/>
+
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
+  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//cdn.rawgit.com/genesos/AttrAjax/master/attrajax.js"></script>
+
+  <script type="text/javascript" src="/js/common.js"></script>
+  <script type="text/javascript" src="/js/attrajax.js"></script>
+  <script type="text/javascript" src="/js/jquery.form.js"></script>
+  <script type="text/javascript" src="/js/jquery.jeditable.js"></script>
+  <script type="text/javascript" src="/js/jquery.tmpl.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.number.min.js"></script>
   {% block head %}
-    <title>RIDI Corporation</title>
-
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.css" media="screen"/>
-    <link rel="stylesheet" href="/css/screen.css" media="screen"/>
-    <link rel="stylesheet" href="/css/print.css" media="print"/>
-
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
-    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="//cdn.rawgit.com/genesos/AttrAjax/master/attrajax.js"></script>
-
-    <script type="text/javascript" src="/js/attrajax.js"></script>
-    <script type="text/javascript" src="/js/common.js"></script>
-    <script type="text/javascript" src="/js/jquery.form.js"></script>
-    <script type="text/javascript" src="/js/jquery.jeditable.js"></script>
-    <script type="text/javascript" src="/js/jquery.tmpl.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.number.min.js"></script>
   {% endblock %}
 </head>
 <body>
-{% for user in users %}
-  <div class='js_user_popup' data-userid='{{ user.public_information.id_for_css }}'>
-    <div>{{ user.public_information.name }}</div>
-    {% if user.public_information.outer_call %}
-      <div><strong>외선</strong> {{ user.public_information.outer_call }}</div>
-    {% endif %}
-    {% if user.public_information.inner_call %}
-      <div><strong>내선</strong> {{ user.public_information.inner_call }}</div>
-    {% endif %}
-    <div><strong>긴급</strong> {{ user.public_information.mobile }}</div>
-  </div>
-{% endfor %}
+
+{% block body_head %}
+{% endblock %}
+
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -79,75 +71,6 @@
 <div style="height: 50px;">
 </div>
 {% block body %}
-  <div style="position: absolute;top:50px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
-    {% for user in users %}
-      <div class='js_user'
-           style='padding:0;left:{{ user.public_information.extra.posX }}px;top:{{ user.public_information.extra.posY }}px'
-           data-userid='{{ user.public_information.id_for_css }}' data-rawuserid='{{ user.public_information.id }}'>
-        <div style='padding:0;margin:0;height:100px;overflow:hidden;'>
-          <div>{{ user.public_information.name }}</div>
-          <img src='pics/{{ user.public_information.id }}.png' width='60px'
-               data-userid='{{ user.public_information.id_for_css }}'
-               onerror="$(this).detach()"
-               class="js_user_img"
-               data-rawuserid='{{ user.public_information.id }}'/>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
 {% endblock %}
-<script>
-  $(function () {
-    //js_cookie_save, js_data_chosen, js_number_format
-    {
-      $('select[js_cookie_save],input[js_cookie_save]')
-        .change(function () {
-          var _this = $(this);
-          var key = _this.tagName + '#' + _this.attr('name') + '#' + _this.attr('id');
-          var val = _this.val();
-          Cookies.set(key, val);
-        }).each(function () {
-          var _this = $(this);
-          var key = _this.tagName + '#' + _this.attr('name') + '#' + _this.attr('id');
-          _this.val(Cookies.get(key)).trigger('change');
-        });
-      $('select[js_data_chosen]').chosen({search_contains: true});
-      $('input[js_number_format]').number(true);
-    }
-    $(document).on('mouseover', '.js_user', function (e) {
-      var id = $(this).data('userid');
-      $('.js_user_popup[data-userid=' + id + ']').show(0);
-      e.stopPropagation();
-      return false;
-    });
-    $(document).on('mouseout', '.js_user', function (e) {
-      var id = $(this).data('userid');
-      $('.js_user_popup[data-userid=' + id + ']').hide(0);
-      e.stopPropagation();
-      return false;
-    });
-    $(document).on('mousemove', '.js_user', function (e) {
-      var id = $(this).data('userid');
-      var bodyPos = $('#user_map').position();
-      $('.js_user_popup[data-userid=' + id + ']')
-        .css('left', (e.pageX - bodyPos.left) + 'px')
-        .css('top', (e.pageY - bodyPos.top) + 'px');
-      e.stopPropagation();
-      return false;
-    });
-
-    {% if replaceable %}
-    $('.js_user').draggable({
-      snap: true, containment: '#user_map', stop: function (e, ui) {
-        var id = $(this).data('rawuserid');
-        var x = parseInt(ui.position.left);
-        var y = parseInt(ui.position.top);
-        $.post('/users/' + id + '/updateExtra/posX/' + x);
-        $.post('/users/' + id + '/updateExtra/posY/' + y);
-      }
-    });
-    {% endif %}
-  });
-</script>
 </body>
 </html>
