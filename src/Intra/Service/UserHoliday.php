@@ -205,13 +205,19 @@ class UserHoliday
 	{
 		$holidayRaw = $this->filterAdd($holidayRaw);
 		$this->assertAdd($holidayRaw);
+		$holidayRaws = $this->convertToArrayToAdd($holidayRaw);
 
-		$holidayRaw->uid = $this->user->uid;
-		return $this->user_holiday_model->add($holidayRaw);
+		foreach ($holidayRaws as $holidayRaw) {
+			if (!$this->user_holiday_model->add($holidayRaw)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public function sendNotification($holidayid, $type)
 	{
+		return true;
 		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);
 		$title = $this->getMailTitle($holidayRaw, $type);
 		$ret = $this->sendMailNotification($holidayRaw, $title);
@@ -358,6 +364,7 @@ class UserHoliday
 		if ($holidayRaw->type == '연차' && strlen(trim($holidayRaw->cost)) == 0) {
 			$holidayRaw->cost = 1;
 		}
+		$holidayRaw->uid = $this->user->uid;
 		return $holidayRaw;
 	}
 
@@ -372,5 +379,52 @@ class UserHoliday
 			return $user->getName();
 		}
 		return '';
+	}
+
+	/**
+	 * @param $holidayRaw holidayRaw
+	 * @return holidayRaw[]
+	 */
+	private function convertToArrayToAdd($holidayRaw)
+	{
+		if ($holidayRaw->type == '연차' && $holidayRaw->cost > 1) {
+			$return = array();
+			$cost = $holidayRaw->cost;
+			$date = $holidayRaw->date;
+			while ($cost > 0) {
+				$holidayRaw->cost = 1;
+				$holidayRaw->date = $date;
+				$return[] = clone $holidayRaw;
+				$cost--;
+				$date = $this->getNextDateWhichIsNotWeekend($date);
+			}
+			return $return;
+		} else {
+			return array($holidayRaw);
+		}
+	}
+
+	private function isWeekend($date)
+	{
+		return (date('N', strtotime($date)) >= 6);
+	}
+
+	private function getNextDateWhichIsNotWeekend($date)
+	{
+		$date = $this->getNextDate($date);
+		while ($this->isWeekend($date)) {
+			$date = $this->getNextDate($date);
+		}
+		return $date;
+	}
+
+	/**
+	 * @param $date
+	 * @return bool|string
+	 */
+	private function getNextDate($date)
+	{
+		$date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
+		return $date;
 	}
 }

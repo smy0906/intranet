@@ -29,6 +29,13 @@ class UserHolidayPolicy
 		$this->user_holiday_model = new UserHolidayModel();
 	}
 
+	public function getRemainCost($yearly)
+	{
+		$full_cost = $this->getAvailableCost($yearly);
+		$used_cost = $this->getUsedCost($yearly);
+		return $full_cost - $used_cost;
+	}
+
 	/**
 	 * @param $yearly
 	 * @return int
@@ -143,12 +150,5 @@ class UserHolidayPolicy
 		$begin = date('Y/m/d', $this->getYearlyBeginTimestamp($yearly));
 		$end = date('Y/m/d', $this->getYearlyEndTimestamp($yearly));
 		return $this->user_holiday_model->getUsedCost($this->user, $begin, $end);
-	}
-
-	public function getRemainCost($yearly)
-	{
-		$full_cost = $this->getAvailableCost($yearly);
-		$used_cost = $this->getUsedCost($yearly);
-		return $full_cost - $used_cost;
 	}
 }
