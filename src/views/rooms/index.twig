@@ -68,6 +68,7 @@
         return "";
       };
       function renderPc() {
+        $('#js_howto').show(0);
         $('.js_room_select_mobile').hide(0);
         $('.js_room_select_pc').show(0);
         {% for num, room in rooms %}
@@ -85,6 +86,7 @@
       }
 
       function renderMobile() {
+        $('#js_howto').hide(0);
         $('.js_room_select_mobile').show(0);
         $('.js_room_select_pc').hide(0);
         {% for num, room in rooms %}
@@ -230,7 +232,7 @@
     $(function () {
       $('#js_howto_button').click(
         function () {
-          $('#js_howto').toggle();
+          $('#js_howto_detail').toggle();
         });
       $('#js_room').on('change', function () {
 
@@ -270,9 +272,9 @@
     </label>
   </div>
   <div style="position:absolute;right:15px;top:100px;z-index: 1000;">
-    <div style="float:right;text-align: right">
+    <div style="float:right;text-align: right" id="js_howto">
       <button id="js_howto_button" class="btn btn-default">사용법</button>
-  <pre id="js_howto" style="display: none;text-align: left;">#회의실 예약 방법
+  <pre id="js_howto_detail" style="display: none;text-align: left;">#회의실 예약 방법
 1. 인트라넷에 로그인 후, [회의실 예약] 메뉴를 눌러주세요.
 2. 예약할 회의실을 선택한 후, 사용하실 시간을 드래그하여 지정해주세요.
 3. 예약자와 예약내용을 기재하시고, ‘Enter’키를 눌러 저장해주세요.
