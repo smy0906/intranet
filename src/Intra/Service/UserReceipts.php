@@ -256,7 +256,7 @@ class UserReceipts
 			throw new \Exception('"저녁/휴일 식사비"는 8000원 이하이어야합니다');
 		}
 		$timestamp_input_date = strtotime($row['date']);
-		$timestamp_month = strtotime('first day', $timestamp_working_month);
+		$timestamp_month = strtotime('first day of this month', $timestamp_working_month);
 		$timestamp_nextmonth = strtotime('first day of next month', $timestamp_working_month);
 		if ($timestamp_input_date < $timestamp_month || $timestamp_nextmonth <= $timestamp_input_date) {
 			throw new \Exception('날짜를 확인해주세요');
