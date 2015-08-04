@@ -51,12 +51,12 @@
     <div class='js_user_popup' data-userid='{{ user.public_information.id_for_css }}'>
       <div>{{ user.public_information.name }}</div>
       {% if user.public_information.outer_call %}
-        <div><strong>¿Ü¼±</strong> {{ user.public_information.outer_call }}</div>
+        <div><strong>ì™¸ì„ </strong> {{ user.public_information.outer_call }}</div>
       {% endif %}
       {% if user.public_information.inner_call %}
-        <div><strong>³»¼±</strong> {{ user.public_information.inner_call }}</div>
+        <div><strong>ë‚´ì„ </strong> {{ user.public_information.inner_call }}</div>
       {% endif %}
-      <div><strong>±ä±Þ</strong> {{ user.public_information.mobile }}</div>
+      <div><strong>ê¸´ê¸‰</strong> {{ user.public_information.mobile }}</div>
     </div>
   {% endfor %}
 {% endblock %}
