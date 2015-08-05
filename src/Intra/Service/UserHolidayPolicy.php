@@ -46,54 +46,56 @@ class UserHolidayPolicy
 		$info = $this->getDetailInfomationByYearly($yearly);
 		if ($yearly == 1) {
 			//금년입사
-			$fullCost = $info['worked_month_this_year'];
-			return $fullCost;
+			$preusable_cost = $info['preusable_cost'];
+			$full_cost = $preusable_cost;
 		} elseif ($yearly == 2) {
 			//작년입사(회계기준 조금 적용)
-			$costByUpdatingYear = $info['base_holiday_count'];
-			$costByThisYear = $info['worked_month_from_first_day_in_this_year'];
-			$usedHolidayLastYear = $info['used_holiday_last_year'];
-			return $costByUpdatingYear + $costByThisYear - $usedHolidayLastYear;
+			$usable_cost = $info['base_holiday_count'];
+			$preusable_cost = $info['preusable_cost'];
+			$preused_cost_prev_year = $info['preused_cost_prev_year'];
+			$full_cost = $usable_cost + $preusable_cost - $preused_cost_prev_year;
 		} elseif ($yearly == 3) {
 			//작년입사(회계기준 조금 적용)
-			$costByUpdatingYear = 15;
-			$usedHolidayLastYear = $info['used_holiday_last_year'];
-			return $costByUpdatingYear - $usedHolidayLastYear;
+			$usable_cost = 15;
+			$preused_cost_prev_year = $info['preused_cost_prev_year'];
+			$full_cost = $usable_cost - $preused_cost_prev_year;
 		} else {
 			//2014년시작 기점으로 완전한 회계기준 적용
-			return min(25, 15 + floor(($yearly - 3) / 2));
+			$full_cost = min(25, 15 + floor(($yearly - 3) / 2));
 		}
+		$full_cost = $this->floorByZeroDotFive($full_cost);
+		return $full_cost;
 	}
 
 	public function getDetailInfomationByYearly($yearly)
 	{
 		$ret = array();
-		$onDate = $this->user->getOnDate();
-		$yearlyBeginTimestamp = $this->getYearlyBeginTimestamp($yearly);
-		$yearlyEndTimestamp = $this->getYearlyEndTimestamp($yearly);
-		$ret['ondate'] = date('Y/m/d', strtotime($onDate));
-		$ret['dateOfOndate'] = date('m/d', strtotime($onDate));
+		$on_date = $this->user->getOnDate();
+		$yearly_begin_timestamp = $this->getYearlyBeginTimestamp($yearly);
+		$yearly_end_timestamp = $this->getYearlyEndTimestamp($yearly);
+		$ret['ondate'] = date('Y/m/d', strtotime($on_date));
+		$ret['date_of_ondate'] = date('m/d', strtotime($on_date));
 		if ($yearly == 1) {
-			$from = date('Ymd', strtotime($onDate));
-			$to = date('Ymd', min($yearlyEndTimestamp, time()));
-			$monthDiff = floor(($to - $from) / 100);
-			$ret['worked_month_this_year'] = max(0, $monthDiff);
+			$from = date('Ymd', strtotime($on_date));
+			$to = date('Ymd', min($yearly_end_timestamp, time()));
+			$month_diff = floor(($to - $from) / 100);
+			$ret['preusable_cost'] = max(0, $month_diff);
 		}
 		if ($yearly == 2) {
-			$nextYearOfOndateTimestamp = strtotime("+1 year", strtotime($onDate));
 			//최대 12개아닌 11개까지 만 부여하기위해 '-1' 추가
-			$endofPartTimestamp = min($nextYearOfOndateTimestamp - 1, time());
+			$next_year_of_ondate_timestamp = strtotime("+1 year", strtotime($on_date)) - 1;
+			$end_of_yearmonth_range_timestamp = min($next_year_of_ondate_timestamp, time());
 
-			$from = '00' . date('d', strtotime($onDate));
-			$to = date('md', $endofPartTimestamp);
-			$monthDiff = floor(($to - $from) / 100);
-			$monthDiff %= 12;
-			$ret['worked_month_from_first_day_in_this_year'] = max(0, $monthDiff);
+			$from = '00' . date('d', strtotime($on_date));
+			$to = date('md', $end_of_yearmonth_range_timestamp);
+			$month_diff = floor(($to - $from) / 100);
+			$month_diff %= 12;
+			$ret['preusable_cost'] = max(0, $month_diff);
 		}
 		if ($yearly == 2) {
-			$beginOfPart = new DateTime($onDate);
+			$beginOfPart = new DateTime($on_date);
 			$endofPart = new DateTime();
-			$endofPart->setTimestamp($yearlyBeginTimestamp);
+			$endofPart->setTimestamp($yearly_begin_timestamp);
 
 			$diff = $beginOfPart->diff($endofPart);
 			$costByUpdatingYearRaw = 15 * ($diff->days - 1) / 365;
@@ -102,7 +104,7 @@ class UserHolidayPolicy
 			$ret['worked_day_last_year'] = $diff->days - 1;
 		}
 		if ($yearly == 2) {
-			$ret['used_holiday_last_year'] = floatval($this->getUsedCost($yearly - 1));
+			$ret['preused_cost_prev_year'] = floatval($this->getUsedCost($yearly - 1));
 		}
 		if ($yearly == 3) {
 			$info = $this->getDetailInfomationByYearly(2);
@@ -113,7 +115,7 @@ class UserHolidayPolicy
 			$ret['last_year_remain_cost'] = $last_year_remain_cost;
 			$ret['last_year_usable_holiday_count'] = $last_year_usable_holiday_count;
 
-			$ret['used_holiday_last_year'] = max(0, $exceeded_cost);
+			$ret['preused_cost_prev_year'] = max(0, $exceeded_cost);
 		}
 		return $ret;
 	}
@@ -150,5 +152,15 @@ class UserHolidayPolicy
 		$begin = date('Y/m/d', $this->getYearlyBeginTimestamp($yearly));
 		$end = date('Y/m/d', $this->getYearlyEndTimestamp($yearly));
 		return $this->user_holiday_model->getUsedCost($this->user, $begin, $end);
+	}
+
+	/**
+	 * @param $fullCost
+	 * @return float
+	 */
+	private function floorByZeroDotFive($fullCost)
+	{
+		$fullCost = floor($fullCost * 2) / 2;
+		return $fullCost;
 	}
 }

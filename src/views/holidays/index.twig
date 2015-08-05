@@ -205,14 +205,14 @@
 
    입사일자 : {{ holidayInfo.ondate }}
   {% if yearly == 1 %}
-    월차가산 (내년것 미리 쓸수 있는 갯수)  ({{ holidayInfo.dateOfOndate }} ~ 12/31) : {{ holidayInfo.worked_month_this_year }}개월 만근 = {{ holidayInfo.worked_month_this_year }}개
+    월차가산 (내년것 미리 쓸수 있는 갯수)  ({{ holidayInfo.date_of_ondate }} ~ 12/31) : {{ holidayInfo.preusable_cost }}개월 만근 = {{ holidayInfo.preusable_cost }}개
   {% elseif yearly == 2 %}
-    월차가산 (내년것 미리 쓸수 있는 갯수) (작년 ~ {{ holidayInfo.dateOfOndate }}) : {{ holidayInfo.worked_month_from_first_day_in_this_year }}개월 만근 = {{ holidayInfo.worked_month_from_first_day_in_this_year }}개
+    월차가산 (내년것 미리 쓸수 있는 갯수) (작년 ~ {{ holidayInfo.date_of_ondate }}) : {{ holidayInfo.preusable_cost }}개월 만근 = {{ holidayInfo.preusable_cost }}개
     연차 : 작년근무일수({{ holidayInfo.worked_day_last_year }}일) x 15 / 365 = {{ holidayInfo.base_holiday_count }}개
-    작년사용에의한 차감연차 : {{ holidayInfo.used_holiday_last_year }}개
+    작년사용에의한 차감연차 : {{ holidayInfo.preused_cost_prev_year }}개
   {% elseif yearly == 3 %}
     연차 : {{ yearly }}년차 = 15개
-    작년사용에의한 차감연차 : {{ holidayInfo.used_holiday_last_year }}개 (2년차에 생긴 연차 : {{ holidayInfo.last_year_remain_cost }}개, 1~2년차에 사용한 연차 : {{ holidayInfo.last_year_usable_holiday_count }}개)
+    작년사용에의한 차감연차 : {{ holidayInfo.preused_cost_prev_year }}개 (2년차에 생긴 연차 : {{ holidayInfo.last_year_remain_cost }}개, 1~2년차에 사용한 연차 : {{ holidayInfo.last_year_usable_holiday_count }}개)
   {% else %}
     연차 : {{ yearly }}년차 = {{ fullCost }}개
   {% endif %}</span></pre>
