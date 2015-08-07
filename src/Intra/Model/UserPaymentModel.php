@@ -82,7 +82,7 @@ class UserPaymentModel
 
 	public function getAllPayments($month)
 	{
-		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
+		$nextmonth = date('Y-m-1', strtotime('+1 month', strtotime($month)));
 
 		$tables = array(
 			'payments.uid' => 'users.uid'

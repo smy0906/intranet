@@ -98,7 +98,7 @@ class UserPayment
 		$return['todayQueuedCost'] = $this->user_payment_model->todayQueuedCost();
 		$return['currentUid'] = $this->user->uid;
 
-		if ($this->isEditable()) {
+		if ($this->isSuperAdmin()) {
 			$return['isSuperAdmin'] = 1;
 			$return['editable'] |= 1;
 		}
@@ -128,17 +128,12 @@ class UserPayment
 
 	function sendExcelResposeAndExit($month)
 	{
-		$return = array();
-
-		if (!$this->isEditable()) {
+		if (!$this->isSuperAdmin()) {
 			return '권한이 없습니다';
 		}
 		$month = date('Y/m/1', strtotime($month));
-		$nextmonth = date('Y/m/1', strtotime('+1 month', strtotime($month)));
 
 		$payments = $this->user_payment_model->getAllPayments($month);
-		$return['payments'] = $payments;
-		$return['nextmonth'] = $nextmonth;
 		//header
 		$csvs = array();
 		{
@@ -164,7 +159,7 @@ class UserPayment
 			);
 			$csvs[] = $arr;
 		}
-		foreach ($return['payments'] as $payment) {
+		foreach ($payments as $payment) {
 			$arr = array(
 				$payment['request_date'],
 				$payment['name'],
@@ -307,7 +302,7 @@ class UserPayment
 			}
 		}
 
-		if (!$this->isEditable()) {
+		if (!$this->isSuperAdmin()) {
 			return false;
 		}
 		return true;
@@ -383,7 +378,7 @@ class UserPayment
 	/**
 	 * @return bool
 	 */
-	private function isEditable()
+	private function isSuperAdmin()
 	{
 		return UserSession::getSelf()->isSuperAdmin();
 	}
