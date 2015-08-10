@@ -77,7 +77,7 @@ class UserReceipts
 		$return = array();
 
 		$return['user'] = $this->user;
-		$uid = $this->getSupereditUserUid();
+		$uid = $this->getSupereditUid();
 
 		$prevmonth = date('Y-m', strtotime('-1 month', strtotime($month)));
 		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
@@ -190,8 +190,8 @@ class UserReceipts
 			$return['paymentCosts'][] = array('payment' => '합계', 'cost' => $sum);
 		}
 
-		$return['currentUid'] = $this->getSupereditUserUid();
-		$return['editable'] = (UserReceipts::parseMonth() == $month);
+		$return['currentUid'] = $this->getSupereditUid();
+		$return['editable'] = (UserReceipts::parseMonth() <= $month);
 		if (UserSession::getSelf()->isSuperAdmin()) {
 			$return['isSuperAdmin'] = 1;
 			$return['editable'] |= 1;
@@ -203,7 +203,7 @@ class UserReceipts
 		return $return;
 	}
 
-	private function getSupereditUserUid()
+	private function getSupereditUid()
 	{
 		return $this->user->uid;
 	}
@@ -231,7 +231,7 @@ class UserReceipts
 			'payment' => $payment,
 			'note' => $note
 		);
-		$row['uid'] = $this->getSupereditUserUid();
+		$row['uid'] = $this->getSupereditUid();
 		$row['date'] = date('Y-m-d', strtotime($month . '-' . $day));
 		if ($row['note'] == '저녁식사비' && self::isWeekend($row['date'])) {
 			$row['note'] = '휴일식사비';
@@ -257,8 +257,7 @@ class UserReceipts
 		}
 		$timestamp_input_date = strtotime($row['date']);
 		$timestamp_month = strtotime('first day of this month', $timestamp_working_month);
-		$timestamp_nextmonth = strtotime('first day of next month', $timestamp_working_month);
-		if ($timestamp_input_date < $timestamp_month || $timestamp_nextmonth <= $timestamp_input_date) {
+		if ($timestamp_input_date < $timestamp_month) {
 			throw new \Exception('날짜를 확인해주세요');
 		}
 
@@ -271,7 +270,7 @@ class UserReceipts
 	{
 		$db = IntraDb::getGnfDb();
 
-		$uid = $this->getSupereditUserUid();
+		$uid = $this->getSupereditUid();
 		$res = $db->sqlDelete('receipts', compact('receiptid', 'uid'));
 		if ($res) {
 			return 1;
@@ -283,7 +282,7 @@ class UserReceipts
 	{
 		$db = IntraDb::getGnfDb();
 
-		$uid = $this->getSupereditUserUid();
+		$uid = $this->getSupereditUid();
 
 		$update = array($key => $value);
 		$where = compact('uid', 'receiptid');
