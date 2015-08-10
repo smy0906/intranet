@@ -45,7 +45,7 @@
           })
       }).trigger('change');
 
-      $('#category_input').on('change', function () {
+      $('#js_category_input').on('change', function () {
         var category = $(this).val();
         if (category == '기타') {
           var category_detail = prompt('상세한 내역 입력해주세요');
@@ -62,17 +62,17 @@
         $('input[name=category]').val(category);
       }).trigger('change');
 
-      $('.payments_check').click(function () {
+      $('.js_payments_check').click(function () {
         var $checked = $(this).prop('checked');
-        $('.payment_check').prop('checked', $checked);
+        $('.js_payment_check').prop('checked', $checked);
       });
-      $('.checkbox_edit').change(function () {
+      $('.js_edit_all').change(function () {
         var url = '/payments/edit';
         var $this = $(this);
         var key = $this.data('key');
         var value = $this.val();
         $this.val(0);
-        var checkboxes = $('.payment_check:checked');
+        var checkboxes = $('.js_payment_check:checked');
         var checkbox_count = checkboxes.length;
         checkboxes.each(function () {
           var $check = $(this);
@@ -168,7 +168,7 @@
       <thead>
       <tr>
         <td rowspan="5">
-          <input type="checkbox" class="payments_check" name=""/>
+          <input type="checkbox" class="js_payments_check" name=""/>
         </td>
       </tr>
       <tr>
@@ -221,7 +221,7 @@
                 {% endif %}
                 ' paymentid='{{ payment.paymentid }}'>
           <td>
-            <input type="checkbox" class="payment_check" data-paymentid="{{ payment.paymentid }}"/>
+            <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}"/>
           </td>
           <td>{{ payment.request_date | slice(0, 10) }}</td>
           <td>{{ payment.name }}</td>
@@ -299,7 +299,7 @@
         </td>
         <td>
           <label>
-            <select id='category_input' js_cookie_save js_data_chosen>
+            <select id='js_category_input' js_cookie_save js_data_chosen>
               {% for product in const.categorys %}
                 <option value='{{ product }}'>{{ product }}</option>
               {% endfor %}
@@ -335,26 +335,51 @@
         <td><input type='text' name='note' placeholder='비고'/></td>
         <td>
           {% if isSuperAdmin %}
-            <select class="checkbox_edit" data-key="paytype">
+          <label>
+            <select name='paytype' js_cookie_save js_data_chosen>
+              <option value='미정'>미정</option>
+              {% for paytype in const.paytypes %}
+                <option value='{{ paytype }}'>{{ paytype }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          {% endif %}
+        </td>
+        <td>
+          {% if isSuperAdmin %}
+          <label>
+            <select name='status' js_cookie_save js_data_chosen>
+              {% for status in const.statuses %}
+                <option value='{{ status }}'>{{ status }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          {% endif %}
+        </td>
+        <td><input type="submit" value="추가"/></td>
+      </tr>
+      {% if isSuperAdmin %}
+        <tr>
+          <td colspan="17"></td>
+          <td>
+            <select class="js_edit_all" data-key="paytype">
               <option value='0'>선택 일괄 적용</option>
               {% for paytype in const.paytypes %}
                 <option value='{{ paytype }}'>{{ paytype }}</option>
               {% endfor %}
             </select>
-          {% endif %}
-        </td>
-        <td>
-          {% if isSuperAdmin %}
-            <select class="checkbox_edit" data-key="status">
+          </td>
+          <td>
+            <select class="js_edit_all" data-key="status">
               <option value='0'>선택 일괄 적용</option>
               {% for status in const.statuses %}
                 <option value='{{ status }}'>{{ status }}</option>
               {% endfor %}
             </select>
-          {% endif %}
-        </td>
-        <td><input type="submit" value="추가"/></td>
-      </tr>
+          </td>
+          <td></td>
+        </tr>
+      {% endif %}
       </tbody>
     </table>
   </form>

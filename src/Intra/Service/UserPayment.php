@@ -394,6 +394,10 @@ class UserPayment
 		$request_args['month'] = preg_replace('/\D/', '/', trim($request_args['month']));
 		$request_args['month'] = date('Y-m', strtotime($request_args['month'] . '/1'));
 		$request_args['pay_date'] = preg_replace('/\D/', '-', trim($request_args['pay_date']));
+		if (!$this->isSuperAdmin()) {
+			unset($request_args['status']);
+			unset($request_args['paytype']);
+		}
 		return $request_args;
 	}
 }

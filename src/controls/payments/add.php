@@ -20,6 +20,8 @@ $request_args = array(
 	'pay_date' => $request->get('pay_date'),
 	'tax' => $request->get('tax'),
 	'note' => $request->get('note'),
+	'paytype' => $request->get('paytype'),
+	'status' => $request->get('status'),
 );
 
 $payment_service = new UserPayment(UserSession::getSupereditUser());
