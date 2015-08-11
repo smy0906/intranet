@@ -10,7 +10,10 @@ class UserReceipts
 {
 	private $user;
 
-	function __construct(User $user)
+	/**
+	 * @param $user User
+	 */
+	function __construct($user)
 	{
 		$this->user = $user;
 	}
