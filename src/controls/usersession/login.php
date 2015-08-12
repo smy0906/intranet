@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-require_once(__DIR__ . '/../../azure/AuthorizationHelperForGraph.php');
+use Intra\Lib\Azure\AuthorizationHelperForAADGraphService;
 
 $azure_login = AuthorizationHelperForAADGraphService::getAuthorizatonURL();
 

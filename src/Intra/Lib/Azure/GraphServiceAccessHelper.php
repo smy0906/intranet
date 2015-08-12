@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/Settings.php';
+
+namespace Intra\Lib\Azure;
 
 class GraphServiceAccessHelper
 {

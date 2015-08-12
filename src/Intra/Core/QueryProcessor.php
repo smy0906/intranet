@@ -64,70 +64,41 @@ class QueryProcessor
 	 */
 	public function __act()
 	{
-		//__construct.php
-		{
-			if ($this->isAvailableController(self::CONSTRUCT_MAGIC_FUNCTION)) {
-				$__construct = new Control(
-					$this->controller_root, self::CONSTRUCT_MAGIC_FUNCTION, $this->request
-				);
-				$__construct_ret = $__construct->call();
-				if ($__construct_ret instanceof Response) {
-					$__construct_ret->send();
-					exit;
-				}
-			}
-		}
-
+		//__constructor.php
+		$this->processConstructor();
 		//__route.php
-		{
-			$__route = new Route($this->controller_root);
-			if ($__route->isExist()) {
-				$this->remain_query = $__route->route($this->remain_query, $this->request);
-			}
-		}
-
+		$this->processRoute();
 		//parse query
-		{
-			if (preg_match('/^\/?([\w\._]+)\/?/', $this->remain_query, $match)) {
-				$matched_query_raw = $match[0];
-				$matched_query = $match[1];
-				$unmatched_query_tail = substr($this->remain_query, strlen($matched_query_raw));
-			} else {
-				$matched_query = 'index';
-				$unmatched_query_tail = '';
-			}
-		}
+		list($matched_query, $unmatched_query_tail) = $this->parseQuery();
 
 		//control
-		{
-			if ($this->isSubfolder($matched_query)) {
-				$subQueryProcessor = new QueryProcessor(
-					$this->controller_root . '/' . $matched_query,
-					$unmatched_query_tail,
+		if ($this->isSubfolder($matched_query)) {
+			$subQueryProcessor = new QueryProcessor(
+				$this->controller_root . '/' . $matched_query,
+				$unmatched_query_tail,
+				$this->request
+			);
+			$ret = $subQueryProcessor->__act();
+			$this->executed_query = $matched_query . '/' . $subQueryProcessor->getRoutedQuery();
+			return $ret;
+		} elseif ($this->isAvailableController($matched_query)) {
+			try {
+				$target = new Control(
+					$this->controller_root,
+					$matched_query,
 					$this->request
 				);
-				$ret = $subQueryProcessor->__act();
-				$this->executed_query = $matched_query . '/' . $subQueryProcessor->getRoutedQuery();
-				return $ret;
-			} elseif ($this->isAvailableController($matched_query)) {
-				try {
-					$target = new Control(
-						$this->controller_root,
-						$matched_query,
-						$this->request
-					);
-					$this->executed_query = $matched_query;
-					$ret = $target->call();
-				} catch (AjaxMessage $e) {
-					$ret = $e->getMessage();
-					echo($ret);
-				}
-				if ($ret instanceof Response) {
-					$ret->send();
-					exit;
-				}
-				return $ret;
+				$this->executed_query = $matched_query;
+				$ret = $target->call();
+			} catch (AjaxMessage $e) {
+				$ret = $e->getMessage();
+				echo($ret);
 			}
+			if ($ret instanceof Response) {
+				$ret->send();
+				exit;
+			}
+			return $ret;
 		}
 		return false;
 	}
@@ -145,5 +116,46 @@ class QueryProcessor
 	public function getRoutedQuery()
 	{
 		return $this->executed_query;
+	}
+
+	private function processConstructor()
+	{
+		if ($this->isAvailableController(self::CONSTRUCT_MAGIC_FUNCTION)) {
+			$__construct = new Control(
+				$this->controller_root,
+				self::CONSTRUCT_MAGIC_FUNCTION,
+				$this->request
+			);
+			$__construct_ret = $__construct->call();
+			if ($__construct_ret instanceof Response) {
+				$__construct_ret->send();
+				exit;
+			}
+		}
+	}
+
+	private function processRoute()
+	{
+		$__route = new Route($this->controller_root);
+		if ($__route->isExist()) {
+			$this->remain_query = $__route->route($this->remain_query, $this->request);
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	private function parseQuery()
+	{
+		if (preg_match('/^\/?([\w\._]+)\/?/', $this->remain_query, $match)) {
+			$matched_query_raw = $match[0];
+			$matched_query = $match[1];
+			$unmatched_query_tail = substr($this->remain_query, strlen($matched_query_raw));
+			return array($matched_query, $unmatched_query_tail);
+		} else {
+			$matched_query = 'index';
+			$unmatched_query_tail = '';
+			return array($matched_query, $unmatched_query_tail);
+		}
 	}
 }

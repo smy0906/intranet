@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/Settings.php';
+
+namespace Intra\Lib\Azure;
 
 #session_start();
 #error_reporting(E_ALL | E_STRICT);

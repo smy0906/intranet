@@ -1,5 +1,7 @@
 <?php
 
+namespace Intra\Lib\Azure;
+
 class Settings
 {
 	public static $clientId = '***REMOVED***';
