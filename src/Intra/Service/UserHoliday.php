@@ -40,23 +40,7 @@ class UserHoliday
 		$end = date('Y/m/d', $this->user_holiday_policy->getYearlyEndTimestamp($yearly));
 		$holidays = $this->user_holiday_model->getHolidaysByUserYearly($this->user, $begin, $end);
 
-		$this->filterHolidays($holidays);
-
-		return $holidays;
-	}
-
-	/**
-	 * @param $year
-	 * @return \Intra\Model\HolidayRaw[]
-	 */
-
-	public function getHolidaysAllUsers($year)
-	{
-		$begin = date($year . '/1/1');
-		$end = date(($year) . '/12/31');
-		$holidays = $this->user_holiday_model->getHolidaysByUserYearly(null, $begin, $end);
-
-		$this->filterHolidays($holidays);
+		self::filterHolidays($holidays);
 
 		return $holidays;
 	}
@@ -69,19 +53,19 @@ class UserHoliday
 	{
 		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);
 		$holidayRaws = array($holidayRaw);
-		$this->filterHolidays($holidayRaws);
+		self::filterHolidays($holidayRaws);
 		return $holidayRaws[0];
 	}
 
 	/**
 	 * @param $holidays
 	 */
-	private function filterHolidays($holidays)
+	public static function filterHolidays($holidays)
 	{
 		foreach ($holidays as $holiday) {
-			$holiday->uid_name = $this->getUserNameSafe($holiday->uid);
-			$holiday->manager_uid_name = $this->getUserNameSafe($holiday->manager_uid);
-			$holiday->keeper_uid_name = $this->getUserNameSafe($holiday->keeper_uid);
+			$holiday->uid_name = self::getUserNameSafe($holiday->uid);
+			$holiday->manager_uid_name = self::getUserNameSafe($holiday->manager_uid);
+			$holiday->keeper_uid_name = self::getUserNameSafe($holiday->keeper_uid);
 		}
 	}
 
@@ -217,7 +201,6 @@ class UserHoliday
 
 	public function sendNotification($holidayid, $type)
 	{
-		return true;
 		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);
 		$title = $this->getMailTitle($holidayRaw, $type);
 		$ret = $this->sendMailNotification($holidayRaw, $title);
@@ -372,7 +355,7 @@ class UserHoliday
 	 * @param $keeper_uid
 	 * @return mixed
 	 */
-	private function getUserNameSafe($keeper_uid)
+	public static function getUserNameSafe($keeper_uid)
 	{
 		$user = Users::getByUid($keeper_uid);
 		if ($user) {

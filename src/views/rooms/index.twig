@@ -8,8 +8,8 @@
 
   <style type="text/css" media="screen">
     html, body {
-      margin: 0px;
-      padding: 0px;
+      margin: 0;
+      padding: 0;
       height: 100%;
       overflow: hidden;
     }
@@ -53,6 +53,9 @@
 
   <script type="text/javascript" charset="utf-8">
     function init() {
+      var $ = window.$;
+      var oldFrom, oldTo;
+      ;
       scheduler.config.mark_now = true;
       scheduler.config.time_step = 30;
       scheduler.config.first_hour = 10;

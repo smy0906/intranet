@@ -3,6 +3,7 @@
 
 use Intra\Lib\Response\CsvResponse;
 use Intra\Service\UserHoliday;
+use Intra\Service\UserHolidayStat;
 use Intra\Service\UserSession;
 
 $request = $this->getRequest();
@@ -14,7 +15,7 @@ if (!UserSession::getSelf()->isSuperAdmin()) {
 
 //service
 {
-	$user_holiday = new UserHoliday($super_edit_user);
+	$user_holiday = new UserHolidayStat($super_edit_user);
 }
 
 //input

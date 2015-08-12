@@ -3,6 +3,7 @@
 
 use Intra\Service\UserPayment;
 use Intra\Service\UserReceipts;
+use Intra\Service\UserReceiptsStat;
 use Intra\Service\UserSession;
 
 if (!UserSession::getSelf()->isSuperAdmin()) {
@@ -13,5 +14,5 @@ $request = $this->getRequest();
 $month = $request->get('month');
 
 $month = UserPayment::parseMonth($month);
-$payment_service = new UserReceipts(null);
+$payment_service = new UserReceiptsStat();
 $payment_service->download($month);

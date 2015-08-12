@@ -13,6 +13,6 @@ $this->matchIf('/download/{year}')
 	->assertAsInt('year')
 	->query('download');
 
-$this->matchIf('/download_remain/{year}')
+$this->matchIf('/downloadRemain/{year}')
 	->assertAsInt('year')
-	->query('download_remain');
+	->query('downloadRemain');
