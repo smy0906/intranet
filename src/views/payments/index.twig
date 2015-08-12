@@ -90,9 +90,9 @@
 
       {% if editable %}
       $('.payment td[key]').each(function () {
-        var paymentid = $(this).parent().attr('paymentid');
-        var key = $(this).attr('key');
-        var keyselect = $(this).attr('keyselect') != undefined;
+        var paymentid = $(this).parent().data('paymentid');
+        var key = $(this).data('key');
+        var keyselect = $(this).data('keyselect') != undefined;
         var submitdata = {paymentid: paymentid, key: key};
         var args = {submitdata: submitdata};
 
@@ -138,8 +138,8 @@
     }
 
     tr.add td {
-      margin: 0px;
-      padding: 0px;
+      margin: 0;
+      padding: 0;
     }
 
     tr.add input, tr.add select {
@@ -168,7 +168,7 @@
       <thead>
       <tr>
         <td rowspan="5">
-          <input type="checkbox" class="js_payments_check" name=""/>
+          <input type="checkbox" class="js_payments_check" name="" title="payment_checkbox_all"/>
         </td>
       </tr>
       <tr>
@@ -184,7 +184,7 @@
         <td colspan="3" rowspan="2">자동입력</td>
         <td colspan="13">업무부서 입력</td>
         <td colspan="2" rowspan="2">CO팀 입력</td>
-        <td rowspan="2" paymentsCommand></td>
+        <td rowspan="2"></td>
       </tr>
       <tr>
         <td colspan="5">기본정보</td>
@@ -219,29 +219,29 @@
                 {% if payment.status == '결제 완료' %}
                     payment_done
                 {% endif %}
-                ' paymentid='{{ payment.paymentid }}'>
+                ' data-paymentid='{{ payment.paymentid }}'>
           <td>
-            <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}"/>
+            <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}" title="payment_checkbox"/>
           </td>
           <td>{{ payment.request_date | slice(0, 10) }}</td>
           <td>{{ payment.name }}</td>
-          <td key='manager_uid' keyselect>{{ payment.manager_name }}</td>
-          <td key='month'>{{ payment.month }}</td>
-          <td key='team' keyselect>{{ payment.team }}</td>
-          <td key='product' keyselect>{{ payment.product }}</td>
-          <td key='category'>{{ payment.category }}</td>
-          <td key='desc'>{{ payment.desc }}</td>
-          <td key='company_name'>{{ payment.company_name }}</td>
-          <td key='bank'>{{ payment.bank }}</td>
-          <td key='bank_account'>{{ payment.bank_account }}</td>
-          <td key='bank_account_owner'>{{ payment.bank_account_owner }}</td>
-          <td key='price'>{{ payment.price | number_format }}</td>
-          <td key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
-          <td key='tax' keyselect>{{ payment.tax }}</td>
-          <td key='note'>{{ payment.note }}</td>
+          <td data-key='manager_uid' data-keyselect>{{ payment.manager_name }}</td>
+          <td data-key='month'>{{ payment.month }}</td>
+          <td data-key='team' data-keyselect>{{ payment.team }}</td>
+          <td data-key='product' data-keyselect>{{ payment.product }}</td>
+          <td data-key='category'>{{ payment.category }}</td>
+          <td data-key='desc'>{{ payment.desc }}</td>
+          <td data-key='company_name'>{{ payment.company_name }}</td>
+          <td data-key='bank'>{{ payment.bank }}</td>
+          <td data-key='bank_account'>{{ payment.bank_account }}</td>
+          <td data-key='bank_account_owner'>{{ payment.bank_account_owner }}</td>
+          <td data-key='price'>{{ payment.price | number_format }}</td>
+          <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
+          <td data-key='tax' data-keyselect>{{ payment.tax }}</td>
+          <td data-key='note'>{{ payment.note }}</td>
           {% if isSuperAdmin %}
-            <td key='paytype' keyselect>{{ payment.paytype }}</td>
-            <td key='status' keyselect>{{ payment.status }}</td>
+            <td data-key='paytype' data-keyselect>{{ payment.paytype }}</td>
+            <td data-key='status' data-keyselect>{{ payment.status }}</td>
           {% else %}
             <td>{{ payment.paytype }}</td>
             <td>{{ payment.status }}</td>
@@ -362,7 +362,7 @@
         <tr>
           <td colspan="17"></td>
           <td>
-            <select class="js_edit_all" data-key="paytype">
+            <select class="js_edit_all" data-key="paytype" title="paytype">
               <option value='0'>선택 일괄 적용</option>
               {% for paytype in const.paytypes %}
                 <option value='{{ paytype }}'>{{ paytype }}</option>
@@ -370,7 +370,7 @@
             </select>
           </td>
           <td>
-            <select class="js_edit_all" data-key="status">
+            <select class="js_edit_all" data-key="status" title="status">
               <option value='0'>선택 일괄 적용</option>
               {% for status in const.statuses %}
                 <option value='{{ status }}'>{{ status }}</option>
@@ -416,7 +416,7 @@ B. 결제정보
           </td>
           <td>
             <input type="button" value="받기"
-                   onclick="javascript:location.href='/payments/download/{{ month }}'"/>
+                   onclick="location.href='/payments/download/{{ month }}'"/>
           </td>
         </tr>
         <tr>

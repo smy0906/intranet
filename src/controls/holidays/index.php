@@ -22,15 +22,13 @@ if ($self->isSuperAdmin()) {
 }
 
 //input
-{
-	$year = $request->get('year');
-	if (!intval($year)) {
-		$year = date('Y');
-	}
-
-	$joinYear = $user_holiday->getYearByYearly(1);
-	$yearly = $year - $joinYear + 1;
+$year = $request->get('year');
+if (!intval($year)) {
+	$year = date('Y');
 }
+
+$joinYear = $user_holiday->getYearByYearly(1);
+$yearly = $year - $joinYear + 1;
 
 //main
 {

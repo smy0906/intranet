@@ -28,7 +28,7 @@ class UserModel extends DomainCacheModel
 	 */
 	private $db;
 
-	function __construct($uid, $other_db = null)
+	public function __construct($uid, $other_db = null)
 	{
 		$this->db = IntraDb::getGnfDb();
 		$this->uid = $uid;
@@ -70,7 +70,7 @@ class UserModel extends DomainCacheModel
 	 * @return bool
 	 * @throws AjaxMessage
 	 */
-	static public function addUser($userJoinDto)
+	public static function addUser($userJoinDto)
 	{
 		$array = get_object_vars($userJoinDto);
 
@@ -90,7 +90,7 @@ class UserModel extends DomainCacheModel
 		return $this->db->sqlCount(self::$table, $where);
 	}
 
-	function updateExtra($key, $val)
+	public function updateExtra($key, $val)
 	{
 		self::invalidateCache($this->uid);
 

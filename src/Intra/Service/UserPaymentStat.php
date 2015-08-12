@@ -6,7 +6,7 @@ use Intra\Model\UserPaymentModel;
 
 class UserPaymentStat
 {
-	function sendExcelResposeAndExit($month)
+	public function sendExcelResposeAndExit($month)
 	{
 		if (!UserSession::getSelf()->isSuperAdmin()) {
 			return '권한이 없습니다';
@@ -17,29 +17,27 @@ class UserPaymentStat
 		$payments = $user_payment_model->getAllPayments($month);
 		//header
 		$csvs = array();
-		{
-			$arr = array(
-				'요청일',
-				'요청자',
-				'승인자',
-				'귀속월',
-				'귀속부서',
-				'프로덕트',
-				'분류',
-				'상세내역',
-				'업체명',
-				'입금은행',
-				'입금계좌번호',
-				'예금주',
-				'입금금액',
-				'결제예정일',
-				'세금계산서수취여부',
-				'비고',
-				'결제수단',
-				'상태'
-			);
-			$csvs[] = $arr;
-		}
+		$arr = array(
+			'요청일',
+			'요청자',
+			'승인자',
+			'귀속월',
+			'귀속부서',
+			'프로덕트',
+			'분류',
+			'상세내역',
+			'업체명',
+			'입금은행',
+			'입금계좌번호',
+			'예금주',
+			'입금금액',
+			'결제예정일',
+			'세금계산서수취여부',
+			'비고',
+			'결제수단',
+			'상태'
+		);
+		$csvs[] = $arr;
 		foreach ($payments as $payment) {
 			$arr = array(
 				$payment['request_date'],

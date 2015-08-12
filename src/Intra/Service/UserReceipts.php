@@ -2,7 +2,6 @@
 
 namespace Intra\Service;
 
-
 use Intra\Model\UserFactory;
 
 class UserReceipts
@@ -12,12 +11,12 @@ class UserReceipts
 	/**
 	 * @param $user User
 	 */
-	function __construct($user)
+	public function __construct($user)
 	{
 		$this->user = $user;
 	}
 
-	static public function queryWeekend($month, $day)
+	public static function queryWeekend($month, $day)
 	{
 		$date = $month . '-' . $day;
 		if (self::isWeekend($date)) {
@@ -26,13 +25,13 @@ class UserReceipts
 		return "(평일)";
 	}
 
-	static private function isWeekend($date)
+	private static function isWeekend($date)
 	{
 		return (date('N', strtotime($date)) >= 6);
 	}
 
 
-	function index($month = null)
+	public function index($month = null)
 	{
 		$db = IntraDb::getGnfDb();
 
@@ -56,101 +55,100 @@ class UserReceipts
 
 
 		//용도별 통계
-		{
-			$tbls = $db->sqlDicts(
-				'select scope, type, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by scope, type order by scope, type',
-				$uid,
-				$month,
-				$nextmonth
-			);
-			$sumByScope = $db->sqlDicts(
-				'select scope, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by scope order by scope',
-				$uid,
-				$month,
-				$nextmonth
-			);
-			$sumByType = $db->sqlDicts(
-				'select type, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by type order by type',
-				$uid,
-				$month,
-				$nextmonth
-			);
-			$sum = $db->sqlDict(
-				'select sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d")',
-				$uid,
-				$month,
-				$nextmonth
-			);
+
+		$tbls = $db->sqlDicts(
+			'select scope, type, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by scope, type order by scope, type',
+			$uid,
+			$month,
+			$nextmonth
+		);
+		$sumByScope = $db->sqlDicts(
+			'select scope, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by scope order by scope',
+			$uid,
+			$month,
+			$nextmonth
+		);
+		$sumByType = $db->sqlDicts(
+			'select type, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by type order by type',
+			$uid,
+			$month,
+			$nextmonth
+		);
+		$sum = $db->sqlDict(
+			'select sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d")',
+			$uid,
+			$month,
+			$nextmonth
+		);
 
 
-			$cols = array(
-				'합계' => 1
-			);
-			foreach ($sumByScope as $tbl) {
-				$cols[$tbl['scope']] = 1;
-			}
-			foreach ($cols as $k => $v) {
-				if (!$v) {
-					unset($cols[$k]);
-				}
-			}
-
-			$rows = array(
-				'저녁/휴일 식사비' => 0,
-				'팀런치' => 0,
-				'접대비' => 0,
-				'야근교통비' => 0,
-				'업무차 식음료비' => 0,
-				'업무차 교통비' => 0,
-				'회식비' => 0,
-				'동호회 지원비' => 0,
-				'기타' => 0,
-				'합계' => 1
-			);
-			foreach ($sumByType as $tbl) {
-				$rows[$tbl['type']] = 1;
-			}
-			foreach ($rows as $k => $v) {
-				if (!$v) {
-					unset($rows[$k]);
-				}
-			}
-
-			$costs = array();
-			foreach ($rows as $row => $null) {
-				foreach ($cols as $col => $null2) {
-					$costs[$row][$col] = array('cost' => 0, 'count' => 0);
-				}
-			}
-			foreach ($tbls as $tbl) {
-				$costs[$tbl['type']][$tbl['scope']] = $tbl;
-			}
-			foreach ($sumByScope as $tbl) {
-				$costs['합계'][$tbl['scope']] = $tbl;
-			}
-			foreach ($sumByType as $tbl) {
-				$costs[$tbl['type']]['합계'] = $tbl;
-			}
-			$costs['합계']['합계'] = $sum;
-
-			$return['cols'] = $cols;
-			$return['costs'] = $costs;
+		$cols = array(
+			'합계' => 1
+		);
+		foreach ($sumByScope as $tbl) {
+			$cols[$tbl['scope']] = 1;
 		}
+		foreach ($cols as $k => $v) {
+			if (!$v) {
+				unset($cols[$k]);
+			}
+		}
+
+		$rows = array(
+			'저녁/휴일 식사비' => 0,
+			'팀런치' => 0,
+			'접대비' => 0,
+			'야근교통비' => 0,
+			'업무차 식음료비' => 0,
+			'업무차 교통비' => 0,
+			'회식비' => 0,
+			'동호회 지원비' => 0,
+			'기타' => 0,
+			'합계' => 1
+		);
+		foreach ($sumByType as $tbl) {
+			$rows[$tbl['type']] = 1;
+		}
+		foreach ($rows as $k => $v) {
+			if (!$v) {
+				unset($rows[$k]);
+			}
+		}
+
+		$costs = array();
+		foreach ($rows as $row => $null) {
+			foreach ($cols as $col => $null2) {
+				$costs[$row][$col] = array('cost' => 0, 'count' => 0);
+			}
+		}
+		foreach ($tbls as $tbl) {
+			$costs[$tbl['type']][$tbl['scope']] = $tbl;
+		}
+		foreach ($sumByScope as $tbl) {
+			$costs['합계'][$tbl['scope']] = $tbl;
+		}
+		foreach ($sumByType as $tbl) {
+			$costs[$tbl['type']]['합계'] = $tbl;
+		}
+		$costs['합계']['합계'] = $sum;
+
+		$return['cols'] = $cols;
+		$return['costs'] = $costs;
 
 		//지불방식별 통계
-		{
-			$return['paymentCosts'] = $db->sqlDicts(
-				'select payment, sum(cost) as cost from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by payment order by payment, type',
-				$uid,
-				$month,
-				$nextmonth
-			);
-			$sum = 0;
-			foreach ($return['paymentCosts'] as $cost) {
-				$sum += $cost['cost'];
-			}
-			$return['paymentCosts'][] = array('payment' => '합계', 'cost' => $sum);
+
+		$return['paymentCosts'] = $db->sqlDicts(
+			'select payment, sum(cost) as cost from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by payment order by payment, type',
+			$uid,
+			$month,
+			$nextmonth
+		);
+		$sum = 0;
+		foreach ($return['paymentCosts'] as $cost) {
+			$sum += $cost['cost'];
 		}
+		$return['paymentCosts'][] = array('payment' => '합계', 'cost' => $sum);
+
 
 		$return['currentUid'] = $this->getSupereditUid();
 		$return['editable'] = (UserReceipts::parseMonth() <= $month);
@@ -181,7 +179,7 @@ class UserReceipts
 		return $month;
 	}
 
-	function add($month, $day, $title, $scope, $type, $cost, $payment, $note)
+	public function add($month, $day, $title, $scope, $type, $cost, $payment, $note)
 	{
 		$db = IntraDb::getGnfDb();
 
@@ -228,7 +226,7 @@ class UserReceipts
 		}
 	}
 
-	function del($receiptid)
+	public function del($receiptid)
 	{
 		$db = IntraDb::getGnfDb();
 
@@ -240,7 +238,7 @@ class UserReceipts
 		return '삭제가 실패했습니다!';
 	}
 
-	function edit($receiptid, $key, $value)
+	public function edit($receiptid, $key, $value)
 	{
 		$db = IntraDb::getGnfDb();
 

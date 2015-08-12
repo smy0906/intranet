@@ -10,7 +10,7 @@ namespace Intra\Model;
 
 class SessionModel
 {
-	function __construct($other_db = null)
+	public function __construct($other_db = null)
 	{
 		if (!isset($_SESSION)) {
 			ini_set("session.gc_maxlifetime", 60 * 60 * 24 * 10);

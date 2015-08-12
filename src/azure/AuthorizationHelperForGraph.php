@@ -56,7 +56,7 @@ class AuthorizationHelperForAADGraphService
 		$tokenOutput = json_decode($output);
 		$tokenType = $tokenOutput->{'token_type'};
 		$accessToken = $tokenOutput->{'access_token'};
-		$tokenScope = $tokenOutput->{'scope'};
+		#$tokenScope = $tokenOutput->{'scope'};
 
 		#print("\t Token Type: " . $tokenType . "\n AccessToken: " . $accessToken);
 		// Add the token information to the session header so that we can use it to access Graph

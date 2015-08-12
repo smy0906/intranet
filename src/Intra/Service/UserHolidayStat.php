@@ -8,12 +8,11 @@
 
 namespace Intra\Service;
 
-
 use Intra\Model\UserHolidayModel;
 
 class UserHolidayStat
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->user_holiday_model = new UserHolidayModel();
 	}

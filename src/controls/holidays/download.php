@@ -2,7 +2,6 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Lib\Response\CsvResponse;
-use Intra\Service\UserHoliday;
 use Intra\Service\UserHolidayStat;
 use Intra\Service\UserSession;
 
@@ -19,11 +18,9 @@ if (!UserSession::getSelf()->isSuperAdmin()) {
 }
 
 //input
-{
-	$year = $request->get('year');
-	if (!intval($year)) {
-		$year = date('Y');
-	}
+$year = $request->get('year');
+if (!intval($year)) {
+	$year = date('Y');
 }
 
 //main

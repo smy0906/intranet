@@ -11,7 +11,7 @@ class GraphServiceAccessHelper
 		$ch = curl_init();
 
 		// Add authorization and other headers. Also set some common settings.
-		self::AddRequiredHeadersAndSettings($ch, $token_array);
+		self::addRequiredHeadersAndSettings($ch, $token_array);
 
 		// Create url for the entry based on the feedname and the key value
 		$feedURL = "https://graph.windows.net/" . Settings::$appTenantDomainName . "/me/";
@@ -32,7 +32,7 @@ class GraphServiceAccessHelper
 
 	// Constructs a HTTP PATCH request for updating current user entry.
 
-	public static function AddRequiredHeadersAndSettings($ch, array $token_array)
+	public static function addRequiredHeadersAndSettings($ch, array $token_array)
 	{
 		//Generate the authentication header
 		$authHeader = 'Authorization:' . $token_array['tokenType'] . ' ' . $token_array['accessToken'];
@@ -57,7 +57,7 @@ class GraphServiceAccessHelper
 	{
 		//initiaze curl which is used to make the http request
 		$ch = curl_init();
-		self::AddRequiredHeadersAndSettings($ch, $token_array);
+		self::addRequiredHeadersAndSettings($ch, $token_array);
 		// set url
 		$feedURL = "https://graph.windows.net/me" . "?" . Settings::$apiVersion;
 		curl_setopt($ch, CURLOPT_URL, $feedURL);
@@ -74,5 +74,4 @@ class GraphServiceAccessHelper
 		$udpatedEntry = json_decode($output);
 		return $udpatedEntry;
 	}
-
 }

@@ -5,21 +5,6 @@ namespace Intra\Model;
 use Intra\Service\IntraDb;
 use Intra\Service\User;
 
-class HolidayRaw
-{
-	public $holidayid;
-	public $request_date;
-	public $uid;
-	public $manager_uid;
-	public $yearly;
-	public $type;
-	public $date;
-	public $cost;
-	public $keeper_uid;
-	public $phone_emergency;
-	public $memo;
-}
-
 class UserHolidayModel
 {
 	public static $const = array(
@@ -27,7 +12,7 @@ class UserHolidayModel
 		'memos' => array('개인용무', '병원진료', '예비군훈련', '경조사', '기타')
 	);
 
-	function __construct()
+	public function __construct()
 	{
 		$this->db = IntraDb::getGnfDb();
 	}

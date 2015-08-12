@@ -2,7 +2,6 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\UserPayment;
-use Intra\Service\UserReceipts;
 use Intra\Service\UserReceiptsStat;
 use Intra\Service\UserSession;
 

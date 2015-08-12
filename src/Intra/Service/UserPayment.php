@@ -1,7 +1,6 @@
 <?php
 namespace Intra\Service;
 
-use Intra\Lib\Response\CsvResponse;
 use Intra\Model\UserFactory;
 use Intra\Model\UserPaymentModel;
 use Mailgun\Mailgun;
@@ -76,7 +75,7 @@ class UserPayment
 		$this->const = $const;
 	}
 
-	function index($month)
+	public function index($month)
 	{
 		$return = array();
 		$return['user'] = UserSession::getSupereditUser()->getDbDto();
@@ -111,7 +110,7 @@ class UserPayment
 		return $return;
 	}
 
-	function add($request_args)
+	public function add($request_args)
 	{
 		$request_args = $this->filterAdd($request_args);
 		$this->assertAdd($request_args);
@@ -126,7 +125,7 @@ class UserPayment
 		return 1;
 	}
 
-	function getConstValueByKey($key)
+	public function getConstValueByKey($key)
 	{
 		if ($key == 'manager_uid') {
 			$ret = array();
@@ -169,7 +168,7 @@ class UserPayment
 		return '삭제가 실패했습니다!';
 	}
 
-	function edit($paymentid, $key, $new_value)
+	public function edit($paymentid, $key, $new_value)
 	{
 		$uid = $this->user->uid;
 
@@ -198,7 +197,7 @@ class UserPayment
 		return $updated_value;
 	}
 
-	public function get_pay_date_by_str($pay_type_str)
+	public function getPayDateByStr($pay_type_str)
 	{
 		if ($pay_type_str == '7일' || $pay_type_str == '10일' || $pay_type_str == '25일') {
 			$dest_day = preg_replace('/\D/', '', $pay_type_str);

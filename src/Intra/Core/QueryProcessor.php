@@ -23,7 +23,7 @@ class QueryProcessor
 	private $controller_root;
 	private $executed_query;
 
-	function __construct($controller_root, $remain_query, Request $request)
+	public function __construct($controller_root, $remain_query, Request $request)
 	{
 		$this->controller_root = $controller_root;
 		$this->remain_query = $remain_query;
@@ -142,7 +142,7 @@ class QueryProcessor
 		return is_dir($this->controller_root . '/' . $controller);
 	}
 
-	function getRoutedQuery()
+	public function getRoutedQuery()
 	{
 		return $this->executed_query;
 	}

@@ -2,7 +2,6 @@
 
 namespace Intra\Service;
 
-
 use Intra\Lib\Response\CsvResponse;
 
 class UserReceiptsStat

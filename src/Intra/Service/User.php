@@ -8,7 +8,6 @@
 
 namespace Intra\Service;
 
-
 use Intra\Model\UserFactory;
 use Intra\Model\UserModel;
 

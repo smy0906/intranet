@@ -8,7 +8,6 @@
 
 namespace Intra\Service;
 
-
 use DateTime;
 use Intra\Model\HolidayRaw;
 use Intra\Model\UserFactory;
@@ -22,7 +21,7 @@ class UserHoliday
 	 */
 	private $user;
 
-	function __construct(User $user)
+	public function __construct(User $user)
 	{
 		$this->user = $user;
 		$this->user_holiday_policy = new UserHolidayPolicy($user);

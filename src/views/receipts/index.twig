@@ -38,12 +38,12 @@
       });
       {% if editable %}
       $('.receipt td[key]').each(function () {
-        var receiptid = $(this).parent().attr('receiptid');
-        var key = $(this).attr('key');
+        var receiptid = $(this).parent().data('receiptid');
+        var key = $(this).data('key');
         var submitdata = {receiptid: receiptid, key: key};
         var args = {submitdata: submitdata};
         if (key == 'cost') {
-          args['data'] = function (value, settings) {
+          args['data'] = function (value) {
             return value.replace(/\D/gi, '');
           };
         }
@@ -129,15 +129,15 @@
       </thead>
       <tbody>
       {% for key, receipt in receipts %}
-        <tr class='receipt' receiptid='{{ receipt.receiptid }}'>
+        <tr class='receipt' data-receiptid='{{ receipt.receiptid }}'>
           <td>{{ key + 1 }}</td>
-          <td key='date'>{{ receipt.date }}</td>
-          <td key='title'>{{ receipt.title }}</td>
-          <td key='type'>{{ receipt.type }}</td>
-          <td key='scope'>{{ receipt.scope }}</td>
-          <td key='cost' align='right'>{{ receipt.cost | number_format }}원</td>
-          <td key='payment'>{{ receipt.payment }}</td>
-          <td key='note'>{{ receipt.note }}</td>
+          <td data-key='date'>{{ receipt.date }}</td>
+          <td data-key='title'>{{ receipt.title }}</td>
+          <td data-key='type'>{{ receipt.type }}</td>
+          <td data-key='scope'>{{ receipt.scope }}</td>
+          <td data-key='cost' align='right'>{{ receipt.cost | number_format }}원</td>
+          <td data-key='payment'>{{ receipt.payment }}</td>
+          <td data-key='note'>{{ receipt.note }}</td>
           <td class='receipts_command'>
             {% if editable %}
               <input type='button' value='삭제'
@@ -158,53 +158,57 @@
         <tr class='receipts_command'>
           <td></td>
           <td>
-            <input type='text' name='day' maxlength='2' size='2'/>일 <span id='dayType'></span>
+            <input type='text' name='day' maxlength='2' size='2' title="day"/>일 <span id='dayType'></span>
           </td>
-          <td><input type='text' name='title' value='웍앤박스' class='sampleInput' js_cookie_save/></td>
+          <td><input type='text' name='title' value='웍앤박스' class='sampleInput' js_cookie_save title="title"/></td>
           <td>
-            <select name='type' js_data_chosen>
-              <option value='저녁/휴일 식사비'/>
-              저녁/휴일 식사비
-              <option value='팀런치'/>
-              팀런치
-              <option value='야근교통비'/>
-              야근교통비
-              <option value='업무차 식음료비'/>
-              업무차 식음료비
-              <option value='업무차 교통비'/>
-              업무차 교통비
-              <option value='회식비'/>
-              회식비
-              <option value='동호회 지원비'/>
-              동호회 지원비
-              <option value='기타'/>
-              기타
+            <label>
+              <select name='type' js_data_chosen>
+                <option value='저녁/휴일 식사비'>
+                  저녁/휴일 식사비
+                <option value='팀런치'>
+                  팀런치
+                <option value='야근교통비'>
+                  야근교통비
+                <option value='업무차 식음료비'>
+                  업무차 식음료비
+                <option value='업무차 교통비'>
+                  업무차 교통비
+                <option value='회식비'>
+                  회식비
+                <option value='동호회 지원비'>
+                  동호회 지원비
+                <option value='기타'>
+                  기타
+              </select>
+            </label>
+          </td>
+          <td>
+            <label>
+              <select name='scope' disabled='disabled'>
+                <option value='개인비용'>
+                  개인비용
+                <option value='회사비용'>
+                  회사비용
+              </select>
+            </label>
+          </td>
+          <td><input type='text' name='cost' js_number_format title="cost"/>원</td>
+          <td>
+            <select name='payment' js_cookie_save js_data_chosen title="payment">
+              <option value='신용카드'>
+                신용카드
+              <option value='직불/체크카드'>
+                직불/체크카드
+              <option value='현금'>
+                현금
+              <option value='현금영수증'>
+                현금영수증
+              <option value='휴대폰 결제'>
+                휴대폰 결제
             </select>
           </td>
-          <td>
-            <select name='scope' disabled='disabled'>
-              <option value='개인비용'/>
-              개인비용
-              <option value='회사비용'/>
-              회사비용
-            </select>
-          </td>
-          <td><input type='text' name='cost' js_number_format/>원</td>
-          <td>
-            <select name='payment' js_cookie_save js_data_chosen>
-              <option value='신용카드'/>
-              신용카드
-              <option value='직불/체크카드'/>
-              직불/체크카드
-              <option value='현금'/>
-              현금
-              <option value='현금영수증'/>
-              현금영수증
-              <option value='휴대폰 결제'/>
-              휴대폰 결제
-            </select>
-          </td>
-          <td><input type='text' name='note' value='저녁식사비' class='sampleInput'/></td>
+          <td><input type='text' name='note' value='저녁식사비' class='sampleInput' title="note"/></td>
           <td>
             <input type='submit' value='추가하기'/>
           </td>

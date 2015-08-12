@@ -16,14 +16,14 @@ class View
 	private $root;
 	private $query;
 
-	function __construct($root, $query)
+	public function __construct($root, $query)
 	{
 		$this->root = $root;
 		$this->query = $query;
 		$this->query = preg_replace('/\/+$/', '', $this->query);
 		$file = $this->root . '/' . $this->query . ".twig";
 		if (file_exists($file)) {
-			$this->target = $file;;
+			$this->target = $file;
 		} else {
 			$this->target = null;
 		}
@@ -37,9 +37,7 @@ class View
 	public function act($array)
 	{
 		$loader = new Twig_Loader_Filesystem($this->root);
-		$twig = new Twig_Environment(
-			$loader, array()
-		);
+		$twig = new Twig_Environment($loader, array());
 		#$twig->addFilter('number_format', new Twig_Filter_Function('number_format'));
 
 		echo $twig->render($this->query . '.twig', $array);

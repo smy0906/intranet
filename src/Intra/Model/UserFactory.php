@@ -8,7 +8,6 @@
 
 namespace Intra\Model;
 
-
 use Intra\Core\AjaxMessage;
 use Intra\Service\IntraDb;
 
@@ -21,7 +20,7 @@ use Intra\Service\IntraDb;
  */
 class UserFactory
 {
-	static public function assertUserIdExist($id)
+	public static function assertUserIdExist($id)
 	{
 		if (!self::isExistById($id)) {
 			throw new AjaxMessage(
@@ -35,12 +34,12 @@ class UserFactory
 		}
 	}
 
-	static public function isExistById($uid)
+	public static function isExistById($uid)
 	{
 		return !!self::getUidById($uid);
 	}
 
-	static public function getUidById($id)
+	public static function getUidById($id)
 	{
 		$db = IntraDb::getGnfDb();
 		return $db->sqlData('select uid from users where id = ?', $id);

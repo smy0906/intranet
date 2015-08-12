@@ -8,7 +8,6 @@
 
 namespace Intra\Lib\Response;
 
-
 use Symfony\Component\HttpFoundation\Response;
 
 class CsvResponse extends Response
@@ -68,7 +67,7 @@ class CsvResponse extends Response
 		return $this->update();
 	}
 
-	function encodeCsv($input)
+	public function encodeCsv($input)
 	{
 		$ret = '';
 		foreach ($input as $row) {

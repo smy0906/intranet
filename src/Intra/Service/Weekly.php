@@ -3,13 +3,24 @@
 namespace Intra\Service;
 
 use Exception;
-use Intra\Model\lightFileModel;
+use Intra\Model\LightFileModel;
+use PHPExcel_Reader_Excel2007;
+use PHPExcel_Writer_HTML;
 
 class Weekly
 {
 	public function __construct()
 	{
 		date_default_timezone_set('Asia/Seoul');
+	}
+
+	public static function dumpToHtml($infile, $outfile)
+	{
+		$reader = new PHPExcel_Reader_Excel2007();
+		$excel = $reader->load($infile);
+
+		$writer = new PHPExcel_Writer_HTML($excel);
+		$writer->save($outfile);
 	}
 
 	public function assertPermission()
@@ -31,7 +42,7 @@ class Weekly
 
 	public function getContents()
 	{
-		$filebag = new lightFileModel('weekly');
+		$filebag = new LightFileModel('weekly');
 		$filename = date("Ym") . '-' . floor((date('d') - 1) / 7 + 1) . ".html";
 		if (!$filebag->isExist($filename)) {
 			throw new Exception('내용이 준비되지 않았습니다.');

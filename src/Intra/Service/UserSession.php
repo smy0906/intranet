@@ -8,7 +8,6 @@
 
 namespace Intra\Service;
 
-
 use Intra\Model\SessionModel;
 use Intra\Model\UserFactory;
 use Intra\Service;
@@ -18,7 +17,7 @@ class UserSession
 	/**
 	 * @var SessionModel
 	 */
-	static $session;
+	private static $session;
 
 	public static function loginByAzure($id)
 	{
@@ -36,7 +35,7 @@ class UserSession
 		self::$session = new SessionModel();
 	}
 
-	static function logout()
+	public static function logout()
 	{
 		self::initStatic();
 
@@ -64,7 +63,7 @@ class UserSession
 	/**
 	 * @return User
 	 */
-	static public function getSelf()
+	public static function getSelf()
 	{
 		self::initStatic();
 
@@ -78,7 +77,7 @@ class UserSession
 		return null;
 	}
 
-	static public function isLogined()
+	public static function isLogined()
 	{
 		self::initStatic();
 
@@ -95,4 +94,4 @@ class UserSession
 			self::$session->set('super_edit_uid', $uid);
 		}
 	}
-} 
+}

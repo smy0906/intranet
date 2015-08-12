@@ -8,10 +8,9 @@
 
 namespace Intra\Model;
 
-
 use ConfigDevelop;
 
-class lightFileModel
+class LightFileModel
 {
 	private $dir;
 

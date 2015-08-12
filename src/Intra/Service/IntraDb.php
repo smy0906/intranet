@@ -49,5 +49,4 @@ class IntraDb
 		self::bootDB();
 		return self::$gnfdb;
 	}
-
 }

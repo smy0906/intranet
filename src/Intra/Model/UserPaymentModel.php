@@ -6,7 +6,7 @@ use Intra\Service\IntraDb;
 
 class UserPaymentModel
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->db = IntraDb::getGnfDb();
 	}

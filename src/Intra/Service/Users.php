@@ -8,7 +8,6 @@
 
 namespace Intra\Service;
 
-
 use Intra\Core\AjaxMessage;
 use Intra\Model\UserFactory;
 use Intra\Model\UserModel;
@@ -107,7 +106,7 @@ class Users
 	 * @param $uids array
 	 * @return User[]
 	 */
-	function getUsersByUids($uids)
+	public function getUsersByUids($uids)
 	{
 		$ret = array();
 		foreach ($uids as $uid) {

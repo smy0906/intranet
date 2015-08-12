@@ -20,7 +20,7 @@ class UserHolidayPolicy
 	private $user;
 	private $user_holiday_model;
 
-	function __construct(User $user)
+	public function __construct(User $user)
 	{
 		$db = IntraDb::getGnfDb();
 		$this->db = $db;

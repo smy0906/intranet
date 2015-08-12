@@ -19,14 +19,12 @@ $super_edit_user = \Intra\Service\UserSession::getSupereditUser();
 }
 
 //finalize
-{
-	$db = IntraDb::getGnfDb();
-	$db->sqlBegin();
-	if ($user_holiday->del($holidayid)) {
-		if ($user_holiday->sendNotification($holidayid, '휴가취소')) {
-			if ($db->sqlEnd()) {
-				return 1;
-			}
+$db = IntraDb::getGnfDb();
+$db->sqlBegin();
+if ($user_holiday->del($holidayid)) {
+	if ($user_holiday->sendNotification($holidayid, '휴가취소')) {
+		if ($db->sqlEnd()) {
+			return 1;
 		}
 	}
 }
