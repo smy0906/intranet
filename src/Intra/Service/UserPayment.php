@@ -307,7 +307,7 @@ class UserPayment
 결제예정일 : {$row['pay_date']}";
 		$receivers = array(
 			Users::getByUid($row['uid'])->getEmail(),
-			Users::getByUid($row['manager_uid'])->getName(),
+			Users::getByUid($row['manager_uid'])->getEmail(),
 		);
 		return array($title, $text, $receivers);
 	}
