@@ -89,7 +89,7 @@
       });
 
       {% if editable %}
-      $('.payment td[key]').each(function () {
+      $('.payment td[data-key]').each(function () {
         var paymentid = $(this).parent().data('paymentid');
         var key = $(this).data('key');
         var keyselect = $(this).data('keyselect') != undefined;
@@ -221,7 +221,8 @@
                 {% endif %}
                 ' data-paymentid='{{ payment.paymentid }}'>
           <td>
-            <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}" title="payment_checkbox"/>
+            <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}"
+                   title="payment_checkbox"/>
           </td>
           <td>{{ payment.request_date | slice(0, 10) }}</td>
           <td>{{ payment.name }}</td>
@@ -335,25 +336,25 @@
         <td><input type='text' name='note' placeholder='비고'/></td>
         <td>
           {% if isSuperAdmin %}
-          <label>
-            <select name='paytype' js_cookie_save js_data_chosen>
-              <option value='미정'>미정</option>
-              {% for paytype in const.paytypes %}
-                <option value='{{ paytype }}'>{{ paytype }}</option>
-              {% endfor %}
-            </select>
-          </label>
+            <label>
+              <select name='paytype' js_cookie_save js_data_chosen>
+                <option value='미정'>미정</option>
+                {% for paytype in const.paytypes %}
+                  <option value='{{ paytype }}'>{{ paytype }}</option>
+                {% endfor %}
+              </select>
+            </label>
           {% endif %}
         </td>
         <td>
           {% if isSuperAdmin %}
-          <label>
-            <select name='status' js_cookie_save js_data_chosen>
-              {% for status in const.statuses %}
-                <option value='{{ status }}'>{{ status }}</option>
-              {% endfor %}
-            </select>
-          </label>
+            <label>
+              <select name='status' js_cookie_save js_data_chosen>
+                {% for status in const.statuses %}
+                  <option value='{{ status }}'>{{ status }}</option>
+                {% endfor %}
+              </select>
+            </label>
           {% endif %}
         </td>
         <td><input type="submit" value="추가"/></td>
