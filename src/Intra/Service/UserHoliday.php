@@ -106,7 +106,7 @@ class UserHoliday
 	private function assertAdd($holidayRaw)
 	{
 		$dateTimestamp = strtotime($holidayRaw->date);
-		if (!$dateTimestamp) {
+		if (!$dateTimestamp || $dateTimestamp <= 0) {
 			throw new \Exception("사용날짜를 다시 입력해주세요");
 		}
 
@@ -119,7 +119,7 @@ class UserHoliday
 		if ($holidayRaw->cost > 0) {
 			$remain_cost = $this->user_holiday_policy->getRemainCost($holidayRaw->yearly);
 			if ($remain_cost < $holidayRaw->cost) {
-				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다.");
+				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다." . $holidayRaw->yearly);
 			}
 		}
 
@@ -182,7 +182,7 @@ class UserHoliday
 
 	/**
 	 * @param HolidayRaw $holidayRaw
-	 * @return int
+	 * @return int[]
 	 */
 	public function add($holidayRaw)
 	{
@@ -190,16 +190,20 @@ class UserHoliday
 		$this->assertAdd($holidayRaw);
 		$holidayRaws = $this->convertToArrayToAdd($holidayRaw);
 
+		$holiday_ids = array();
 		foreach ($holidayRaws as $holidayRaw) {
-			if (!$this->user_holiday_model->add($holidayRaw)) {
+			$holiday_id = $this->user_holiday_model->add($holidayRaw);
+			if (!$holiday_id) {
 				return false;
 			}
+			$holiday_ids[] = $holiday_id;
 		}
-		return true;
+		return $holiday_ids;
 	}
 
-	public function sendNotification($holidayid, $type)
+	public function sendNotification($holidayids, $type)
 	{
+		$holidayid = $holidayids[0];
 		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);
 		$title = $this->getMailTitle($holidayRaw, $type);
 		$ret = $this->sendMailNotification($holidayRaw, $title);

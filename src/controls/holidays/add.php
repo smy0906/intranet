@@ -36,8 +36,8 @@ $super_edit_user = UserSession::getSupereditUser();
 //finalize
 $db = IntraDb::getGnfDb();
 $db->sqlBegin();
-if ($holidayid = $user_holiday->add($holiday_raw)) {
-	if ($user_holiday->sendNotification($holidayid, "휴가신청")) {
+if ($holiday_ids = $user_holiday->add($holiday_raw)) {
+	if ($user_holiday->sendNotification($holiday_ids, "휴가신청")) {
 		if ($db->sqlEnd()) {
 			return 1;
 		}
