@@ -38,12 +38,10 @@ class QueryProcessor
 
 	public static function run($control_dir, $view_dir, $request = null)
 	{
-		$query = $_SERVER['REQUEST_URI'];
-		#$query = preg_replace("/[^\w\/_\-\.]/", "", $query);
-
 		if ($request === null) {
 			$request = Request::createFromGlobals();
 		}
+		$query = $request->getPathInfo();
 		$response = new TwigResponse;
 
 		$control = new QueryProcessor($control_dir, $query, $request, $response);
