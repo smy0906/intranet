@@ -1,6 +1,10 @@
 {% extends 'ridi.twig' %}
 
 {% block head %}
+  <!--
+  dhtmlx 는 암묵적인 사용이 많이 다루기 까다롭다...
+  가능하다면 다른것 사용할것...ㅠ
+  -->
   {{ parent() }}
   <script type="text/javascript" src="/lib/dhtmlxScheduler/dhtmlxscheduler.js"></script>
   <link rel="stylesheet" type="text/css" href="/lib/dhtmlxScheduler/dhtmlxscheduler.css"/>
@@ -149,6 +153,7 @@
 
         var postArg = {
           desc: scheduler.getEventText(event_id), from: from, to: to, id: event_id
+          //			,rid : $('.dhx_cal_tab.active').attr('rid')
         };
 
         $.post('/rooms/mod', postArg, function (dat) {
@@ -177,7 +182,7 @@
       scheduler.attachEvent("onEventAdded", function (event_id, event_object) {
         var evs = scheduler.getEvents(scheduler.getEventStartDate(event_id), scheduler.getEventEndDate(event_id));
         var evsCnt = 0;
-        for (var k in evs) {
+        for (k in evs) {
           if (evs[k].id != event_id)
             evsCnt++;
         }
@@ -196,7 +201,7 @@
             desc: scheduler.getEventText(event_id),
             from: from,
             to: to,
-            room_id: $('.dhx_cal_tab.active').data('room_id')
+            room_id: $('.dhx_cal_tab.active').attr('room_id')
           }, function (dat) {
             try {
               var new_event_id = parseInt(dat);
@@ -224,7 +229,7 @@
         renderPc();
       var $dhxCalTab = $('.dhx_cal_tab');
       $dhxCalTab.click(function () {
-        var room_id = $(this).data('room_id');
+        var room_id = $(this).attr('room_id');
         scheduler.clearAll();
         scheduler.load("/rooms/get/room_id/" + room_id);
       });
@@ -251,7 +256,7 @@
        style='width:100%; height:100%;margin-top:35px;overflow: visible'>
     <div class="dhx_cal_navline" style="margin-bottom: 100px;">
       {% for num,room in rooms %}
-        <div class="dhx_cal_tab js_room_select_pc" data-room_id='{{ room.id }}' data-name="room{{ room.id }}_tab"
+        <div class="dhx_cal_tab js_room_select_pc" room_id='{{ room.id }}' name="room{{ room.id }}_tab"
              style="margin-left:-205px;"></div>
       {% endfor %}
       <div class="dhx_cal_prev_button" style="margin-top:-40px;">&nbsp;</div>
@@ -273,7 +278,7 @@
       </select>
     </label>
   </div>
-  <div style="position:absolute;right:15px;top:100px;z-index: 1000;">
+  <div style="position:absolute;right:15px;top:120px;z-index: 1000;">
     <div style="float:right;text-align: right" id="js_howto">
       <button id="js_howto_button" class="btn btn-default">사용법</button>
   <pre id="js_howto_detail" style="display: none;text-align: left;">#회의실 예약 방법
