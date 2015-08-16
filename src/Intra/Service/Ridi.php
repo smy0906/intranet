@@ -15,6 +15,10 @@ use Raven_ErrorHandler;
 
 class Ridi
 {
+	/**
+	 * @var Raven_Client
+	 */
+	private static $raven_client;
 
 	public static function isRidiIP()
 	{
@@ -57,10 +61,19 @@ class Ridi
 			return;
 		}
 		Raven_Autoloader::register();
-		$client = new Raven_Client($sentry_key);
-		$error_handler = new Raven_ErrorHandler($client);
+		self::$raven_client = new Raven_Client($sentry_key);
+		$error_handler = new Raven_ErrorHandler(self::$raven_client);
 		$error_handler->registerExceptionHandler();
 		$error_handler->registerErrorHandler(true, E_ALL & ~E_NOTICE & ~E_STRICT);
 		$error_handler->registerShutdownFunction();
+	}
+
+	public static function triggerSentryException(\Exception $e)
+	{
+		if (self::$raven_client instanceof Raven_Client) {
+			self::$raven_client->captureException($e);
+			return true;
+		}
+		return false;
 	}
 }

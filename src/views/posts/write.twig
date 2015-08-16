@@ -1,0 +1,40 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+  <form
+    attrajax
+    data-aa-method='post'
+    data-aa-onsuccess="refresh"
+    data-aa-onsuccess-alert
+    data-aa-onfail-alert
+    >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <input name="title" type="text" class="form-control" placeholder="제목" aria-describedby="basic-addon2"
+                     value="{{ title | escape('html_attr') }}"
+                >
+            </div>
+            <div class="panel-body">
+              <textarea name="content_html" class="form-control" placeholder="본문"
+                        style="height: 400px;">{{ content_html }}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="/posts/{{ group }}">
+        <button class="btn" type="button">
+          목록으로
+        </button>
+      </a>
+      {% block button %}
+        <input type="submit" class="btn btn-primary" value="등록하기"/>
+      {% endblock %}
+    </div>
+  </form>
+{% endblock %}

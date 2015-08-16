@@ -8,7 +8,7 @@
 
 namespace Intra\Core;
 
-class AjaxMessage extends \Exception
+class MsgException extends \Exception
 {
 
 }

@@ -18,8 +18,12 @@ class Control
 	 * @var Request
 	 */
 	private $request;
+	/**
+	 * @var TwigResponse
+	 */
+	private $response;
 
-	public function __construct($controller_root, $query, Request $request)
+	public function __construct($controller_root, $query, Request $request, TwigResponse $response)
 	{
 		$this->controller_root = $controller_root;
 		$this->remain_query = $query;
@@ -27,6 +31,7 @@ class Control
 		$this->target_file = $this->__getTargetFileByQuery();
 		$this->is_exist = file_exists($this->target_file);
 		$this->request = $request;
+		$this->response = $response;
 	}
 
 	/**
@@ -67,5 +72,10 @@ class Control
 	public function getRequest()
 	{
 		return $this->request;
+	}
+
+	public function getResponse()
+	{
+		return $this->response;
 	}
 }

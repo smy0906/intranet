@@ -8,7 +8,7 @@
 
 namespace Intra\Model;
 
-use Intra\Core\AjaxMessage;
+use Intra\Core\MsgException;
 use Intra\Service\IntraDb;
 
 class UserModel extends DomainCacheModel
@@ -68,7 +68,7 @@ class UserModel extends DomainCacheModel
 	/**
 	 * @param $userJoinDto
 	 * @return bool
-	 * @throws AjaxMessage
+	 * @throws MsgException
 	 */
 	public static function addUser($userJoinDto)
 	{
@@ -76,7 +76,7 @@ class UserModel extends DomainCacheModel
 
 		$uid = IntraDb::getGnfDb()->sqlInsert(sqlTable(self::$table), $array);
 		if (!$uid) {
-			throw new AjaxMessage('계정 추가가 실패하였습니다');
+			throw new MsgException('계정 추가가 실패하였습니다');
 		}
 		return true;
 	}

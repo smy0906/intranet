@@ -38,7 +38,7 @@ class User
 	public function isSuperAdmin()
 	{
 		$name = $this->getName();
-		return in_array($name, array('박주현', '설다인', '한재선', '권민석', '현정환', '심민규'));
+		return in_array($name, array('박주현', '설다인', '한재선', '심민규'));
 	}
 
 	public function getName()

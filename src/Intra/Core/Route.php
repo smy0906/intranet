@@ -19,10 +19,12 @@ use Symfony\Component\HttpFoundation\Request;
 class Route
 {
 	private $path;
+	private $isAlreadyRouted;
 
 	public function __construct($path)
 	{
 		$this->path = $path;
+		$this->isAlreadyRouted = false;
 	}
 
 	public function isExist()
@@ -45,9 +47,13 @@ class Route
 	public function postProcessLastMatchIfExist()
 	{
 		if ($this->lastMatch !== null) {
-			if ($this->lastMatch->__success()) {
-				$this->query = $this->lastMatch->__getQuery();
-				$parameters = $this->lastMatch->__getParameter();
+			$lastMatched = $this->lastMatch;
+			$this->lastMatch = null;
+
+			if ($lastMatched->__success()) {
+				$this->isAlreadyRouted = true;
+				$this->query = $lastMatched->__getQuery();
+				$parameters = $lastMatched->__getParameter();
 				foreach ($parameters as $key => $value) {
 					$this->request->attributes->set($key, $value);
 				}
@@ -62,8 +68,9 @@ class Route
 	public function matchIf($pattern)
 	{
 		$this->postProcessLastMatchIfExist();
-
-		$this->lastMatch = null;
+		if ($this->isAlreadyRouted) {
+			return new ControlRouteNull();
+		}
 
 		$regex = '/\{(\w+)\}/';
 
@@ -79,7 +86,7 @@ class Route
 			$pattern_regex = preg_replace('/^\/+|\/+$/', '', $pattern_regex);
 			$pattern_regex = str_replace('/', '\\' . '/+', $pattern_regex);
 			$pattern_regex = preg_replace($regex, '([^\/\\?&]+)', $pattern_regex);
-			$pattern_regex = '/^' . $pattern_regex . '(.*)$/';
+			$pattern_regex = '/^' . $pattern_regex . '\/*$/';
 		}
 
 		if (preg_match($pattern_regex, $this->query, $match)) {
@@ -88,9 +95,13 @@ class Route
 				$parameters[$parameterName] = $match[$index + 1];
 			}
 
-			$unmatchedQueryTail = end($match);
+			if (count($match) > 2) {
+				$unmatchedQueryTail = end($match);
+			} else {
+				$unmatchedQueryTail = '';
+			}
 
-			$this->lastMatch = new ControlRouteMatch($this->query, $unmatchedQueryTail, $parameters);
+			$this->lastMatch = new ControlRouteMatch($this->query, $unmatchedQueryTail, $parameters, $this->request);
 			return $this->lastMatch;
 		}
 

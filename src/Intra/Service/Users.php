@@ -8,27 +8,13 @@
 
 namespace Intra\Service;
 
-use Intra\Core\AjaxMessage;
+use Intra\Core\MsgException;
 use Intra\Model\UserFactory;
 use Intra\Model\UserModel;
 use Symfony\Component\HttpFoundation\Request;
 
 class Users
 {
-	private static function isExistById($id)
-	{
-		return UserFactory:: isExistById($id);
-	}
-
-	/**
-	 * @param $uid
-	 * @return bool
-	 */
-	public static function isExistByUid($uid)
-	{
-		return UserFactory::isExist($uid);
-	}
-
 	/**
 	 * @param $id
 	 * @return User
@@ -42,16 +28,9 @@ class Users
 		return new User($uid);
 	}
 
-	/**
-	 * @param $uid
-	 * @return User
-	 */
-	public static function getByUid($uid)
+	private static function isExistById($id)
 	{
-		if (!self::isExistByUid($uid)) {
-			return null;
-		}
-		return new User($uid);
+		return UserFactory:: isExistById($id);
 	}
 
 	public static function join($request)
@@ -79,27 +58,63 @@ class Users
 	private static function assertJoin($joinDto)
 	{
 		if (!preg_match("/^.+$/", $joinDto->name)) {
-			throw new AjaxMessage('이름을 입력해주세요');
+			throw new MsgException('이름을 입력해주세요');
 		}
 		if (!preg_match("/^.+$/", $joinDto->id)) {
-			throw new AjaxMessage('아이디를 입력해주세요');
+			throw new MsgException('아이디를 입력해주세요');
 		}
 		if (!preg_match("/^[\w_\.]+$/", $joinDto->id)) {
-			throw new AjaxMessage('아이디는 영문과 숫자, 그리고 _(언더바)와 .(점)만 가능합니다');
+			throw new MsgException('아이디는 영문과 숫자, 그리고 _(언더바)와 .(점)만 가능합니다');
 		}
 		if (!preg_match("/^.+@.+\..+$/", $joinDto->email)) {
-			throw new AjaxMessage('올바른 이메일을 입력해주세요');
+			throw new MsgException('올바른 이메일을 입력해주세요');
 		}
 		if (!preg_match("/^\d+\/\d+\/\d+$/", $joinDto->birth) || $joinDto->birth == '0000/00/00') {
-			throw new AjaxMessage('생년월일을 올바르게 입력해주세요');
+			throw new MsgException('생년월일을 올바르게 입력해주세요');
 		}
 		if (!preg_match("/^\d+-\d+-\d+$/", $joinDto->mobile) || $joinDto->mobile == '010-0000-0000') {
-			throw new AjaxMessage('전화번호를 올바르게 입력해주세요');
+			throw new MsgException('전화번호를 올바르게 입력해주세요');
 		}
 
 		if (Users::isExistById($joinDto->id)) {
-			throw new AjaxMessage('이미 존재하는 계정입니다');
+			throw new MsgException('이미 존재하는 계정입니다');
 		}
+	}
+
+	public static function getNameByUid($uid)
+	{
+		$user = self::getByUid($uid);
+		if ($user === null) {
+			return null;
+		}
+		return $user->getName();
+	}
+
+	/**
+	 * @param $uid
+	 * @return User
+	 */
+	public static function getByUid($uid)
+	{
+		if (!self::isExistByUid($uid)) {
+			return null;
+		}
+		return new User($uid);
+	}
+
+	/**
+	 * @param $uid
+	 * @return bool
+	 */
+	public static function isExistByUid($uid)
+	{
+		return UserFactory::isExist($uid);
+	}
+
+	public function getAllUsers()
+	{
+		$uids = UserFactory::getAllUserUid();
+		return $this->getUsersByUids($uids);
 	}
 
 	/**
@@ -113,11 +128,5 @@ class Users
 			$ret[] = new User($uid);
 		}
 		return $ret;
-	}
-
-	public function getAllUsers()
-	{
-		$uids = UserFactory::getAllUserUid();
-		return $this->getUsersByUids($uids);
 	}
 }

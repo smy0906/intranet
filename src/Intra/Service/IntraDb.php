@@ -17,6 +17,15 @@ class IntraDb
 {
 	private static $gnfdb;
 
+	/**
+	 * @return base
+	 */
+	public static function getGnfDb()
+	{
+		self::bootDB();
+		return self::$gnfdb;
+	}
+
 	public static function bootDB()
 	{
 		if (self::$gnfdb === null) {
@@ -39,14 +48,5 @@ class IntraDb
 			$db = new PDO($capsule->getConnection()->getPdo());
 			self::$gnfdb = $db;
 		}
-	}
-
-	/**
-	 * @return base
-	 */
-	public static function getGnfDb()
-	{
-		self::bootDB();
-		return self::$gnfdb;
 	}
 }

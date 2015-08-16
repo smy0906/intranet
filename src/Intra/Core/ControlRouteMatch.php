@@ -8,27 +8,34 @@
 
 namespace Intra\Core;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class ControlRouteMatch
 {
 	private $query;
 	private $unmatchedQueryTail;
 	private $parameters;
+	private $request;
+	private $success;
 
-	public function __construct($uri, $unmatchedQueryTail, $parameters)
+	public function __construct($uri, $unmatchedQueryTail, $parameters, Request $request)
 	{
 		$this->query = $uri;
 		$this->unmatchedQueryTail = $unmatchedQueryTail;
 		$this->parameters = $parameters;
+		$this->request = $request;
+		$this->success = false;
 	}
 
 	public function query($string)
 	{
 		$this->query = $string;
+		$this->success = true;
 	}
 
 	public function __success()
 	{
-		return true;
+		return $this->success;
 	}
 
 	public function __getQuery()
@@ -49,7 +56,8 @@ class ControlRouteMatch
 	public function assertAsInt($string)
 	{
 		if (!preg_match('/^\d+$/', $this->parameters[$string])) {
-			throw new \Exception("parameter $string is not integer");
+			return new ControlRouteNull;
+			#throw new \Exception("parameter $string is not integer");
 		}
 		return $this;
 	}
@@ -57,8 +65,17 @@ class ControlRouteMatch
 	public function assertInArray($string, $array)
 	{
 		if (!in_array($this->parameters[$string], $array)) {
-			throw new \Exception("parameter $string is not valid");
+			return new ControlRouteNull;
+			#throw new \Exception("parameter $string is not valid");
 		}
 		return $this;
+	}
+
+	public function isMethod($string)
+	{
+		if ($this->request->isMethod($string)) {
+			return $this;
+		}
+		return new ControlRouteNull;
 	}
 }

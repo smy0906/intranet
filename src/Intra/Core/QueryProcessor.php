@@ -22,13 +22,18 @@ class QueryProcessor
 	private $request;
 	private $controller_root;
 	private $executed_query;
+	/**
+	 * @var TwigResponse
+	 */
+	private $response;
 
-	public function __construct($controller_root, $remain_query, Request $request)
+	public function __construct($controller_root, $remain_query, Request $request, TwigResponse $response)
 	{
 		$this->controller_root = $controller_root;
 		$this->remain_query = $remain_query;
-		$this->request = $request;
 		$this->executed_query = null;
+		$this->request = $request;
+		$this->response = $response;
 	}
 
 	public static function run($control_dir, $view_dir, $request = null)
@@ -39,8 +44,9 @@ class QueryProcessor
 		if ($request === null) {
 			$request = Request::createFromGlobals();
 		}
+		$response = new TwigResponse;
 
-		$control = new QueryProcessor($control_dir, $query, $request);
+		$control = new QueryProcessor($control_dir, $query, $request, $response);
 		$return_by_controler = $control->__act();
 		if ($return_by_controler === false) {
 			return false;
@@ -49,6 +55,8 @@ class QueryProcessor
 		if (!is_array($return_by_controler)) {
 			exit((string)$return_by_controler);
 		}
+		$return_by_controler = array_merge($response->get(), $return_by_controler);
+
 		$view = new View($view_dir, $control->getRoutedQuery());
 		if (!$view->isExist()) {
 			throw new \Exception('no view');
@@ -76,7 +84,8 @@ class QueryProcessor
 			$subQueryProcessor = new QueryProcessor(
 				$this->controller_root . '/' . $matched_query,
 				$unmatched_query_tail,
-				$this->request
+				$this->request,
+				$this->response
 			);
 			$ret = $subQueryProcessor->__act();
 			$this->executed_query = $matched_query . '/' . $subQueryProcessor->getRoutedQuery();
@@ -86,11 +95,12 @@ class QueryProcessor
 				$target = new Control(
 					$this->controller_root,
 					$matched_query,
-					$this->request
+					$this->request,
+					$this->response
 				);
 				$this->executed_query = $matched_query;
 				$ret = $target->call();
-			} catch (AjaxMessage $e) {
+			} catch (MsgException $e) {
 				$ret = $e->getMessage();
 				echo($ret);
 			}
@@ -103,28 +113,14 @@ class QueryProcessor
 		return false;
 	}
 
-	private function isAvailableController($controller)
-	{
-		return is_file($this->controller_root . '/' . $controller . ".php");
-	}
-
-	private function isSubfolder($controller)
-	{
-		return is_dir($this->controller_root . '/' . $controller);
-	}
-
-	public function getRoutedQuery()
-	{
-		return $this->executed_query;
-	}
-
 	private function processConstructor()
 	{
 		if ($this->isAvailableController(self::CONSTRUCT_MAGIC_FUNCTION)) {
 			$__construct = new Control(
 				$this->controller_root,
 				self::CONSTRUCT_MAGIC_FUNCTION,
-				$this->request
+				$this->request,
+				$this->response
 			);
 			$__construct_ret = $__construct->call();
 			if ($__construct_ret instanceof Response) {
@@ -132,6 +128,11 @@ class QueryProcessor
 				exit;
 			}
 		}
+	}
+
+	private function isAvailableController($controller)
+	{
+		return is_file($this->controller_root . '/' . $controller . ".php");
 	}
 
 	private function processRoute()
@@ -157,5 +158,15 @@ class QueryProcessor
 			$unmatched_query_tail = '';
 			return array($matched_query, $unmatched_query_tail);
 		}
+	}
+
+	private function isSubfolder($controller)
+	{
+		return is_dir($this->controller_root . '/' . $controller);
+	}
+
+	public function getRoutedQuery()
+	{
+		return $this->executed_query;
 	}
 }
