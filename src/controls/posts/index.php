@@ -7,4 +7,4 @@ $request = $this->getRequest();
 $group = $request->get('group');
 
 $post_list_view = PostListDto::import($group);
-return $post_list_view->exportAsArrayForTwig();
+return $post_list_view->exportAsArrayForListView();

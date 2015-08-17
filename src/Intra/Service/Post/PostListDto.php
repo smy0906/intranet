@@ -9,7 +9,6 @@
 namespace Intra\Service\Post;
 
 use Intra\Model\PostModel;
-use Intra\Service\Users;
 
 class PostListDto
 {
@@ -17,7 +16,7 @@ class PostListDto
 	/**
 	 * @var PostModel[]
 	 */
-	private $posts;
+	private $postModels;
 	/**
 	 * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
@@ -32,23 +31,25 @@ class PostListDto
 	{
 		$return = new self($post_group);
 
-		$return->paginate = PostModel::on()->where('group', $post_group)->paginate(15);
-		$return->posts = $return->paginate->items();
+		$return->paginate = PostModel::on()->where('group', $post_group)->orderBy('id', 'desc')->paginate(15);
+		$return->postModels = $return->paginate->items();
 
 		return $return;
 	}
 
-	public function exportAsArrayForTwig()
+	public function exportAsArrayForListView()
 	{
-		foreach ($this->posts as $post) {
-			$uid_name = Users::getNameByUid($post->uid);
-			$post->uid_name = $uid_name;
+		$posts = array();
+		foreach ($this->postModels as $postModel) {
+			$postDto = PostDetailDto::importFromModel($postModel);
+			$post = $postDto->exportAsArrayForDetailView();
+			$posts[] = $post;
 		}
 
 		return array(
 			'group' => $this->group,
-			'posts' => $this->posts,
-			'paginate' => $this->paginate,
+			'posts' => $posts,
+			'lastItem' => $this->paginate->lastItem(),
 		);
 	}
 }

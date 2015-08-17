@@ -18,7 +18,7 @@ class Post
 {
 	public function add($request)
 	{
-		$postDto = PostDto::importFromWriteRequest($request);
+		$postDto = PostDetailDto::importFromWriteRequest($request);
 		$this->assertAdd($postDto);
 		/**
 		 * @var PostModel
@@ -36,7 +36,7 @@ class Post
 
 	public function modify($request)
 	{
-		$postDto = PostDto::importFromWriteRequest($request);
+		$postDto = PostDetailDto::importFromWriteRequest($request);
 		$this->assertModify($postDto);
 
 		$post = PostModel::on()->find($postDto->id);

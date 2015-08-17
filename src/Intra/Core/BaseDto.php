@@ -118,4 +118,14 @@ class BaseDto
 
 		return $columns;
 	}
+
+	public function exportAsArrayByKeys(array $keys)
+	{
+		$columns = array();
+		foreach ($keys as $key) {
+			$columns[$key] = $this->{$key};
+		}
+
+		return $columns;
+	}
 }
