@@ -27,14 +27,21 @@
           </div>
         </div>
       </div>
-      <a href="/posts/{{ group }}">
-        <button class="btn" type="button">
-          목록으로
-        </button>
-      </a>
-      {% block button %}
-        <input type="submit" class="btn btn-primary" value="등록하기"/>
-      {% endblock %}
+      <div class="row">
+        <div class="col-xs-7">
+          <a href="/posts/{{ group }}">
+            <button class="btn" type="button">
+              목록으로
+            </button>
+          </a>
+        </div>
+
+        <div class="col-xs-1">
+          {% block button %}
+            <input type="submit" class="btn btn-primary" value="등록하기"/>
+          {% endblock %}
+        </div>
+      </div>
     </div>
   </form>
 {% endblock %}

@@ -21,18 +21,25 @@
         {% endfor %}
       </div>
     </div>
-    {% if isSuperAdmin %}
-      <a href="/posts/{{ group }}/write">
-        <button class="btn btn-primary" type="button">
-          글쓰기
-        </button>
-      </a>
-      <a href="/posts/{{ group }}/sendAll">
-        <button class="btn btn-primary" type="button">
-          모두 발송하기
-        </button>
-      </a>
-    {% endif %}
+    <div class="row">
+      {% if isSuperAdmin %}
+      <div class="col-xs-7">
+        <a href="/posts/{{ group }}/sendAll">
+          <button class="btn btn-primary" type="button">
+            모두 발송하기
+          </button>
+        </a>
+      </div>
+
+      <div class="col-xs-1">
+        <a href="/posts/{{ group }}/write">
+          <button class="btn btn-primary" type="button">
+            글쓰기
+          </button>
+        </a>
+      </div>
+      {% endif %}
+    </div>
   </div>
 
 {% endblock %}

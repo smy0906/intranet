@@ -21,18 +21,26 @@
         </div>
       </div>
     </div>
-    <a href="/posts/{{ group }}">
-      <button class="btn" type="button">
-        목록으로
-      </button>
-    </a>
-    {% if isSuperAdmin %}
-      <a href="/posts/{{ group }}/{{ id }}/modify">
-        <button class="btn btn-primary" type="button">
-          수정하기
-        </button>
-      </a>
-    {% endif %}
+      <div class="row">
+        <div class="col-xs-7">
+          <a href="/posts/{{ group }}">
+            <button class="btn" type="button">
+              목록으로
+            </button>
+          </a>
+        </div>
+
+        <div class="col-xs-1">
+          {% if isSuperAdmin %}
+            <a href="/posts/{{ group }}/{{ id }}/modify">
+              <button class="btn btn-primary" type="button">
+                수정하기
+              </button>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
 
 {% endblock %}

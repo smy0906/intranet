@@ -8,6 +8,10 @@ $this->matchIf('/{group}/write')
 	->isMethod('get')
 	->query('write');
 
+$this->matchIf('/{group}/write')
+	->isMethod('post')
+	->query('write.ajax');
+
 $this->matchIf('/{group}/sendAll')
 	->query('sendAll');
 

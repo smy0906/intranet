@@ -55,6 +55,7 @@ class PostDto extends BaseDto
 	{
 		$array = $this->exportAsArray();
 		unset($array['id']);
+		unset($array['is_sent']);
 		$return = new PostModel;
 		$return->setRawAttributes($array);
 		return $return;
@@ -63,9 +64,6 @@ class PostDto extends BaseDto
 	public function exportAsArrayForModify()
 	{
 		$return = $this->exportAsArray();
-		unset($return['group']);
-		unset($return['id']);
-		unset($return['uid']);
 		return $return;
 	}
 
