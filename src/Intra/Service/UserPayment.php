@@ -48,6 +48,7 @@ class UserPayment
 			'CO팀',
 			'콘텐츠개발팀',
 			'사업전략팀',
+			'스튜디오 D',
 			'공통'
 		);
 		$const['products'] = array('리디북스', '리디샵', '공통');
