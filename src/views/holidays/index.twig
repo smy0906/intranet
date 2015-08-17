@@ -48,7 +48,7 @@
     <table>
       <thead>
       <tr>
-        <td colspan="11">
+        <td colspan="12">
           &lt;연차휴가 신청내역&gt;
                     <span style='float:right'>
                         <a href='/holidays/index/year/{{ yearPrev }}' class='receipts_command'>{{ yearPrev }}년</a>
@@ -62,8 +62,9 @@
         <td>신청자</td>
         <td>결재자</td>
         <td>종류</td>
+        <td>시작날짜</td>
+        <td>종료날짜</td>
         <td>연차소모</td>
-        <td>사용날짜</td>
         <td>업무인수인계자</td>
         <td>비상시연락처</td>
         <td>비고</td>
@@ -80,8 +81,9 @@
           <td>{{ holiday.uid_name }}</td>
           <td>{{ holiday.manager_uid_name }}</td>
           <td data-key="type">{{ holiday.type }}</td>
-          <td data-key="cost">{{ holiday.cost }}</td>
           <td data-key="date">{{ holiday.date }}</td>
+          <td></td>
+          <td data-key="cost">{{ holiday.cost }}</td>
           <td>{{ holiday.keeper_uid_name }}</td>
           <td data-key="phone_emergency">{{ holiday.phone_emergency }}</td>
           <td data-key="memo">{{ holiday.memo }}</td>
@@ -123,12 +125,30 @@
             </select>
           </label>
         </td>
+        <td><input
+            type='text'
+            name='date'
+            style='width:80px'
+            placeholder='0000-00-00'
+            data-toggle="popover"
+            data-placement="bottom"
+            data-content="2일 휴가를 사용할경우 시작날짜를 입력하고서
+            '연차소모'에 기간을 입력해주세요. (주말은 자동 제외됩니다)"
+            /></td>
+        <td></td>
         <td>
           <label>
-            <input name='cost' id="js_cost" style="display: none;width:50px;" placeholder="1"/>
+            <input
+              name='cost'
+              id="js_cost"
+              style="display: none;width:50px;"
+              placeholder="1"
+              data-toggle="popover"
+              data-placement="bottom"
+              data-content="2일 휴가를 사용할경우에만 입력해주세요"
+              />
           </label>
         </td>
-        <td><input type='text' name='date' style='width:80px' placeholder='0000-00-00'/></td>
         <td>
           <label>
             <select name='keeper_uid' js_cookie_save js_data_chosen>

@@ -5,6 +5,7 @@
     $("input").on("keypress", function (e) {
       return e.which != 13;
     });
+    $('[data-toggle="popover"]').popover({'trigger':'focus'});
 
     $('#js_memo').on('change', function () {
       var memo_str = $(this).val();
@@ -22,7 +23,7 @@
 
     $('#js_type').on('change', function () {
       var type_str = $(this).val();
-      if (type_str == '연차')
+      if (type_str != '오전반차' && type_str != '오후반차' && type_str != 'PWT')
         $('#js_cost').show();
       else
         $('#js_cost').hide();

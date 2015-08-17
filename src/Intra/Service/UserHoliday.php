@@ -16,6 +16,7 @@ use Mailgun\Mailgun;
 
 class UserHoliday
 {
+	private $cost_unselectable_type = array('PWT', '오전반차', '오후반차');
 	/**
 	 * @var User
 	 */
@@ -347,7 +348,7 @@ class UserHoliday
 	 */
 	private function filterAdd($holidayRaw)
 	{
-		if ($holidayRaw->type == '연차' && strlen(trim($holidayRaw->cost)) == 0) {
+		if (!in_array($holidayRaw->type, $this->cost_unselectable_type) && strlen(trim($holidayRaw->cost)) == 0) {
 			$holidayRaw->cost = 1;
 		}
 		$holidayRaw->uid = $this->user->uid;
