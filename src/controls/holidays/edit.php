@@ -20,7 +20,7 @@ $user_holiday = new UserHoliday($super_edit_user);
 $db = IntraDb::getGnfDb();
 $db->sqlBegin();
 $ret = $user_holiday->edit($holidayid, $key, $value);
-if ($user_holiday->sendNotification($holidayid, "휴가수정")) {
+if ($user_holiday->sendNotification(array($holidayid), "휴가수정")) {
 	if ($db->sqlEnd()) {
 		return $ret;
 	}

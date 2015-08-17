@@ -201,7 +201,7 @@ class UserHoliday
 		return $holiday_ids;
 	}
 
-	public function sendNotification($holidayids, $type)
+	public function sendNotification(array $holidayids, $type)
 	{
 		$holidayid = $holidayids[0];
 		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);

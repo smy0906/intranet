@@ -22,7 +22,7 @@ $super_edit_user = \Intra\Service\UserSession::getSupereditUser();
 $db = IntraDb::getGnfDb();
 $db->sqlBegin();
 if ($user_holiday->del($holidayid)) {
-	if ($user_holiday->sendNotification($holidayid, '휴가취소')) {
+	if ($user_holiday->sendNotification(array($holidayid), '휴가취소')) {
 		if ($db->sqlEnd()) {
 			return 1;
 		}
