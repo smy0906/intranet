@@ -48,7 +48,6 @@ class PostDto extends BaseDto
 		$return = $this->exportAsArray();
 		$return['name'] = Users::getNameByUid($this->uid);
 		$return['content_html'] = nl2br($return['content_html']);
-		var_dump($return);
 		return $return;
 	}
 
