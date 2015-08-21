@@ -55,26 +55,26 @@ class Post
 	{
 		$result = false;
 		Capsule::connection()->transaction(
-			function () use ($result, $group) {
+			function () use (&$result, $group) {
 				$posts = PostModel::on()->where('group', $group)->where('is_sent', 0)->get();
-				$mail_title = '[공지] ' . date('Y/m/d');
+				$mail_title = '[공지] ' . date('Y/m/d') . '의 공지사항입니다.';
 				$mail_bodys = array();
 				foreach ($posts as $post) {
-					$mail_body = " - {$post->title}\n\n" . $post->content_html;
+					$mail_body = "<fieldset style='margin: 20px'><legend><h4>{$post->title}</h4> </legend>" . $post->content_html . "</fieldset>";
 					$mail_bodys[] = $mail_body;
 				}
-				$mail_bodys = implode("\n\n\n", $mail_bodys);
+				$mail_bodys = implode("", $mail_bodys);
+				$mail_bodys = 'asdasdasda';
 
 				$receivers = array();
 				$receivers[] = '***REMOVED***';
-				$receivers[] = '***REMOVED***';
 
 				$mg = new Mailgun("***REMOVED***");
-				$domain = "ridibooks.com";
+				$domain = "ridi.com";
 				$result = $mg->sendMessage(
 					$domain,
 					array(
-						'from' => 'noreply@ridibooks.com',
+						'from' => '***REMOVED***',
 						'to' => implode(', ', $receivers),
 						'subject' => $mail_title,
 						'text' => strip_tags($mail_bodys),
