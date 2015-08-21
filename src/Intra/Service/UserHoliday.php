@@ -117,13 +117,6 @@ class UserHoliday
 			//throw new Exception("연차가 맞지 않습니다. 사용년도를 확인해주세요");
 		}
 
-		if ($holidayRaw->cost > 0) {
-			$remain_cost = $this->user_holiday_policy->getRemainCost($holidayRaw->yearly);
-			if ($remain_cost < $holidayRaw->cost) {
-				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다." . $holidayRaw->yearly);
-			}
-		}
-
 		if ($dateTimestamp < strtotime('-1 month')) {
 			throw new \Exception("연차 사용날짜를 다시 입력해주세요. 이미 지난 시간입니다.");
 		}
@@ -140,6 +133,13 @@ class UserHoliday
 			$holidayRaw->cost = $int_cost;
 		} else {
 			throw new \Exception("연차종류를 다시 확인해주세요");
+		}
+
+		if ($holidayRaw->cost > 0) {
+			$remain_cost = $this->user_holiday_policy->getRemainCost($holidayRaw->yearly);
+			if ($remain_cost < $holidayRaw->cost) {
+				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다." . $holidayRaw->yearly);
+			}
 		}
 
 		if ($this->isDuplicate($holidayRaw->date)) {
