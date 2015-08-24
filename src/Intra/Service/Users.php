@@ -35,7 +35,7 @@ class Users
 
 	public static function join($request)
 	{
-		$joinDto = self::getJoinDtoFromRequest($request);
+		$joinDto = self::importJoinDtoFromRequest($request);
 		self::assertJoin($joinDto);
 		UserModel::addUser($joinDto);
 	}
@@ -44,7 +44,7 @@ class Users
 	 * @param $request Request
 	 * @return object
 	 */
-	public static function getJoinDtoFromRequest($request)
+	public static function importJoinDtoFromRequest($request)
 	{
 		$ret = array();
 		$keys = array('name', 'email', 'mobile', 'birth');

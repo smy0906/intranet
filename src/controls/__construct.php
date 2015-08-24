@@ -10,7 +10,6 @@ $free_to_login_path = array(
 	'/usersession/login',
 	'/usersession/login.azure',
 	'/users/join',
-	'/users/join.ajax',
 	'/programs/insert',
 	'/programs/list',
 );

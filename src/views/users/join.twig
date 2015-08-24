@@ -6,17 +6,23 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.css" media="screen"/>
+  <link rel="stylesheet" href="/css/screen.css" media="screen"/>
+  <link rel="stylesheet" href="/css/print.css" media="print"/>
+
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
+  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//cdn.rawgit.com/genesos/AttrAjax/master/attrajax.js"></script>
 
   <script type="text/javascript" src="/js/common.js"></script>
   <script type="text/javascript" src="/js/jquery.form.js"></script>
-  <script type="text/javascript" src="/lib/dhtmlxScheduler/dhtmlxscheduler.js"></script>
-  <script type="text/javascript" src="/lib/dhtmlxScheduler/locale.js"></script>
-  <link rel="stylesheet" type="text/css" href="/lib/dhtmlxScheduler/skin/dhtmlxscheduler.css"/>
+  <script type="text/javascript" src="/js/jquery.jeditable.js"></script>
+  <script type="text/javascript" src="/js/jquery.tmpl.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.number.min.js"></script>
 
   <style>
     body, div, td, p {
@@ -94,10 +100,6 @@
 {% block body %}
   <div style='width:100%'>
     <div class='box _blue' style='width:300px;margin: 100px auto 0;padding:20px;'>
-      <div style="padding:5px;border: 1px solid #999">
-        <div>1. 아이디에는, 이메일과 동일한 아이디를 입력</div>
-        <div>2. 이 후 비밀번호는 이메일과 동일하게</div>
-      </div>
       <form id="js_join">
         <table>
           <tr>
@@ -139,14 +141,15 @@
           <div>
             <button
               attrajax
-              data-aa-url='/users/join.ajax'
+              data-aa-url='/users/join'
+              data-aa-method="post"
               data-aa-param-form="#js_join"
-              data-aa-confirm='정말 삭제하시겠습니까?'
+              data-aa-confirm='정말 가입하시겠습니까?'
               data-aa-datatype="text"
               data-aa-success-if-result-is="1"
               data-aa-onsuccess-msg="가입되었습니다. 인프라팀의 가입승인 후 이용가능합니다."
               data-aa-onsuccess="refresh"
-              data-aa-onfail-alert="true"
+              data-aa-onfail-alert
               value='{% block userForm_name %}!{% endblock %}'>
               Join
             </button>
