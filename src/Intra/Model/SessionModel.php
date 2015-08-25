@@ -10,11 +10,17 @@ namespace Intra\Model;
 
 class SessionModel
 {
-	public function __construct($other_db = null)
+	public function __construct()
+	{
+		self::init();
+	}
+
+	public static function init()
 	{
 		if (!isset($_SESSION)) {
-			ini_set("session.gc_maxlifetime", 60 * 60 * 24 * 10);
-			session_set_cookie_params(time() + 60 * 60 * 24 * 30);
+			$session_lifetime = 60 * 60 * 24 * 7;//7일
+			ini_set("session.gc_maxlifetime", $session_lifetime);
+			session_set_cookie_params($session_lifetime);
 			session_start();
 		}
 	}
