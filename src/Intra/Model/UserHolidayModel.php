@@ -8,7 +8,7 @@ use Intra\Service\User;
 class UserHolidayModel
 {
 	public static $const = array(
-		'types' => array('연차', '오전반차', '오후반차', '공가', '경조', '대체휴가', '무급휴가', 'PWT'),
+		'types' => array('연차', '오전반차', '오후반차', '공가', '경조', '대체휴가', '무급휴가', '무급오전반차', '무급오후반차', 'PWT'),
 		'memos' => array('개인용무', '병원진료', '예비군훈련', '경조사', '기타')
 	);
 

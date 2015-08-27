@@ -16,7 +16,10 @@ use Mailgun\Mailgun;
 
 class UserHoliday
 {
-	private $cost_unselectable_type = array('PWT', '오전반차', '오후반차');
+	private $cost_unselectable_type = array('PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차');
+	private $cost_zero_type = array('공가', '경조', '대체휴가', '무급휴가', 'PWT', '무급오전반차', '무급오후반차');
+	private $cost_half_type = array('오전반차', '오후반차');
+	private $cost_int_type = array('연차');
 	/**
 	 * @var User
 	 */
@@ -121,11 +124,11 @@ class UserHoliday
 			throw new \Exception("연차 사용날짜를 다시 입력해주세요. 이미 지난 시간입니다.");
 		}
 
-		if (in_array($holidayRaw->type, array('공가', '경조', '대체휴가', '무급휴가', 'PWT'))) {
+		if (in_array($holidayRaw->type, $this->cost_zero_type)) {
 			$holidayRaw->cost = 0;
-		} elseif (in_array($holidayRaw->type, array('오전반차', '오후반차'))) {
+		} elseif (in_array($holidayRaw->type, $this->cost_half_type)) {
 			$holidayRaw->cost = 0.5;
-		} elseif (in_array($holidayRaw->type, array('연차'))) {
+		} elseif (in_array($holidayRaw->type, $this->cost_int_type)) {
 			$int_cost = intval($holidayRaw->cost);
 			if ($int_cost != $holidayRaw->cost || $int_cost <= 0) {
 				throw new \Exception('연차는 자연수로만 입력가능합니다');
