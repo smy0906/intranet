@@ -14,4 +14,6 @@ class Config extends ConfigLoader
 	public static $mysql_db;
 
 	public static $sentry_key;
+
+	public static $is_dev = false;
 }
