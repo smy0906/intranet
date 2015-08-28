@@ -336,6 +336,12 @@ class UserPayment
 			unset($request_args['status']);
 			unset($request_args['paytype']);
 		}
+		if (strlen($request_args['status']) == 0) {
+			unset($request_args['status']);
+		}
+		if (strlen($request_args['paytype']) == 0) {
+			unset($request_args['paytype']);
+		}
 		return $request_args;
 	}
 }
