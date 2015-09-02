@@ -37,7 +37,7 @@
         }
       });
       {% if editable %}
-      $('.receipt td[key]').each(function () {
+      $('.receipt td[data-key]').each(function () {
         var receiptid = $(this).parent().data('receiptid');
         var key = $(this).data('key');
         var submitdata = {receiptid: receiptid, key: key};
