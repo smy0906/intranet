@@ -327,6 +327,7 @@
         <td>
           <label>
             <select name='tax' js_cookie_save>
+              <option value='N/A'>N/A</option>
               {% for tax in const.taxs %}
                 <option value='{{ tax }}'>{{ tax }}</option>
               {% endfor %}
@@ -350,6 +351,7 @@
           {% if isSuperAdmin %}
             <label>
               <select name='status' js_cookie_save js_data_chosen>
+                <option value='결제 대기중'>결제 대기중</option>
                 {% for status in const.statuses %}
                   <option value='{{ status }}'>{{ status }}</option>
                 {% endfor %}
