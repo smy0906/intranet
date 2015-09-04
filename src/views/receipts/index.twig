@@ -70,7 +70,8 @@
             }
           );
         })
-        .val(currentUid);
+        .val(currentUid)
+        .trigger("chosen:updated");
       var $js_recipts_title = $('.js_recipts_title');
       var text = $("select#js_super_edit option:selected").text();
       if (text && text.length)
