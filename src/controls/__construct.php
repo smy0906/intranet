@@ -12,6 +12,7 @@ $free_to_login_path = array(
 	'/users/join',
 	'/programs/insert',
 	'/programs/list',
+	'/api/ridibooks_ids',
 );
 
 $is_free_to_login = in_array($request->getPathInfo(), $free_to_login_path);
