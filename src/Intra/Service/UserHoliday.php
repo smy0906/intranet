@@ -205,12 +205,12 @@ class UserHoliday
 		return $holiday_ids;
 	}
 
-	public function sendNotification(array $holidayids, $type)
+	public function sendNotification(array $holidayids, $action_type)
 	{
 		$holidayid = $holidayids[0];
-		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);
-		$title = $this->getMailTitle($holidayRaw, $type);
-		$ret = $this->sendMailNotification($holidayRaw, $title);
+		$holidayRaws = $this->user_holiday_model->get($holidayid, $this->user->uid);
+		$title = $this->getMailTitle($holidayRaws, $action_type);
+		$ret = $this->sendMailNotification($holidayRaws, $title);
 		$this->sendSlackNotification($title);
 
 		return $ret->http_response_code == 200;
@@ -218,12 +218,28 @@ class UserHoliday
 
 	/**
 	 * @param $holidayRaw HolidayRaw
-	 * @param $type
+	 * @param $action_type
 	 * @return string
 	 */
-	private function getMailTitle($holidayRaw, $type)
+	private function getMailTitle($holidayRaws, $action_type)
 	{
-		return "[$type][{$holidayRaw->type}][{$holidayRaw->date}] {$this->user->getName()}님의 {$holidayRaw->cost}일 휴가사용신청";
+		$cost_sum = 0;
+		foreach ($holidayRaws as $holidayRaw) {
+			$cost_sum += $holidayRaw->cost;
+		}
+		if (count($holidayRaws) == 1) {
+			$date_duration = $holidayRaws[0]->date;
+		} else {
+			$date_durations = array();
+			foreach ($holidayRaws as $holidayRaw) {
+				$date_durations[] = $holidayRaw->date;
+			}
+			$date_duration = implode(', ', $date_durations);
+		}
+
+		$holiday_type = $holidayRaws[0]->type;
+
+		return "[{$action_type}][{$holiday_type}][{$date_duration}] {$this->user->getName()}님의 {$cost_sum}일 휴가사용신청";
 	}
 
 	/**
@@ -232,7 +248,7 @@ class UserHoliday
 	 * @return \stdClass
 	 * @throws \Mailgun\Messages\Exceptions\MissingRequiredMIMEParameters
 	 */
-	private function sendMailNotification($holidayRaw, $title)
+	private function sendMailNotification($holidayRaws, $title)
 	{
 		$emails = $this->getMailReceivers($holidayRaw);
 		$contents = $this->getMailContents($holidayRaw);

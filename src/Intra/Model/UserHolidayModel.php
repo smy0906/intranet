@@ -83,8 +83,19 @@ class UserHolidayModel
 
 	public function get($holidayid, $uid)
 	{
-		$where = array('holidayid' => $holidayid, 'uid' => $uid);
-		return $this->db->sqlObject('select * from holidays where ? order by date asc', sqlWhere($where));
+		return $this->gets(array($holidayid), $uid);
+	}
+
+	/**
+	 * @param $holidayids
+	 * @param $uid
+	 * @return HolidayRaw
+	 */
+
+	public function gets(array $holidayids, $uid)
+	{
+		$where = array('holidayid' => $holidayids, 'uid' => $uid);
+		return $this->db->sqlObjects('select * from holidays where ? order by date asc', sqlWhere($where));
 	}
 
 	public function isDuplicate($date, $uid)
