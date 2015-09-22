@@ -10,9 +10,7 @@ namespace Intra\Service;
 
 use DateTime;
 use Intra\Model\HolidayRaw;
-use Intra\Model\UserFactory;
 use Intra\Model\UserHolidayModel;
-use Mailgun\Mailgun;
 
 class UserHoliday
 {
@@ -207,125 +205,9 @@ class UserHoliday
 
 	public function sendNotification(array $holidayids, $action_type)
 	{
-		$holidayid = $holidayids[0];
-		$holidayRaws = $this->user_holiday_model->get($holidayid, $this->user->uid);
-		$title = $this->getMailTitle($holidayRaws, $action_type);
-		$ret = $this->sendMailNotification($holidayRaws, $title);
-		$this->sendSlackNotification($title);
-
-		return $ret->http_response_code == 200;
-	}
-
-	/**
-	 * @param $holidayRaw HolidayRaw
-	 * @param $action_type
-	 * @return string
-	 */
-	private function getMailTitle($holidayRaws, $action_type)
-	{
-		$cost_sum = 0;
-		foreach ($holidayRaws as $holidayRaw) {
-			$cost_sum += $holidayRaw->cost;
-		}
-		if (count($holidayRaws) == 1) {
-			$date_duration = $holidayRaws[0]->date;
-		} else {
-			$date_durations = array();
-			foreach ($holidayRaws as $holidayRaw) {
-				$date_durations[] = $holidayRaw->date;
-			}
-			$date_duration = implode(', ', $date_durations);
-		}
-
-		$holiday_type = $holidayRaws[0]->type;
-
-		return "[{$action_type}][{$holiday_type}][{$date_duration}] {$this->user->getName()}님의 {$cost_sum}일 휴가사용신청";
-	}
-
-	/**
-	 * @param $holidayRaw
-	 * @param $title
-	 * @return \stdClass
-	 * @throws \Mailgun\Messages\Exceptions\MissingRequiredMIMEParameters
-	 */
-	private function sendMailNotification($holidayRaws, $title)
-	{
-		$emails = $this->getMailReceivers($holidayRaw);
-		$contents = $this->getMailContents($holidayRaw);
-
-		$mg = new Mailgun("***REMOVED***");
-		$domain = "ridibooks.com";
-		$ret = $mg->sendMessage(
-			$domain,
-			array(
-				'from' => 'noreply@ridibooks.com',
-				'to' => implode(', ', $emails),
-				'subject' => $title,
-				'text' => $contents
-			)
-		);
-		return $ret;
-	}
-
-	/**
-	 * @param HolidayRaw $holidayRaw
-	 * @return array
-	 */
-	private function getMailReceivers($holidayRaw)
-	{
-		$uids = array($holidayRaw->uid, $holidayRaw->manager_uid, $holidayRaw->keeper_uid);
-		$uids = array_filter(array_unique($uids));
-		$users = new Users;
-		$user_list = $users->getUsersByUids($uids);
-
-		$emails = array();
-		foreach ($user_list as $user) {
-			$emails[] = $user->getId() . '@ridi.com';
-		}
-		$emails[] = '***REMOVED***';
-		$emails[] = '***REMOVED***';
-
-		return array_unique(array_filter($emails));
-	}
-
-	/**
-	 * @param HolidayRaw $holidayRaw
-	 * @return string
-	 * @throws \Exception
-	 */
-	private function getMailContents($holidayRaw)
-	{
-		$keeper = UserFactory::getByUid($holidayRaw->keeper_uid);
-		if ($keeper === null) {
-			throw new \Exception('$keeper === null');
-		}
-		$request_date = date('Y-m-d');
-
-		$text = "요청일 : {$request_date}
-요청자 : {$this->user->getName()}
-종류 : {$holidayRaw->type}
-사용연차 : {$holidayRaw->cost}
-사용날짜 : {$holidayRaw->date}
-업무인수인계자 : {$keeper->getName()}
-비상시연락처 : {$holidayRaw->phone_emergency}
-비고 : {$holidayRaw->memo}
-";
-		return $text;
-	}
-
-	private function sendSlackNotification($message)
-	{
-		$data = "payload=" . json_encode(array("text" => $message));
-
-		// You can get your webhook endpoint from your Slack settings
-		$ch = curl_init("https://hooks.slack.com/services/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");
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$result = curl_exec($ch);
-		curl_close($ch);
-
-		return $result;
+		$holiday_raws = $this->user_holiday_model->gets($holidayids, $this->user->uid);
+		$user_holiday_notification = new UserHolidayNotification($this->user, $holiday_raws, $action_type);
+		return $user_holiday_notification->sendNotification();
 	}
 
 	/**
