@@ -39,7 +39,7 @@ class UserHolidayNotification
 	{
 		$title = $this->getMailTitle();
 		$ret = $this->sendMailNotification($title);
-		$this->sendSlackNotification($title);
+		//$this->sendSlackNotification($title);
 
 		return $ret->http_response_code == 200;
 	}
