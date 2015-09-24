@@ -1,34 +1,45 @@
 {% extends 'ridi.twig' %}
 
 {% block head %}
+  <style>
+    tbody td {
+      text-align: left;
+    }
+  </style>
 {% endblock %}
 
 {% block body %}
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-8">
-        {% for index, post in posts %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
+    <table class="table">
+      <col width="20">
+      <col width="*">
+      <col width="80">
+      <tbody>
+      {% for index, post in posts %}
+        <tr>
+          <td>
+            {{ lastItem + posts.length - index }}
+          </td>
+          <td>
+            <a href="/posts/{{ group }}/{{ post.id }}">
+              {{ post.title }}
+            </a>
+            {% if post.is_new %}
+              <span class="label label-success">NEW</span>
+            {% endif %}
+            {% if not post.is_sent %}
+              <span class="label label-info">미발송</span>
+            {% endif %}
+            <span class="label label-info">{{ post.name }}</span>
+          </td>
+          <td>
+            {{ post.updated_at|date('Y-m-d') }}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
 
-              <a href="/posts/{{ group }}/{{ post.id }}">
-                {{ lastItem + posts.length - index }} -
-                {{ post.title }}
-              </a>
-
-              {% if post.is_new %}
-                <span class="label label-success">NEW</span>
-              {% endif %}
-              {% if not post.is_sent %}
-                <span class="label label-info">미발송</span>
-              {% endif %}
-              <span class="label label-info">{{ post.name }}</span>
-            </div>
-
-          </div>
-        {% endfor %}
-      </div>
-    </div>
     <div class="row">
       {% if isSuperAdmin %}
         <div class="col-xs-7">
