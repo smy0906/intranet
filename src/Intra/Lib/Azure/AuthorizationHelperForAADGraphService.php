@@ -14,9 +14,9 @@ class AuthorizationHelperForAADGraphService
 	{
 		$authUrl = "https://login.windows.net/common/oauth2/authorize" . "?" .
 			"response_type=code" . "&" .
-			"client_id=" . Settings::$clientId . "&" .
-			"resource=" . Settings::$resourceURI . "&" .
-			"redirect_uri=" . Settings::$redirectURI;
+			"client_id=" . Settings::getClientId() . "&" .
+			"resource=" . Settings::getResourceURI() . "&" .
+			"redirect_uri=" . Settings::getRediectURI();
 		return $authUrl;
 	}
 
@@ -25,9 +25,9 @@ class AuthorizationHelperForAADGraphService
 	{
 		// Construct the body for the STS request
 		$authenticationRequestBody = "grant_type=authorization_code" . "&" .
-			"client_id=" . urlencode(Settings::$clientId) . "&" .
-			"redirect_uri=" . Settings::$redirectURI . "&" .
-			"client_secret=" . urlencode(Settings::$password) . "&" .
+			"client_id=" . urlencode(Settings::getClientId()) . "&" .
+			"redirect_uri=" . Settings::getRediectURI() . "&" .
+			"client_secret=" . urlencode(Settings::getPassword()) . "&" .
 			"code=" . $code;
 
 

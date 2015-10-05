@@ -15,9 +15,9 @@ class GraphServiceAccessHelper
 		self::addRequiredHeadersAndSettings($ch, $token_array);
 
 		// Create url for the entry based on the feedname and the key value
-		$feedURL = "https://graph.windows.net/" . Settings::$appTenantDomainName . "/me/";
+		$feedURL = "https://graph.windows.net/" . Settings::getAppTenantDomainName() . "/me/";
 		//  $feedURL = "https://graph.windows.net/me";
-		$feedURL = $feedURL . "?" . Settings::$apiVersion;
+		$feedURL = $feedURL . "?" . Settings::getApiVersion();
 		curl_setopt($ch, CURLOPT_URL, $feedURL);
 
 		//Enable fiddler to capture request
@@ -60,7 +60,7 @@ class GraphServiceAccessHelper
 		$ch = curl_init();
 		self::addRequiredHeadersAndSettings($ch, $token_array);
 		// set url
-		$feedURL = "https://graph.windows.net/me" . "?" . Settings::$apiVersion;
+		$feedURL = "https://graph.windows.net/me" . "?" . Settings::getApiVersion();
 		curl_setopt($ch, CURLOPT_URL, $feedURL);
 		// Mark as Patch request
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
