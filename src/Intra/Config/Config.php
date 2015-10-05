@@ -15,7 +15,7 @@ class Config extends ConfigLoader
 
 	public static $sentry_key;
 
-	public static $domain = "intra.ridi.com";
+	public static $domain = "ridi.com";
 
 	public static $is_dev = false;
 }

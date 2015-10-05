@@ -8,33 +8,33 @@ class Settings
 {
 	private static $clientId =
 		array(
-			'intra.ridi.com' => '***REMOVED***',
-			'intra.studiod.co.kr' => '***REMOVED***'
+			'ridi.com' => '***REMOVED***',
+			'studiod.co.kr' => '***REMOVED***'
 		);
 	private static $password =
 		array(
-			'intra.ridi.com' => 'KpZt7XrwDuJw2/I/NTHDCbQZ6jmrtbcUefZta4Lv90w=',
-			'intra.studiod.co.kr' => '***REMOVED***'
+			'ridi.com' => 'KpZt7XrwDuJw2/I/NTHDCbQZ6jmrtbcUefZta4Lv90w=',
+			'studiod.co.kr' => '***REMOVED***'
 		);
 	private static $redirectURI =
 		array(
-			'intra.ridi.com' => 'http://intra.ridi.com/usersession/login.azure',
-			'intra.studiod.co.kr' => 'http://intra.studiod.co.kr/usersession/login.azure'
+			'ridi.com' => 'http://intra.ridi.com/usersession/login.azure',
+			'studiod.co.kr' => 'http://intra.studiod.co.kr/usersession/login.azure'
 		);
 	private static $resourceURI =
 		array(
-			'intra.ridi.com' => 'https://graph.windows.net',
-			'intra.studiod.co.kr' => 'https://graph.windows.net'
+			'ridi.com' => 'https://graph.windows.net',
+			'studiod.co.kr' => 'https://graph.windows.net'
 		);
 	private static $appTenantDomainName =
 		array(
-			'intra.ridi.com' => 'ridicorp.com',
-			'intra.studiod.co.kr' => 'studiod.co.kr'
+			'ridi.com' => 'ridicorp.com',
+			'studiod.co.kr' => 'studiod.co.kr'
 		);
 	private static $apiVersion =
 		array(
-			'intra.ridi.com' => 'api-version=2013-11-08',
-			'intra.studiod.co.kr' => 'api-version=2013-11-08'
+			'ridi.com' => 'api-version=2013-11-08',
+			'studiod.co.kr' => 'api-version=2013-11-08'
 		);
 
 	public static function getClientId()

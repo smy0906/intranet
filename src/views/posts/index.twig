@@ -42,13 +42,15 @@
 
     <div class="row">
       {% if isSuperAdmin %}
-        <div class="col-xs-7">
-          <a href="/posts/{{ group }}/sendAll">
-            <button class="btn btn-primary" type="button">
-              모두 발송하기
-            </button>
-          </a>
-        </div>
+        {% if globalDomain == "ridi.com" %}
+          <div class="col-xs-7">
+            <a href="/posts/{{ group }}/sendAll">
+              <button class="btn btn-primary" type="button">
+                모두 발송하기
+              </button>
+            </a>
+          </div>
+        {% endif %}
 
         <div class="col-xs-1">
           <a href="/posts/{{ group }}/write">

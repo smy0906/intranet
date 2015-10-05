@@ -9,6 +9,7 @@
 namespace Intra\Service\Post;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Intra\Config\Config;
 use Intra\Core\MsgException;
 use Intra\Model\PostModel;
 use Intra\Service\UserSession;
@@ -64,10 +65,9 @@ class Post
 					$mail_bodys[] = $mail_body;
 				}
 				$mail_bodys = implode("", $mail_bodys);
-				$mail_bodys = 'asdasdasda';
 
 				$receivers = array();
-				$receivers[] = '***REMOVED***';
+				$receivers[] = 'everyone@' . Config::$domain;
 
 				$mg = new Mailgun("***REMOVED***");
 				$domain = "ridi.com";

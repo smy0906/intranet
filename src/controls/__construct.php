@@ -1,5 +1,6 @@
 <?php
 /** @var $this Intra\Core\Control */
+use Intra\Config\Config;
 use Intra\Service\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,3 +24,10 @@ if (!$is_free_to_login && !UserSession::isLogined()) {
 		return new RedirectResponse('/usersession/login');
 	}
 }
+
+$response = $this->getResponse();
+$response->add(
+	array(
+		'globalDomain' => Config::$domain,
+	)
+);

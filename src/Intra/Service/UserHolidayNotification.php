@@ -8,6 +8,7 @@
 
 namespace Intra\Service;
 
+use Intra\Config\Config;
 use Intra\Model\UserFactory;
 use Mailgun\Mailgun;
 
@@ -93,7 +94,7 @@ class UserHolidayNotification
 
 		$emails = array();
 		foreach ($user_list as $user) {
-			$emails[] = $user->getId() . '@ridi.com';
+			$emails[] = $user->getId() . '@' . Config::$domain;
 		}
 		$emails[] = '***REMOVED***';
 		$emails[] = '***REMOVED***';
