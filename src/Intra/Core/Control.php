@@ -74,6 +74,9 @@ class Control
 		return $this->request;
 	}
 
+	/**
+	 * @return TwigResponse
+	 */
 	public function getResponse()
 	{
 		return $this->response;
