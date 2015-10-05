@@ -69,7 +69,7 @@ class UserPayment
 			'저작권료 (마케팅용 콘텐츠 매절)',
 			'콘텐츠 지원금',
 		);
-		if (in_array(UserSession::getSelf()->getName(), array('박주현', '설다인', '한재선'))) {
+		if (UserSession::getSelf()->isSuperAdmin()) {
 			$const['categorys'][] = '기타';
 		}
 		$const['pay_dates'] = array('선택해주세요', '7일', '10일', '25일', '월말일', '긴급');

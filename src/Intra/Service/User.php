@@ -8,6 +8,7 @@
 
 namespace Intra\Service;
 
+use Intra\Config\Config;
 use Intra\Model\UserFactory;
 use Intra\Model\UserModel;
 
@@ -37,8 +38,8 @@ class User
 
 	public function isSuperAdmin()
 	{
-		$name = $this->getName();
-		return in_array($name, array('박주현', '설다인', '한재선', '심민규'));
+		$db_dto = $this->user_model->getDbDto();
+		return ($db_dto['is_admin'] == '1');
 	}
 
 	public function getName()
@@ -60,7 +61,7 @@ class User
 
 	public function getEmail()
 	{
-		return $this->getId() . '@ridi.com';
+		return $this->getId() . '@' . Config::$domain;
 	}
 
 	public function getId()
