@@ -5,7 +5,7 @@ use Intra\Service\UserSession;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-if (!Ridi::isRidiIP()) {
+if (!Ridi::isRidiIP() || UserSession::isTa()) {
 	throw new Exception('권한이 없습니다.');
 }
 

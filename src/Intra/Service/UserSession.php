@@ -94,4 +94,15 @@ class UserSession
 			self::$session->set('super_edit_uid', $uid);
 		}
 	}
+
+	public static function isTa()
+	{
+		$user = self::getSelf();
+
+		if (strpos($user->getEmail(), ".ta@") !== false || strpos($user->getName(), "TA") === 0) {
+			return true;
+		}
+
+		return false;
+	}
 }

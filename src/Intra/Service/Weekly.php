@@ -9,11 +9,6 @@ use PHPExcel_Writer_HTML;
 
 class Weekly
 {
-	public function __construct()
-	{
-		date_default_timezone_set('Asia/Seoul');
-	}
-
 	public static function dumpToHtml($infile, $outfile)
 	{
 		$reader = new PHPExcel_Reader_Excel2007();
@@ -30,7 +25,7 @@ class Weekly
 			return;
 		}
 
-		if (!Ridi::isRidiIP()) {
+		if (!Ridi::isRidiIP() || UserSession::isTa()) {
 			throw new Exception('권한이 없습니다.');
 		}
 
