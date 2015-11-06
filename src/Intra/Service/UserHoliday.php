@@ -275,7 +275,7 @@ class UserHoliday
 	 */
 	private function convertToArrayToAdd($holidayRaw)
 	{
-		if ($holidayRaw->type == '연차' && $holidayRaw->cost > 1) {
+		if ($holidayRaw->cost > 1) {
 			$return = array();
 			$cost = $holidayRaw->cost;
 			$date = $holidayRaw->date;
