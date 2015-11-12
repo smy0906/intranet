@@ -47,17 +47,19 @@
 {% endblock %}
 
 {% block body_head %}
-  {% for user in users %}
-    <div class='js_user_popup' data-userid='{{ user.public_information.id_for_css }}'>
-      <div>{{ user.public_information.name }} <sub>{{ user.public_information.id }}@{{ globalDomain }}</sub></div>
-      {% if user.public_information.outer_call %}
-        <div><strong>외선</strong> {{ user.public_information.outer_call }}</div>
-      {% endif %}
-      {% if user.public_information.inner_call %}
-        <div><strong>내선</strong> {{ user.public_information.inner_call }}</div>
-      {% endif %}
-      <div><strong>긴급</strong> {{ user.public_information.mobile }}</div>
-    </div>
+  {% if globalDomain == "ridi.com" %}
+    {% for user in users %}
+      <div class='js_user_popup' data-userid='{{ user.public_information.id_for_css }}'>
+        <div>{{ user.public_information.name }} <sub>{{ user.public_information.id }}@{{ globalDomain }}</sub></div>
+        {% if user.public_information.outer_call %}
+          <div><strong>외선</strong> {{ user.public_information.outer_call }}</div>
+        {% endif %}
+        {% if user.public_information.inner_call %}
+          <div><strong>내선</strong> {{ user.public_information.inner_call }}</div>
+        {% endif %}
+        <div><strong>긴급</strong> {{ user.public_information.mobile }}</div>
+      </div>
+    {% endfor %}
   {% endfor %}
 {% endblock %}
 
