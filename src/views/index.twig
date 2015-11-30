@@ -64,20 +64,22 @@
 {% endblock %}
 
 {% block body %}
-  <div style="position: absolute;top:50px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
-    {% for user in users %}
-      <div class='js_user'
-           style='padding:0;left:{{ user.public_information.extra.posX }}px;top:{{ user.public_information.extra.posY }}px'
-           data-userid='{{ user.public_information.id_for_css }}' data-rawuserid='{{ user.public_information.id }}'>
-        <div style='padding:0;margin:0;height:100px;overflow:hidden;'>
-          <div>{{ user.public_information.name }}</div>
-          <img src='pics/{{ user.public_information.id }}.png' width='60px'
-               data-userid='{{ user.public_information.id_for_css }}'
-               onerror="$(this).detach()"
-               class="js_user_img"
-               data-rawuserid='{{ user.public_information.id }}'/>
+  {% if globalDomain == "ridi.com" %}
+    <div style="position: absolute;top:50px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
+      {% for user in users %}
+        <div class='js_user'
+             style='padding:0;left:{{ user.public_information.extra.posX }}px;top:{{ user.public_information.extra.posY }}px'
+             data-userid='{{ user.public_information.id_for_css }}' data-rawuserid='{{ user.public_information.id }}'>
+          <div style='padding:0;margin:0;height:100px;overflow:hidden;'>
+            <div>{{ user.public_information.name }}</div>
+            <img src='pics/{{ user.public_information.id }}.png' width='60px'
+                 data-userid='{{ user.public_information.id_for_css }}'
+                 onerror="$(this).detach()"
+                 class="js_user_img"
+                 data-rawuserid='{{ user.public_information.id }}'/>
+          </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endblock %}
