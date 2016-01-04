@@ -13,10 +13,6 @@
             {% if is_new %}
               <span class="label label-success">NEW</span>
             {% endif %}
-            {% if not is_sent %}
-              <span class="label label-info">미발송</span>
-            {% endif %}
-            <span class="label label-info">{{ name }}</span>
           </div>
           <div class="panel-body">
             {{ content_html | raw }}
