@@ -11,6 +11,7 @@ namespace Intra\Service\Press;
 use Intra\Core\JsonDto;
 use Intra\Service\IntraDb;
 use Intra\Service\User;
+use Intra\Service\UserSession;
 
 class Press
 {
@@ -30,7 +31,8 @@ class Press
 
         $return = [
             'user' => $this->user,
-            'press' => $db->sqlDicts('select * from press order by date desc')
+            'press' => $db->sqlDicts('select * from press order by date desc'),
+            'manager' => UserSession::isPressManager()
         ];
 
         return $return;

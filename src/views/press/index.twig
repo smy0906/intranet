@@ -27,6 +27,7 @@
 {% endblock %}
 
 {% block body %}
+    {% if manager %}
     <form
             attrajax
             data-aa-url='/press/add'
@@ -111,4 +112,7 @@
             </tbody>
         </table>
     </form>
+    {% else %}
+        접근 권한이 없습니다.
+    {% endif %}
 {% endblock %}
