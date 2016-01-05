@@ -30,7 +30,7 @@ class Press
 
         $return = [
             'user' => $this->user,
-            'press' => $db->sqlDicts('select * from press order by date asc')
+            'press' => $db->sqlDicts('select * from press order by date desc')
         ];
 
         return $return;
