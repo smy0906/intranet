@@ -14,4 +14,4 @@ $user = UserSession::getSupereditUser();
 
 $press_service = new Press($user);
 
-return $_GET['callback'].'('.$press_service->getListByJson().')';
+return $request->query->get('callback').'('.$press_service->getListByJson().')';
