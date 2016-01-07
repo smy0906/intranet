@@ -29,5 +29,6 @@ $response = $this->getResponse();
 $response->add(
 	array(
 		'globalDomain' => Config::$domain,
+        'pressManager' => UserSession::isPressManager()
 	)
 );
