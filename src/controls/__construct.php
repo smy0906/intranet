@@ -14,6 +14,7 @@ $free_to_login_path = array(
 	'/programs/insert',
 	'/programs/list',
 	'/api/ridibooks_ids',
+	'/press/list'
 );
 
 $is_free_to_login = in_array($request->getPathInfo(), $free_to_login_path);
@@ -27,8 +28,8 @@ if (!$is_free_to_login && !UserSession::isLogined()) {
 
 $response = $this->getResponse();
 $response->add(
-	array(
+	[
 		'globalDomain' => Config::$domain,
-        'pressManager' => UserSession::isPressManager()
-	)
+		'pressManager' => UserSession::isPressManager()
+	]
 );
