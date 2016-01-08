@@ -106,19 +106,19 @@ class UserSession
 		return false;
 	}
 
-    public static function isPressManager()
-    {
-        $user = self::getSelf();
+	public static function isPressManager()
+	{
+		$user = self::getSelf();
 
-        $press_manager = [
-            'kimhs',
-            'sanghoon.kim'
-        ];
+		$press_manager = [
+			'kimhs',
+			'sanghoon.kim'
+		];
 
-        if(in_array($user->getId(), $press_manager)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+		if (in_array($user->getId(), $press_manager)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

@@ -15,88 +15,91 @@ use Intra\Service\UserSession;
 
 class Press
 {
-    private $user;
+	private $user;
 
-    /**
-     * @param $user User
-     */
-    public function __construct($user)
-    {
-        $this->user = $user;
-    }
+	/**
+	 * @param $user User
+	 */
+	public function __construct($user)
+	{
+		$this->user = $user;
+	}
 
-    public function index()
-    {
-        $db = IntraDb::getGnfDb();
+	public function index()
+	{
+		$db = IntraDb::getGnfDb();
 
-        $return = [
-            'user' => $this->user,
-            'press' => $db->sqlDicts('select * from press order by date desc'),
-            'manager' => UserSession::isPressManager()
-        ];
+		$return = [
+			'user' => $this->user,
+			'press' => $db->sqlDicts('select * from press order by date desc'),
+			'manager' => UserSession::isPressManager()
+		];
 
-        return $return;
-    }
+		return $return;
+	}
 
-    public function add($date, $media, $title, $link_url, $note)
-    {
-        $db = IntraDb::getGnfDb();
+	public function add($date, $media, $title, $link_url, $note)
+	{
+		$db = IntraDb::getGnfDb();
 
-        $row = [
-            'date' => $date,
-            'media' => $media,
-            'title' => $title,
-            'link_url' => $link_url,
-            'note' => $note
-        ];
+		$row = [
+			'date' => $date,
+			'media' => $media,
+			'title' => $title,
+			'link_url' => $link_url,
+			'note' => $note
+		];
 
-        $res = $db->sqlInsert('press', $row);
+		try {
+			$db->sqlInsert('press', $row);
+		} catch (\Exception $e) {
+			return '자료를 추가할 수 없습니다. 다시 확인해 주세요';
+		}
 
-        if ($res) {
-            return 1;
-        }
-        return '자료를 추가할 수 없습니다. 다시 확인해 주세요';
-    }
+		return true;
+	}
 
-    public function del($press_id)
-    {
-        $db = IntraDb::getGnfDb();
+	public function del($press_id)
+	{
+		$db = IntraDb::getGnfDb();
 
-        $where = [
-            'id' => $press_id
-        ];
+		$where = [
+			'id' => $press_id
+		];
 
-        $res = $db->sqlDelete('press', $where);
-        if ($res) {
-            return 1;
-        }
-        return '삭제가 실패했습니다!';
-    }
+		try {
+			$db->sqlDelete('press', $where);
+		} catch (\Exception $e) {
+			return '삭제가 실패했습니다!';
+		}
 
-    public function edit($press_id, $key, $value)
-    {
-        $db = IntraDb::getGnfDb();
+		return true;
+	}
 
-        $update = [$key => $value];
-        $where = [
-            'id' => $press_id
-        ];
+	public function edit($press_id, $key, $value)
+	{
+		$db = IntraDb::getGnfDb();
 
-        $db->sqlUpdate('press', $update, $where);
-        $new_value = $db->sqlData('select ? from press where ?', sqlColumn($key), sqlWhere($where));
+		$update = [$key => $value];
+		$where = [
+			'id' => $press_id
+		];
 
-        return $new_value;
-    }
+		$db->sqlUpdate('press', $update, $where);
+		$new_value = $db->sqlData('select ? from press where ?', sqlColumn($key), sqlWhere($where));
 
-    public function getListByJson()
-    {
-        $press = $this->index();
+		return $new_value;
+	}
 
-        $json_dto = new JsonDto();
-        $json_dto->data = $press['press'];
+	public function getListByJson()
+	{
+		$press = $this->index();
 
-        return json_encode(
-            (array)$json_dto
-        );
-    }
+		$json_dto = new JsonDto();
+		$json_dto->data = $press['press'];
+
+		return json_encode(
+			(array)$json_dto
+		);
+	}
 }

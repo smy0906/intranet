@@ -9,4 +9,4 @@ $this->matchIf('/del/{id}')
 	->query('del');
 
 $this->matchIf('/list')
-    ->query('list');
+	->query('list');
