@@ -11,9 +11,9 @@ use Intra\Service\UserSession;
 
 $request = $this->getRequest();
 $page = $request->get('page');
-$ITEMS_PER_PAGE = $request->get('items');
+$items_per_page = $request->get('items_per_page');
 $user = UserSession::getSupereditUser();
 
 $press_service = new Press($user);
 
-return $request->query->get('callback') . '(' . $press_service->getPressByPage($page, $ITEMS_PER_PAGE) . ')';
+return $request->query->get('callback') . '(' . $press_service->getPressByPage($page, $items_per_page) . ')';
