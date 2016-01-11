@@ -91,15 +91,39 @@ class Press
 		return $new_value;
 	}
 
-	public function getListByJson()
+	public function getAllPress()
 	{
 		$press = $this->index();
 
 		$json_dto = new JsonDto();
-		$json_dto->data = $press['press'];
+		$json_dto->data = $press;
 
 		return json_encode(
 			(array)$json_dto
 		);
+	}
+
+	public function getPressByPage($page, $ITEMS_PER_PAGE)
+	{
+		$db = IntraDb::getGnfDb();
+
+		$json_dto = new JsonDto();
+		$json_dto->data = [
+			'user' => $this->user,
+			'press' => $db->sqlDicts('select * from press order by date desc limit ' . ($page-1) * $ITEMS_PER_PAGE . ', ' . $ITEMS_PER_PAGE),
+			'count' => $this->getPressCount(),
+			'manager' => UserSession::isPressManager()
+		];
+
+		return json_encode(
+			(array)$json_dto
+		);
+	}
+
+	private function getPressCount()
+	{
+		$db = IntraDb::getGnfDb();
+
+		return $db->sqlData('select count(*) from press');
 	}
 }

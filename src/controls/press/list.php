@@ -10,8 +10,10 @@ use Intra\Service\Press\Press;
 use Intra\Service\UserSession;
 
 $request = $this->getRequest();
+$page = $request->get('page');
+$ITEMS_PER_PAGE = $request->get('items');
 $user = UserSession::getSupereditUser();
 
 $press_service = new Press($user);
 
-return $request->query->get('callback') . '(' . $press_service->getListByJson() . ')';
+return $request->query->get('callback') . '(' . $press_service->getPressByPage($page, $ITEMS_PER_PAGE) . ')';
