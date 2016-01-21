@@ -20,7 +20,7 @@ class UserHolidayModel
 	public function getUsedCost(User $user, $begin, $end)
 	{
 		$where = array('uid' => $user->uid, 'hidden' => 0, 'date' => sqlBetween($begin, $end));
-		return $this->db->sqlData('select sum(cost) from holidays where ?', sqlWhere($where));
+		return max(0, $this->db->sqlData('select sum(cost) from holidays where ?', sqlWhere($where)));
 	}
 
 	/**

@@ -221,18 +221,9 @@ class UserHoliday
 		if ($timestamp === null) {
 			$timestamp = time();
 		}
-		$toDate = date('Y/m/d', strtotime("first day of this year", $timestamp));
-		$from = new DateTime($fromDate);
-		$to = new DateTime($toDate);
-
-		$diff = $from->diff($to);
-
-		//금년 입사
-		if ($diff->invert) {
-			return 1;
-		}
-		$yearly = $diff->y + 2;
-		return $yearly;
+		$fromYear = date('Y', strtotime($fromDate));
+		$toDate = date('Y', $timestamp);
+		return max(0, $toDate - $fromYear);
 	}
 
 
@@ -241,7 +232,7 @@ class UserHoliday
 		$onDate = $this->user->getOnDate();
 		$onDateTimestamp = strtotime($onDate);
 		$joinYear = date('Y', $onDateTimestamp);
-		return $joinYear - 1 + $yearly;
+		return $joinYear + $yearly;
 	}
 
 	/**

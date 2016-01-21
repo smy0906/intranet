@@ -44,7 +44,7 @@
     data-aa-onsuccess="refresh"
     data-aa-onfail-alert="true"
     onsubmit="$('[name=scope]').removeAttr('disabled');"
-    >
+  >
     <table>
       <thead>
       <tr>
@@ -98,7 +98,7 @@
                      data-aa-onsuccess-msg="삭제되었습니다"
                      data-aa-onsuccess="refresh"
                      data-aa-onfail-alert="true"
-                />
+              />
             {% endif %}
           </td>
         </tr>
@@ -134,7 +134,7 @@
             data-placement="bottom"
             data-content="2일 이상 휴가를 사용할경우 시작날짜를 입력하고서
             '연차소모'에 기간을 입력해주세요. (주말은 자동 제외됩니다)"
-            /></td>
+          /></td>
         <td></td>
         <td>
           <label>
@@ -146,7 +146,7 @@
               data-toggle="popover"
               data-placement="bottom"
               data-content="2일 이상 휴가를 사용할경우에만 입력해주세요"
-              />
+            />
           </label>
         </td>
         <td>
@@ -223,18 +223,18 @@
 <span style="color: white">
 [세부연차 계산 내역]
 
-   입사일자 : {{ holidayInfo.ondate }}
-  {% if yearly == 1 %}
+    입사일자 : {{ holidayInfo.ondate }}
+  {% if yearly == 0 %}
     월차가산 (내년것 미리 쓸수 있는 갯수)  ({{ holidayInfo.date_of_ondate }} ~ 12/31) : {{ holidayInfo.preusable_cost }}개월 만근 = {{ holidayInfo.preusable_cost }}개
-  {% elseif yearly == 2 %}
+  {% elseif yearly == 1 %}
     월차가산 (내년것 미리 쓸수 있는 갯수) (작년 ~ {{ holidayInfo.date_of_ondate }}) : {{ holidayInfo.preusable_cost }}개월 만근 = {{ holidayInfo.preusable_cost }}개
     연차 : 작년근무일수({{ holidayInfo.worked_day_last_year }}일) x 15 / 365 = {{ holidayInfo.base_holiday_count }}개
     작년사용에의한 차감연차 : {{ holidayInfo.preused_cost_prev_year }}개
-  {% elseif yearly == 3 %}
-    연차 : {{ yearly }}년차 = 15개
-    작년사용에의한 차감연차 : {{ holidayInfo.preused_cost_prev_year }}개 (2년차에 생긴 연차 : {{ holidayInfo.last_year_remain_cost }}개, 1~2년차에 사용한 연차 : {{ holidayInfo.last_year_usable_holiday_count }}개)
+  {% elseif yearly == 2 %}
+    연차 : 회계기준 입사 {{ yearly - 1 }}년차 = 15개
+    작년사용에의한 차감연차 : {{ holidayInfo.preused_cost_prev_year }}개 (작년에 생긴 연차 : {{ holidayInfo.last_year_remain_cost }}개, 올해 전 사용한 연차 : {{ holidayInfo.last_year_usable_holiday_count }}개)
   {% else %}
-    연차 : {{ yearly }}년차 = {{ fullCost }}개
+    연차 : 회계기준 입사 {{ yearly - 1 }}년차 = {{ fullCost }}개
   {% endif %}</span></pre>
 
   {% if self.isSuperAdmin() %}
@@ -254,7 +254,7 @@
             <script>
               $(function () {
                 $('select.js_superedit')
-                  .val({{super_edit_user.uid}})
+                  .val({{ super_edit_user.uid }})
                   .trigger("chosen:updated")
                   .change(function () {
                     $.post('/usersession/superedit'

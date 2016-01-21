@@ -27,8 +27,8 @@ if (!intval($year)) {
 	$year = date('Y');
 }
 
-$joinYear = $user_holiday->getYearByYearly(1);
-$yearly = $year - $joinYear + 1;
+$joinYear = $user_holiday->getYearByYearly(0);
+$yearly = $year - $joinYear;
 
 //main
 {
