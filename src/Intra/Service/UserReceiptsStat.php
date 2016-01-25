@@ -57,7 +57,7 @@ class UserReceiptsStat
 			'receipts.uid' => 'users.uid'
 		);
 		$receipts = $db->sqlDicts(
-			'select SUBSTR(`date`, 1, 7 ) as yearmonth, users.name, scope, type, payment, sum(cost) as cost from ? where year(`date`) = ? group by yearmonth, users.name, scope, type, payment ',
+			'select SUBSTR(`date`, 1, 7 ) as yearmonth, users.name, title, scope, type, payment, sum(cost) as cost from ? where year(`date`) = ? group by yearmonth, users.name, scope, type, payment ',
 			sqlLeftJoin($tables),
 			$year
 		);
@@ -72,10 +72,12 @@ class UserReceiptsStat
 			$arr = array(
 				$receipt['yearmonth'] . '월',
 				$receipt['name'],
+				$receipt['title'],
 				$receipt['scope'],
 				$receipt['type'],
 				$receipt['payment'],
-				$receipt['cost']
+				$receipt['cost'],
+				$receipt['scope'],
 			);
 			$csvs[] = $arr;
 		}
