@@ -1,7 +1,7 @@
 <?php
 use Intra\Model\LightFileModel;
 use Intra\Service\Ridi;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 

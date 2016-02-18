@@ -2,7 +2,7 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Model\LightFileModel;
-use Intra\Service\Weekly;
+use Intra\Service\Weekly\Weekly;
 
 $infile = $_FILES["fileToUpload"]["tmp_name"];
 $filebag = new LightFileModel('weekly');

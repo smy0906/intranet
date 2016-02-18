@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\Weekly;
+use Intra\Service\Weekly\Weekly;
 
 $weekly = new Weekly;
 

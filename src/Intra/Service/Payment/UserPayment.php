@@ -1,8 +1,11 @@
 <?php
-namespace Intra\Service;
+namespace Intra\Service\Payment;
 
 use Intra\Model\UserFactory;
 use Intra\Model\UserPaymentModel;
+use Intra\Service\User\User;
+use Intra\Service\User\Users;
+use Intra\Service\User\UserSession;
 use Mailgun\Mailgun;
 
 class UserPayment

@@ -2,7 +2,7 @@
 /** @var $this Intra\Core\Control */
 use Intra\Lib\Azure\AuthorizationHelperForAADGraphService;
 use Intra\Lib\Azure\GraphServiceAccessHelper;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 $request = $this->getRequest();

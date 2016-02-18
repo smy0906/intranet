@@ -1,10 +1,10 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Model\HolidayRaw;
+use Intra\Service\Holiday\UserHolidayDto;
+use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\IntraDb;
-use Intra\Service\UserHoliday;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $super_edit_user = UserSession::getSupereditUser();
@@ -16,7 +16,7 @@ $super_edit_user = UserSession::getSupereditUser();
 
 //input
 {
-	$holiday_raw = new HolidayRaw;
+	$holiday_raw = new UserHolidayDto;
 	$holiday_raw->date = $request->get('date');
 	$holiday_raw->keeper_uid = $request->get('keeper_uid');
 	$holiday_raw->manager_uid = $request->get('manager_uid');

@@ -6,10 +6,12 @@
  * Time: 오후 4:14
  */
 
-namespace Intra\Service;
+namespace Intra\Service\Holiday;
 
 use DateTime;
 use Intra\Model\UserHolidayModel;
+use Intra\Service\IntraDb;
+use Intra\Service\User\User;
 
 class UserHolidayPolicy
 {

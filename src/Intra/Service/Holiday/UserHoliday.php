@@ -6,18 +6,19 @@
  * Time: 오후 12:16
  */
 
-namespace Intra\Service;
+namespace Intra\Service\Holiday;
 
-use DateTime;
-use Intra\Model\HolidayRaw;
 use Intra\Model\UserHolidayModel;
+use Intra\Service\User\User;
+use Intra\Service\User\Users;
+use Intra\Service\User\UserSession;
 
 class UserHoliday
 {
-	private $cost_unselectable_type = array('PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차');
-	private $cost_zero_type = array('공가', '경조', '대체휴가', '무급휴가', 'PWT', '무급오전반차', '무급오후반차');
-	private $cost_half_type = array('오전반차', '오후반차');
-	private $cost_int_type = array('연차');
+	private $cost_unselectable_type = ['PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차'];
+	private $cost_zero_type = ['공가', '경조', '대체휴가', '무급휴가', 'PWT', '무급오전반차', '무급오후반차'];
+	private $cost_half_type = ['오전반차', '오후반차'];
+	private $cost_int_type = ['연차'];
 	/**
 	 * @var User
 	 */
@@ -32,7 +33,7 @@ class UserHoliday
 
 	/**
 	 * @param $yearly
-	 * @return \Intra\Model\HolidayRaw[]
+	 * @return UserHolidayDto[]
 	 */
 
 	public function getUserHolidays($yearly)
@@ -48,12 +49,12 @@ class UserHoliday
 
 	/**
 	 * @param $holidayid
-	 * @return HolidayRaw
+	 * @return UserHolidayDto
 	 */
 	private function getHoliday($holidayid)
 	{
 		$holidayRaw = $this->user_holiday_model->get($holidayid, $this->user->uid);
-		$holidayRaws = array($holidayRaw);
+		$holidayRaws = [$holidayRaw];
 		self::filterHolidays($holidayRaws);
 		return $holidayRaws[0];
 	}
@@ -74,7 +75,7 @@ class UserHoliday
 	{
 		$this->assertEdit();
 
-		$editable_keys = array('manager_uid', 'type', 'cost', 'keeper_uid', 'phone_emergency', 'memo');
+		$editable_keys = ['manager_uid', 'type', 'cost', 'keeper_uid', 'phone_emergency', 'memo'];
 		if (in_array($key, $editable_keys)) {
 			$this->user_holiday_model->edit($holidayid, $this->user->uid, $key, $value);
 		}
@@ -102,7 +103,7 @@ class UserHoliday
 	}
 
 	/**
-	 * @param HolidayRaw $holidayRaw
+	 * @param UserHolidayDto $holidayRaw
 	 * @throws \Exception
 	 */
 	private function assertAdd($holidayRaw)
@@ -183,7 +184,7 @@ class UserHoliday
 	}
 
 	/**
-	 * @param HolidayRaw $holidayRaw
+	 * @param UserHolidayDto $holidayRaw
 	 * @return int[]
 	 */
 	public function add($holidayRaw)
@@ -192,7 +193,7 @@ class UserHoliday
 		$this->assertAdd($holidayRaw);
 		$holidayRaws = $this->convertToArrayToAdd($holidayRaw);
 
-		$holiday_ids = array();
+		$holiday_ids = [];
 		foreach ($holidayRaws as $holidayRaw) {
 			$holiday_id = $this->user_holiday_model->add($holidayRaw);
 			if (!$holiday_id) {
@@ -261,13 +262,13 @@ class UserHoliday
 	}
 
 	/**
-	 * @param $holidayRaw holidayRaw
-	 * @return holidayRaw[]
+	 * @param $holidayRaw UserHolidayDto
+	 * @return UserHolidayDto[]
 	 */
 	private function convertToArrayToAdd($holidayRaw)
 	{
 		if ($holidayRaw->cost > 1) {
-			$return = array();
+			$return = [];
 			$cost = $holidayRaw->cost;
 			$date = $holidayRaw->date;
 			while ($cost > 0) {
@@ -279,7 +280,7 @@ class UserHoliday
 			}
 			return $return;
 		} else {
-			return array($holidayRaw);
+			return [$holidayRaw];
 		}
 	}
 

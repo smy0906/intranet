@@ -7,7 +7,7 @@ $db = \Intra\Service\IntraDb::getGnfDb();
 $request = $this->getRequest();
 
 $id = $request->get('id');
-$user = \Intra\Service\UserSession::getSelf();
+$user = \Intra\Service\User\UserSession::getSelf();
 $uid = $user->uid;
 
 $update = array('deleted' => 1);

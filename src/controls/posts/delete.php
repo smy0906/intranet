@@ -7,5 +7,5 @@ $request = $this->getRequest();
 $group = $request->get('group');
 $id = $request->get('id');
 
-$post_list_view = PostDetailDto::importFromModel($group, $id);
+$post_list_view = PostDetailDto::importFromModel($group);
 return $post_list_view->exportAsArrayForDetailView();

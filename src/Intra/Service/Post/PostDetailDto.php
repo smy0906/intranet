@@ -11,8 +11,8 @@ namespace Intra\Service\Post;
 use Illuminate\Database\Eloquent\Model as EloquentBaseModel;
 use Intra\Core\BaseDto;
 use Intra\Model\PostModel;
-use Intra\Service\Users;
-use Intra\Service\UserSession;
+use Intra\Service\User\Users;
+use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 
 class PostDetailDto extends BaseDto

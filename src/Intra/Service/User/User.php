@@ -6,7 +6,7 @@
  * Time: 오후 4:35
  */
 
-namespace Intra\Service;
+namespace Intra\Service\User;
 
 use Intra\Config\Config;
 use Intra\Model\UserFactory;

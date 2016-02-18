@@ -1,8 +1,11 @@
 <?php
 
-namespace Intra\Service;
+namespace Intra\Service\Receipt;
 
 use Intra\Model\UserFactory;
+use Intra\Service\IntraDb;
+use Intra\Service\User\User;
+use Intra\Service\User\UserSession;
 
 class UserReceipts
 {
@@ -20,7 +23,7 @@ class UserReceipts
 	{
 		$date = $month . '-' . $day;
 		if (self::isWeekend($date)) {
-			return '(<font color="red">주말</font>)';
+			return '(<span style="color:red">주말</span>)';
 		}
 		return "(평일)";
 	}

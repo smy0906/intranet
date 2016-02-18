@@ -1,8 +1,8 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\UserPayment;
-use Intra\Service\UserSession;
+use Intra\Service\Payment\UserPayment;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $paymentid = $request->get('paymentid');

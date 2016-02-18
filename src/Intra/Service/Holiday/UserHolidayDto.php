@@ -1,8 +1,8 @@
 <?php
 
-namespace Intra\Model;
+namespace Intra\Service\Holiday;
 
-class HolidayRaw
+class UserHolidayDto
 {
 	public $holidayid;
 	public $request_date;

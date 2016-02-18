@@ -17,6 +17,8 @@ Ridi::enableSentry();
 IntraDb::bootDB();
 SessionModel::init();
 
+#\Intra\Service\User\UserSession::loginByAzure('blu');
+
 if (QueryProcessor::run(__DIR__ . "/src/controls", __DIR__ . "/src/views")) {
 	exit;
 }

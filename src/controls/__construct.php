@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 use Intra\Config\Config;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 

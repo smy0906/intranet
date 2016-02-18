@@ -10,8 +10,8 @@ namespace Intra\Service\Press;
 
 use Intra\Core\JsonDto;
 use Intra\Service\IntraDb;
-use Intra\Service\User;
-use Intra\Service\UserSession;
+use Intra\Service\User\User;
+use Intra\Service\User\UserSession;
 
 class Press
 {

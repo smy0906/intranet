@@ -6,7 +6,7 @@
  * Time: 오후 4:08
  */
 
-namespace Intra\Service;
+namespace Intra\Service\User;
 
 use Intra\Core\MsgException;
 use Intra\Model\UserFactory;

@@ -5,6 +5,6 @@
 $db = \Intra\Service\IntraDb::getGnfDb();
 
 $rooms = $db->sqlDicts('select * from rooms');
-$name = \Intra\Service\UserSession::getSelf()->getName();
+$name = \Intra\Service\User\UserSession::getSelf()->getName();
 
 return compact('rooms', 'name');

@@ -1,8 +1,8 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\UserReceipts;
-use Intra\Service\UserSession;
+use Intra\Service\Receipt\UserReceipts;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 

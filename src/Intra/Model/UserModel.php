@@ -9,6 +9,7 @@
 namespace Intra\Model;
 
 use Intra\Core\MsgException;
+use Intra\Model\Base\DomainCacheModel;
 use Intra\Service\IntraDb;
 
 class UserModel extends DomainCacheModel

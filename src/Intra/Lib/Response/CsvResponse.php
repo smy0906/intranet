@@ -14,6 +14,7 @@ class CsvResponse extends Response
 {
 	protected $data;
 	protected $callback;
+	protected $filename;
 
 	/**
 	 * Constructor.

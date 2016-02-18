@@ -6,7 +6,7 @@
  * Time: 오후 12:16
  */
 
-namespace Intra\Service;
+namespace Intra\Service\Holiday;
 
 use Intra\Model\UserHolidayModel;
 

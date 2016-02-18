@@ -1,8 +1,8 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\Users;
-use Intra\Service\UserSession;
+use Intra\Service\User\Users;
+use Intra\Service\User\UserSession;
 
 $self = UserSession::getSelf();
 if (!$self->isSuperAdmin()) {

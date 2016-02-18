@@ -2,8 +2,8 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Lib\Response\CsvResponse;
-use Intra\Service\UserHolidayStat;
-use Intra\Service\UserSession;
+use Intra\Service\Holiday\UserHolidayStat;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $super_edit_user = UserSession::getSupereditUser();

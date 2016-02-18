@@ -4,7 +4,7 @@
 
 $db = \Intra\Service\IntraDb::getGnfDb();
 
-$user = \Intra\Service\UserSession::getSelf();
+$user = \Intra\Service\User\UserSession::getSelf();
 $request = $this->getRequest();
 
 $uid = $user->uid;

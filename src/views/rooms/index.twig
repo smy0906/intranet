@@ -182,7 +182,7 @@
       scheduler.attachEvent("onEventAdded", function (event_id, event_object) {
         var evs = scheduler.getEvents(scheduler.getEventStartDate(event_id), scheduler.getEventEndDate(event_id));
         var evsCnt = 0;
-        for (k in evs) {
+        for (var k in evs) {
           if (evs[k].id != event_id)
             evsCnt++;
         }

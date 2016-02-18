@@ -1,8 +1,9 @@
 <?php
 
-namespace Intra\Service;
+namespace Intra\Service\Receipt;
 
 use Intra\Lib\Response\CsvResponse;
+use Intra\Service\IntraDb;
 
 class UserReceiptsStat
 {

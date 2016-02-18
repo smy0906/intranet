@@ -4,6 +4,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 $request = $this->getRequest();
 
-\Intra\Service\UserSession::logout();
+\Intra\Service\User\UserSession::logout();
 
 return new RedirectResponse('/usersession/login');

@@ -2,7 +2,7 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\Press\Press;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $user = UserSession::getSupereditUser();

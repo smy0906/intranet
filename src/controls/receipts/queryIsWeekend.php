@@ -1,6 +1,6 @@
 <?php
 /** @var $this Intra\Core\Control */
-use Intra\Service\UserReceipts;
+use Intra\Service\Receipt\UserReceipts;
 
 $request = $this->getRequest();
 $month = $request->get('month');

@@ -2,7 +2,7 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Model\UserFactory;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 
 $self = UserSession::getSelf();
 if ($self->isSuperAdmin()) {

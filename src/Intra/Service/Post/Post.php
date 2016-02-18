@@ -12,7 +12,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Intra\Config\Config;
 use Intra\Core\MsgException;
 use Intra\Model\PostModel;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 use Mailgun\Mailgun;
 
 class Post
@@ -61,7 +61,7 @@ class Post
 				$mail_title = '[공지] ' . date('Y/m/d') . '의 공지사항입니다.';
 				$mail_bodys = array();
 				foreach ($posts as $post) {
-					$mail_body = "<fieldset style='margin: 20px'><legend><h4>{$post->title}</h4> </legend>" . $post->content_html . "</fieldset>";
+					$mail_body = "<fieldset style='margin: 20px'><legend>{$post->title}</legend>" . $post->content_html . "</fieldset>";
 					$mail_bodys[] = $mail_body;
 				}
 				$mail_bodys = implode("", $mail_bodys);

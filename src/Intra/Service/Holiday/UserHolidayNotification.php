@@ -6,10 +6,12 @@
  * Time: 오후 12:16
  */
 
-namespace Intra\Service;
+namespace Intra\Service\Holiday;
 
 use Intra\Config\Config;
 use Intra\Model\UserFactory;
+use Intra\Service\User\User;
+use Intra\Service\User\Users;
 use Mailgun\Mailgun;
 
 class UserHolidayNotification
@@ -19,7 +21,7 @@ class UserHolidayNotification
 	 */
 	private $user;
 	/**
-	 * @var \Intra\Model\HolidayRaw[]
+	 * @var UserHolidayDto[]
 	 */
 	private $holiday_raws;
 	private $action_type;
@@ -132,21 +134,6 @@ class UserHolidayNotification
 비고 : {$holiday_raw->memo}
 ";
 		return $text;
-	}
-
-	private function sendSlackNotification($message)
-	{
-		$data = "payload=" . json_encode(array("text" => $message));
-
-		// You can get your webhook endpoint from your Slack settings
-		$ch = curl_init("https://hooks.slack.com/services/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");
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$result = curl_exec($ch);
-		curl_close($ch);
-
-		return $result;
 	}
 
 	/**

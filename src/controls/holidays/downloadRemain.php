@@ -2,10 +2,10 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Lib\Response\CsvResponse;
-use Intra\Service\UserHoliday;
-use Intra\Service\UserHolidayPolicy;
-use Intra\Service\Users;
-use Intra\Service\UserSession;
+use Intra\Service\Holiday\UserHoliday;
+use Intra\Service\Holiday\UserHolidayPolicy;
+use Intra\Service\User\Users;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $users_service = new Users();

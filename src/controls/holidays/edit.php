@@ -1,9 +1,9 @@
 <?php
 /** @var $this Intra\Core\Control */
 
+use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\IntraDb;
-use Intra\Service\UserHoliday;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 

@@ -1,9 +1,11 @@
 <?php
 
-namespace Intra\Service;
+namespace Intra\Service\Weekly;
 
 use Exception;
 use Intra\Model\LightFileModel;
+use Intra\Service\Ridi;
+use Intra\Service\User\UserSession;
 use PHPExcel_Reader_Excel2007;
 use PHPExcel_Writer_HTML;
 

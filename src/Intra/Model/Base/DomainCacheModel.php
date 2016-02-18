@@ -6,7 +6,7 @@
  * Time: 오후 6:44
  */
 
-namespace Intra\Model;
+namespace Intra\Model\Base;
 
 /**
  * Class DomainCacheModel

@@ -1,8 +1,10 @@
 <?php
-namespace Intra\Service;
+namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
 use Intra\Model\UserPaymentModel;
+use Intra\Service\User\Users;
+use Intra\Service\User\UserSession;
 
 class UserPaymentStat
 {

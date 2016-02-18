@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KHS
- * Date: 2016. 1. 5.
- * Time: 오전 10:11
- */
+/** @var $this Intra\Core\Control */
 
 use Intra\Service\Press\Press;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $page = $request->get('page');

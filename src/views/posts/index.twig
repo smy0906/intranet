@@ -11,9 +11,11 @@
 {% block body %}
   <div class="container-fluid">
     <table class="table">
-      <col width="20">
-      <col width="*">
-      <col width="80">
+      <colgroup>
+        <col width="20">
+        <col width="*">
+        <col width="80">
+      </colgroup>
       <tbody>
       {% for index, post in posts %}
         <tr>

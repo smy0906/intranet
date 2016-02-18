@@ -2,8 +2,9 @@
 
 namespace Intra\Model;
 
+use Intra\Service\Holiday\UserHolidayDto;
 use Intra\Service\IntraDb;
-use Intra\Service\User;
+use Intra\Service\User\User;
 
 class UserHolidayModel
 {
@@ -27,7 +28,7 @@ class UserHolidayModel
 	 * @param User $user
 	 * @param $begin
 	 * @param $end
-	 * @return HolidayRaw[]
+	 * @return UserHolidayDto[]
 	 */
 	public function getHolidaysByUserYearly($user, $begin, $end)
 	{
@@ -46,7 +47,7 @@ class UserHolidayModel
 		return $this->db->sqlObjects('select * from holidays where ? order by uid asc, date asc', sqlWhere($where));
 	}
 
-	public function add(HolidayRaw $holidayRaw)
+	public function add(UserHolidayDto $holidayRaw)
 	{
 		$holiday = get_object_vars($holidayRaw);
 		foreach ($holiday as $k => $v) {
@@ -78,7 +79,7 @@ class UserHolidayModel
 	/**
 	 * @param $holidayid
 	 * @param $uid
-	 * @return HolidayRaw
+	 * @return UserHolidayDto
 	 */
 
 	public function get($holidayid, $uid)
@@ -89,7 +90,7 @@ class UserHolidayModel
 	/**
 	 * @param $holidayids
 	 * @param $uid
-	 * @return HolidayRaw
+	 * @return UserHolidayDto
 	 */
 
 	public function gets(array $holidayids, $uid)

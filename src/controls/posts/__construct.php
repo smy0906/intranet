@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
-use Intra\Service\UserSession;
+use Intra\Service\User\UserSession;
 
 $response = $this->getResponse();
 $response->add(

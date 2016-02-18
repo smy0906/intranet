@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\Users;
+use Intra\Service\User\Users;
 
 $request = $this->getRequest();
 

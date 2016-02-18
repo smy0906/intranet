@@ -2,11 +2,11 @@
 
 /** @var $this Intra\Core\Control */
 
+use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\IntraDb;
-use Intra\Service\UserHoliday;
 
 $request = $this->getRequest();
-$super_edit_user = \Intra\Service\UserSession::getSupereditUser();
+$super_edit_user = \Intra\Service\User\UserSession::getSupereditUser();
 
 //service
 {
