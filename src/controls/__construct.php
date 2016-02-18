@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $request = $this->getRequest();
 
-$free_to_login_path = array(
+$free_to_login_path = [
 	'/usersession/login',
 	'/usersession/login.azure',
 	'/users/join',
@@ -15,7 +15,7 @@ $free_to_login_path = array(
 	'/programs/list',
 	'/api/ridibooks_ids',
 	'/press/list'
-);
+];
 
 $is_free_to_login = in_array($request->getPathInfo(), $free_to_login_path);
 if (!$is_free_to_login && !UserSession::isLogined()) {

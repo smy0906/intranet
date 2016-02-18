@@ -7,7 +7,7 @@ use Intra\Service\User\UserSession;
 
 $response = $this->getResponse();
 $response->add(
-	array('isSuperAdmin' => UserSession::getSelf()->isSuperAdmin())
+	['isSuperAdmin' => UserSession::getSelfDto()->is_admin]
 );
 
 $schema = Capsule::schema();

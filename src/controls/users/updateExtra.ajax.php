@@ -1,14 +1,14 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\User\Users;
+use Intra\Service\User\UserDtoObject;
 
 $request = $this->getRequest();
 
-$id = $request->get('userid');
+$uid = $request->get('userid');
 $key = $request->get('key');
 $value = $request->get('value');
 
-$user = Users::getById($id);
+$user = UserDtoObject::importFromDatabaseWithUid($uid);
 $user->setExtra($key, $value);
 return 1;

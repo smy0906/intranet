@@ -6,10 +6,10 @@ $db = \Intra\Service\IntraDb::getGnfDb();
 $able_programs = $db->sqlDatas('select program from programs');
 $able_fonts = $db->sqlDatas('select font from fonts');
 
-$program_name_list = array();
-$name_program_list = array();
-$font_name_list = array();
-$name_font_list = array();
+$program_name_list = [];
+$name_program_list = [];
+$font_name_list = [];
+$name_font_list = [];
 
 /**
  * @param $programs

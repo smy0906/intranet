@@ -16,22 +16,23 @@ namespace Intra\Model\Base;
  *
  */
 
-class DomainCacheModel
+trait DomainCacheModel
 {
-	static private $cacheExist = array();
-	static private $cache = array();
+	static private $cacheHashesByKey = [];
+	static private $cache = [];
 
 	/**
 	 * @param $domain_primary_keys array|string
-	 * @param $closure callable
+	 * @param $function callable
 	 * @return mixed
 	 */
-	protected static function setCache($domain_primary_keys, $closure)
+	protected static function cachingGetter($domain_primary_keys, $function)
 	{
 		$class = get_called_class();
 		if (!is_array($domain_primary_keys)) {
-			$domain_primary_keys = array($domain_primary_keys);
+			$domain_primary_keys = [$domain_primary_keys];
 		}
+		sort($domain_primary_keys);
 
 		self::cacheInit($class);
 
@@ -39,51 +40,56 @@ class DomainCacheModel
 		if ($cache !== null) {
 			return $cache;
 		}
-		$value = $closure();
-		self::insertCache($class, $domain_primary_keys, $value);
-		return $value;
+		$function_result = $function();
+		self::insertCache($class, $domain_primary_keys, $function_result);
+		return $function_result;
 	}
 
 	private static function cacheInit($class)
 	{
-		if (!is_array(self::$cacheExist[$class])) {
-			self::$cacheExist[$class] = array();
+		if (!is_array(self::$cacheHashesByKey[$class])) {
+			self::$cacheHashesByKey[$class] = [];
 		}
 		if (!is_array(self::$cache[$class])) {
-			self::$cache[$class] = array();
+			self::$cache[$class] = [];
 		}
 	}
 
 	private static function findCacheByKey($class, $domain_primary_keys)
 	{
-		$cursor = self::$cacheExist[$class];
-		$common = array_intersect(array_keys($cursor), $domain_primary_keys);
-		if (count($common) == count($domain_primary_keys)) {
-			sort($domain_primary_keys);
-			$compiled_cache_keys = implode('#', $domain_primary_keys);
-			return self::$cache[$class][$compiled_cache_keys];
+		$hash_raw = implode('##', $domain_primary_keys);
+		$hash = md5($hash_raw);
+		if (isset(self::$cache[$class][$hash])) {
+			return self::$cache[$class][$hash];
 		}
 		return null;
 	}
 
 	private static function insertCache($class, $domain_primary_keys, $value)
 	{
-		foreach ($domain_primary_keys as $cache_key) {
-			self::$cacheExist[$class][$cache_key] = true;
+		$hash_raw = implode('##', $domain_primary_keys);
+		$hash = md5($hash_raw);
+
+		self::$cache[$class][$hash] = $value;
+
+		foreach ($domain_primary_keys as $domain_primary_key) {
+			self::$cacheHashesByKey[$class][$domain_primary_key][] = $hash;
 		}
-		sort($domain_primary_keys);
-		$compiled_cache_keys = implode('#', $domain_primary_keys);
-		self::$cache[$class][$compiled_cache_keys] = $value;
 	}
 
 	protected static function invalidateCache($domain_primary_keys)
 	{
 		$class = get_called_class();
 		if (!is_array($domain_primary_keys)) {
-			$domain_primary_keys = array($domain_primary_keys);
+			$domain_primary_keys = [$domain_primary_keys];
 		}
-		foreach ($domain_primary_keys as $cache_key) {
-			unset(self::$cacheExist[$class][$cache_key]);
+
+		foreach ($domain_primary_keys as $domain_primary_key) {
+			$hashes = self::$cacheHashesByKey[$class][$domain_primary_key];
+			foreach ($hashes as $hash) {
+				unset(self::$cache[$class][$hash]);
+			}
+			unset(self::$cacheHashesByKey[$class][$domain_primary_key]);
 		}
 	}
 }

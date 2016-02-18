@@ -15,6 +15,6 @@ $cost = $request->get('cost');
 $payment = $request->get('payment');
 $note = $request->get('note');
 
-$user = UserSession::getSupereditUser();
+$user = UserSession::getSupereditUserDto();
 $payment_service = new UserReceipts($user);
 return $payment_service->add($month, $day, $title, $scope, $type, $cost, $payment, $note);

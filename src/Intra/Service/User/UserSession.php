@@ -9,7 +9,7 @@
 namespace Intra\Service\User;
 
 use Intra\Model\SessionModel;
-use Intra\Model\UserFactory;
+use Intra\Model\UserModel;
 use Intra\Service;
 
 class UserSession
@@ -23,11 +23,11 @@ class UserSession
 	{
 		self::initStatic();
 
-		UserFactory::assertUserIdExist($id);
-		$user = User::getbyId($id);
-		self::$session->set('users_uid', $user->uid);
+		UserService::assertUserIdExist($id);
+		$uid = UserModel::convertUidFromId($id);
+		self::$session->set('users_uid', $uid);
 
-		return 1;
+		return true;
 	}
 
 	private static function initStatic()
@@ -43,27 +43,27 @@ class UserSession
 	}
 
 	/**
-	 * @return User
+	 * @return UserDto
 	 * "현재 편집중인 유저" or "본인"
 	 */
-	public static function getSupereditUser()
+	public static function getSupereditUserDto()
 	{
 		self::initStatic();
 
 		$super_edit_uid = self::$session->get('super_edit_uid');
-		$self = self::getSelf();
+		$self = self::getSelfDto();
 
-		if ($super_edit_uid && $self && $self->isSuperAdmin()) {
-			return Users::getByUId($super_edit_uid);
+		if ($super_edit_uid && $self && $self->is_admin) {
+			return UserService::getDtobyUid($super_edit_uid);
 		} else {
 			return $self;
 		}
 	}
 
 	/**
-	 * @return User
+	 * @return UserDto
 	 */
-	public static function getSelf()
+	public static function getSelfDto()
 	{
 		self::initStatic();
 
@@ -72,7 +72,7 @@ class UserSession
 		}
 		if (self::$session->get('users_uid')) {
 			$users_uid = self::$session->get('users_uid');
-			return Users::getByUid($users_uid);
+			return UserService::getDtobyUid($users_uid);
 		}
 		return null;
 	}
@@ -89,17 +89,17 @@ class UserSession
 	{
 		self::initStatic();
 
-		$self = self::getSelf();
-		if ($self && $self->isSuperAdmin()) {
+		$self = self::getSelfDto();
+		if ($self && $self->is_admin) {
 			self::$session->set('super_edit_uid', $uid);
 		}
 	}
 
 	public static function isTa()
 	{
-		$user = self::getSelf();
+		$user = self::getSelfDto();
 
-		if (strpos($user->getEmail(), ".ta@") !== false || strpos($user->getName(), "TA") === 0) {
+		if (strpos($user->email, ".ta@") !== false || strpos($user->name, "TA") === 0) {
 			return true;
 		}
 
@@ -108,7 +108,7 @@ class UserSession
 
 	public static function isPressManager()
 	{
-		$user = self::getSelf();
+		$user = self::getSelfDto();
 		if ($user === null) {
 			return false;
 		}
@@ -118,7 +118,7 @@ class UserSession
 			'sanghoon.kim'
 		];
 
-		if (in_array($user->getId(), $press_manager)) {
+		if (in_array($user->id, $press_manager)) {
 			return true;
 		} else {
 			return false;

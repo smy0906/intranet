@@ -1,17 +1,17 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Model\UserFactory;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
-$self = UserSession::getSelf();
-if ($self->isSuperAdmin()) {
+$self = UserSession::getSelfDto();
+if ($self->is_admin) {
 	$replaceable = true;
 }
 
-return array(
+return [
 	'replaceable' => $replaceable,
-	'users' => UserFactory::getAvailableUsers(),
-	'allUsers' => UserFactory::getAllUsers(),
-	'allCurrentUsers' => UserFactory::getAvailableUsers()
-);
+	'users' => UserService::getAvailableUserDtos(),
+	'allUsers' => UserService::getAllUserDtos(),
+	'allCurrentUsers' => UserService::getAvailableUserDtos()
+];

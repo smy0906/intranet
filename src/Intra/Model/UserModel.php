@@ -8,63 +8,16 @@
 
 namespace Intra\Model;
 
+use Intra\Core\BaseModel;
 use Intra\Core\MsgException;
 use Intra\Model\Base\DomainCacheModel;
 use Intra\Service\IntraDb;
 
-class UserModel extends DomainCacheModel
+class UserModel extends BaseModel
 {
+	use DomainCacheModel;
+
 	static private $table = 'users';
-	/**
-	 * @var int
-	 */
-	public $uid;
-	public $public_information;
-	/**
-	 * @var
-	 */
-	public $user;
-	/**
-	 * @var \Gnf\db\base
-	 */
-	private $db;
-
-	public function __construct($uid, $other_db = null)
-	{
-		$this->db = IntraDb::getGnfDb();
-		$this->uid = $uid;
-		$this->initUser();
-	}
-
-	/**
-	 * @internal param $uid
-	 */
-	private function initUser()
-	{
-		$user = $this->getDbDto();
-		$this->user = $user;
-		$user['id_for_css'] = str_replace(".", "_", $user['id']);
-		$this->public_information = $user;
-	}
-
-	public function getDbDto()
-	{
-		return self::setCache(
-			$this->uid,
-			function () {
-				$user = $this->db->sqlDict('select * from ? where uid = ?', sqlTable(self::$table), $this->uid);
-				if ($user) {
-					$obj = json_decode($user['extra']);
-					if (is_object($obj)) {
-						$user['extra'] = @get_object_vars($obj);
-					} else {
-						$user['extra'] = array();
-					}
-				}
-				return $user;
-			}
-		);
-	}
 
 	/**
 	 * @param $userJoinDto
@@ -82,31 +35,78 @@ class UserModel extends DomainCacheModel
 		return true;
 	}
 
-	public function isValid()
+	public static function isExistById($id)
 	{
-		$where = array();
-		$where['uid'] = $this->uid;
+		return self::getDb()->sqlCount('users', ['id' => $id]);
+	}
+
+	public static function getRowWithUid($uid)
+	{
+		return self::cachingGetter(
+			$uid,
+			function () use ($uid) {
+				return self::getDb()->sqlDict('select * from ? where uid = ?', sqlTable(self::$table), $uid);
+			}
+		);
+	}
+
+	public static function getRowWithUids(array $uids)
+	{
+		return self::cachingGetter(
+			$uids,
+			function () use ($uids) {
+				return self::getDb()->sqlDict(
+					'select * from ? where ?', sqlTable(self::$table), sqlWhere(['uid' => $uids])
+				);
+			}
+		);
+	}
+
+	/**
+	 * @param $id
+	 * @return mixed
+	 */
+	public static function convertUidFromId($id)
+	{
+		return self::getDb()->sqlData('select uid from ? where id = ?', sqlTable(self::$table), $id);
+	}
+
+	public static function isExistByUid($uid)
+	{
+		return self::getDb()->sqlData('select count(*) from users where uid = ?', $uid);
+	}
+
+	public static function getRowsAvailable()
+	{
+		$where = [];
 		$where['on_date'] = sqlLesserEqual(sqlNow());
 		$where['off_date'] = sqlGreaterEqual(sqlNow());
-		return $this->db->sqlCount(self::$table, $where);
+
+		return self::getDb()->sqlDicts('select * from users where ? order by name', sqlWhere($where));
 	}
 
-	public function updateExtra($key, $val)
+	public static function getAllRows()
 	{
-		self::invalidateCache($this->uid);
+		return self::getDb()->sqlDicts('select * from users order by name');
+	}
 
-		$user = $this->user;
-		$user['extra'][$key] = $val;
+	public static function getRowsManager()
+	{
+		$where = [];
+		$where['on_date'] = sqlLesserEqual(sqlNow());
+		$where['off_date'] = sqlGreaterEqual(sqlNow());
+		$where['position'] = ['팀장', 'CTO', 'CEO', '부사장'];
 
-		$value = array('extra' => json_encode($user['extra']));
-		$where = array('uid' => $this->uid);
-		$this->db->sqlUpdate(self::$table, $value, $where);
+		return self::getDb()->sqlDicts('select * from users where ? order by name', sqlWhere($where));
+	}
+
+	public static function updateExtra($uid, $extra_update)
+	{
+		self::invalidateCache($uid);
+
+		$where = ['uid' => $uid];
+		self::getDb()->sqlUpdate(self::$table, $extra_update, $where);
 
 		return 1;
-	}
-
-	public function getName()
-	{
-		return $this->user['name'];
 	}
 }

@@ -4,28 +4,26 @@
 use Intra\Lib\Response\CsvResponse;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
-use Intra\Service\User\Users;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$users_service = new Users();
-$self = UserSession::getSelf();
+$self = UserSession::getSelfDto();
 
-if (!$self->isSuperAdmin()) {
+if (!$self->is_admin) {
 	exit;
 }
 
-$users = $users_service->getAllUsers();
-
+$users = UserService::getAllUserDtos();
 
 $year = $request->get('year');
 if (!intval($year)) {
 	$year = date('Y');
 }
 
-$rows = array(
-	array('연도', '이름', '입사일자', '퇴사일자', '연차부여', '사용일수', '잔여일수')
-);
+$rows = [
+	['연도', '이름', '입사일자', '퇴사일자', '연차부여', '사용일수', '잔여일수']
+];
 
 foreach ($users as $user) {
 	$user_holiday = new UserHoliday($user);
@@ -38,17 +36,15 @@ foreach ($users as $user) {
 	$usedCost = $user_holiday_policy->getUsedCost($yearly);
 	$remainCost = $fullCost - $usedCost;
 
-	$user_row = $user->getDbDto();
-
-	$rows[] = array(
+	$rows[] = [
 		$year,
-		$user->getName(),
-		$user_row['on_date'],
-		$user_row['off_date'],
+		$user->name,
+		$user->on_date,
+		$user->off_date,
 		$fullCost,
 		$usedCost,
 		$remainCost
-	);
+	];
 }
 
 $response = new CsvResponse($rows);

@@ -9,8 +9,8 @@ if (!Ridi::isRidiIP() || UserSession::isTa()) {
 	throw new Exception('권한이 없습니다.');
 }
 
-$self = UserSession::getSelf();
-if (preg_match('/TA/', $self->getName())) {
+$self = UserSession::getSelfDto();
+if (preg_match('/TA/', $self->name)) {
 	throw new Exception('권한이 없습니다.');
 }
 

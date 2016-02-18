@@ -40,11 +40,11 @@ class GraphServiceAccessHelper
 		curl_setopt(
 			$ch,
 			CURLOPT_HTTPHEADER,
-			array(
+			[
 				$authHeader,
 				'Accept:application/json;odata=minimalmetadata',
 				'Content-Type:application/json'
-			)
+			]
 		);
 		// Set the option to recieve the response back as string.
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

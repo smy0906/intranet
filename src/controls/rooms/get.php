@@ -7,7 +7,7 @@ $request = $this->getRequest();
 $room_id = $request->get('room_id');
 
 $db = \Intra\Service\IntraDb::getGnfDb();
-$where = array('room_id' => $room_id, 'deleted' => 0);
+$where = ['room_id' => $room_id, 'deleted' => 0];
 $events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
 
 $return = '';

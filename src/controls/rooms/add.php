@@ -6,7 +6,7 @@ $request = $this->getRequest();
 
 $db = \Intra\Service\IntraDb::getGnfDb();
 
-$user = \Intra\Service\User\UserSession::getSelf();
+$user = \Intra\Service\User\UserSession::getSelfDto();
 
 $uid = $user->uid;
 $room_id = $request->get('room_id');

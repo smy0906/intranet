@@ -76,6 +76,6 @@ class AuthorizationHelperForAADGraphService
 		// $upn = rtrim(ltrim($subString,'"upn":"'), '"');
 		// $_SESSION['upn']=$upn;
 
-		return array('tokenType' => $tokenType, 'accessToken' => $accessToken);
+		return ['tokenType' => $tokenType, 'accessToken' => $accessToken];
 	}
 }

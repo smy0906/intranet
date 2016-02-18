@@ -5,7 +5,7 @@ use Intra\Service\Payment\UserPayment;
 use Intra\Service\Receipt\UserReceiptsStat;
 use Intra\Service\User\UserSession;
 
-if (!UserSession::getSelf()->isSuperAdmin()) {
+if (!UserSession::getSelfDto()->is_admin) {
 	exit;
 }
 

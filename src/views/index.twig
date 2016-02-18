@@ -33,7 +33,7 @@
       {% if replaceable %}
       $('.js_user').draggable({
         snap: true, containment: '#user_map', stop: function (e, ui) {
-          var id = $(this).data('rawuserid');
+          var id = $(this).data('userid');
           var x = parseInt(ui.position.left);
           var y = parseInt(ui.position.top);
           $.post('/users/' + id + '/updateExtra/posX/' + x);
@@ -49,15 +49,15 @@
 {% block body_head %}
   {% if globalDomain == "ridi.com" %}
     {% for user in users %}
-      <div class='js_user_popup' data-userid='{{ user.public_information.id_for_css }}'>
-        <div>{{ user.public_information.name }} <sub>{{ user.public_information.id }}@{{ globalDomain }}</sub></div>
-        {% if user.public_information.outer_call %}
-          <div><strong>외선</strong> {{ user.public_information.outer_call }}</div>
+      <div class='js_user_popup' data-userid='{{ user.uid }}'>
+        <div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>
+        {% if user.outer_call %}
+          <div><strong>외선</strong> {{ user.outer_call }}</div>
         {% endif %}
-        {% if user.public_information.inner_call %}
-          <div><strong>내선</strong> {{ user.public_information.inner_call }}</div>
+        {% if user.inner_call %}
+          <div><strong>내선</strong> {{ user.inner_call }}</div>
         {% endif %}
-        <div><strong>긴급</strong> {{ user.public_information.mobile }}</div>
+        <div><strong>긴급</strong> {{ user.mobile }}</div>
       </div>
     {% endfor %}
   {% endif %}
@@ -68,15 +68,10 @@
     <div style="position: absolute;top:50px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
       {% for user in users %}
         <div class='js_user'
-             style='padding:0;left:{{ user.public_information.extra.posX }}px;top:{{ user.public_information.extra.posY }}px'
-             data-userid='{{ user.public_information.id_for_css }}' data-rawuserid='{{ user.public_information.id }}'>
+             style='padding:0;left:{{ user.extra.posX }}px;top:{{ user.extra.posY }}px'
+             data-userid='{{ user.uid }}'>
           <div style='padding:0;margin:0;height:100px;overflow:hidden;'>
-            <div>{{ user.public_information.name }}</div>
-            <img src='pics/{{ user.public_information.id }}.png' width='60px'
-                 data-userid='{{ user.public_information.id_for_css }}'
-                 onerror="$(this).detach()"
-                 class="js_user_img"
-                 data-rawuserid='{{ user.public_information.id }}'/>
+            <div>{{ user.name }}</div>
           </div>
         </div>
       {% endfor %}

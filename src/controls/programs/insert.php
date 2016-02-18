@@ -12,21 +12,21 @@ if ($request->get('urlencode_data')) {
 	$dara_raw = str_replace("\x00", "", $dara_raw);
 	parse_str($dara_raw, $data);
 
-	$post_data = array(
+	$post_data = [
 		'name' => $data['name'],
 		'computer_name' => $data['computer_name'],
 		'programs' => $data['programs'],
 		'fonts' => $data['fonts'],
 		'ip' => $data['ip'],
-	);
+	];
 } else {
-	$post_data = array(
+	$post_data = [
 		'name' => $request->get('name'),
 		'computer_name' => $request->get('computer_name'),
 		'programs' => $request->get('programs'),
 		'fonts' => $request->get('fonts'),
 		'ip' => $request->get('ip'),
-	);
+	];
 }
 
 $programs_insert = $post_data;

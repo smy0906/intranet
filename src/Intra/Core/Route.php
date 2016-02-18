@@ -90,7 +90,7 @@ class Route
 		}
 
 		if (preg_match($pattern_regex, $this->query, $match)) {
-			$parameters = array();
+			$parameters = [];
 			foreach ($parameterNames as $index => $parameterName) {
 				$parameters[$parameterName] = $match[$index + 1];
 			}

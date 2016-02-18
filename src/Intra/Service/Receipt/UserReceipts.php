@@ -2,17 +2,20 @@
 
 namespace Intra\Service\Receipt;
 
-use Intra\Model\UserFactory;
 use Intra\Service\IntraDb;
-use Intra\Service\User\User;
+use Intra\Service\User\UserDto;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 class UserReceipts
 {
+	/**
+	 * @var UserDto
+	 */
 	private $user;
 
 	/**
-	 * @param $user User
+	 * @param $user UserDto
 	 */
 	public function __construct($user)
 	{
@@ -38,7 +41,7 @@ class UserReceipts
 	{
 		$db = IntraDb::getGnfDb();
 
-		$return = array();
+		$return = [];
 
 		$return['user'] = $this->user;
 		$uid = $this->getSupereditUid();
@@ -85,9 +88,9 @@ class UserReceipts
 		);
 
 
-		$cols = array(
+		$cols = [
 			'합계' => 1
-		);
+		];
 		foreach ($sumByScope as $tbl) {
 			$cols[$tbl['scope']] = 1;
 		}
@@ -97,7 +100,7 @@ class UserReceipts
 			}
 		}
 
-		$rows = array(
+		$rows = [
 			'저녁/휴일 식사비' => 0,
 			'팀런치' => 0,
 			'접대비' => 0,
@@ -108,7 +111,7 @@ class UserReceipts
 			'땀친 지원비' => 0,
 			'기타' => 0,
 			'합계' => 1
-		);
+		];
 		foreach ($sumByType as $tbl) {
 			$rows[$tbl['type']] = 1;
 		}
@@ -118,10 +121,10 @@ class UserReceipts
 			}
 		}
 
-		$costs = array();
+		$costs = [];
 		foreach ($rows as $row => $null) {
 			foreach ($cols as $col => $null2) {
-				$costs[$row][$col] = array('cost' => 0, 'count' => 0);
+				$costs[$row][$col] = ['cost' => 0, 'count' => 0];
 			}
 		}
 		foreach ($tbls as $tbl) {
@@ -150,18 +153,18 @@ class UserReceipts
 		foreach ($return['paymentCosts'] as $cost) {
 			$sum += $cost['cost'];
 		}
-		$return['paymentCosts'][] = array('payment' => '합계', 'cost' => $sum);
+		$return['paymentCosts'][] = ['payment' => '합계', 'cost' => $sum];
 
 
 		$return['currentUid'] = $this->getSupereditUid();
 		$return['editable'] = (UserReceipts::parseMonth() <= $month);
-		if (UserSession::getSelf()->isSuperAdmin()) {
+		if (UserSession::getSelfDto()->is_admin) {
 			$return['isSuperAdmin'] = 1;
 			$return['editable'] |= 1;
 		}
 
-		$return['allCurrentUsers'] = UserFactory::getAvailableUsers();
-		$return['allUsers'] = UserFactory::getAllUsers();
+		$return['allCurrentUsers'] = UserService::getAvailableUserDtos();
+		$return['allUsers'] = UserService::getAllUserDtos();
 
 		return $return;
 	}
@@ -186,14 +189,14 @@ class UserReceipts
 	{
 		$db = IntraDb::getGnfDb();
 
-		$row = array(
+		$row = [
 			'title' => $title,
 			'scope' => $scope,
 			'type' => $type,
 			'cost' => $cost,
 			'payment' => $payment,
 			'note' => $note
-		);
+		];
 		$row['uid'] = $this->getSupereditUid();
 		$row['date'] = date('Y-m-d', strtotime($month . '-' . $day));
 		if ($row['note'] == '저녁식사비' && self::isWeekend($row['date'])) {
@@ -247,7 +250,7 @@ class UserReceipts
 
 		$uid = $this->getSupereditUid();
 
-		$update = array($key => $value);
+		$update = [$key => $value];
 		$where = compact('uid', 'receiptid');
 
 		$old_value = $db->sqlData('select ? from receipts where ?', sqlColumn($key), sqlWhere($where));

@@ -23,7 +23,7 @@ class JsonDto
 	public function __construct()
 	{
 		$this->success = true;
-		$this->msg = array();
+		$this->msg = [];
 	}
 
 	/**Exception 발생 시 set<br/>

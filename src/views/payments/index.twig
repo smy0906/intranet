@@ -126,7 +126,7 @@
             }
           );
         })
-        .val({{currentUid}});
+        .val({{ currentUid }});
       var js_recipts_title = $('.js_recipts_title');
       js_recipts_title.text($("select[name=js_super_edit]:first option:selected").text());
     });
@@ -159,7 +159,7 @@
     data-aa-onsuccess="refresh"
     data-aa-onfail-alert="true"
     onsubmit="$('[name=scope]').removeAttr('disabled');"
-    >
+  >
 
     <div class='paymentsInfo'>
       <h2>[{{ month }}] <span class='js_recipts_title'>{{ user.name }}</span></h2>
@@ -258,7 +258,7 @@
                      data-aa-onsuccess-msg="삭제되었습니다"
                      data-aa-onsuccess="refresh"
                      data-aa-onfail-alert="true"
-                />
+              />
             {% endif %}
           </td>
         </tr>

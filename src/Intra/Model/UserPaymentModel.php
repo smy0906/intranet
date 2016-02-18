@@ -15,13 +15,13 @@ class UserPaymentModel
 	{
 		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
 
-		$where = array(
+		$where = [
 			'payments.uid' => $uid,
 			sqlOr(
-				array('status' => '결제 대기중'),
-				array('request_date' => sqlRange($month . '-1', $nextmonth . '-1'))
+				['status' => '결제 대기중'],
+				['request_date' => sqlRange($month . '-1', $nextmonth . '-1')]
 			)
-		);
+		];
 
 		#payments.uid = ? and (status = "결제 대기중" or (str_to_date(?, "%Y-%m-%d") <= `request_date` and `request_date` < str_to_date(?, "%Y-%m-%d")))
 		return $this->db->sqlDicts(
@@ -32,9 +32,9 @@ class UserPaymentModel
 
 	public function queuedPayments()
 	{
-		$where = array(
+		$where = [
 			'status' => "결제 대기중"
-		);
+		];
 
 		return $this->db->sqlDicts(
 			'select payments.uid, pay_date, users.name from payments left join users on payments.uid = users.uid where ? order by `pay_date` asc, paymentid asc',
@@ -58,13 +58,13 @@ class UserPaymentModel
 	 */
 	private function getTodayQueuedWhere()
 	{
-		return array(
+		return [
 			'status' => "결제 대기중",
 			'pay_date' => sqlRange(
 				date('Y/m/d'),
 				date('Y/m/d', strtotime('+1 day'))
 			)
-		);
+		];
 	}
 
 	public function todayQueuedCount()
@@ -84,9 +84,9 @@ class UserPaymentModel
 	{
 		$nextmonth = date('Y-m-1', strtotime('+1 month', strtotime($month)));
 
-		$tables = array(
+		$tables = [
 			'payments.uid' => 'users.uid'
-		);
+		];
 		return $this->db->sqlDicts(
 			'select users.name, payments.* from ? where `pay_date` between ? and ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
@@ -102,7 +102,7 @@ class UserPaymentModel
 
 	public function update($paymentid, $uid, $key, $value)
 	{
-		$update = array($key => $value);
+		$update = [$key => $value];
 		$where = compact('paymentid', 'uid');
 		$this->db->sqlUpdate('payments', $update, $where);
 	}

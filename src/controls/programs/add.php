@@ -11,9 +11,9 @@ $value = urldecode($value);
 var_dump($value);
 
 $db = IntraDb::getGnfDb();
-$insert = array(
+$insert = [
 	$key => $value
-);
+];
 if ($db->sqlInsert($key . 's', $insert)) {
 	echo "추가 되었습니다";
 } else {

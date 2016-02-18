@@ -5,7 +5,7 @@ use Intra\Service\Payment\UserPayment;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$request_args = array(
+$request_args = [
 	'month' => $request->get('month'),
 	'manager_uid' => $request->get('manager_uid'),
 	'team' => $request->get('team'),
@@ -22,7 +22,7 @@ $request_args = array(
 	'note' => $request->get('note'),
 	'paytype' => $request->get('paytype'),
 	'status' => $request->get('status'),
-);
+];
 
-$payment_service = new UserPayment(UserSession::getSupereditUser());
+$payment_service = new UserPayment(UserSession::getSupereditUserDto());
 return $payment_service->add($request_args);

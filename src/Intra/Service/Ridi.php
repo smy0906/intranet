@@ -28,7 +28,7 @@ class Ridi
 		 * 106.247.248.130
 		 * 106.249.148.11
 		 */
-		$ridi_ips = array(
+		$ridi_ips = [
 			'/^112\.220\.199\.134/',
 			'/^106\.247\.248\.130/',
 			'/^106\.249\.148\.11/',
@@ -37,7 +37,7 @@ class Ridi
 			'***REMOVED***',
 			'***REMOVED***',
 			'***REMOVED***'
-		);
+		];
 		foreach ($ridi_ips as $pattern) {
 			if (preg_match($pattern, $_SERVER['REMOTE_ADDR'])) {
 				return true;

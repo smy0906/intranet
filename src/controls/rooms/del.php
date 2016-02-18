@@ -7,11 +7,11 @@ $db = \Intra\Service\IntraDb::getGnfDb();
 $request = $this->getRequest();
 
 $id = $request->get('id');
-$user = \Intra\Service\User\UserSession::getSelf();
+$user = \Intra\Service\User\UserSession::getSelfDto();
 $uid = $user->uid;
 
-$update = array('deleted' => 1);
-if ($user->isSuperAdmin()) {
+$update = ['deleted' => 1];
+if ($user->is_admin) {
 	$where = compact('id');
 } else {
 	$where = compact('id', 'uid');

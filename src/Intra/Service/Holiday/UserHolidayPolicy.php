@@ -11,18 +11,18 @@ namespace Intra\Service\Holiday;
 use DateTime;
 use Intra\Model\UserHolidayModel;
 use Intra\Service\IntraDb;
-use Intra\Service\User\User;
+use Intra\Service\User\UserDto;
 
 class UserHolidayPolicy
 {
 
 	/**
-	 * @var User
+	 * @var UserDto
 	 */
 	private $user;
 	private $user_holiday_model;
 
-	public function __construct(User $user)
+	public function __construct(UserDto $user)
 	{
 		$db = IntraDb::getGnfDb();
 		$this->db = $db;
@@ -71,8 +71,8 @@ class UserHolidayPolicy
 
 	public function getDetailInfomationByYearly($yearly)
 	{
-		$ret = array();
-		$on_date = $this->user->getOnDate();
+		$ret = [];
+		$on_date = $this->user->on_date;
 		$yearly_begin_timestamp = $this->getYearlyBeginTimestamp($yearly);
 		$yearly_end_timestamp = $this->getYearlyEndTimestamp($yearly);
 		$ret['ondate'] = date('Y/m/d', strtotime($on_date));
@@ -124,7 +124,7 @@ class UserHolidayPolicy
 
 	public function getYearlyBeginTimestamp($yearly)
 	{
-		$onDate = $this->user->getOnDate();
+		$onDate = $this->user->on_date;
 		$targetDate = strtotime("+{$yearly} year", strtotime($onDate));
 
 		$year = date('Y', $targetDate);
@@ -134,7 +134,7 @@ class UserHolidayPolicy
 
 	public function getYearlyEndTimestamp($yearly)
 	{
-		$onDate = $this->user->getOnDate();
+		$onDate = $this->user->on_date;
 		$targetDate = strtotime("+{$yearly} year", strtotime($onDate));
 
 		$year = date('Y', $targetDate);

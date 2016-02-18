@@ -6,9 +6,9 @@ use Intra\Service\Holiday\UserHolidayStat;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$super_edit_user = UserSession::getSupereditUser();
+$super_edit_user = UserSession::getSupereditUserDto();
 
-if (!UserSession::getSelf()->isSuperAdmin()) {
+if (!UserSession::getSelfDto()->is_admin) {
 	exit;
 }
 
@@ -28,7 +28,7 @@ if (!intval($year)) {
 	$holidays = $user_holiday->getHolidaysAllUsers($year);
 }
 
-$csvs = array(
+$csvs = [
 	'신청날짜' => 'request_date',
 	'신청자' => 'uid_name',
 	'결재자' => 'manager_uid_name',
@@ -38,11 +38,11 @@ $csvs = array(
 	'업무인수인계자' => 'keeper_uid_name',
 	'비상시연락처' => 'phone_emergency',
 	'비고' => 'memo',
-);
-$rows = array();
+];
+$rows = [];
 $rows[] = array_keys($csvs);
 foreach ($holidays as $holiday) {
-	$row = array();
+	$row = [];
 	foreach ($csvs as $key) {
 		$row[] = $holiday->$key;
 	}

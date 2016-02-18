@@ -7,7 +7,7 @@ $weekly = new Weekly;
 
 try {
 	$weekly->assertPermission();
-	return array('html' => $weekly->getContents());
+	return ['html' => $weekly->getContents()];
 } catch (Exception $e) {
 	die($e->getMessage());
 }

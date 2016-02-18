@@ -7,5 +7,5 @@ use Intra\Service\User\UserSession;
 $request = $this->getRequest();
 $key = $request->get('key');
 
-$payment_service = new UserPayment(UserSession::getSupereditUser());
+$payment_service = new UserPayment(UserSession::getSupereditUserDto());
 return $payment_service->getConstValueByKey($key);

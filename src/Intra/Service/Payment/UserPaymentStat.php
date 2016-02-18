@@ -3,14 +3,14 @@ namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
 use Intra\Model\UserPaymentModel;
-use Intra\Service\User\Users;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 class UserPaymentStat
 {
 	public function sendExcelResposeAndExit($month)
 	{
-		if (!UserSession::getSelf()->isSuperAdmin()) {
+		if (!UserSession::getSelfDto()->is_admin) {
 			return '권한이 없습니다';
 		}
 		$month = date('Y/m/1', strtotime($month));
@@ -18,8 +18,8 @@ class UserPaymentStat
 		$user_payment_model = new UserPaymentModel();
 		$payments = $user_payment_model->getAllPayments($month);
 		//header
-		$csvs = array();
-		$arr = array(
+		$csvs = [];
+		$arr = [
 			'요청일',
 			'요청자',
 			'승인자',
@@ -38,13 +38,13 @@ class UserPaymentStat
 			'비고',
 			'결제수단',
 			'상태'
-		);
+		];
 		$csvs[] = $arr;
 		foreach ($payments as $payment) {
-			$arr = array(
+			$arr = [
 				$payment['request_date'],
 				$payment['name'],
-				Users::getByUid($payment['manager_uid'])->getName(),
+				UserService::getNameByUidSafe($payment['manager_uid']),
 				$payment['month'],
 				$payment['team'],
 				$payment['product'],
@@ -60,7 +60,7 @@ class UserPaymentStat
 				$payment['note'],
 				$payment['paytype'],
 				$payment['status'],
-			);
+			];
 			$csvs[] = $arr;
 		}
 

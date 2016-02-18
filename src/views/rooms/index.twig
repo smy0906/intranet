@@ -79,14 +79,14 @@
         $('.js_room_select_mobile').hide(0);
         $('.js_room_select_pc').show(0);
         {% for num, room in rooms %}
-        scheduler.locale.labels.room{{room.id}}_tab = "{{room.name}}";
-        scheduler.date.room{{room.id}}_start = scheduler.date.week_start;
-        scheduler.templates.room{{room.id}}_date = scheduler.templates.week_date;
-        scheduler.templates.room{{room.id}}_scale_date = scheduler.templates.week_scale_date;
-        scheduler.date.add_room{{room.id}} = function (date, inc) {
+        scheduler.locale.labels.room{{ room.id }}_tab = "{{ room.name }}";
+        scheduler.date.room{{ room.id }}_start = scheduler.date.week_start;
+        scheduler.templates.room{{ room.id }}_date = scheduler.templates.week_date;
+        scheduler.templates.room{{ room.id }}_scale_date = scheduler.templates.week_scale_date;
+        scheduler.date.add_room{{ room.id }} = function (date, inc) {
           return scheduler.date.add(date, inc * 7, "day");
         };
-        scheduler.date.get_room{{room.id}}_end = function (date) {
+        scheduler.date.get_room{{ room.id }}_end = function (date) {
           return scheduler.date.add(date, 5, "day");
         };
         {% endfor %}
@@ -97,21 +97,21 @@
         $('.js_room_select_mobile').show(0);
         $('.js_room_select_pc').hide(0);
         {% for num, room in rooms %}
-        scheduler.locale.labels.room{{room.id}}_tab = "{{room.name}}";
-        scheduler.date.room{{room.id}}_start = scheduler.date.day_start;
-        scheduler.templates.room{{room.id}}_date = scheduler.templates.day_date;
-        scheduler.templates.room{{room.id}}_scale_date = scheduler.templates.week_scale_date;
-        scheduler.date.add_room{{room.id}} = function (date, inc) {
+        scheduler.locale.labels.room{{ room.id }}_tab = "{{ room.name }}";
+        scheduler.date.room{{ room.id }}_start = scheduler.date.day_start;
+        scheduler.templates.room{{ room.id }}_date = scheduler.templates.day_date;
+        scheduler.templates.room{{ room.id }}_scale_date = scheduler.templates.week_scale_date;
+        scheduler.date.add_room{{ room.id }} = function (date, inc) {
           return scheduler.date.add(date, inc, "day");
         };
-        scheduler.date.get_room{{room.id}}_end = function (date) {
+        scheduler.date.get_room{{ room.id }}_end = function (date) {
           return scheduler.date.add(date, 1, "day");
         };
         {% endfor %}
       }
 
       {% for num, room in rooms %}
-      scheduler.locale.labels.room{{room.id}}_tab = "{{room.name}}";
+      scheduler.locale.labels.room{{ room.id }}_tab = "{{ room.name }}";
       {% endfor %}
 
       scheduler.attachEvent("onTemplatesReady", function () {

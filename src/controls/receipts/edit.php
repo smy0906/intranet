@@ -9,6 +9,6 @@ $receiptid = $request->get('receiptid');
 $key = $request->get('key');
 $value = $request->get('value');
 
-$user = UserSession::getSupereditUser();
+$user = UserSession::getSupereditUserDto();
 $payment_service = new UserReceipts($user);
 return $payment_service->edit($receiptid, $key, $value);

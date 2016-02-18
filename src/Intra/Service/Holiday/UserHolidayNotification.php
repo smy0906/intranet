@@ -9,15 +9,15 @@
 namespace Intra\Service\Holiday;
 
 use Intra\Config\Config;
-use Intra\Model\UserFactory;
-use Intra\Service\User\User;
-use Intra\Service\User\Users;
+use Intra\Service\User\UserDto;
+use Intra\Service\User\UserDtoObject;
+use Intra\Service\User\UserService;
 use Mailgun\Mailgun;
 
 class UserHolidayNotification
 {
 	/**
-	 * @var User
+	 * @var UserDto
 	 */
 	private $user;
 	/**
@@ -56,7 +56,7 @@ class UserHolidayNotification
 		$date_duration = $this->getHolidayDuration();
 		$holiday_type = $this->getHolidayType();
 
-		return "[{$this->action_type}][{$holiday_type}][{$date_duration}] {$this->user->getName()}님의 {$cost_sum}일 휴가사용신청";
+		return "[{$this->action_type}][{$holiday_type}][{$date_duration}] {$this->user->name}님의 {$cost_sum}일 휴가사용신청";
 	}
 
 	/**
@@ -73,12 +73,12 @@ class UserHolidayNotification
 		$domain = "ridibooks.com";
 		$ret = $mg->sendMessage(
 			$domain,
-			array(
+			[
 				'from' => 'noreply@ridibooks.com',
 				'to' => implode(', ', $emails),
 				'subject' => $title,
 				'text' => $contents
-			)
+			]
 		);
 		return $ret;
 	}
@@ -89,14 +89,14 @@ class UserHolidayNotification
 	private function getMailReceivers()
 	{
 		$holiday_raw = $this->holiday_raws[0];
-		$uids = array($holiday_raw->uid, $holiday_raw->manager_uid, $holiday_raw->keeper_uid);
+		$uids = [$holiday_raw->uid, $holiday_raw->manager_uid, $holiday_raw->keeper_uid];
 		$uids = array_filter(array_unique($uids));
-		$users = new Users;
-		$user_list = $users->getUsersByUids($uids);
 
-		$emails = array();
-		foreach ($user_list as $user) {
-			$emails[] = $user->getId() . '@' . Config::$domain;
+		$users = UserService::getUserDtosByUid($uids);
+
+		$emails = [];
+		foreach ($users as $user) {
+			$emails[] = $user->id . '@' . Config::$domain;
 		}
 		if (Config::$domain == 'ridi.com') {
 			$emails[] = '***REMOVED***';
@@ -115,7 +115,7 @@ class UserHolidayNotification
 	private function getMailContents()
 	{
 		$holiday_raw = $this->holiday_raws[0];
-		$keeper = UserFactory::getByUid($holiday_raw->keeper_uid);
+		$keeper = UserDtoObject::importFromDatabaseWithUid($holiday_raw->keeper_uid);
 		if ($keeper === null) {
 			throw new \Exception('$keeper === null');
 		}
@@ -125,7 +125,7 @@ class UserHolidayNotification
 		$holiday_type = $this->getHolidayType();
 
 		$text = "요청일 : {$request_date}
-요청자 : {$this->user->getName()}
+요청자 : {$this->user->name}
 종류 : {$holiday_type}
 사용연차 : {$holiday_sum_cost}
 사용날짜 : {$holiday_duration}
@@ -154,7 +154,7 @@ class UserHolidayNotification
 			$date_duration = $this->holiday_raws[0]->date;
 			return $date_duration;
 		} else {
-			$date_durations = array();
+			$date_durations = [];
 			foreach ($this->holiday_raws as $holiday_raw) {
 				$date_durations[] = $holiday_raw->date;
 			}

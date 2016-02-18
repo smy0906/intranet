@@ -5,7 +5,7 @@ use Intra\Service\Press\Press;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$user = UserSession::getSupereditUser();
+$user = UserSession::getSupereditUserDto();
 
 $press_service = new Press($user);
 return $press_service->index();

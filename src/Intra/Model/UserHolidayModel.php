@@ -4,28 +4,28 @@ namespace Intra\Model;
 
 use Intra\Service\Holiday\UserHolidayDto;
 use Intra\Service\IntraDb;
-use Intra\Service\User\User;
+use Intra\Service\User\UserDto;
 
 class UserHolidayModel
 {
-	public static $const = array(
-		'types' => array('연차', '오전반차', '오후반차', '공가', '경조', '대체휴가', '무급휴가', '무급오전반차', '무급오후반차', 'PWT'),
-		'memos' => array('개인용무', '병원진료', '예비군훈련', '경조사', '기타')
-	);
+	public static $const = [
+		'types' => ['연차', '오전반차', '오후반차', '공가', '경조', '대체휴가', '무급휴가', '무급오전반차', '무급오후반차', 'PWT'],
+		'memos' => ['개인용무', '병원진료', '예비군훈련', '경조사', '기타']
+	];
 
 	public function __construct()
 	{
 		$this->db = IntraDb::getGnfDb();
 	}
 
-	public function getUsedCost(User $user, $begin, $end)
+	public function getUsedCost(UserDto $user, $begin, $end)
 	{
-		$where = array('uid' => $user->uid, 'hidden' => 0, 'date' => sqlBetween($begin, $end));
+		$where = ['uid' => $user->uid, 'hidden' => 0, 'date' => sqlBetween($begin, $end)];
 		return max(0, $this->db->sqlData('select sum(cost) from holidays where ?', sqlWhere($where)));
 	}
 
 	/**
-	 * @param User $user
+	 * @param UserDto $user
 	 * @param $begin
 	 * @param $end
 	 * @return UserHolidayDto[]
@@ -33,16 +33,16 @@ class UserHolidayModel
 	public function getHolidaysByUserYearly($user, $begin, $end)
 	{
 		if ($user == null) {
-			$where = array(
+			$where = [
 				'hidden' => 0,
 				'date' => sqlBetween($begin, $end),
-			);
+			];
 		} else {
-			$where = array(
+			$where = [
 				'uid' => $user->uid,
 				'hidden' => 0,
 				'date' => sqlBetween($begin, $end),
-			);
+			];
 		}
 		return $this->db->sqlObjects('select * from holidays where ? order by uid asc, date asc', sqlWhere($where));
 	}
@@ -62,17 +62,17 @@ class UserHolidayModel
 
 	public function hide($holidayid, $uid)
 	{
-		$update = array('hidden' => 1);
+		$update = ['hidden' => 1];
 		return $this->db->sqlUpdate('holidays', $update, compact('holidayid', 'uid'));
 	}
 
 	public function edit($holidayid, $uid, $key, $value)
 	{
-		$update = array($key => $value);
-		$where = array(
+		$update = [$key => $value];
+		$where = [
 			'holidayid' => $holidayid,
 			'uid' => $uid
-		);
+		];
 		$this->db->sqlUpdate('holidays', $update, $where);
 	}
 
@@ -84,7 +84,7 @@ class UserHolidayModel
 
 	public function get($holidayid, $uid)
 	{
-		return $this->gets(array($holidayid), $uid);
+		return $this->gets([$holidayid], $uid);
 	}
 
 	/**
@@ -95,29 +95,29 @@ class UserHolidayModel
 
 	public function gets(array $holidayids, $uid)
 	{
-		$where = array('holidayid' => $holidayids, 'uid' => $uid);
+		$where = ['holidayid' => $holidayids, 'uid' => $uid];
 		return $this->db->sqlObjects('select * from holidays where ? order by date asc', sqlWhere($where));
 	}
 
 	public function isDuplicate($date, $uid)
 	{
 		$date = date('Y-m-d', strtotime($date));
-		$where = array(
+		$where = [
 			'date' => $date,
 			'uid' => $uid,
 			'hidden' => 0
-		);
+		];
 		return $this->db->sqlCount('holidays', $where);
 	}
 
 	public function isDuplicateInDateRangeByType($this_month, $next_month, $type, $uid)
 	{
-		$where = array(
+		$where = [
 			'date' => sqlRange($this_month, $next_month),
 			'type' => $type,
 			'uid' => $uid,
 			'hidden' => 0
-		);
+		];
 		return $this->db->sqlCount('holidays', $where);
 	}
 }

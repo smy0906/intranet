@@ -9,8 +9,8 @@
 namespace Intra\Service\Holiday;
 
 use Intra\Model\UserHolidayModel;
-use Intra\Service\User\User;
-use Intra\Service\User\Users;
+use Intra\Service\User\UserDto;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 class UserHoliday
@@ -20,11 +20,11 @@ class UserHoliday
 	private $cost_half_type = ['오전반차', '오후반차'];
 	private $cost_int_type = ['연차'];
 	/**
-	 * @var User
+	 * @var UserDto
 	 */
 	private $user;
 
-	public function __construct(User $user)
+	public function __construct(UserDto $user)
 	{
 		$this->user = $user;
 		$this->user_holiday_policy = new UserHolidayPolicy($user);
@@ -86,11 +86,11 @@ class UserHoliday
 
 	private function assertEdit()
 	{
-		$self = UserSession::getSelf();
+		$self = UserSession::getSelfDto();
 		if ($self->uid == $this->user->uid) {
 			return;
 		}
-		if (!$self->isSuperAdmin()) {
+		if (!$self->is_admin) {
 			throw new \Exception('권한이 없습니다.');
 		}
 	}
@@ -218,7 +218,7 @@ class UserHoliday
 
 	public function getYearly($timestamp = null)
 	{
-		$fromDate = $this->user->getOnDate();
+		$fromDate = $this->user->on_date;
 		if ($timestamp === null) {
 			$timestamp = time();
 		}
@@ -230,7 +230,7 @@ class UserHoliday
 
 	public function getYearByYearly($yearly)
 	{
-		$onDate = $this->user->getOnDate();
+		$onDate = $this->user->on_date;
 		$onDateTimestamp = strtotime($onDate);
 		$joinYear = date('Y', $onDateTimestamp);
 		return $joinYear + $yearly;
@@ -254,11 +254,7 @@ class UserHoliday
 	 */
 	public static function getUserNameSafe($keeper_uid)
 	{
-		$user = Users::getByUid($keeper_uid);
-		if ($user) {
-			return $user->getName();
-		}
-		return '';
+		return UserService::getNameByUidSafe($keeper_uid);
 	}
 
 	/**

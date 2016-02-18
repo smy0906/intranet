@@ -150,11 +150,11 @@ class QueryProcessor
 			$matched_query_raw = $match[0];
 			$matched_query = $match[1];
 			$unmatched_query_tail = substr($this->remain_query, strlen($matched_query_raw));
-			return array($matched_query, $unmatched_query_tail);
+			return [$matched_query, $unmatched_query_tail];
 		} else {
 			$matched_query = 'index';
 			$unmatched_query_tail = '';
-			return array($matched_query, $unmatched_query_tail);
+			return [$matched_query, $unmatched_query_tail];
 		}
 	}
 

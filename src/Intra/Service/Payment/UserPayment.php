@@ -1,10 +1,9 @@
 <?php
 namespace Intra\Service\Payment;
 
-use Intra\Model\UserFactory;
 use Intra\Model\UserPaymentModel;
-use Intra\Service\User\User;
-use Intra\Service\User\Users;
+use Intra\Service\User\UserDto;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 use Mailgun\Mailgun;
 
@@ -13,7 +12,7 @@ class UserPayment
 	private $const;
 	private $user_payment_model;
 	/**
-	 * @var User
+	 * @var UserDto
 	 */
 	private $user;
 
@@ -27,14 +26,14 @@ class UserPayment
 		return $month;
 	}
 
-	public function __construct(User $user)
+	public function __construct(UserDto $user)
 	{
 		$this->user = $user;
 
 		$this->user_payment_model = new UserPaymentModel();
 
-		$const = array();
-		$const['teams'] = array(
+		$const = [];
+		$const['teams'] = [
 			'스토어팀',
 			'앱팀',
 			'플랫폼팀',
@@ -52,12 +51,12 @@ class UserPayment
 			'CO팀',
 			'스튜디오 D',
 			'공통'
-		);
-		$const['products'] = array('리디북스', '페이퍼샵', '공통');
-		$const['taxs'] = array('Y', 'N', 'N/A');
-		$const['paytypes'] = array('현금', '법인카드', '연구비카드', '연구비계좌');
-		$const['statuses'] = array('결제 대기중', '결제 완료');
-		$const['categorys'] = array(
+		];
+		$const['products'] = ['리디북스', '페이퍼샵', '공통'];
+		$const['taxs'] = ['Y', 'N', 'N/A'];
+		$const['paytypes'] = ['현금', '법인카드', '연구비카드', '연구비계좌'];
+		$const['statuses'] = ['결제 대기중', '결제 완료'];
+		$const['categorys'] = [
 			'상품매입 (페이퍼샵 판매용 상품 매입 비용)',
 			'운반비 (택배, 퀵서비스 이용대금)',
 			'잡급 (로맨스, 판무 가이드 알바 급여)',
@@ -70,18 +69,18 @@ class UserPayment
 			'지급수수료',
 			'저작권료 (마케팅용 콘텐츠 매절)',
 			'콘텐츠 지원금',
-		);
-		if (UserSession::getSelf()->isSuperAdmin()) {
+		];
+		if (UserSession::getSelfDto()->is_admin) {
 			$const['categorys'][] = '기타';
 		}
-		$const['pay_dates'] = array('선택해주세요', '7일', '10일', '25일', '월말일', '긴급');
+		$const['pay_dates'] = ['선택해주세요', '7일', '10일', '25일', '월말일', '긴급'];
 		$this->const = $const;
 	}
 
 	public function index($month)
 	{
-		$return = array();
-		$return['user'] = UserSession::getSupereditUser()->getDbDto();
+		$return = [];
+		$return['user'] = UserSession::getSupereditUserDto();
 		$uid = $this->user->uid;
 
 		$prevmonth = date('Y-m', strtotime('-1 month', strtotime($month)));
@@ -105,8 +104,8 @@ class UserPayment
 			$return['editable'] |= 1;
 		}
 
-		$return['allCurrentUsers'] = UserFactory::getAvailableUsers();
-		$return['allUsers'] = UserFactory::getAllUsers();
+		$return['allCurrentUsers'] = UserService::getAvailableUserDtos();
+		$return['allUsers'] = UserService::getAllUserDtos();
 
 		$return['const'] = $this->const;
 
@@ -131,9 +130,9 @@ class UserPayment
 	public function getConstValueByKey($key)
 	{
 		if ($key == 'manager_uid') {
-			$ret = array();
-			foreach (UserFactory::getAvailableUsers() as $user) {
-				$ret[$user['uid']] = $user['name'];
+			$ret = [];
+			foreach (UserService::getAvailableUserDtos() as $user) {
+				$ret[$user->uid] = $user->name;
 			}
 			return json_encode($ret);
 		}
@@ -141,7 +140,7 @@ class UserPayment
 		if (!is_array($this->const[$plural_key])) {
 			return null;
 		}
-		$ret = array();
+		$ret = [];
 		foreach ($this->const[$plural_key] as $v) {
 			$ret[$v] = $v;
 		}
@@ -191,11 +190,11 @@ class UserPayment
 		} elseif ($key == 'price') {
 			return number_format($updated_value) . ' 원';
 		} elseif ($key == 'manager_uid') {
-			$user = Users::getByUid($updated_value);
-			if ($user) {
-				return $user->getName();
+			$user_name = UserService::getNameByUidSafe($updated_value);
+			if ($user_name === null) {
+				return 'error';
 			}
-			return 'error';
+			return $user_name;
 		}
 		return $updated_value;
 	}
@@ -269,12 +268,12 @@ class UserPayment
 		$domain = "ridibooks.com";
 		$mg->sendMessage(
 			$domain,
-			array(
+			[
 				'from' => 'noreply@ridibooks.com',
 				'to' => implode(', ', $receivers),
 				'subject' => $title,
 				'text' => $text
-			)
+			]
 		);
 	}
 
@@ -285,7 +284,7 @@ class UserPayment
 	private function filterPayements($payments)
 	{
 		foreach ($payments as $k => $payment) {
-			$payment['manager_name'] = Users::getByUid($payment['manager_uid'])->getName();
+			$payment['manager_name'] = UserService::getNameByUidSafe($payment['manager_uid']);
 			$payments[$k] = $payment;
 		}
 		return $payments;
@@ -298,7 +297,7 @@ class UserPayment
 	 */
 	private function getMailContents($type, $row)
 	{
-		$name = Users::getByUid($row['uid'])->getName();
+		$name = UserService::getNameByUidSafe($row['uid']);
 		$title = "[{$type}][{$row['team']}][{$row['month']}] {$name}님의 요청, {$row['category']}";
 		$text = "요청일 : {$row['request_date']}
 요청자 : {$name}
@@ -307,11 +306,11 @@ class UserPayment
 상세내용 : {$row['desc']}
 금액 : {$row['price']}
 결제예정일 : {$row['pay_date']}";
-		$receivers = array(
-			Users::getByUid($row['uid'])->getEmail(),
-			Users::getByUid($row['manager_uid'])->getEmail(),
-		);
-		return array($title, $text, $receivers);
+		$receivers = [
+			UserService::getEmailByUidSafe($row['uid']),
+			UserService::getEmailByUidSafe($row['manager_uid'])
+		];
+		return [$title, $text, $receivers];
 	}
 
 	/**
@@ -319,7 +318,7 @@ class UserPayment
 	 */
 	private function isSuperAdmin()
 	{
-		return UserSession::getSelf()->isSuperAdmin();
+		return UserSession::getSelfDto()->is_admin;
 	}
 
 	/**

@@ -11,7 +11,7 @@ namespace Intra\Service\Post;
 use Illuminate\Database\Eloquent\Model as EloquentBaseModel;
 use Intra\Core\BaseDto;
 use Intra\Model\PostModel;
-use Intra\Service\User\Users;
+use Intra\Service\User\UserDtoObject;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,7 +33,8 @@ class PostDetailDto extends BaseDto
 	 */
 	public static function importFromModel($post)
 	{
-		$return = new self($post->getAttributes());
+		$return = new self;
+		$return->initFromArray($post->getAttributes());
 		if (strtotime('-1 day') < strtotime($return->updated_at)) {
 			$return->is_new = true;
 		} else {
@@ -45,8 +46,9 @@ class PostDetailDto extends BaseDto
 
 	public static function importFromWriteRequest(Request $request)
 	{
-		$return = new self($request);
-		$return->uid = UserSession::getSelf()->uid;
+		$return = new self;
+		$return->initFromRequest($request);
+		$return->uid = UserSession::getSelfDto()->uid;
 
 		return $return;
 	}
@@ -54,14 +56,14 @@ class PostDetailDto extends BaseDto
 	public function exportAsArrayForDetailView()
 	{
 		$return = $this->exportAsArray();
-		$return['name'] = Users::getNameByUid($this->uid);
+		$return['name'] = UserDtoObject::importFromDatabaseWithUid($this->uid)->getName();
 		$return['content_html'] = nl2br($return['content_html']);
 		return $return;
 	}
 
 	public function exportAsModelForInsertDb()
 	{
-		$array = $this->exportAsArrayByKeys(array('group', 'uid', 'title', 'content_html'));
+		$array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html']);
 		$return = new PostModel;
 		$return->setRawAttributes($array);
 		return $return;
@@ -75,7 +77,7 @@ class PostDetailDto extends BaseDto
 
 	public function exportAsModelForModifyDb()
 	{
-		$array = $this->exportAsArrayByKeys(array('group', 'uid', 'title', 'content_html', 'id'));
+		$array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html', 'id']);
 		$return = new PostModel;
 		$return->setRawAttributes($array);
 		return $return;

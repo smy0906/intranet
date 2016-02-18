@@ -1,17 +1,17 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Model\UserFactory;
 use Intra\Model\UserHolidayModel;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$self = UserSession::getSelf();
-$super_edit_user = UserSession::getSupereditUser();
+$self = UserSession::getSelfDto();
+$super_edit_user = UserSession::getSupereditUserDto();
 
-if ($self->isSuperAdmin()) {
+if ($self->is_admin) {
 	$editable = 1;
 }
 
@@ -45,8 +45,8 @@ $yearly = $year - $joinYear;
 	$holidays = $user_holiday->getUserHolidays($yearly);
 	$holidayInfo = $user_holiday_policy->getDetailInfomationByYearly($yearly);
 
-	$availableUsers = UserFactory::getAvailableUsers();
-	$managerUsers = UserFactory::getManagerUsers();
+	$availableUsers = UserService::getAvailableUserDtos();
+	$managerUsers = UserService::getManagerUserDtos();
 }
 
 return compact(

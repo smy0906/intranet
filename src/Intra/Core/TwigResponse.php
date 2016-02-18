@@ -14,7 +14,7 @@ class TwigResponse
 
 	public function __construct()
 	{
-		$this->response_array = array();
+		$this->response_array = [];
 	}
 
 	public function add(array $array)

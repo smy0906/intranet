@@ -30,7 +30,7 @@ class Post
 
 	private function assertAdd($post_list_view)
 	{
-		if (!UserSession::getSelf()->isSuperAdmin()) {
+		if (!UserSession::getSelfDto()->is_admin) {
 			throw new MsgException('권한이 없습니다');
 		}
 	}
@@ -47,7 +47,7 @@ class Post
 
 	private function assertModify($post_list_view)
 	{
-		if (!UserSession::getSelf()->isSuperAdmin()) {
+		if (!UserSession::getSelfDto()->is_admin) {
 			throw new MsgException('권한이 없습니다');
 		}
 	}
@@ -59,27 +59,27 @@ class Post
 			function () use (&$result, $group) {
 				$posts = PostModel::on()->where('group', $group)->where('is_sent', 0)->get();
 				$mail_title = '[공지] ' . date('Y/m/d') . '의 공지사항입니다.';
-				$mail_bodys = array();
+				$mail_bodys = [];
 				foreach ($posts as $post) {
 					$mail_body = "<fieldset style='margin: 20px'><legend>{$post->title}</legend>" . $post->content_html . "</fieldset>";
 					$mail_bodys[] = $mail_body;
 				}
 				$mail_bodys = implode("", $mail_bodys);
 
-				$receivers = array();
+				$receivers = [];
 				$receivers[] = 'everyone@' . Config::$domain;
 
 				$mg = new Mailgun("***REMOVED***");
 				$domain = "ridi.com";
 				$result = $mg->sendMessage(
 					$domain,
-					array(
+					[
 						'from' => '***REMOVED***',
 						'to' => implode(', ', $receivers),
 						'subject' => $mail_title,
 						'text' => strip_tags($mail_bodys),
 						'html' => nl2br($mail_bodys),
-					)
+					]
 				);
 				foreach ($posts as $post) {
 					$post->is_sent = true;

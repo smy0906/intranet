@@ -4,14 +4,14 @@
   {{ parent() }}
   <script>
     var edited = false;
-    var currentUid = '{{currentUid}}';
+    var currentUid = '{{ currentUid }}';
     $(function () {
       $('.sampleInput').one('click', function () {
         $(this).val('');
       });
       $('[name=day]').focus().change(function () {
         $.post('/receipts/queryIsWeekend'
-          , {month: '{{month}}', day: $(this).val()}
+          , {month: '{{ month }}', day: $(this).val()}
           , function (dat) {
             $('#dayType').html(dat);
           })
@@ -98,7 +98,7 @@
     data-aa-onsuccess="refresh"
     data-aa-onfail-alert="true"
     onsubmit="$('[name=scope]').removeAttr('disabled');"
-    >
+  >
     <input type='hidden' name='month' value='{{ month }}'/>
 
     <div class='receipts_info'>
@@ -149,7 +149,7 @@
                      data-aa-onsuccess-msg="삭제되었습니다"
                      data-aa-onsuccess="refresh"
                      data-aa-onfail-alert="true"
-                />
+              />
             {% endif %}
           </td>
         </tr>

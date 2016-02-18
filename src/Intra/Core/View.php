@@ -37,7 +37,7 @@ class View
 	public function act($array)
 	{
 		$loader = new Twig_Loader_Filesystem($this->root);
-		$twig = new Twig_Environment($loader, array());
+		$twig = new Twig_Environment($loader, []);
 		#$twig->addFilter('number_format', new Twig_Filter_Function('number_format'));
 
 		echo $twig->render($this->query . '.twig', $array);

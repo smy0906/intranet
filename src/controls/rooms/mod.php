@@ -4,7 +4,7 @@
 
 $db = \Intra\Service\IntraDb::getGnfDb();
 
-$user = \Intra\Service\User\UserSession::getSelf();
+$user = \Intra\Service\User\UserSession::getSelfDto();
 $request = $this->getRequest();
 
 $uid = $user->uid;
@@ -13,7 +13,7 @@ $desc = $request->get('desc');
 $from = $request->get('from');
 $to = $request->get('to');
 
-if ($user->isSuperAdmin()) {
+if ($user->is_admin) {
 	$where = compact('id');
 } else {
 	$where = compact('id', 'uid');

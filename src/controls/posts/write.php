@@ -3,4 +3,4 @@
 $request = $this->getRequest();
 $group = $request->get('group');
 
-return array('group' => $group);
+return ['group' => $group];

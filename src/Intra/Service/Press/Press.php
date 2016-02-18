@@ -10,7 +10,7 @@ namespace Intra\Service\Press;
 
 use Intra\Core\JsonDto;
 use Intra\Service\IntraDb;
-use Intra\Service\User\User;
+use Intra\Service\User\UserDto;
 use Intra\Service\User\UserSession;
 
 class Press
@@ -18,7 +18,7 @@ class Press
 	private $user;
 
 	/**
-	 * @param $user User
+	 * @param $user UserDto
 	 */
 	public function __construct($user)
 	{
@@ -110,7 +110,9 @@ class Press
 		$json_dto = new JsonDto();
 		$json_dto->data = [
 			'user' => $this->user,
-			'press' => $db->sqlDicts('select * from press order by date desc limit ' . ($page-1) * $ITEMS_PER_PAGE . ', ' . $ITEMS_PER_PAGE),
+			'press' => $db->sqlDicts(
+				'select * from press order by date desc limit ' . ($page - 1) * $ITEMS_PER_PAGE . ', ' . $ITEMS_PER_PAGE
+			),
 			'count' => $this->getPressCount(),
 			'manager' => UserSession::isPressManager()
 		];

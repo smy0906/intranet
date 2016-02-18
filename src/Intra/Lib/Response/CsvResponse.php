@@ -24,7 +24,7 @@ class CsvResponse extends Response
 	 * @param integer $status The response status code
 	 * @param array $headers An array of response headers
 	 */
-	public function __construct($data = null, $filename = null, $status = 200, $headers = array())
+	public function __construct($data = null, $filename = null, $status = 200, $headers = [])
 	{
 		parent::__construct('', $status, $headers);
 
@@ -49,13 +49,13 @@ class CsvResponse extends Response
 	 *
 	 * @throws \InvalidArgumentException
 	 */
-	public function setData($data = array())
+	public function setData($data = [])
 	{
 		foreach ($data as $k => $v) {
 			if (is_object($v)) {
 				$v = get_object_vars($v);
 			} elseif (is_scalar($v)) {
-				$v = array($v);
+				$v = [$v];
 			}
 			foreach ($v as $k2 => $v2) {
 				$v[$k2] = iconv('utf-8', 'cp949', $v2);
@@ -96,7 +96,7 @@ class CsvResponse extends Response
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function create($data = null, $filename = null, $status = 200, $headers = array())
+	public static function create($data = null, $filename = null, $status = 200, $headers = [])
 	{
 		return new static($data, $filename, $status, $headers);
 	}

@@ -14,9 +14,9 @@ class UserReceiptsStat
 		$month = date('Y-m', strtotime($month));
 		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
 
-		$tables = array(
+		$tables = [
 			'receipts.uid' => 'users.uid'
-		);
+		];
 		$receipts = $db->sqlDicts(
 			'select users.name, receipts.* from ? where str_to_date(?, "%Y-%m-%d") <= `date` and date < str_to_date(?, "%Y-%m-%d") order by uid asc, `date` asc, receiptid asc',
 			sqlLeftJoin($tables),
@@ -24,14 +24,14 @@ class UserReceiptsStat
 			$nextmonth
 		);
 
-		$csvs = array();
+		$csvs = [];
 		//header
 		{
-			$arr = array('이름', '날짜', '상호', '금액', '적요', '분류', '지불방식', '용도');
+			$arr = ['이름', '날짜', '상호', '금액', '적요', '분류', '지불방식', '용도'];
 			$csvs[] = $arr;
 		}
 		foreach ($receipts as $receipt) {
-			$arr = array(
+			$arr = [
 				$receipt['name'],
 				$receipt['date'],
 				$receipt['title'],
@@ -40,7 +40,7 @@ class UserReceiptsStat
 				$receipt['type'],
 				$receipt['payment'],
 				$receipt['scope']
-			);
+			];
 			$csvs[] = $arr;
 		}
 		$csvresponse = new CsvResponse($csvs, 'download.' . $month);
@@ -54,23 +54,23 @@ class UserReceiptsStat
 
 		$year = date('Y', strtotime($month));
 
-		$tables = array(
+		$tables = [
 			'receipts.uid' => 'users.uid'
-		);
+		];
 		$receipts = $db->sqlDicts(
 			'select SUBSTR(`date`, 1, 7 ) as yearmonth, users.name, title, scope, type, payment, sum(cost) as cost from ? where year(`date`) = ? group by yearmonth, users.name, scope, type, payment ',
 			sqlLeftJoin($tables),
 			$year
 		);
 
-		$csvs = array();
+		$csvs = [];
 		//header
 		{
-			$arr = array('월', '이름', '상호', '금액', '적요', '분류', '지불방식', '용도');
+			$arr = ['월', '이름', '상호', '금액', '적요', '분류', '지불방식', '용도'];
 			$csvs[] = $arr;
 		}
 		foreach ($receipts as $receipt) {
-			$arr = array(
+			$arr = [
 				$receipt['yearmonth'] . '월',
 				$receipt['name'],
 				$receipt['title'],
@@ -79,7 +79,7 @@ class UserReceiptsStat
 				$receipt['payment'],
 				$receipt['cost'],
 				$receipt['scope'],
-			);
+			];
 			$csvs[] = $arr;
 		}
 		$csvresponse = new CsvResponse($csvs, 'downloadYear.' . $year);

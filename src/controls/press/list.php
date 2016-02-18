@@ -7,7 +7,7 @@ use Intra\Service\User\UserSession;
 $request = $this->getRequest();
 $page = $request->get('page');
 $items_per_page = $request->get('items_per_page');
-$user = UserSession::getSupereditUser();
+$user = UserSession::getSupereditUserDto();
 
 $press_service = new Press($user);
 

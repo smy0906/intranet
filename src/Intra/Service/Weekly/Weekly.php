@@ -50,7 +50,7 @@ class Weekly
 			'#FF0000',
 			'#888888',
 			$html
-	);
+		);
 		return $html;
 	}
 }

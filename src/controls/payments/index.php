@@ -9,5 +9,5 @@ $month = $request->get('month');
 
 $month = UserPayment::parseMonth($month);
 
-$payment_service = new UserPayment(UserSession::getSupereditUser());
+$payment_service = new UserPayment(UserSession::getSupereditUserDto());
 return $payment_service->index($month);

@@ -14,15 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BaseDto
 {
-	public function __construct($param = null)
+	protected function __construct()
 	{
-		if ($param instanceof Request) {
-			$this->initFromRequest($param);
-		} elseif ($param instanceof \stdClass) {
-			$this->initFromStdClass($param);
-		} elseif (is_array($param)) {
-			$this->initFromArray($param);
-		}
 	}
 
 	/**
@@ -104,16 +97,11 @@ class BaseDto
 	public function exportAsArray()
 	{
 		$reflect = new ReflectionClass(get_called_class());
-		$reflect_parent = $reflect->getParentClass();
 		$default_properties = $reflect->getDefaultProperties();
 
-		$columns = array();
+		$columns = [];
 		foreach ($default_properties as $key => $value) {
-			if ($reflect_parent->hasProperty($key)) {
-				// 부모 클래스의 properties는 무시한다.
-				continue;
-			}
-			$columns = array_merge($columns, array($key => $this->{$key}));
+			$columns = array_merge($columns, [$key => $this->{$key}]);
 		}
 
 		return $columns;
@@ -121,7 +109,7 @@ class BaseDto
 
 	public function exportAsArrayByKeys(array $keys)
 	{
-		$columns = array();
+		$columns = [];
 		foreach ($keys as $key) {
 			$columns[$key] = $this->{$key};
 		}

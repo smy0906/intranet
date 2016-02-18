@@ -39,17 +39,17 @@ class PostListDto
 
 	public function exportAsArrayForListView()
 	{
-		$posts = array();
+		$posts = [];
 		foreach ($this->postModels as $postModel) {
 			$postDto = PostDetailDto::importFromModel($postModel);
 			$post = $postDto->exportAsArrayForDetailView();
 			$posts[] = $post;
 		}
 
-		return array(
+		return [
 			'group' => $this->group,
 			'posts' => $posts,
 			'lastItem' => $this->paginate->lastItem(),
-		);
+		];
 	}
 }

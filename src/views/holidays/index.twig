@@ -14,7 +14,7 @@
         {{ year }} ({{ today }} 기준)
       </td>
       <td>
-        <span style="float: right">{{ super_edit_user.user.name }}</span>
+        <span style="float: right">{{ super_edit_user.name }}</span>
       </td>
     </tr>
     </thead>
@@ -111,7 +111,7 @@
           <label>
             <select name='manager_uid' js_cookie_save js_data_chosen>
               {% for managerUser in managerUsers %}
-                <option value='{{ managerUser.uid }}'>{{ managerUser.user.name }}</option>
+                <option value='{{ managerUser.uid }}'>{{ managerUser.name }}</option>
               {% endfor %}
             </select>
           </label>
@@ -153,7 +153,7 @@
           <label>
             <select name='keeper_uid' js_cookie_save js_data_chosen>
               {% for availableUser in availableUsers %}
-                <option value='{{ availableUser.uid }}'>{{ availableUser.user.name }}</option>
+                <option value='{{ availableUser.uid }}'>{{ availableUser.name }}</option>
               {% endfor %}
             </select>
           </label>
@@ -237,7 +237,7 @@
     연차 : 회계기준 입사 {{ yearly - 1 }}년차 = {{ fullCost }}개
   {% endif %}</span></pre>
 
-  {% if self.isSuperAdmin() %}
+  {% if self.is_admin %}
     <div>
       <table>
         <thead>
@@ -272,7 +272,7 @@
             <label>
               <select class='js_superedit' js_data_chosen>
                 {% for availableUser in availableUsers %}
-                  <option value='{{ availableUser.uid }}'>{{ availableUser.user.name }}</option>
+                  <option value='{{ availableUser.uid }}'>{{ availableUser.name }}</option>
                 {% endfor %}
               </select>
             </label>
