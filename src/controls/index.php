@@ -1,13 +1,12 @@
 <?php
 /** @var $this Intra\Core\Control */
 
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $self = UserSession::getSelfDto();
-if ($self->is_admin) {
-	$replaceable = true;
-}
+$replaceable = UserPolicy::is_first_page_replaceable($self);
 
 return [
 	'replaceable' => $replaceable,

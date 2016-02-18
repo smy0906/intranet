@@ -1,5 +1,6 @@
 <script>
   var edited = false;
+  var uid = {{ target_user_dto.uid }};
 
   $(function () {
     $("input").on("keypress", function (e) {
@@ -28,6 +29,7 @@
       else
         $('#js_cost').hide();
     }).trigger('change');
+
     {% if editable %}
     $('.holiday td[data-key]').each(function () {
       var holidayid = $(this).parent().data('holidayid');
@@ -42,7 +44,7 @@
         args['submit'] = "OK";
       }
 
-      $(this).editable('/holidays/edit', args);
+      $(this).editable('/holidays/uid/' + uid + '/edit', args);
     });
     {% endif %}
   });

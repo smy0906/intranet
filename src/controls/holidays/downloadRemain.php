@@ -4,17 +4,15 @@
 use Intra\Lib\Response\CsvResponse;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$self = UserSession::getSelfDto();
 
-if (!$self->is_admin) {
+if (!UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
 	exit;
 }
-
-$users = UserService::getAllUserDtos();
 
 $year = $request->get('year');
 if (!intval($year)) {
@@ -24,6 +22,8 @@ if (!intval($year)) {
 $rows = [
 	['연도', '이름', '입사일자', '퇴사일자', '연차부여', '사용일수', '잔여일수']
 ];
+
+$users = UserService::getAllUserDtos();
 
 foreach ($users as $user) {
 	$user_holiday = new UserHoliday($user);

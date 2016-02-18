@@ -3,18 +3,13 @@
 
 use Intra\Lib\Response\CsvResponse;
 use Intra\Service\Holiday\UserHolidayStat;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$super_edit_user = UserSession::getSupereditUserDto();
 
-if (!UserSession::getSelfDto()->is_admin) {
+if (!UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
 	exit;
-}
-
-//service
-{
-	$user_holiday = new UserHolidayStat($super_edit_user);
 }
 
 //input
@@ -23,10 +18,8 @@ if (!intval($year)) {
 	$year = date('Y');
 }
 
-//main
-{
-	$holidays = $user_holiday->getHolidaysAllUsers($year);
-}
+$user_holiday = new UserHolidayStat(UserSession::getSelfDto());
+$holidays = $user_holiday->getHolidaysAllUsers($year);
 
 $csvs = [
 	'신청날짜' => 'request_date',

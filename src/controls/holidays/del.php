@@ -4,20 +4,21 @@
 
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\IntraDb;
+use Intra\Service\User\UserPolicy;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
-$super_edit_user = UserSession::getSupereditUserDto();
 
-//service
-{
-	$user_holiday = new UserHoliday($super_edit_user);
+if (UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
+	$uid = $request->get('uid');
+	$dto = UserService::getDtobyUid($uid);
+} else {
+	$dto = UserSession::getSelfDto();
 }
 
-//input
-{
-	$holidayid = $request->get('holidayid');
-}
+$user_holiday = new UserHoliday($dto);
+$holidayid = $request->get('holidayid');
 
 //finalize
 $db = IntraDb::getGnfDb();

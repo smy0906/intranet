@@ -1,11 +1,12 @@
 <?php
 /** @var $this Intra\Core\Route */
 
-$this->matchIf('/{holidayid}/del')
-	->assertAsInt('holidayid')
-	->query('del');
+$this->matchIf('/index/uid/{uid}')
+	->assertAsInt('uid')
+	->query('index');
 
-$this->matchIf('/index/year/{year}')
+$this->matchIf('/index/uid/{uid}/year/{year}')
+	->assertAsInt('uid')
 	->assertAsInt('year')
 	->query('index');
 
@@ -16,3 +17,14 @@ $this->matchIf('/download/{year}')
 $this->matchIf('/downloadRemain/{year}')
 	->assertAsInt('year')
 	->query('downloadRemain');
+
+$this->matchIf('/uid/{uid}/{holidayid}/del')
+	->assertAsInt('uid')
+	->assertAsInt('holidayid')
+	->query('del');
+
+$this->matchIf('/uid/{uid}/edit')
+	->assertAsInt('uid')
+	->query('edit');
+
+

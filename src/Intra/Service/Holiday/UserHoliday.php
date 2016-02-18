@@ -24,6 +24,10 @@ class UserHoliday
 	 */
 	private $user;
 
+	/**
+	 * UserHoliday constructor.
+	 * @param UserDto $user
+	 */
 	public function __construct(UserDto $user)
 	{
 		$this->user = $user;

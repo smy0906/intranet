@@ -84,13 +84,13 @@ class UserHolidayModel
 
 	public function get($holidayid, $uid)
 	{
-		return $this->gets([$holidayid], $uid);
+		return head($this->gets([$holidayid], $uid));
 	}
 
 	/**
 	 * @param $holidayids
 	 * @param $uid
-	 * @return UserHolidayDto
+	 * @return UserHolidayDto[]
 	 */
 
 	public function gets(array $holidayids, $uid)

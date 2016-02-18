@@ -26,9 +26,9 @@ class BaseDtoObject
 		return new $called_class($dto);
 	}
 
-	public static function exportToDto($dto)
+	public function exportDto()
 	{
-		return clone($dto);
+		return clone($this->dto);
 	}
 
 	protected static function assertDatabaseRowExist($row)

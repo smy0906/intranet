@@ -4,28 +4,36 @@
 use Intra\Model\UserHolidayModel;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
+use Intra\Service\User\UserDtoObject;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $self = UserSession::getSelfDto();
-$super_edit_user = UserSession::getSupereditUserDto();
 
-if ($self->is_admin) {
-	$editable = 1;
+$uid = $request->get('uid');
+if (!intval($uid)) {
+	$uid = $self->uid;
 }
-
-//service
-{
-	$user_holiday = new UserHoliday($super_edit_user);
-	$user_holiday_policy = new UserHolidayPolicy($super_edit_user);
-}
-
-//input
 $year = $request->get('year');
 if (!intval($year)) {
 	$year = date('Y');
 }
+
+$is_holiday_master = UserPolicy::is_holiday_editable($self);
+$editable = $is_holiday_master;
+if (!$is_holiday_master) {
+	if ($uid != $self->uid) {
+		$uid = $self->uid;
+	}
+}
+
+$user_dto_object = UserDtoObject::importFromDatabaseWithUid($uid);
+$target_user_dto = $user_dto_object->exportDto();
+$user_holiday = new UserHoliday($target_user_dto);
+$user_holiday_policy = new UserHolidayPolicy($target_user_dto);
+
 
 $joinYear = $user_holiday->getYearByYearly(0);
 $yearly = $year - $joinYear;
@@ -49,26 +57,23 @@ $yearly = $year - $joinYear;
 	$managerUsers = UserService::getManagerUserDtos();
 }
 
-return compact(
-	'today',
-	'month',
-	'prevMonth',
-	'nextMonth',
-	'holidays',
-	'year',
-	'yearly',
-	'yearPrev',
-	'yearNext',
-	'yearlyFrom',
-	'yearlyTo',
-	'fullCost',
-	'remainCost',
-	'editable',
-	'self',
-	'super_edit_user',
-	'availableUsers',
-	'holidays',
-	'holidayConst',
-	'holidayInfo',
-	'managerUsers'
-);
+return [
+	'target_user_dto' => $target_user_dto,
+	'today' => $today,
+	'month' => $month,
+	'holidays' => $holidays,
+	'year' => $year,
+	'yearly' => $yearly,
+	'yearPrev' => $yearPrev,
+	'yearNext' => $yearNext,
+	'yearlyFrom' => $yearlyFrom,
+	'yearlyTo' => $yearlyTo,
+	'fullCost' => $fullCost,
+	'remainCost' => $remainCost,
+	'editable' => $editable,
+	'self' => $self,
+	'availableUsers' => $availableUsers,
+	'holidayConst' => $holidayConst,
+	'holidayInfo' => $holidayInfo,
+	'managerUsers' => $managerUsers
+];

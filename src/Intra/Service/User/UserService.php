@@ -154,7 +154,7 @@ class UserService
 
 	public static function getNameByUidSafe($uid)
 	{
-		if (!UserModel::isExistById($uid)) {
+		if (!UserModel::isExistByUid($uid)) {
 			return null;
 		}
 		$row = UserModel::getRowWithUid($uid);
@@ -164,7 +164,7 @@ class UserService
 
 	public static function getEmailByUidSafe($uid)
 	{
-		if (!UserModel::isExistById($uid)) {
+		if (!UserModel::isExistByUid($uid)) {
 			return null;
 		}
 		$row = UserModel::getRowWithUid($uid);

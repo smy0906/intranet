@@ -14,7 +14,7 @@
         {{ year }} ({{ today }} 기준)
       </td>
       <td>
-        <span style="float: right">{{ super_edit_user.name }}</span>
+        <span style="float: right">{{ target_user_dto.name }}</span>
       </td>
     </tr>
     </thead>
@@ -45,14 +45,17 @@
     data-aa-onfail-alert="true"
     onsubmit="$('[name=scope]').removeAttr('disabled');"
   >
+    <input type="hidden" name="uid" value="{{ target_user_dto.uid }}"/>
     <table>
       <thead>
       <tr>
         <td colspan="12">
           &lt;연차휴가 신청내역&gt;
                     <span style='float:right'>
-                        <a href='/holidays/index/year/{{ yearPrev }}' class='receipts_command'>{{ yearPrev }}년</a>
-                        <a href='/holidays/index/year/{{ yearNext }}' class='receipts_command'>{{ yearNext }}년</a>
+                        <a href='/holidays/index/uid/{{ target_user_dto.uid }}/year/{{ yearPrev }}'
+                           class='receipts_command'>{{ yearPrev }}년</a>
+                        <a href='/holidays/index/uid/{{ target_user_dto.uid }}/year/{{ yearNext }}'
+                           class='receipts_command'>{{ yearNext }}년</a>
                     </span>
         </td>
       </tr>
@@ -91,7 +94,7 @@
             {% if editable %}
               <input type='button' value='삭제'
                      attrajax
-                     data-aa-url="/holidays/{{ holiday.holidayid }}/del"
+                     data-aa-url="/holidays/uid/{{ target_user_dto.uid }}/{{ holiday.holidayid }}/del"
                      data-aa-confirm='정말 삭제하시겠습니까?'
                      data-aa-datatype="text"
                      data-aa-success-if-result-is="1"
@@ -106,7 +109,7 @@
       <tr class='add'>
         <td></td>
         <td></td>
-        <td>{{ super_edit_user.name }}</td>
+        <td>{{ target_user_dto.name }}</td>
         <td>
           <label>
             <select name='manager_uid' js_cookie_save js_data_chosen>
@@ -254,18 +257,10 @@
             <script>
               $(function () {
                 $('select.js_superedit')
-                  .val({{ super_edit_user.uid }})
+                  .val({{ target_user_dto.uid }})
                   .trigger("chosen:updated")
                   .change(function () {
-                    $.post('/usersession/superedit'
-                      , {uid: $(this).val()}
-                      , function (dat) {
-                        if (dat == '1')
-                          window.location.reload();
-                        else
-                          alert(dat);
-                      }
-                    );
+                    location.href = '/holidays/index/uid/' + $(this).val();
                   });
               });
             </script>
