@@ -35,7 +35,7 @@ class UserDto extends BaseDto
 	 */
 	public $extra;
 
-	public static function importFromDatabase($user_row)
+	public static function importFromDatabase(array $user_row)
 	{
 		$return = new self;
 		if ($user_row) {

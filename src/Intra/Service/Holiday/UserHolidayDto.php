@@ -21,6 +21,7 @@ class UserHolidayDto extends BaseDto
 
 	/**
 	 * @param $request Request
+	 * @param $yearly
 	 * @return UserHolidayDto
 	 */
 	public static function importAddRequest($request, $yearly)

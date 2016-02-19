@@ -55,7 +55,7 @@ class UserModel extends BaseModel
 		return self::cachingGetter(
 			$uids,
 			function () use ($uids) {
-				return self::getDb()->sqlDict(
+				return self::getDb()->sqlDicts(
 					'select * from ? where ?', sqlTable(self::$table), sqlWhere(['uid' => $uids])
 				);
 			}

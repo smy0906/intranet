@@ -18,7 +18,8 @@ if (UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
 }
 
 $user_holiday = new UserHoliday($dto);
-$holiday_raw = UserHolidayDto::importAddRequest($request, $user_holiday->getYearly(strtotime($holiday_raw->date)));
+$yearly = $user_holiday->getYearly(strtotime($request->get('date')));
+$holiday_raw = UserHolidayDto::importAddRequest($request, $yearly);
 
 $db = IntraDb::getGnfDb();
 $db->sqlBegin();
