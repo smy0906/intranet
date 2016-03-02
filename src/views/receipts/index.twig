@@ -21,7 +21,6 @@
         var $name = $('[name=scope]');
         switch (type) {
           case '저녁/휴일 식사비':
-          case '팀런치':
           case '야근교통비':
           case '땀친 지원비':
             $name.val('개인비용').attr('disabled', 'disabled');
@@ -166,8 +165,6 @@
               <select name='type' js_data_chosen>
                 <option value='저녁/휴일 식사비'>
                   저녁/휴일 식사비
-                <option value='팀런치'>
-                  팀런치
                 <option value='야근교통비'>
                   야근교통비
                 <option value='업무차 식음료비'>
