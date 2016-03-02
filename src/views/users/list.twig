@@ -1,0 +1,73 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+  <style>
+    tbody td {
+      text-align: left;
+    }
+    tbody tr.exited_user
+    {
+      display: none;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <table class="table">
+      <colgroup>
+        <col width="20">
+        <col width="*">
+        <col width="80">
+      </colgroup>
+      <thead>
+      <tr>
+        <td>아이디</td>
+        <td>이름</td>
+        <td>이메일</td>
+        <td>팀</td>
+        <td>직급</td>
+        <td>외부전화</td>
+        <td>내선전화</td>
+        <td>휴대폰</td>
+        <td>생일</td>
+        <td>입사일</td>
+        <td>퇴사일</td>
+        <td>사원번호</td>
+        <td>리디북스아이디</td>
+      </tr>
+      </thead>
+      <tbody>
+      {% for user in users %}
+        <tr
+          class="
+          {% if user.off_date != '9999-01-01' %}
+            exited_user
+          {% endif %}
+          "
+        >
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.team }}</td>
+          <td>{{ user.position }}</td>
+          <td>{{ user.outer_call }}</td>
+          <td>{{ user.inner_call }}</td>
+          <td>{{ user.mobile }}</td>
+          <td>{{ user.birth }}</td>
+          <td>{{ user.on_date }}</td>
+          <td>{{ user.off_date }}</td>
+          <td>{{ user.personcode }}</td>
+          <td>{{ user.ridibooks_id }}</td>
+          <td>
+            <a href="/posts/{{ group }}/{{ post.id }}">
+              입사
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}

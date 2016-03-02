@@ -88,7 +88,7 @@ class UserModel extends BaseModel
 
 	public static function getAllRows()
 	{
-		return self::getDb()->sqlDicts('select * from users order by name');
+		return self::getDb()->sqlDicts('select * from users order by off_date desc, on_date');
 	}
 
 	public static function getRowsManager()
