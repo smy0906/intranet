@@ -10,6 +10,7 @@ namespace Intra\Service\Holiday;
 
 use Intra\Model\UserHolidayModel;
 use Intra\Service\User\UserDto;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
@@ -94,7 +95,7 @@ class UserHoliday
 		if ($self->uid == $this->user->uid) {
 			return;
 		}
-		if (!$self->is_admin) {
+		if (!UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
 			throw new \Exception('권한이 없습니다.');
 		}
 	}
