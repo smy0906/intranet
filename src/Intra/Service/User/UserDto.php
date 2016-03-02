@@ -57,17 +57,21 @@ class UserDto extends BaseDto
 	public static function importFromJoinRequest($request)
 	{
 		$return = new self;
-		$ret = [];
 		$keys = ['name', 'email', 'mobile', 'birth'];
 		foreach ($keys as $key) {
-			$ret[$key] = $request->get($key);
+			$return->$key = $request->get($key);
 		}
-		$ret['id'] = preg_replace('/@.+/', '', $ret['email']);
+		$return->id = preg_replace('/@.+/', '', $return->email);
 		return $return;
 	}
 
 	public function exportExtraForDatabase()
 	{
 		return ['extra' => json_encode($this->extra)];
+	}
+
+	public function exportDatabaseForJoin()
+	{
+		return $this->exportAsArrayExceptNull();
 	}
 }

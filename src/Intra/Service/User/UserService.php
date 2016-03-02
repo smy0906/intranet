@@ -131,14 +131,14 @@ class UserService
 		if (!preg_match("/^.+$/", $join_dto->name)) {
 			throw new MsgException('이름을 입력해주세요');
 		}
-		if (!preg_match("/^.+$/", $join_dto->id)) {
-			throw new MsgException('아이디를 입력해주세요');
+		if (!preg_match("/^.+@.+\..+$/", $join_dto->email)) {
+			throw new MsgException('올바른 이메일을 입력해주세요');
 		}
 		if (!preg_match("/^[\w_\.]+$/", $join_dto->id)) {
 			throw new MsgException('아이디는 영문과 숫자, 그리고 _(언더바)와 .(점)만 가능합니다');
 		}
-		if (!preg_match("/^.+@.+\..+$/", $join_dto->email)) {
-			throw new MsgException('올바른 이메일을 입력해주세요');
+		if (!preg_match("/^.+$/", $join_dto->id)) {
+			throw new MsgException('아이디를 입력해주세요');
 		}
 		if (!preg_match("/^\d+\/\d+\/\d+$/", $join_dto->birth) || $join_dto->birth == '0000/00/00') {
 			throw new MsgException('생년월일을 올바르게 입력해주세요');

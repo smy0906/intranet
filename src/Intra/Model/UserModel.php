@@ -12,6 +12,7 @@ use Intra\Core\BaseModel;
 use Intra\Core\MsgException;
 use Intra\Model\Base\DomainCacheModel;
 use Intra\Service\IntraDb;
+use Intra\Service\User\UserDto;
 
 class UserModel extends BaseModel
 {
@@ -20,15 +21,15 @@ class UserModel extends BaseModel
 	static private $table = 'users';
 
 	/**
-	 * @param $userJoinDto
+	 * @param $userJoinDto UserDto
 	 * @return bool
 	 * @throws MsgException
 	 */
 	public static function addUser($userJoinDto)
 	{
-		$array = get_object_vars($userJoinDto);
+		$users_row = $userJoinDto->exportDatabaseForJoin();
 
-		$uid = IntraDb::getGnfDb()->sqlInsert(sqlTable(self::$table), $array);
+		$uid = IntraDb::getGnfDb()->sqlInsert(sqlTable(self::$table), $users_row);
 		if (!$uid) {
 			throw new MsgException('계정 추가가 실패하였습니다');
 		}
