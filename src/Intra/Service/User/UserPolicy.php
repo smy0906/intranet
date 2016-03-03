@@ -40,7 +40,8 @@ class UserPolicy
 	{
 		$user_manager = [
 			'blu',
-			'brian.han'
+			'brian.han',
+			'dayoung.lim',
 		];
 
 		return in_array($self->id, $user_manager);
