@@ -64,7 +64,8 @@
       </colgroup>
       <thead>
       <tr>
-        <td>아이디</td>
+        <td>아이디<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
+                  data-content="TA계정 아이디을 다른 사람이 이어서 쓰는경우, 기존의 TA직원의 ID를 다른것으로 변경 후 가입진행해주세요"></i></td>
         <td>이름<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
                  data-content="이름이 TA로 시작하면 조직도, 전사주간 조회불가"></i></td>
         <td>이메일</td>
@@ -97,7 +98,7 @@
           "
           data-uid="{{ user.uid }}"
         >
-          <td>{{ user.id }}</td>
+          <td data-key="id">{{ user.id }}</td>
           <td data-key="name">{{ user.name }}</td>
           <td data-key="email">{{ user.email }}</td>
           <td data-key="team">{{ user.team }}</td>
