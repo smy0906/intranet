@@ -74,4 +74,13 @@ class UserDto extends BaseDto
 	{
 		return $this->exportAsArrayExceptNull();
 	}
+
+	public function exportForDatabaseOnlyKeys($keys)
+	{
+		$return = [];
+		foreach ($keys as $key) {
+			$return[$key] = $this->$key;
+		}
+		return $return;
+	}
 }

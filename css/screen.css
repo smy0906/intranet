@@ -20,7 +20,7 @@ body {
     text-decoration: underline;
 }
 
-thead td {
+thead > tr > td {
     background-color: #999;
     color: #eee;
     padding: 4px;

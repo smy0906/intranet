@@ -44,6 +44,7 @@ class UserSession
 
 	/**
 	 * @return UserDto
+	 * @deprecated
 	 * "현재 편집중인 유저" or "본인"
 	 */
 	public static function getSupereditUserDto()
@@ -113,15 +114,15 @@ class UserSession
 			return false;
 		}
 
-		$press_manager = [
-			'kimhs',
-			'sanghoon.kim'
-		];
+		return UserPolicy::isPressManager($user);
+	}
 
-		if (in_array($user->id, $press_manager)) {
-			return true;
-		} else {
+	public static function isUserManager()
+	{
+		$user = self::getSelfDto();
+		if ($user === null) {
 			return false;
 		}
+		return UserPolicy::isUserManager($user);
 	}
 }

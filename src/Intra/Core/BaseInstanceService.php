@@ -11,7 +11,7 @@ namespace Intra\Core;
 
 use Exception;
 
-class BaseDtoObject
+class BaseInstanceService
 {
 	protected $dto;
 

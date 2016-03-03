@@ -96,7 +96,7 @@ class UserModel extends BaseModel
 		$where = [];
 		$where['on_date'] = sqlLesserEqual(sqlNow());
 		$where['off_date'] = sqlGreaterEqual(sqlNow());
-		$where['position'] = ['팀장', 'CTO', 'CEO', '부사장'];
+		$where['position'] = ['CEO', '팀장', 'CTO', 'COO', 'CDO'];
 
 		return self::getDb()->sqlDicts('select * from users where ? order by name', sqlWhere($where));
 	}
@@ -107,6 +107,16 @@ class UserModel extends BaseModel
 
 		$where = ['uid' => $uid];
 		self::getDb()->sqlUpdate(self::$table, $extra_update, $where);
+
+		return 1;
+	}
+
+	public static function update($uid, $update)
+	{
+		self::invalidateCache($uid);
+
+		$where = ['uid' => $uid];
+		self::getDb()->sqlUpdate(self::$table, $update, $where);
 
 		return 1;
 	}

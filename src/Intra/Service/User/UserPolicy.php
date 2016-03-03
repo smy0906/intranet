@@ -25,4 +25,24 @@ class UserPolicy
 		}
 		return false;
 	}
+
+	public static function isPressManager($self)
+	{
+		$press_manager = [
+			'kimhs',
+			'sanghoon.kim'
+		];
+
+		return in_array($self->id, $press_manager);
+	}
+
+	public static function isUserManager($self)
+	{
+		$user_manager = [
+			'blu',
+			'brian.han'
+		];
+
+		return in_array($self->id, $user_manager);
+	}
 }

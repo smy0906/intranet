@@ -67,6 +67,10 @@
           <li><a href="/organization/chart" target="_blank">조직도</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          {% if isUserManager %}
+            <li><a href="/users/list"><span class="glyphicon glyphicon-list"></span>
+                회원목록</a></li>
+          {% endif %}
           <li><a href="http://minsoopark.github.io/RIDJ/" target="_blank"><span class="glyphicon glyphicon-cd"></span>
               DJ</a></li>
           <li><a href="http://lunch.ridi.com/" target="_blank"><span class="glyphicon glyphicon-cutlery"></span>

@@ -11,7 +11,7 @@ namespace Intra\Service\Post;
 use Illuminate\Database\Eloquent\Model as EloquentBaseModel;
 use Intra\Core\BaseDto;
 use Intra\Model\PostModel;
-use Intra\Service\User\UserDtoObject;
+use Intra\Service\User\UserInstanceService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -56,7 +56,7 @@ class PostDetailDto extends BaseDto
 	public function exportAsArrayForDetailView()
 	{
 		$return = $this->exportAsArray();
-		$return['name'] = UserDtoObject::importFromDatabaseWithUid($this->uid)->getName();
+		$return['name'] = UserInstanceService::importFromDatabaseWithUid($this->uid)->getName();
 		$return['content_html'] = nl2br($return['content_html']);
 		return $return;
 	}

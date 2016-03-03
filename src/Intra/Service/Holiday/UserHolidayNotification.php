@@ -10,7 +10,7 @@ namespace Intra\Service\Holiday;
 
 use Intra\Config\Config;
 use Intra\Service\User\UserDto;
-use Intra\Service\User\UserDtoObject;
+use Intra\Service\User\UserInstanceService;
 use Intra\Service\User\UserService;
 use Mailgun\Mailgun;
 
@@ -115,7 +115,7 @@ class UserHolidayNotification
 	private function getMailContents()
 	{
 		$holiday_raw = $this->holiday_raws[0];
-		$keeper = UserDtoObject::importFromDatabaseWithUid($holiday_raw->keeper_uid);
+		$keeper = UserInstanceService::importFromDatabaseWithUid($holiday_raw->keeper_uid);
 		if ($keeper === null) {
 			throw new \Exception('$keeper === null');
 		}

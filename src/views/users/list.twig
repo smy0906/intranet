@@ -1,38 +1,85 @@
 {% extends 'ridi.twig' %}
 
 {% block head %}
+  {{ parent() }}
   <style>
     tbody td {
       text-align: left;
     }
-    tbody tr.exited_user
-    {
+
+    tbody td input {
+      height: 20px;
+    }
+
+    tbody tr.js_exited_user {
       display: none;
     }
-  </style>
-{% endblock %}
 
+    tbody tr.js_exited_user td {
+      background: #ddaaaa;
+    }
+
+    tbody tr.joined_user td {
+      background: #ddffdd;
+    }
+
+    .popover-content {
+      color: #333;
+    }
+  </style>
+  <script>
+    $(function () {
+      $('[data-toggle="popover"]').popover(
+        {
+          'trigger': 'hover',
+          placement: 'bottom'
+        });
+      $('tr.user td[data-key]').each(function () {
+        var uid = $(this).parent().data('uid');
+        var key = $(this).data('key');
+        var submitdata = {uid: uid, key: key};
+        var args = {
+          submitdata: submitdata,
+          height: '20px',
+          submit: 'OK',
+          placeholder: '[내용없음]',
+          data: function (value) {
+            return value;
+          }
+        };
+
+        $(this).editable('/users/edit', args);
+      });
+      $(document).on('click', '.js_toggle_exitusers', function () {
+        $('.js_exited_user').toggle();
+      })
+    });
+  </script>
+{% endblock %}
 {% block body %}
   <div class="container-fluid">
     <table class="table">
       <colgroup>
-        <col width="20">
         <col width="*">
-        <col width="80">
       </colgroup>
       <thead>
       <tr>
         <td>아이디</td>
-        <td>이름</td>
+        <td>이름<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
+                 data-content="이름이 TA로 시작하면 조직도, 전사주간 조회불가"></i></td>
         <td>이메일</td>
-        <td>팀</td>
-        <td>직급</td>
+        <td>팀<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
+                data-content="현재 사용않음"></i></td>
+        <td>직급<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
+                 data-content="'CEO', '팀장', 'CTO', 'COO', 'CDO' 중 하나이면 승인자(결제요청 등)으로 지정가능"></i></td>
         <td>외부전화</td>
         <td>내선전화</td>
         <td>휴대폰</td>
         <td>생일</td>
-        <td>입사일</td>
-        <td>퇴사일</td>
+        <td>입사일<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
+                  data-content="입사일이 입력이 되어야 로그인가능"></i></td>
+        <td>퇴사일<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
+                  data-content="퇴사일이 입력되면 해당 날짜 이후 로그인 불가"></i></td>
         <td>사원번호</td>
         <td>리디북스아이디</td>
       </tr>
@@ -41,33 +88,36 @@
       {% for user in users %}
         <tr
           class="
-          {% if user.off_date != '9999-01-01' %}
-            exited_user
+          user
+          {% if user.on_date == '9999-01-01' and user.off_date == '9999-01-01' %}
+            joined_user
+          {% elseif user.off_date != '9999-01-01' %}
+            js_exited_user
           {% endif %}
           "
+          data-uid="{{ user.uid }}"
         >
           <td>{{ user.id }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.team }}</td>
-          <td>{{ user.position }}</td>
-          <td>{{ user.outer_call }}</td>
-          <td>{{ user.inner_call }}</td>
-          <td>{{ user.mobile }}</td>
-          <td>{{ user.birth }}</td>
-          <td>{{ user.on_date }}</td>
-          <td>{{ user.off_date }}</td>
-          <td>{{ user.personcode }}</td>
-          <td>{{ user.ridibooks_id }}</td>
-          <td>
-            <a href="/posts/{{ group }}/{{ post.id }}">
-              입사
-            </a>
-          </td>
+          <td data-key="name">{{ user.name }}</td>
+          <td data-key="email">{{ user.email }}</td>
+          <td data-key="team">{{ user.team }}</td>
+          <td data-key="position">{{ user.position }}</td>
+          <td data-key="outer_call">{{ user.outer_call }}</td>
+          <td data-key="inner_call">{{ user.inner_call }}</td>
+          <td data-key="mobile">{{ user.mobile }}</td>
+          <td data-key="birth">{{ user.birth }}</td>
+          <td data-key="on_date">{{ user.on_date }}</td>
+          <td data-key="off_date">{{ user.off_date }}</td>
+          <td data-key="personcode">{{ user.personcode }}</td>
+          <td data-key="ridibooks_id">{{ user.ridibooks_id }}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table>
   </div>
+
+  <button type="button" class="btn btn-default js_toggle_exitusers">
+    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span> 퇴사자 열고 닫기
+  </button>
 
 {% endblock %}

@@ -56,7 +56,7 @@ class UserService
 			);
 		}
 
-		$user_dto_object = UserDtoObject::importFromDatabaseWithId($id);
+		$user_dto_object = UserInstanceService::importFromDatabaseWithId($id);
 
 		if (!$user_dto_object->isValid()) {
 			throw new MsgException(

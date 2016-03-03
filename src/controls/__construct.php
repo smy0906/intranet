@@ -30,6 +30,7 @@ $response = $this->getResponse();
 $response->add(
 	[
 		'globalDomain' => Config::$domain,
-		'isPressManager' => UserSession::isPressManager()
+		'isPressManager' => UserSession::isPressManager(),
+		'isUserManager' => UserSession::isUserManager(),
 	]
 );

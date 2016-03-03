@@ -11,10 +11,10 @@ namespace Intra\Service\User;
 
 use Exception;
 use Intra\Config\Config;
-use Intra\Core\BaseDtoObject;
+use Intra\Core\BaseInstanceService;
 use Intra\Model\UserModel;
 
-class UserDtoObject extends BaseDtoObject
+class UserInstanceService extends BaseInstanceService
 {
 	/**
 	 * @var UserDto
@@ -23,7 +23,7 @@ class UserDtoObject extends BaseDtoObject
 
 	/**
 	 * @param $id
-	 * @return UserDtoObject
+	 * @return UserInstanceService
 	 * @throws Exception
 	 */
 	public static function importFromDatabaseWithId($id)
@@ -36,7 +36,7 @@ class UserDtoObject extends BaseDtoObject
 
 	/**
 	 * @param $uid
-	 * @return UserDtoObject
+	 * @return UserInstanceService
 	 * @throws Exception
 	 */
 	public static function importFromDatabaseWithUid($uid)
@@ -62,17 +62,6 @@ class UserDtoObject extends BaseDtoObject
 		return $this->dto->name;
 	}
 
-	public function setExtra($key, $value)
-	{
-		if (is_null($value)) {
-			unset($this->dto->extra[$key]);
-		} else {
-			$this->dto->extra[$key] = $value;
-		}
-		$extra_update = $this->dto->exportExtraForDatabase();
-		UserModel::updateExtra($this->dto->uid, $extra_update);
-	}
-
 	public function isSuperAdmin()
 	{
 		return ($this->dto->is_admin == '1');
@@ -96,5 +85,44 @@ class UserDtoObject extends BaseDtoObject
 	public function getUid()
 	{
 		return $this->dto->uid;
+	}
+
+	public function setExtra($key, $value)
+	{
+		if (is_null($value)) {
+			unset($this->dto->extra[$key]);
+		} else {
+			$this->dto->extra[$key] = $value;
+		}
+		$extra_update = $this->dto->exportExtraForDatabase();
+		UserModel::updateExtra($this->dto->uid, $extra_update);
+	}
+
+	public function updateByKey($key, $value)
+	{
+		list($key, $value) = $this->filterUpdate($key, $value);
+		$this->assertUpdate($key, $value);
+		$this->dto->$key = $value;
+		$update = $this->dto->exportForDatabaseOnlyKeys([$key]);
+		UserModel::update($this->dto->uid, $update);
+	}
+
+	private function filterUpdate($key, $value)
+	{
+		$value = trim($value);
+		return [$key, $value];
+	}
+
+	private function assertUpdate($key, $value)
+	{
+		if (in_array($key, ['on_date', 'off_date', 'birth'])) {
+			$time = strtotime($value);
+			if ($time === false) {
+				throw new Exception("날짜형식이 틀렸습니다.");
+			}
+		}
+		if (!UserSession::isUserManager()) {
+			throw new Exception("권한이 없습니다");
+		}
 	}
 }

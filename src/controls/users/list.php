@@ -4,8 +4,7 @@
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
-$self = UserSession::getSelfDto();
-if (!$self->is_admin) {
+if (!UserSession::isUserManager()) {
 	return '권한이 없습니다';
 }
 
