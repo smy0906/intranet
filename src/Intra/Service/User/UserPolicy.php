@@ -40,7 +40,7 @@ class UserPolicy
 	{
 		$user_manager = [
 			'blu',
-			'brian.han',
+			'm.kwon',
 			'dayoung.lim',
 		];
 
