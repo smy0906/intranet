@@ -263,7 +263,6 @@ class UserPayment
 	{
 		$receivers[] = '***REMOVED***';
 		$receivers[] = '***REMOVED***';
-		$receivers[] = '***REMOVED***';
 
 		$mg = new Mailgun("***REMOVED***");
 		$domain = "ridibooks.com";
