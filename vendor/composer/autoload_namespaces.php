@@ -16,5 +16,4 @@ return array(
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'Gnf' => array($vendorDir . '/gnf/gnfdb/lib'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
-    'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
 );

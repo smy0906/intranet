@@ -1,7 +1,7 @@
 {
   "require": {
-    "gnf/gnfcache": "dev-master",
-    "gnf/gnfdb": "dev-master",
+    "gnf/gnfcache": "~0.1",
+    "gnf/gnfdb": "~0.1",
     "mailgun/mailgun-php": "~1.7.2",
     "phpoffice/phpexcel": "~1.8",
     "symfony/http-foundation": ">=2.4,<2.6-dev",
