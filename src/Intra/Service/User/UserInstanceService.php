@@ -48,10 +48,12 @@ class UserInstanceService extends BaseInstanceService
 
 	public function isValid()
 	{
-		if ($this->dto->on_date == '9999-01-01') {
+		$is_safe_ondate = ($this->dto->on_date == '9999-01-01');
+		if ($is_safe_ondate) {
 			return false;
 		}
-		if (strtotime($this->dto->off_date) < time()) {
+		$is_safe_offdate = ($this->dto->off_date != '9999-01-01' && strtotime($this->dto->off_date) < time());
+		if ($is_safe_offdate) {
 			return false;
 		}
 		return true;
