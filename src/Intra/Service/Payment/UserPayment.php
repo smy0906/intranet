@@ -5,84 +5,26 @@ use Intra\Model\UserPaymentModel;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
-use Mailgun\Mailgun;
 
 class UserPayment
 {
-	private $const;
 	private $user_payment_model;
 	/**
 	 * @var UserDto
 	 */
 	private $user;
 
-	public static function parseMonth($month)
-	{
-		if ($month == null) {
-			$month = date('Y-m');
-		} else {
-			$month = date('Y-m', strtotime($month));
-		}
-		return $month;
-	}
-
 	public function __construct(UserDto $user)
 	{
 		$this->user = $user;
 
 		$this->user_payment_model = new UserPaymentModel();
-
-		$const = [];
-		$const['teams'] = [
-			'스토어팀',
-			'뷰어팀',
-			'플랫폼팀',
-			'제작팀',
-			'데이터팀',
-			'UI팀',
-			'콘텐츠디자인팀',
-			'브랜드디자인팀',
-			'제휴관리팀',
-			'서점운영팀',
-			'운영지원팀',
-			'CC/PQ팀',
-			'디바이스그룹',
-			'홍보팀',
-			'재무팀',
-			'인사팀',
-			'CRM팀',
-			'스튜디오 D',
-			'공통'
-		];
-		$const['products'] = ['리디북스', '페이퍼샵', '공통'];
-		$const['taxs'] = ['Y', 'N', 'N/A'];
-		$const['paytypes'] = ['현금', '법인카드', '연구비계좌'];
-		$const['statuses'] = ['결제 대기중', '결제 완료'];
-		$const['categorys'] = [
-			'상품매입 (페이퍼샵 판매용 상품 매입 비용)',
-			'운반비 (택배, 퀵서비스 이용대금)',
-			'잡급 (로맨스, 판무 가이드 알바 급여)',
-			'복리후생비',
-			'소모품비 (페이퍼샵 판매를 위한 포장자재, 기타 소모품)',
-			'자산(PC, 공사대금 등)',
-			'도서구입 및 인쇄비 (쿠폰, 상품권, 명함등 인쇄, 도서구입비)',
-			'저작권료 (콘텐츠 매절 (마케팅용X))',
-			'광고선전비',
-			'지급수수료',
-			'저작권료 (마케팅용 콘텐츠 매절)',
-			'콘텐츠 지원금',
-		];
-		if (UserSession::getSelfDto()->is_admin) {
-			$const['categorys'][] = '기타';
-		}
-		$const['pay_dates'] = ['선택해주세요', '7일', '10일', '25일', '월말일', '긴급'];
-		$this->const = $const;
 	}
 
-	public function index($month)
+	public function index($month, $is_type_remain_only)
 	{
 		$return = [];
-		$return['user'] = UserSession::getSupereditUserDto();
+		$return['user'] = $this->user;
 		$uid = $this->user->uid;
 
 		$prevmonth = date('Y-m', strtotime('-1 month', strtotime($month)));
@@ -94,12 +36,17 @@ class UserPayment
 		$return['todayMonth'] = date('Y-m');
 		$return['todayDate'] = date('Y-m-d');
 
-		$payments = $this->user_payment_model->getPayments($uid, $month);
-		$return['payments'] = $this->filterPayements($payments);
 		$return['queuedPayments'] = $this->user_payment_model->queuedPayments();
 		$return['todayQueuedCount'] = $this->user_payment_model->todayQueuedCount();
 		$return['todayQueuedCost'] = $this->user_payment_model->todayQueuedCost();
 		$return['currentUid'] = $this->user->uid;
+
+		if ($is_type_remain_only) {
+			$payments = $return['queuedPayments'];
+		} else {
+			$payments = $this->user_payment_model->getPayments($uid, $month);
+		}
+		$return['payments'] = $this->filterPayments($payments);
 
 		if ($this->isSuperAdmin()) {
 			$return['isSuperAdmin'] = 1;
@@ -109,9 +56,22 @@ class UserPayment
 		$return['allCurrentUsers'] = UserService::getAvailableUserDtos();
 		$return['allUsers'] = UserService::getAllUserDtos();
 
-		$return['const'] = $this->const;
+		$return['const'] = UserPaymentConst::get();
 
 		return $return;
+	}
+
+	/**
+	 * @param $payments
+	 * @return mixed
+	 */
+	private function filterPayments($payments)
+	{
+		foreach ($payments as $k => $payment) {
+			$payment['manager_name'] = UserService::getNameByUidSafe($payment['manager_uid']);
+			$payments[$k] = $payment;
+		}
+		return $payments;
 	}
 
 	public function add($request_args)
@@ -124,98 +84,9 @@ class UserPayment
 			throw new \Exception('자료추가 실패했습니다');
 		}
 
-		$this->sendMail('결제요청', $insert_id);
+		UserPaymentMail::sendMail('결제요청', $insert_id);
 
 		return 1;
-	}
-
-	public function getConstValueByKey($key)
-	{
-		if ($key == 'manager_uid') {
-			$ret = [];
-			foreach (UserService::getAvailableUserDtos() as $user) {
-				$ret[$user->uid] = $user->name;
-			}
-			return json_encode($ret);
-		}
-		$plural_key = $this->getPluralKey($key);
-		if (!is_array($this->const[$plural_key])) {
-			return null;
-		}
-		$ret = [];
-		foreach ($this->const[$plural_key] as $v) {
-			$ret[$v] = $v;
-		}
-		return json_encode($ret);
-	}
-
-	/**
-	 * @param $key
-	 * @return string
-	 */
-	private function getPluralKey($key)
-	{
-		if (substr($key, -1) == 's') {
-			return $key . 'es';
-		} else {
-			return $key . 's';
-		}
-	}
-
-	public function del($paymentid)
-	{
-		$uid = $this->user->uid;
-		$res = $this->user_payment_model->del($paymentid, $uid);
-		if ($res) {
-			return 1;
-		}
-		return '삭제가 실패했습니다!';
-	}
-
-	public function edit($paymentid, $key, $new_value)
-	{
-		$uid = $this->user->uid;
-
-		$old_value = $this->user_payment_model->getValueByKey($paymentid, $uid, $key);
-		if (!$this->assertEdit($key, $old_value, $new_value)) {
-			return $old_value;
-		}
-
-		$this->user_payment_model->update($paymentid, $uid, $key, $new_value);
-		$updated_value = $this->user_payment_model->getValueByKey($paymentid, $uid, $key);
-
-		if ($key == 'status') {
-			if ($updated_value == '결제 완료') {
-				$type = '결제완료';
-				$this->sendMail($type, $paymentid);
-			}
-		} elseif ($key == 'price') {
-			return number_format($updated_value) . ' 원';
-		} elseif ($key == 'manager_uid') {
-			$user_name = UserService::getNameByUidSafe($updated_value);
-			if ($user_name === null) {
-				return 'error';
-			}
-			return $user_name;
-		}
-		return $updated_value;
-	}
-
-	public function getPayDateByStr($pay_type_str)
-	{
-		if ($pay_type_str == '7일' || $pay_type_str == '10일' || $pay_type_str == '25일') {
-			$dest_day = preg_replace('/\D/', '', $pay_type_str);
-			$cur_date = time();
-			while (date('d', $cur_date) != $dest_day) {
-				$cur_date = strtotime('next day', $cur_date);
-			}
-			return date('Y-m-d', $cur_date);
-		}
-		if ($pay_type_str == '월말일') {
-			$cur_date = strtotime('last day of this month');
-			return date('Y-m-d', $cur_date);
-		}
-		return '';
 	}
 
 	/**
@@ -230,97 +101,6 @@ class UserPayment
 		if (!strtotime($request_args['pay_date'])) {
 			throw new \Exception('결제(예정)일을 다시 입력해주세요');
 		}
-	}
-
-	private function assertEdit($key, $old_value, $new_value)
-	{
-		if ($key == 'date') {
-			//날짜를 변경할때 다른 월로는 변경불가
-			$month_new = date('Ym', strtotime($new_value));
-			$month_old = date('Ym', strtotime($old_value));
-			if ($month_new != $month_old) {
-				return false;
-			}
-		}
-
-		if (!$this->isSuperAdmin()) {
-			return false;
-		}
-		return true;
-	}
-
-	private function sendMail($type, $insert_id)
-	{
-		$row = $this->user_payment_model->getPayment($insert_id);
-		list($title, $text, $receivers) = $this->getMailContents($type, $row);
-		$this->sendMailRaw($receivers, $title, $text);
-	}
-
-	/**
-	 * @param $receivers
-	 * @param $title
-	 * @param $text
-	 */
-	private function sendMailRaw($receivers, $title, $text)
-	{
-		$receivers[] = '***REMOVED***';
-		$receivers[] = '***REMOVED***';
-
-		$mg = new Mailgun("***REMOVED***");
-		$domain = "ridibooks.com";
-		$mg->sendMessage(
-			$domain,
-			[
-				'from' => 'noreply@ridibooks.com',
-				'to' => implode(', ', $receivers),
-				'subject' => $title,
-				'text' => $text
-			]
-		);
-	}
-
-	/**
-	 * @param $payments
-	 * @return mixed
-	 */
-	private function filterPayements($payments)
-	{
-		foreach ($payments as $k => $payment) {
-			$payment['manager_name'] = UserService::getNameByUidSafe($payment['manager_uid']);
-			$payments[$k] = $payment;
-		}
-		return $payments;
-	}
-
-	/**
-	 * @param $type
-	 * @param $row
-	 * @return array
-	 */
-	private function getMailContents($type, $row)
-	{
-		$name = UserService::getNameByUidSafe($row['uid']);
-		$title = "[{$type}][{$row['team']}][{$row['month']}] {$name}님의 요청, {$row['category']}";
-		$text = "요청일 : {$row['request_date']}
-요청자 : {$name}
-분류 : {$row['team']} / {$row['product']}
-내용 : {$row['category']}
-상세내용 : {$row['desc']}
-금액 : {$row['price']}
-결제예정일 : {$row['pay_date']}";
-		$receivers = [
-			UserService::getEmailByUidSafe($row['uid']),
-			UserService::getEmailByUidSafe($row['manager_uid'])
-		];
-		return [$title, $text, $receivers];
-	}
-
-	/**
-	 * @return bool
-	 */
-	private function isSuperAdmin()
-	{
-		return UserSession::getSelfDto()->is_admin;
 	}
 
 	/**
@@ -345,5 +125,27 @@ class UserPayment
 			unset($request_args['paytype']);
 		}
 		return $request_args;
+	}
+
+	public function getRow($paymentid)
+	{
+		if ($this->user->is_admin) {
+			$payment = $this->user_payment_model->getPaymentWithoutUid($paymentid);
+		} else {
+			$payment = $this->user_payment_model->getPayment($paymentid, $this->user->uid);
+		}
+		if (!$payment) {
+			throw new \Exception('invalid paymentid request');
+		}
+		$paymentid = $payment['paymentid'];
+		return new UserPaymentRow($paymentid);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isSuperAdmin()
+	{
+		return UserSession::getSelfDto()->is_admin;
 	}
 }

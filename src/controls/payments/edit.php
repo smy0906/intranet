@@ -9,5 +9,6 @@ $paymentid = $request->get('paymentid');
 $key = $request->get('key');
 $value = $request->get('value');
 
-$payment_service = new UserPayment(UserSession::getSupereditUserDto());
-return $payment_service->edit($paymentid, $key, $value);
+$payment_service = new UserPayment(UserSession::getSelfDto());
+$row = $payment_service->getRow($paymentid); 
+return $row->edit($key, $value);

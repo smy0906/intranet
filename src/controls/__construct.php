@@ -32,5 +32,6 @@ $response->add(
 		'globalDomain' => Config::$domain,
 		'isPressManager' => UserSession::isPressManager(),
 		'isUserManager' => UserSession::isUserManager(),
+		'sentryPublicKey' => Config::$sentry_public_key,
 	]
 );

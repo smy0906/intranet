@@ -28,7 +28,7 @@
     }
   </style>
   <script>
-    $(function () {
+    require(["jquery", "jquery.jeditable", "bootstrap"], function ($) {
       $('[data-toggle="popover"]').popover(
         {
           'trigger': 'hover',

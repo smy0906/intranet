@@ -60,7 +60,6 @@ $yearly = $year - $joinYear;
 return [
 	'target_user_dto' => $target_user_dto,
 	'today' => $today,
-	'month' => $month,
 	'holidays' => $holidays,
 	'year' => $year,
 	'yearly' => $yearly,

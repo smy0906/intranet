@@ -5,7 +5,7 @@
   <script>
     var edited = false;
     var currentUid = '{{ currentUid }}';
-    $(function () {
+    require(["jquery", "jquery.jeditable"], function ($) {
       $('.sampleInput').one('click', function () {
         $(this).val('');
       });

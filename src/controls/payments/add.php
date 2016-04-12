@@ -2,9 +2,12 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\Payment\UserPayment;
+use Intra\Service\User\UserInstanceService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
+$self = UserSession::getSelfDto();
+
 $request_args = [
 	'month' => $request->get('month'),
 	'manager_uid' => $request->get('manager_uid'),
@@ -24,5 +27,14 @@ $request_args = [
 	'status' => $request->get('status'),
 ];
 
-$payment_service = new UserPayment(UserSession::getSupereditUserDto());
+$uid = $request->get('uid');
+if (!intval($uid)) {
+	$uid = $self->uid;
+}
+var_dump($request->files->all());
+
+$user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
+$target_user_dto = $user_dto_object->exportDto();
+
+$payment_service = new UserPayment($target_user_dto);
 return $payment_service->add($request_args);

@@ -2,7 +2,13 @@
   var edited = false;
   var uid = {{ target_user_dto.uid }};
 
-  $(function () {
+  require(["jquery", "jquery.jeditable", "bootstrap"], function ($) {
+    $('select.js_superedit')
+      .val({{ target_user_dto.uid }})
+      .trigger("chosen:updated")
+      .change(function () {
+        location.href = '/holidays/uid/' + $(this).val();
+      });
     $("input").on("keypress", function (e) {
       return e.which != 13;
     });
@@ -35,7 +41,7 @@
       var holidayid = $(this).parent().data('holidayid');
       var key = $(this).data('key');
       var submitdata = {holidayid: holidayid, key: key};
-      var args = {submitdata: submitdata};
+      var args = {submitdata: submitdata, method: 'PUT'};
 
       var isSelectInput = ($(this).data('keyselect') != undefined);
       if (isSelectInput) {
@@ -44,7 +50,7 @@
         args['submit'] = "OK";
       }
 
-      $(this).editable('/holidays/uid/' + uid + '/edit', args);
+      $(this).editable('/holidays/uid/' + uid, args);
     });
     {% endif %}
   });

@@ -3,9 +3,7 @@
 {% block head %}
   {{ parent() }}
   <script>
-    var edited = false;
-
-    $(function () {
+    require(["jquery", "jquery.jeditable"], function ($) {
       $("input").on("keypress", function (e) {
         return e.which != 13;
       });
@@ -67,23 +65,25 @@
         $('.js_payment_check').prop('checked', $checked);
       });
       $('.js_edit_all').change(function () {
-        var url = '/payments/edit';
-        var $this = $(this);
-        var key = $this.data('key');
-        var value = $this.val();
-        $this.val(0);
+        var select_button = $(this);
+        var key = select_button.data('key');
+        var value = select_button.val();
+        select_button.val(0);
+
         var checkboxes = $('.js_payment_check:checked');
         var checkbox_count = checkboxes.length;
         checkboxes.each(function () {
-          var $check = $(this);
-          var paymentid = $check.data('paymentid');
-          var arg = {paymentid: paymentid, key: key, value: value};
-          //alert(url,arg);
-          //console.debug(arg);
-          $.post(url, arg, function () {
-            checkbox_count--;
-            if (checkbox_count == 0)
-              location.reload();
+          var row = $(this);
+          var paymentid = row.data('paymentid');
+          var arg = {key: key, value: value};
+          $.ajax('/payments/paymentid/' + paymentid, {
+            method: 'put',
+            data: arg,
+            success: function () {
+              checkbox_count--;
+              if (checkbox_count == 0)
+                location.reload();
+            }
           });
         });
       });
@@ -92,41 +92,32 @@
       $('.payment td[data-key]').each(function () {
         var paymentid = $(this).parent().data('paymentid');
         var key = $(this).data('key');
-        var keyselect = $(this).data('keyselect') != undefined;
-        var submitdata = {paymentid: paymentid, key: key};
-        var args = {submitdata: submitdata};
+        var is_keyselect = ($(this).data('keyselect') != undefined);
+        var submitdata = {key: key};
+        var args = {submitdata: submitdata, method: 'PUT'};
 
         if (key == 'price') {
           args['data'] = function (value, settings) {
             return value.replace(/\D/gi, '');
           };
         }
-        else {
-          args['data'] = function (value) {
-            edited = true;
-            return value;
-          };
-        }
-        if (keyselect) {
+
+        if (is_keyselect) {
           args['type'] = 'select';
           args['loadurl'] = '/payments/const/' + key;
           args['submit'] = "OK";
         }
 
-        $(this).editable('/payments/edit', args);
+        $(this).editable('/payments/paymentid/' + paymentid, args);
       });
       {% endif %}
+
       $('select[name=js_super_edit]')
+        .val({{ currentUid }})
+        .trigger("chosen:updated")
         .change(function () {
-          $.post('/usersession/superedit', {uid: $(this).val()}, function (dat) {
-              if (dat == '1')
-                window.location.reload();
-              else
-                alert(dat);
-            }
-          );
-        })
-        .val({{ currentUid }});
+          location.href = '/payments/uid/' + $(this).val();
+        });
       var js_recipts_title = $('.js_recipts_title');
       js_recipts_title.text($("select[name=js_super_edit]:first option:selected").text());
     });
@@ -151,7 +142,7 @@
 {% block body %}
   <form
     attrajax
-    data-aa-url='/payments/add'
+    data-aa-url='/payments/uid/{{ currentUid }}'
     data-aa-method='post'
     data-aa-success-if-result-is="1"
     data-aa-datatype="text"
@@ -172,23 +163,23 @@
         </td>
       </tr>
       <tr>
-        <td colspan='19'>
+        <td colspan='20'>
           <span>[{{ month }}] 결제요청 (<span class='js_recipts_title'>{{ user.name }}</span>)</span>
 				<span>
-					<a href='/payments/index/{{ prevmonth }}' class='paymentsCommand'>전달</a>
-					<a href='/payments/index/{{ nextmonth }}' class='paymentsCommand'>다음달</a>
+					<a href='/payments/uid/{{ currentUid }}/month/{{ prevmonth }}' class='paymentsCommand'>전달</a>
+					<a href='/payments/uid/{{ currentUid }}/month/{{ nextmonth }}' class='paymentsCommand'>다음달</a>
 				</span>
         </td>
       </tr>
       <tr>
         <td colspan="3" rowspan="2">자동입력</td>
-        <td colspan="13">업무부서 입력</td>
+        <td colspan="14">업무부서 입력</td>
         <td colspan="2" rowspan="2">CO팀 입력</td>
         <td rowspan="2"></td>
       </tr>
       <tr>
         <td colspan="5">기본정보</td>
-        <td colspan="7">결제정보</td>
+        <td colspan="8">결제정보</td>
         <td colspan="1"></td>
       </tr>
       <tr>
@@ -208,6 +199,7 @@
         <td>결제(예정)일</td>
         <td>세금계산서수취여부</td>
         <td>비고</td>
+        <td>파일</td>
         <td>결제수단</td>
         <td>상태</td>
         <td></td>
@@ -240,6 +232,7 @@
           <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
           <td data-key='tax' data-keyselect>{{ payment.tax }}</td>
           <td data-key='note'>{{ payment.note }}</td>
+          <td>{{ payment.files }}</td>
           {% if isSuperAdmin %}
             <td data-key='paytype' data-keyselect>{{ payment.paytype }}</td>
             <td data-key='status' data-keyselect>{{ payment.status }}</td>
@@ -251,7 +244,8 @@
             {% if editable %}
               <input type='button' value='삭제'
                      attrajax
-                     data-aa-url='/payments/del/{{ payment.paymentid }}'
+                     data-aa-url='/payments/paymentid/{{ payment.paymentid }}'
+                     data-aa-method='DELETE'
                      data-aa-confirm='정말 삭제하시겠습니까?'
                      data-aa-datatype="text"
                      data-aa-success-if-result-is="1"
@@ -335,6 +329,7 @@
           </label>
         </td>
         <td><input type='text' name='note' placeholder='비고'/></td>
+        <td><input type="file" name="files[]" multiple="multiple"></td>
         <td>
           {% if isSuperAdmin %}
             <label>
@@ -460,6 +455,14 @@ B. 결제정보
           </td>
           <td>
             {{ todayQueuedCost }} 원 ({{ todayQueuedCount }}건)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            미결재건 모음
+          </td>
+          <td>
+            <a href="/payments/remain">이동하기</a>
           </td>
         </tr>
       </table>

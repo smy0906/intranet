@@ -78,4 +78,10 @@ class ControlRouteMatch
 		}
 		return new ControlRouteNull;
 	}
+
+	public function setRequest($key, $value)
+	{
+		$this->request->attributes->set($key, $value);
+		return $this;
+	}
 }

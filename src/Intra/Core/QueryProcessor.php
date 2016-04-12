@@ -40,6 +40,7 @@ class QueryProcessor
 	{
 		if ($request === null) {
 			$request = Request::createFromGlobals();
+			$request->enableHttpMethodParameterOverride();
 		}
 		$query = $request->getPathInfo();
 		$response = new TwigResponse;

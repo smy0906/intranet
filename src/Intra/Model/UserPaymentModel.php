@@ -18,7 +18,7 @@ class UserPaymentModel
 		$where = [
 			'payments.uid' => $uid,
 			sqlOr(
-				['status' => '결제 대기중'],
+				['status' => ['결제 대기중']],
 				['request_date' => sqlRange($month . '-1', $nextmonth . '-1')]
 			)
 		];
@@ -33,11 +33,11 @@ class UserPaymentModel
 	public function queuedPayments()
 	{
 		$where = [
-			'status' => "결제 대기중"
+			'status' => ["결제 대기중"]
 		];
 
 		return $this->db->sqlDicts(
-			'select payments.uid, pay_date, users.name from payments left join users on payments.uid = users.uid where ? order by `pay_date` asc, paymentid asc',
+			'select payments.*, users.name from payments left join users on payments.uid = users.uid where ? order by `pay_date` asc, paymentid asc',
 			sqlWhere($where)
 		);
 	}
@@ -59,7 +59,7 @@ class UserPaymentModel
 	private function getTodayQueuedWhere()
 	{
 		return [
-			'status' => "결제 대기중",
+			'status' => ["결제 대기중"],
 			'pay_date' => sqlRange(
 				date('Y/m/d'),
 				date('Y/m/d', strtotime('+1 day'))
@@ -95,25 +95,31 @@ class UserPaymentModel
 		);
 	}
 
-	public function del($paymentid, $uid)
+	public function del($paymentid)
 	{
-		return $this->db->sqlDelete('payments', compact('paymentid', 'uid'));
+		return $this->db->sqlDelete('payments', compact('paymentid'));
 	}
 
-	public function update($paymentid, $uid, $key, $value)
+	public function update($paymentid, $key, $value)
 	{
 		$update = [$key => $value];
-		$where = compact('paymentid', 'uid');
+		$where = compact('paymentid');
 		$this->db->sqlUpdate('payments', $update, $where);
 	}
 
-	public function getValueByKey($paymentid, $uid, $key)
+	public function getValueByKey($paymentid, $key)
 	{
-		$where = compact('paymentid', 'uid');
+		$where = compact('paymentid');
 		return $this->db->sqlData('select ? from payments where ?', sqlColumn($key), sqlWhere($where));
 	}
 
-	public function getPayment($paymentid)
+	public function getPayment($paymentid, $uid)
+	{
+		$where = compact('paymentid', 'uid');
+		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));
+	}
+
+	public function getPaymentWithoutUid($paymentid)
 	{
 		$where = compact('paymentid');
 		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));

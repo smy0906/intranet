@@ -1,0 +1,21 @@
+{
+  "name": "ridi-intra",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "bower_components"
+  ],
+  "dependencies": {
+    "jquery": "~2.1",
+    "jquery-form": "~3",
+    "jquery-number": "~2",
+    "jquery.jeditable": "https://github.com/tuupola/jquery_jeditable.git",
+    "jquery.tmpl": "https://github.com/BorisMoore/jquery-tmpl.git",
+    "jquery.attrajax": "https://github.com/genesos/AttrAjax.git"
+  }
+}

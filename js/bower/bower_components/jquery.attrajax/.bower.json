@@ -1,0 +1,22 @@
+{
+  "name": "jquery.attrajax",
+  "main": "jquery.attrajax.js",
+  "author": "genesos",
+  "dependencies": {
+    "jquery": ">=1.5",
+    "jquery-form": "~3"
+  },
+  "ignore": [
+    "README.md"
+  ],
+  "homepage": "https://github.com/genesos/AttrAjax",
+  "_release": "48570fa969",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "48570fa9690477bd6c76ba3b03ae8ada4e9cd955"
+  },
+  "_source": "https://github.com/genesos/AttrAjax.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/genesos/AttrAjax.git"
+}
