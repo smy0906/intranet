@@ -47,10 +47,10 @@ trait DomainCacheModel
 
 	private static function cacheInit($class)
 	{
-		if (!is_array(self::$cacheHashesByKey[$class])) {
+		if (!isset(self::$cacheHashesByKey[$class]) || !is_array(self::$cacheHashesByKey[$class])) {
 			self::$cacheHashesByKey[$class] = [];
 		}
-		if (!is_array(self::$cache[$class])) {
+		if (!isset(self::$cache[$class]) || !is_array(self::$cache[$class])) {
 			self::$cache[$class] = [];
 		}
 	}
