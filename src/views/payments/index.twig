@@ -149,7 +149,6 @@
     data-aa-onsuccess-msg="추가되었습니다"
     data-aa-onsuccess="refresh"
     data-aa-onfail-alert="true"
-    onsubmit="$('[name=scope]').removeAttr('disabled');"
   >
 
     <div class='paymentsInfo'>
@@ -329,7 +328,7 @@
           </label>
         </td>
         <td><input type='text' name='note' placeholder='비고'/></td>
-        <td><input type="file" name="files[]" multiple="multiple"></td>
+        <td></td>
         <td>
           {% if isSuperAdmin %}
             <label>

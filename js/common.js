@@ -1,4 +1,4 @@
-require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie"], function ($) {
+require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie", "jquery-form"], function ($) {
     $(function () {
         $('*[attrajax]').attrAjax();
         $('input[js_number_format]').number(true);

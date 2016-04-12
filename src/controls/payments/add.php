@@ -31,7 +31,6 @@ $uid = $request->get('uid');
 if (!intval($uid)) {
 	$uid = $self->uid;
 }
-var_dump($request->files->all());
 
 $user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
 $target_user_dto = $user_dto_object->exportDto();

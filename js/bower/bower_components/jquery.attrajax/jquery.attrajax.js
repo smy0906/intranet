@@ -224,6 +224,7 @@
                         $(options["data-aa-result-to"]).empty();
                     }
                     var ajax_param = {
+                        url: options["data-aa-url"],
                         type: options["data-aa-method"],
                         dataType: options["data-aa-datatype"],
                         data: param,
@@ -340,8 +341,9 @@
                             alert(xhr.responseText);
                         }
                     };
-                    if (is_form && $.ajaxSubmit)
+                    if (is_form && $.ajaxSubmit) {
                         $.ajaxSubmit(ajax_param);
+                    }
                     else {
                         if (options["data-aa-url"] === null)
                             ajax_param['url'] = window.location.pathname;
