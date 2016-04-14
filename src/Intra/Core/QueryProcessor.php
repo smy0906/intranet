@@ -36,35 +36,6 @@ class QueryProcessor
 		$this->response = $response;
 	}
 
-	public static function run($control_dir, $view_dir, $request = null)
-	{
-		if ($request === null) {
-			$request = Request::createFromGlobals();
-			$request->enableHttpMethodParameterOverride();
-		}
-		$query = $request->getPathInfo();
-		$response = new TwigResponse;
-
-		$control = new QueryProcessor($control_dir, $query, $request, $response);
-		$return_by_controler = $control->__act();
-		if ($return_by_controler === false) {
-			return false;
-			#throw new Exception('control action error');
-		}
-		if (!is_array($return_by_controler)) {
-			exit((string)$return_by_controler);
-		}
-		$return_by_controler = array_merge($response->get(), $return_by_controler);
-
-		$view = new View($view_dir, $control->getRoutedQuery());
-		if (!$view->isExist()) {
-			throw new \Exception('no view');
-		}
-		$view->act($return_by_controler);
-
-		return true;
-	}
-
 	/**
 	 * @return bool|mixed|string
 	 * @throws \Exception

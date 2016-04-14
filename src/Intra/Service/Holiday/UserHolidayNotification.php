@@ -66,8 +66,16 @@ class UserHolidayNotification
 	 */
 	private function sendMailNotification($title)
 	{
-		$emails = $this->getMailReceivers();
+		$receivers = $this->getMailReceivers();
 		$contents = $this->getMailContents();
+
+		if (Config::$is_dev) {
+			if (strlen(Config::$test_mail)) {
+				$receivers = [Config::$test_mail];
+			} else {
+				return true;
+			}
+		}
 
 		$mg = new Mailgun("***REMOVED***");
 		$domain = "ridibooks.com";
@@ -75,7 +83,7 @@ class UserHolidayNotification
 			$domain,
 			[
 				'from' => 'noreply@ridibooks.com',
-				'to' => implode(', ', $emails),
+				'to' => implode(', ', $receivers),
 				'subject' => $title,
 				'text' => $contents
 			]

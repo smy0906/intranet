@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Model\UserHolidayModel;
+use Intra\Model\HolidayModel;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
 use Intra\Service\User\UserInstanceService;
@@ -41,7 +41,7 @@ $yearly = $year - $joinYear;
 //main
 {
 	$today = date('Y-m-d');
-	$holidayConst = UserHolidayModel::$const;
+	$holidayConst = HolidayModel::$const;
 	$yearPrev = $year - 1;
 	$yearNext = $year + 1;
 	$yearlyFrom = date('Y-m-d', $user_holiday_policy->getYearlyBeginTimestamp($yearly));

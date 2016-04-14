@@ -4,7 +4,7 @@ namespace Intra\Model;
 
 use Intra\Service\IntraDb;
 
-class UserPaymentModel
+class PaymentModel
 {
 	public function __construct()
 	{
@@ -15,6 +15,9 @@ class UserPaymentModel
 	{
 		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
 
+		$table = [
+			'payments.uid' => 'users.uid'
+		];
 		$where = [
 			'payments.uid' => $uid,
 			sqlOr(
@@ -23,21 +26,47 @@ class UserPaymentModel
 			)
 		];
 
-		#payments.uid = ? and (status = "결제 대기중" or (str_to_date(?, "%Y-%m-%d") <= `request_date` and `request_date` < str_to_date(?, "%Y-%m-%d")))
 		return $this->db->sqlDicts(
-			'select payments.*, users.name from payments left join users on payments.uid = users.uid where ? order by `request_date` asc, paymentid asc',
+			'select payments.*, users.name from ? where ? order by `request_date` asc, paymentid asc',
+			sqlLeftJoin($table),
 			sqlWhere($where)
 		);
 	}
 
 	public function queuedPayments()
 	{
+		$table = [
+			'payments.uid' => 'users.uid'
+		];
 		$where = [
 			'status' => ["결제 대기중"]
 		];
 
 		return $this->db->sqlDicts(
-			'select payments.*, users.name from payments left join users on payments.uid = users.uid where ? order by `pay_date` asc, paymentid asc',
+			'select payments.*, users.name from ? where ? order by `pay_date` asc, paymentid asc',
+			sqlLeftJoin($table),
+			sqlWhere($where)
+		);
+	}
+
+	public function queuedPaymentsByManager($uid)
+	{
+		$table = [
+			'payments.uid' => 'users.uid',
+			'payments.paymentid' => [
+				'payment_accept.paymentid',
+				'payment_accept.user_type' => 'manager',
+			],
+		];
+		$where = [
+			'status' => ["결제 대기중"],
+			'payments.manager_uid' => $uid,
+			'payment_accept.paymentid' => null,
+		];
+
+		return $this->db->sqlDicts(
+			'select payments.*, users.name from ? where ? order by `pay_date` asc, paymentid asc',
+			sqlLeftJoin($table),
 			sqlWhere($where)
 		);
 	}
@@ -74,9 +103,9 @@ class UserPaymentModel
 		return $this->db->sqlCount('payments', $where);
 	}
 
-	public function add($request_args)
+	public function add($payment_insert)
 	{
-		$this->db->sqlInsert('payments', $request_args);
+		$this->db->sqlInsert('payments', $payment_insert);
 		return $this->db->insert_id();
 	}
 
@@ -105,12 +134,6 @@ class UserPaymentModel
 		$update = [$key => $value];
 		$where = compact('paymentid');
 		$this->db->sqlUpdate('payments', $update, $where);
-	}
-
-	public function getValueByKey($paymentid, $key)
-	{
-		$where = compact('paymentid');
-		return $this->db->sqlData('select ? from payments where ?', sqlColumn($key), sqlWhere($where));
 	}
 
 	public function getPayment($paymentid, $uid)

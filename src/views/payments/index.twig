@@ -162,34 +162,37 @@
         </td>
       </tr>
       <tr>
-        <td colspan='20'>
+        <td colspan='21'>
           <span>[{{ month }}] 결제요청 (<span class='js_recipts_title'>{{ user.name }}</span>)</span>
 				<span>
 					<a href='/payments/uid/{{ currentUid }}/month/{{ prevmonth }}' class='paymentsCommand'>전달</a>
 					<a href='/payments/uid/{{ currentUid }}/month/{{ nextmonth }}' class='paymentsCommand'>다음달</a>
 				</span>
         </td>
+        <td rowspan="4"></td>
       </tr>
       <tr>
-        <td colspan="3" rowspan="2">자동입력</td>
+        <td colspan="2" rowspan="2">자동입력</td>
+        <td colspan="3" rowspan="2">결제확인</td>
         <td colspan="14">업무부서 입력</td>
         <td colspan="2" rowspan="2">CO팀 입력</td>
-        <td rowspan="2"></td>
       </tr>
       <tr>
-        <td colspan="5">기본정보</td>
+        <td colspan="6">기본정보</td>
         <td colspan="8">결제정보</td>
-        <td colspan="1"></td>
       </tr>
       <tr>
         <td>요청일</td>
         <td>요청자</td>
         <td>승인자</td>
+        <td>승인자 확인</td>
+        <td>재무팀 확인</td>
         <td>귀속월</td>
         <td>귀속부서</td>
         <td>프로덕트</td>
         <td>분류</td>
         <td>상세내역</td>
+        <td>파일</td>
         <td>업체명</td>
         <td>입금은행</td>
         <td>입금계좌번호</td>
@@ -198,10 +201,8 @@
         <td>결제(예정)일</td>
         <td>세금계산서수취여부</td>
         <td>비고</td>
-        <td>파일</td>
         <td>결제수단</td>
         <td>상태</td>
-        <td></td>
       </tr>
       </thead>
       <tbody>
@@ -218,11 +219,56 @@
           <td>{{ payment.request_date | slice(0, 10) }}</td>
           <td>{{ payment.name }}</td>
           <td data-key='manager_uid' data-keyselect>{{ payment.manager_name }}</td>
+          <td>
+            {% if payment.is_manager_accepted == 0 %}
+              {% if payment.manager_uid == currentUid %}
+                <input type='button' value='승인'
+                       attrajax
+                       data-aa-url='/payments/paymentid/{{ payment.paymentid }}'
+                       data-aa-method='PUT'
+                       data-aa-param='key=is_manager_accepted&value=1'
+                       data-aa-confirm='정말 승인하시겠습니까?'
+                       data-aa-datatype="text"
+                       data-aa-success-if-result-is="1"
+                       data-aa-onsuccess-msg="승인되었습니다"
+                       data-aa-onsuccess="refresh"
+                       data-aa-onfail-alert="true"
+                />
+              {% else %}
+                X
+              {% endif %}
+            {% else %}
+              O
+            {% endif %}
+          </td>
+          <td>
+            {% if payment.is_co_accepted == 0 %}
+              {% if isSuperAdmin %}
+                <input type='button' value='승인'
+                       attrajax
+                       data-aa-url='/payments/paymentid/{{ payment.paymentid }}'
+                       data-aa-method='PUT'
+                       data-aa-param='key=is_co_accepted&value=1'
+                       data-aa-confirm='정말 승인하시겠습니까?'
+                       data-aa-datatype="text"
+                       data-aa-success-if-result-is="1"
+                       data-aa-onsuccess-msg="승인되었습니다"
+                       data-aa-onsuccess="refresh"
+                       data-aa-onfail-alert="true"
+                />
+              {% else %}
+                X
+              {% endif %}
+            {% else %}
+              O
+            {% endif %}
+          </td>
           <td data-key='month'>{{ payment.month }}</td>
           <td data-key='team' data-keyselect>{{ payment.team }}</td>
           <td data-key='product' data-keyselect>{{ payment.product }}</td>
           <td data-key='category'>{{ payment.category }}</td>
           <td data-key='desc'>{{ payment.desc }}</td>
+          <td>{{ payment.files }}</td>
           <td data-key='company_name'>{{ payment.company_name }}</td>
           <td data-key='bank'>{{ payment.bank }}</td>
           <td data-key='bank_account'>{{ payment.bank_account }}</td>
@@ -231,7 +277,6 @@
           <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
           <td data-key='tax' data-keyselect>{{ payment.tax }}</td>
           <td data-key='note'>{{ payment.note }}</td>
-          <td>{{ payment.files }}</td>
           {% if isSuperAdmin %}
             <td data-key='paytype' data-keyselect>{{ payment.paytype }}</td>
             <td data-key='status' data-keyselect>{{ payment.status }}</td>
@@ -269,6 +314,8 @@
             </select>
           </label>
         </td>
+        <td></td>
+        <td></td>
         <td>
           <input type='text' name='month' maxlength='7' style='width:60px;' value="{{ todayMonth }}"
                  placeholder="yyyy/mm"/>
@@ -276,7 +323,7 @@
         <td>
           <label>
             <select name='team' js_cookie_save js_data_chosen>
-              {% for team in const.teams %}
+              {% for team in const.team %}
                 <option value='{{ team }}'>{{ team }}</option>
               {% endfor %}
             </select>
@@ -285,7 +332,7 @@
         <td>
           <label>
             <select name='product' js_cookie_save js_data_chosen>
-              {% for product in const.products %}
+              {% for product in const.product %}
                 <option value='{{ product }}'>{{ product }}</option>
               {% endfor %}
             </select>
@@ -294,7 +341,7 @@
         <td>
           <label>
             <select id='js_category_input' js_cookie_save js_data_chosen>
-              {% for product in const.categorys %}
+              {% for product in const.category %}
                 <option value='{{ product }}'>{{ product }}</option>
               {% endfor %}
             </select>
@@ -302,6 +349,7 @@
           </label>
         </td>
         <td><input type='text' name='desc' style='width:250px' placeholder='행사지원 쿠폰 인쇄'/></td>
+        <td></td>
         <td><input type='text' name='company_name' placeholder=''/></td>
         <td><input type='text' name='bank' style='width:60px' placeholder='우리'/></td>
         <td><input type='text' name='bank_account' placeholder='xxx-xxxxxxx-xx-xxx'/></td>
@@ -310,7 +358,7 @@
         <td>
           <label>
             <select id="js_pay_date_input">
-              {% for product in const.pay_dates %}
+              {% for product in const.pay_date %}
                 <option value='{{ product }}'>{{ product }}</option>
               {% endfor %}
             </select>
@@ -321,20 +369,19 @@
           <label>
             <select name='tax' js_cookie_save>
               <option value='N/A'>N/A</option>
-              {% for tax in const.taxs %}
+              {% for tax in const.tax %}
                 <option value='{{ tax }}'>{{ tax }}</option>
               {% endfor %}
             </select>
           </label>
         </td>
         <td><input type='text' name='note' placeholder='비고'/></td>
-        <td></td>
         <td>
           {% if isSuperAdmin %}
             <label>
               <select name='paytype' js_cookie_save js_data_chosen>
                 <option value='미정'>미정</option>
-                {% for paytype in const.paytypes %}
+                {% for paytype in const.paytype %}
                   <option value='{{ paytype }}'>{{ paytype }}</option>
                 {% endfor %}
               </select>
@@ -346,7 +393,7 @@
             <label>
               <select name='status' js_cookie_save js_data_chosen>
                 <option value='결제 대기중'>결제 대기중</option>
-                {% for status in const.statuses %}
+                {% for status in const.status %}
                   <option value='{{ status }}'>{{ status }}</option>
                 {% endfor %}
               </select>
@@ -355,28 +402,45 @@
         </td>
         <td><input type="submit" value="추가"/></td>
       </tr>
-      {% if isSuperAdmin %}
-        <tr>
-          <td colspan="17"></td>
-          <td>
+      <tr>
+        <td colspan="4"></td>
+        <td>
+            <select class="js_edit_all" data-key="is_manager_accepted" title="is_manager_accepted">
+              <option value='0'>선택 일괄 적용</option>
+              <option value='1'>승인</option>
+            </select>
+        </td>
+        <td>
+          {% if isSuperAdmin %}
+            <select class="js_edit_all" data-key="is_co_accepted" title="is_co_accepted">
+              <option value='0'>선택 일괄 적용</option>
+              <option value='1'>승인</option>
+            </select>
+          {% endif %}
+        </td>
+        <td colspan="14"></td>
+        <td>
+          {% if isSuperAdmin %}
             <select class="js_edit_all" data-key="paytype" title="paytype">
               <option value='0'>선택 일괄 적용</option>
-              {% for paytype in const.paytypes %}
+              {% for paytype in const.paytype %}
                 <option value='{{ paytype }}'>{{ paytype }}</option>
               {% endfor %}
             </select>
-          </td>
-          <td>
+          {% endif %}
+        </td>
+        <td>
+          {% if isSuperAdmin %}
             <select class="js_edit_all" data-key="status" title="status">
               <option value='0'>선택 일괄 적용</option>
-              {% for status in const.statuses %}
+              {% for status in const.status %}
                 <option value='{{ status }}'>{{ status }}</option>
               {% endfor %}
             </select>
-          </td>
-          <td></td>
-        </tr>
-      {% endif %}
+          {% endif %}
+        </td>
+        <td></td>
+      </tr>
       </tbody>
     </table>
   </form>

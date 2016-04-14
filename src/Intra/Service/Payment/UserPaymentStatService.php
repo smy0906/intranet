@@ -2,11 +2,11 @@
 namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
-use Intra\Model\UserPaymentModel;
+use Intra\Model\PaymentModel;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
-class UserPaymentStat
+class UserPaymentStatService
 {
 	public function sendExcelResposeAndExit($month)
 	{
@@ -15,8 +15,11 @@ class UserPaymentStat
 		}
 		$month = date('Y/m/1', strtotime($month));
 
-		$user_payment_model = new UserPaymentModel();
-		$payments = $user_payment_model->getAllPayments($month);
+		$user_payment_model = new PaymentModel();
+		/**
+		 * @var $payments PaymentDto[]
+		 */
+		$payments = PaymentDto::importFromDatabaseRowMap($user_payment_model->getAllPayments($month));
 		//header
 		$csvs = [];
 		$arr = [
@@ -42,24 +45,24 @@ class UserPaymentStat
 		$csvs[] = $arr;
 		foreach ($payments as $payment) {
 			$arr = [
-				$payment['request_date'],
-				$payment['name'],
-				UserService::getNameByUidSafe($payment['manager_uid']),
-				$payment['month'],
-				$payment['team'],
-				$payment['product'],
-				$payment['category'],
-				$payment['desc'],
-				$payment['company_name'],
-				$payment['bank'],
-				'"' . $payment['bank_account'] . '"',
-				$payment['bank_account_owner'],
-				$payment['price'],
-				$payment['pay_date'],
-				$payment['tax'],
-				$payment['note'],
-				$payment['paytype'],
-				$payment['status'],
+				$payment->request_date,
+				UserService::getNameByUidSafe($payment->uid),
+				UserService::getNameByUidSafe($payment->manager_uid),
+				$payment->month,
+				$payment->team,
+				$payment->product,
+				$payment->category,
+				$payment->desc,
+				$payment->company_name,
+				$payment->bank,
+				'"' . $payment->bank_account . '"',
+				$payment->bank_account_owner,
+				$payment->price,
+				$payment->pay_date,
+				$payment->tax,
+				$payment->note,
+				$payment->paytype,
+				$payment->status,
 			];
 			$csvs[] = $arr;
 		}

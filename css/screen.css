@@ -24,6 +24,8 @@ thead > tr > td {
     background-color: #999;
     color: #eee;
     padding: 4px;
+    border-right:1px dashed #ddd;
+    border-bottom:1px dashed #ddd;
 }
 
 tbody td {

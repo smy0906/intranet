@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\Payment\UserPayment;
+use Intra\Service\Payment\UserPaymentService;
 use Intra\Service\Payment\UserPaymentRequestFilter;
 use Intra\Service\User\UserInstanceService;
 use Intra\Service\User\UserSession;
@@ -24,5 +24,5 @@ $month = UserPaymentRequestFilter::parseMonth($month);
 $user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
 $target_user_dto = $user_dto_object->exportDto();
 
-$payment_service = new UserPayment($target_user_dto);
+$payment_service = new UserPaymentService($target_user_dto);
 return $payment_service->index($month, $is_type_remain_only);

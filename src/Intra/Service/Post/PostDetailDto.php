@@ -28,7 +28,7 @@ class PostDetailDto extends BaseDto
 	public $is_new;
 
 	/**
-	 * @param PostModel|EloquentBaseModel $post
+	 * @param PostModel|EloquentBaseModel| $post
 	 * @return PostDetailDto
 	 */
 	public static function importFromModel($post)

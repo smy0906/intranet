@@ -8,7 +8,7 @@
 
 namespace Intra\Service\Holiday;
 
-use Intra\Model\UserHolidayModel;
+use Intra\Model\HolidayModel;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
@@ -33,7 +33,7 @@ class UserHoliday
 	{
 		$this->user = $user;
 		$this->user_holiday_policy = new UserHolidayPolicy($user);
-		$this->user_holiday_model = new UserHolidayModel();
+		$this->user_holiday_model = new HolidayModel();
 	}
 
 	/**

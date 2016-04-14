@@ -1,6 +1,6 @@
 <?php
 use Intra\Config\Config;
-use Intra\Core\QueryProcessor;
+use Intra\Core\Application;
 use Intra\Model\SessionModel;
 use Intra\Service\IntraDb;
 use Intra\Service\Ridi;
@@ -17,6 +17,6 @@ Ridi::enableSentry();
 IntraDb::bootDB();
 SessionModel::init();
 
-if (QueryProcessor::run(__DIR__ . "/src/controls", __DIR__ . "/src/views")) {
+if (Application::run(__DIR__ . "/src/controls", __DIR__ . "/src/views")) {
 	exit;
 }

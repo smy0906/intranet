@@ -6,7 +6,7 @@ use Intra\Service\Holiday\UserHolidayDto;
 use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
 
-class UserHolidayModel
+class HolidayModel
 {
 	public static $const = [
 		'types' => ['연차', '오전반차', '오후반차', '공가', '경조', '대체휴가', '무급휴가', '무급오전반차', '무급오후반차', 'PWT'],

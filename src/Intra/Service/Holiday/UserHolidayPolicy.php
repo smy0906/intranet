@@ -9,7 +9,7 @@
 namespace Intra\Service\Holiday;
 
 use DateTime;
-use Intra\Model\UserHolidayModel;
+use Intra\Model\HolidayModel;
 use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
 
@@ -28,7 +28,7 @@ class UserHolidayPolicy
 		$this->db = $db;
 
 		$this->user = $user;
-		$this->user_holiday_model = new UserHolidayModel();
+		$this->user_holiday_model = new HolidayModel();
 	}
 
 	public function getRemainCost($yearly)

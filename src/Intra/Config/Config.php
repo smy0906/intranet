@@ -4,8 +4,10 @@ namespace Intra\Config;
 
 use Intra\Core\ConfigLoader;
 
-class Config extends ConfigLoader
+class Config
 {
+	use ConfigLoader;
+
 	public static $upload_dir;
 
 	public static $mysql_host;
@@ -19,4 +21,5 @@ class Config extends ConfigLoader
 	public static $domain = "ridi.com";
 
 	public static $is_dev = false;
+	public static $test_mail = '';
 }

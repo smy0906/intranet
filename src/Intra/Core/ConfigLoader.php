@@ -4,7 +4,7 @@ namespace Intra\Core;
 
 use Intra\Config\Config;
 
-class ConfigLoader
+trait ConfigLoader
 {
 	public static function loadIfExist($config_file)
 	{

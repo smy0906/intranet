@@ -10,13 +10,13 @@ namespace Intra\Model;
 
 use Intra\Core\BaseModel;
 use Intra\Core\MsgException;
-use Intra\Model\Base\DomainCacheModel;
+use Intra\Model\Base\ClassLightFunctionCache;
 use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
 
 class UserModel extends BaseModel
 {
-	use DomainCacheModel;
+	use ClassLightFunctionCache;
 
 	static private $table = 'users';
 
@@ -43,7 +43,7 @@ class UserModel extends BaseModel
 
 	public static function getRowWithUid($uid)
 	{
-		return self::cachingGetter(
+		return self::cachingCallback(
 			$uid,
 			function () use ($uid) {
 				return self::getDb()->sqlDict('select * from ? where uid = ?', sqlTable(self::$table), $uid);
@@ -53,7 +53,7 @@ class UserModel extends BaseModel
 
 	public static function getRowWithUids(array $uids)
 	{
-		return self::cachingGetter(
+		return self::cachingCallback(
 			$uids,
 			function () use ($uids) {
 				return self::getDb()->sqlDicts(

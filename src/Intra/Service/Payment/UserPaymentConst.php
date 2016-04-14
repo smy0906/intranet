@@ -23,34 +23,20 @@ class UserPaymentConst
 			}
 			return json_encode($ret);
 		}
-		$plural_key = self::getPluralKey($key);
-		if (!UserPaymentConst::isExistByKey($plural_key)) {
+		if (!UserPaymentConst::isExistByKey($key)) {
 			return null;
 		}
 		$ret = [];
-		foreach (UserPaymentConst::getByKey($plural_key) as $v) {
+		foreach (UserPaymentConst::getByKey($key) as $v) {
 			$ret[$v] = $v;
 		}
 		return json_encode($ret);
 	}
 
-	/**
-	 * @param $key
-	 * @return string
-	 */
-	private static function getPluralKey($key)
-	{
-		if (substr($key, -1) == 's') {
-			return $key . 'es';
-		} else {
-			return $key . 's';
-		}
-	}
-
 	public static function get()
 	{
 		$const = [];
-		$const['teams'] = [
+		$const['team'] = [
 			'스토어팀',
 			'뷰어팀',
 			'플랫폼팀',
@@ -71,11 +57,11 @@ class UserPaymentConst
 			'스튜디오 D',
 			'공통'
 		];
-		$const['products'] = ['리디북스', '페이퍼샵', '공통'];
-		$const['taxs'] = ['Y', 'N', 'N/A'];
-		$const['paytypes'] = ['현금', '법인카드', '연구비계좌'];
-		$const['statuses'] = ['결제 대기중', '결제 완료'];
-		$const['categorys'] = [
+		$const['product'] = ['리디북스', '페이퍼샵', '공통'];
+		$const['tax'] = ['Y', 'N', 'N/A'];
+		$const['paytype'] = ['현금', '법인카드', '연구비계좌'];
+		$const['status'] = ['결제 대기중', '결제 완료'];
+		$const['category'] = [
 			'상품매입 (페이퍼샵 판매용 상품 매입 비용)',
 			'운반비 (택배, 퀵서비스 이용대금)',
 			'잡급 (로맨스, 판무 가이드 알바 급여)',
@@ -90,20 +76,20 @@ class UserPaymentConst
 			'콘텐츠 지원금',
 		];
 		if (UserSession::getSelfDto()->is_admin) {
-			$const['categorys'][] = '기타';
+			$const['category'][] = '기타';
 		}
 		$const['pay_dates'] = ['선택해주세요', '7일', '10일', '25일', '월말일', '긴급'];
 
 		return $const;
 	}
 
-	public static function isExistByKey($plural_key)
+	public static function isExistByKey($key)
 	{
-		return isset(self::get()[$plural_key]);
+		return isset(self::get()[$key]);
 	}
 
-	public static function getByKey($plural_key)
+	public static function getByKey($key)
 	{
-		return self::get()[$plural_key];
+		return self::get()[$key];
 	}
 }

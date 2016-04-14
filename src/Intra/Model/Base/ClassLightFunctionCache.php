@@ -16,7 +16,7 @@ namespace Intra\Model\Base;
  *
  */
 
-trait DomainCacheModel
+trait ClassLightFunctionCache
 {
 	static private $cacheHashesByKey = [];
 	static private $cache = [];
@@ -26,7 +26,7 @@ trait DomainCacheModel
 	 * @param $function callable
 	 * @return mixed
 	 */
-	protected static function cachingGetter($domain_primary_keys, $function)
+	protected static function cachingCallback($domain_primary_keys, $function)
 	{
 		$class = get_called_class();
 		if (!is_array($domain_primary_keys)) {
