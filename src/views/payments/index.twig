@@ -308,7 +308,7 @@
         <td>
           <label>
             <select name='manager_uid' js_cookie_save js_data_chosen style="width:80px">
-              {% for user in allCurrentUsers %}
+              {% for user in managerUsers %}
                 <option value='{{ user.uid }}'>{{ user.name }}</option>
               {% endfor %}
             </select>

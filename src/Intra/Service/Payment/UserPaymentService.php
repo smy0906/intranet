@@ -69,6 +69,7 @@ class UserPaymentService
 		}
 
 		$return['allCurrentUsers'] = UserService::getAvailableUserDtos();
+		$return['managerUsers'] = UserService::getManagerUserDtos();
 		$return['allUsers'] = UserService::getAllUserDtos();
 
 		$return['const'] = UserPaymentConst::get();
