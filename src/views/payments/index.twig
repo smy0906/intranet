@@ -152,7 +152,13 @@
   >
 
     <div class='paymentsInfo'>
-      <h2>[{{ month }}] <span class='js_recipts_title'>{{ user.name }}</span></h2>
+      <h2>
+        {% if title %}
+          {{ title }}
+        {% else %}
+          [{{ month }}] <span class='js_recipts_title'>{{ user.name }}</span>
+        {% endif %}
+      </h2>
     </div>
     <table>
       <thead>
@@ -163,7 +169,10 @@
       </tr>
       <tr>
         <td colspan='21'>
-          <span>[{{ month }}] 결제요청 (<span class='js_recipts_title'>{{ user.name }}</span>)</span>
+          <span>
+              [{{ month }}] 결제요청 (<span class='js_recipts_title'>{{ user.name }}</span>)
+
+          </span>
 				<span>
 					<a href='/payments/uid/{{ currentUid }}/month/{{ prevmonth }}' class='paymentsCommand'>전달</a>
 					<a href='/payments/uid/{{ currentUid }}/month/{{ nextmonth }}' class='paymentsCommand'>다음달</a>
@@ -405,10 +414,10 @@
       <tr>
         <td colspan="4"></td>
         <td>
-            <select class="js_edit_all" data-key="is_manager_accepted" title="is_manager_accepted">
-              <option value='0'>선택 일괄 적용</option>
-              <option value='1'>승인</option>
-            </select>
+          <select class="js_edit_all" data-key="is_manager_accepted" title="is_manager_accepted">
+            <option value='0'>선택 일괄 적용</option>
+            <option value='1'>승인</option>
+          </select>
         </td>
         <td>
           {% if isSuperAdmin %}

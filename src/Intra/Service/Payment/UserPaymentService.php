@@ -73,6 +73,14 @@ class UserPaymentService
 
 		$return['const'] = UserPaymentConst::get();
 
+		if ($is_type_remain_only) {
+			if ($self->is_admin) {
+				$return['title'] = '모든 미결제 항목(관리자)';
+			} else {
+				$return['title'] = '모든 미승인 목록';
+			}
+		}
+
 		return $return;
 	}
 
@@ -106,13 +114,5 @@ class UserPaymentService
 		}
 		$paymentid = $payment['paymentid'];
 		return new UserPaymentRowInstance($paymentid);
-	}
-
-	/**
-	 * @return bool
-	 */
-	private function isSuperAdmin()
-	{
-		return UserSession::getSelfDto()->is_admin;
 	}
 }
