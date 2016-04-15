@@ -138,7 +138,14 @@ class PaymentModel
 
 	public function getPayment($paymentid, $uid)
 	{
-		$where = compact('paymentid', 'uid');
+		$where = [
+			'paymentid' => $paymentid,
+			sqlOr(
+				['uid' => $uid],
+				['manager_uid' => $uid]
+			)
+
+		];
 		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));
 	}
 

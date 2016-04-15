@@ -106,8 +106,7 @@ class UserPaymentService
 		if ($this->user->is_admin) {
 			$payment = $this->payment_model->getPaymentWithoutUid($paymentid);
 		} else {
-			$payment =
-				$this->payment_model->getPayment($paymentid, $this->user->uid);
+			$payment = $this->payment_model->getPayment($paymentid, $this->user->uid);
 		}
 		if (!$payment) {
 			throw new \Exception('invalid paymentid request');
