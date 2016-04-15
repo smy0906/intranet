@@ -221,7 +221,7 @@
           <td data-key='manager_uid' data-keyselect>{{ payment.manager_name }}</td>
           <td>
             {% if payment.is_manager_accepted == 0 %}
-              {% if payment.manager_uid == currentUid %}
+              {% if payment.manager_uid == selfUid %}
                 <input type='button' value='승인'
                        attrajax
                        data-aa-url='/payments/paymentid/{{ payment.paymentid }}'
