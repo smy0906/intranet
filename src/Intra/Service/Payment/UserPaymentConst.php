@@ -78,7 +78,7 @@ class UserPaymentConst
 		if (UserSession::getSelfDto()->is_admin) {
 			$const['category'][] = '기타';
 		}
-		$const['pay_dates'] = ['선택해주세요', '7일', '10일', '25일', '월말일', '긴급'];
+		$const['pay_date'] = ['선택해주세요', '7일', '10일', '25일', '월말일', '긴급'];
 
 		return $const;
 	}
