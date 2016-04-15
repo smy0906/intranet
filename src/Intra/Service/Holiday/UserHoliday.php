@@ -16,10 +16,10 @@ use Intra\Service\User\UserSession;
 
 class UserHoliday
 {
-	private $cost_unselectable_type = ['PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차'];
-	private $cost_zero_type = ['공가', '경조', '대체휴가', '무급휴가', 'PWT', '무급오전반차', '무급오후반차'];
-	private $cost_half_type = ['오전반차', '오후반차'];
-	private $cost_int_type = ['연차'];
+	private $COST_UNSELECTABLE_TYPE = ['PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차'];
+	private $COST_ZERO_TYPE = ['공가', '경조', '대체휴가', '무급휴가', 'PWT', '무급오전반차', '무급오후반차'];
+	private $COST_HALF_TYPE = ['오전반차', '오후반차'];
+	private $COST_INT_TYPE = ['연차'];
 	/**
 	 * @var UserDto
 	 */
@@ -128,11 +128,11 @@ class UserHoliday
 			throw new \Exception("연차 사용날짜를 다시 입력해주세요. 이미 지난 시간입니다.");
 		}
 
-		if (in_array($holidayRaw->type, $this->cost_zero_type)) {
+		if (in_array($holidayRaw->type, $this->COST_ZERO_TYPE)) {
 			$holidayRaw->cost = 0;
-		} elseif (in_array($holidayRaw->type, $this->cost_half_type)) {
+		} elseif (in_array($holidayRaw->type, $this->COST_HALF_TYPE)) {
 			$holidayRaw->cost = 0.5;
-		} elseif (in_array($holidayRaw->type, $this->cost_int_type)) {
+		} elseif (in_array($holidayRaw->type, $this->COST_INT_TYPE)) {
 			$int_cost = intval($holidayRaw->cost);
 			if ($int_cost != $holidayRaw->cost || $int_cost <= 0) {
 				throw new \Exception('연차는 자연수로만 입력가능합니다');
@@ -246,7 +246,7 @@ class UserHoliday
 	 */
 	private function filterAdd($holidayRaw)
 	{
-		if (!in_array($holidayRaw->type, $this->cost_unselectable_type) && strlen(trim($holidayRaw->cost)) == 0) {
+		if (!in_array($holidayRaw->type, $this->COST_UNSELECTABLE_TYPE) && strlen(trim($holidayRaw->cost)) == 0) {
 			$holidayRaw->cost = 1;
 		}
 		$holidayRaw->uid = $this->user->uid;
