@@ -36,7 +36,8 @@ class UserPaymentService
 		$return['todayMonth'] = date('Y-m');
 		$return['todayDate'] = date('Y-m-d');
 
-		if ($this->user->is_admin) {
+		$self = UserSession::getSelfDto();
+		if ($self->is_admin) {
 			$return['queuedPayments'] = PaymentDto::importFromDatabaseRowMap(
 				$this->payment_model->queuedPayments()
 			);
@@ -44,13 +45,11 @@ class UserPaymentService
 			$return['todayQueuedCost'] = $this->payment_model->todayQueuedCost();
 		}
 		$return['currentUid'] = $this->user->uid;
+		$return['selfUid'] = $self->uid;
 
 		if ($is_type_remain_only) {
-			if ($this->user->is_admin) {
+			if ($self->is_admin) {
 				$payments = $return['queuedPayments'];
-				$payments = PaymentDto::importFromDatabaseRowMap(
-					$this->payment_model->queuedPaymentsByManager($this->user->uid)
-				);
 			} else {
 				$payments = PaymentDto::importFromDatabaseRowMap(
 					$this->payment_model->queuedPaymentsByManager($this->user->uid)
@@ -63,7 +62,7 @@ class UserPaymentService
 		}
 		$return['payments'] = $payments;
 
-		if ($this->isSuperAdmin()) {
+		if ($self->is_admin) {
 			$return['isSuperAdmin'] = 1;
 			$return['editable'] |= 1;
 		}
