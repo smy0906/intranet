@@ -9,12 +9,12 @@ use Intra\Service\User\UserSession;
 $request = $this->getRequest();
 $self = UserSession::getSelfDto();
 
-$payment_dto = PaymentDto::importFromAddRequest($request);
-
 $uid = $request->get('uid');
 if (!intval($uid)) {
 	$uid = $self->uid;
 }
+
+$payment_dto = PaymentDto::importFromAddRequest($request, $uid, $self->is_admin);
 
 $user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
 $target_user_dto = $user_dto_object->exportDto();

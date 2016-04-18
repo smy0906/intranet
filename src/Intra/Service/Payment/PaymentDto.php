@@ -12,7 +12,6 @@ namespace Intra\Service\Payment;
 use Intra\Core\BaseDto;
 use Intra\Model\PaymentAcceptModel;
 use Intra\Service\User\UserService;
-use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentDto extends BaseDto
@@ -123,7 +122,7 @@ class PaymentDto extends BaseDto
 		return $return;
 	}
 
-	public static function importFromAddRequest(Request $request)
+	public static function importFromAddRequest(Request $request, $uid, $is_admin)
 	{
 		$return = new self;
 		$keys = [
@@ -148,9 +147,8 @@ class PaymentDto extends BaseDto
 			$return->$key = $request->get($key);
 		}
 
-		$self = UserSession::getSelfDto();
-		$return->uid = $self->uid;
-		if (!$self->is_admin) {
+		$return->uid = $uid;
+		if (!$is_admin) {
 			unset($return->status);
 			unset($return->paytype);
 		}
