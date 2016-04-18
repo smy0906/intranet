@@ -226,7 +226,7 @@
                    title="payment_checkbox"/>
           </td>
           <td>{{ payment.request_date | slice(0, 10) }}</td>
-          <td>{{ payment.name }}</td>
+          <td>{{ payment.register_name }}</td>
           <td data-key='manager_uid' data-keyselect>{{ payment.manager_name }}</td>
           <td>
             {% if payment.is_manager_accepted == 0 %}
