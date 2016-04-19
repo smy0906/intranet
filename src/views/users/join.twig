@@ -11,17 +11,48 @@
   <link rel="stylesheet" href="/css/screen.css" media="screen"/>
   <link rel="stylesheet" href="/css/print.css" media="print"/>
 
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Cookies.js/0.3.1/cookies.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
-  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="//cdn.rawgit.com/genesos/AttrAjax/master/attrajax.js"></script>
+  <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap.min.css" media="screen"/>
 
+  <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
+  <script type="text/javascript" src="/js/bower/bower_components/requirejs/require.js"></script>
+
+  <script>
+    requirejs.config({
+      baseUrl: "/js/bower/bower_components",
+      paths: {
+        "jquery": "jquery/dist/jquery.min",
+        "jquery-ui": "jquery-ui/jquery-ui.min",
+        "jquery.attrajax": "jquery.attrajax/jquery.attrajax",
+        "jquery.jeditable": "jquery.jeditable/jquery.jeditable",
+        "jquery.tmpl": "jquery.tmpl/jquery.tmpl",
+        "jquery-form": "jquery-form/jquery.form",
+        "jquery-number": "jquery-number/jquery.number.min",
+        "chosen": "chosen/chosen.jquery",
+        "bootstrap": "bootstrap/dist/js/bootstrap.min",
+        "jquery.cookie": "jquery.cookie/jquery.cookie",
+        "jqueryte": "jqueryte/dist/jquery-te-1.4.0.min"
+      },
+      shim: {
+        "jquery-ui": ["jquery"],
+        "jquery.attrajax": ["jquery", "jquery-form"],
+        "jquery.jeditable": ["jquery"],
+        "jquery.tmpl": ["jquery"],
+        "jquery-form": ["jquery"],
+        "jquery-number": ["jquery"],
+        "chosen": ["jquery"],
+        "bootstrap": ["jquery"],
+        "jquery.cookie": ["jquery"],
+        "jqueryte": ["jquery"]
+      }
+    });
+
+  </script>
   <script type="text/javascript" src="/js/common.js"></script>
-  <script type="text/javascript" src="/js/jquery.form.js"></script>
-  <script type="text/javascript" src="/js/jquery.jeditable.js"></script>
-  <script type="text/javascript" src="/js/jquery.tmpl.min.js"></script>
-  <script type="text/javascript" src="/js/jquery.number.min.js"></script>
+  <script>
+    var sentry_public_key = '{{ sentryPublicKey }}';
+    if (sentry_public_key.length && window.Raven)
+      window.Raven.config(sentry_public_key).install();
+  </script>
 
   <style>
     body, div, td, p {
