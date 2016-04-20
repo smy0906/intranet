@@ -160,6 +160,9 @@ class PaymentDto extends BaseDto
 		if (strlen($return->status) == 0) {
 			unset($return->status);
 		}
+		if (!$return->manager_uid) {
+			throw new \Exception('승인자가 누락되었습니다. 다시 입력해주세요');
+		}
 		if (strlen($return->paytype) == 0) {
 			unset($return->paytype);
 		}
