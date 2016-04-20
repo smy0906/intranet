@@ -163,6 +163,9 @@ class PaymentDto extends BaseDto
 		if (!$return->manager_uid) {
 			throw new \Exception('승인자가 누락되었습니다. 다시 입력해주세요');
 		}
+		if (!$return->product) {
+			throw new \Exception('프로덕트가 누락되었습니다. 다시 입력해주세요');
+		}
 		if (strlen($return->paytype) == 0) {
 			unset($return->paytype);
 		}
