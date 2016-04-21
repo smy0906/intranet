@@ -140,6 +140,17 @@
 {% endblock %}
 
 {% block body %}
+  <h2>
+    <span class='js_recipts_title'>{{ user.name }}</span>
+  </h2>
+  <h4>
+    <a href='/payments/uid/{{ currentUid }}/month/{{ prevmonth }}'>{{ prevmonth }}</a>
+    / {{ month }} /
+    <a href='/payments/uid/{{ currentUid }}/month/{{ nextmonth }}'>{{ nextmonth }}</a>
+    /
+    <a href='/payments/remain' class='paymentsCommand'>미승인</a>
+
+  </h4>
   <form
     attrajax
     data-aa-url='/payments/uid/{{ currentUid }}'
@@ -151,74 +162,52 @@
     data-aa-onfail-alert="true"
   >
 
-    <div class='paymentsInfo'>
-      <h2>
-        {% if title %}
-          {{ title }}
-        {% else %}
-          [{{ month }}] <span class='js_recipts_title'>{{ user.name }}</span>
-        {% endif %}
-      </h2>
-    </div>
-    <table>
+    <table class="table table-striped table-hover table-bordered table-condensed">
       <thead>
       <tr>
-        <td rowspan="5">
+        <th rowspan="5">
           <input type="checkbox" class="js_payments_check" name="" title="payment_checkbox_all"/>
-        </td>
+        </th>
       </tr>
       <tr>
-        <td colspan='21'>
-          <span>
-              [{{ month }}] 결제요청 (<span class='js_recipts_title'>{{ user.name }}</span>)
-
-          </span>
-				<span>
-					<a href='/payments/uid/{{ currentUid }}/month/{{ prevmonth }}' class='paymentsCommand'>전달</a>
-					<a href='/payments/uid/{{ currentUid }}/month/{{ nextmonth }}' class='paymentsCommand'>다음달</a>
-				</span>
-        </td>
-        <td rowspan="4"></td>
+        <th colspan="2" rowspan="2">자동입력</th>
+        <th colspan="3" rowspan="2">결제확인</th>
+        <th colspan="14">업무부서 입력</th>
+        <th colspan="2" rowspan="2">CO팀 입력</th>
       </tr>
       <tr>
-        <td colspan="2" rowspan="2">자동입력</td>
-        <td colspan="3" rowspan="2">결제확인</td>
-        <td colspan="14">업무부서 입력</td>
-        <td colspan="2" rowspan="2">CO팀 입력</td>
+        <th colspan="6">기본정보</th>
+        <th colspan="8">결제정보</th>
       </tr>
       <tr>
-        <td colspan="6">기본정보</td>
-        <td colspan="8">결제정보</td>
-      </tr>
-      <tr>
-        <td>요청일</td>
-        <td>요청자</td>
-        <td>승인자</td>
-        <td>승인자 확인</td>
-        <td>재무팀 확인</td>
-        <td>귀속월</td>
-        <td>귀속부서</td>
-        <td>프로덕트</td>
-        <td>분류</td>
-        <td>상세내역</td>
-        <td>파일</td>
-        <td>업체명</td>
-        <td>입금은행</td>
-        <td>입금계좌번호</td>
-        <td>예금주</td>
-        <td>입금금액</td>
-        <td>결제(예정)일</td>
-        <td>세금계산서수취여부</td>
-        <td>비고</td>
-        <td>결제수단</td>
-        <td>상태</td>
+        <th>요청일</th>
+        <th>요청자</th>
+        <th>승인자</th>
+        <th>승인자 확인</th>
+        <th>재무팀 확인</th>
+        <th>귀속월</th>
+        <th>귀속부서</th>
+        <th>프로덕트</th>
+        <th>분류</th>
+        <th>상세내역</th>
+        <th>파일</th>
+        <th>업체명</th>
+        <th>입금은행</th>
+        <th>입금계좌번호</th>
+        <th>예금주</th>
+        <th>입금금액</th>
+        <th>결제(예정)일</th>
+        <th>세금계산서수취여부</th>
+        <th>비고</th>
+        <th>결제수단</th>
+        <th>상태</th>
       </tr>
       </thead>
       <tbody>
       {% for key, payment in payments %}
         <tr class='payment
                 {% if payment.status == '결제 완료' %}
-                    payment_done
+                    warning
                 {% endif %}
                 ' data-paymentid='{{ payment.paymentid }}'>
           <td>
@@ -472,12 +461,12 @@ B. 결제정보
   </div>
 
   {% if isSuperAdmin %}
-    <div>
-      <table>
+    <div style="width: 500px;">
+      <table class="table">
         <thead>
         <tr>
-          <td>특수작업</td>
-          <td>실행</td>
+          <th>관리자 메뉴</th>
+          <th></th>
         <tr>
         </thead>
         <tr>
