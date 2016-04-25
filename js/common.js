@@ -10,11 +10,15 @@ require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie"
             var key = _this.tagName + '#' + _this.attr('name') + '#' + _this.attr('id');
             var val = _this.val();
             $.cookie(key, val);
-        }).each(function () {
-        var _this = $(this);
-        var key = _this.tagName + '#' + _this.attr('name') + '#' + _this.attr('id');
-        _this.val($.cookie(key)).trigger('change');
-    });
+        })
+        .each(function () {
+            var _this = $(this);
+            var key = _this.tagName + '#' + _this.attr('name') + '#' + _this.attr('id');
+
+            var cookied_value = $.cookie(key);
+            if (cookied_value !== undefined)
+                _this.val(cookied_value).trigger('change');
+        });
 });
 
 function refresh() {
