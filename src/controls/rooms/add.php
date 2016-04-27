@@ -15,4 +15,5 @@ $from = $request->get('from');
 $to = $request->get('to');
 $dat = compact('room_id', 'desc', 'from', 'to', 'uid');
 
-return $db->sqlInsert('room_events', $dat);
+$db->sqlInsert('room_events', $dat);
+return $db->insert_id();

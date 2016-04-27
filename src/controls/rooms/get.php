@@ -2,12 +2,19 @@
 
 /** @var $this Intra\Core\Control */
 
-$request = $this->getRequest();
-
-$room_id = $request->get('room_id');
-
 $db = \Intra\Service\IntraDb::getGnfDb();
-$where = ['room_id' => $room_id, 'deleted' => 0];
+
+$request = $this->getRequest();
+$room_id = $request->get('room_id');
+$from = $request->get('from');
+$to = $request->get('to');
+
+$where = [
+	'room_id' => $room_id,
+	'deleted' => 0,
+	'from' => sqlGreaterEqual($from),
+	'to' => sqlLesser($to)
+];
 $events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
 
 $return = '';
