@@ -7,6 +7,7 @@
   -->
   {{ parent() }}
   <script type="text/javascript" src="/lib/dhtmlxScheduler/dhtmlxscheduler.js"></script>
+  <script type="text/javascript" src="/lib/dhtmlxScheduler/ext/dhtmlxscheduler_units.js"></script>
   <link rel="stylesheet" type="text/css" href="/lib/dhtmlxScheduler/dhtmlxscheduler_flat.css"/>
 
   <style type="text/css" media="screen">
@@ -73,9 +74,6 @@
           else
             throw "not exist handler " + event_type;
         };
-        this.onTemplatesReady = function () {
-          event_handler.renderPc();
-        };
         this.beforeEdit = function (event_id) {
           console.log('beforeEdit');
           console.log(event_id);
@@ -91,13 +89,7 @@
         this.afterEdit = function (event_id) {
           console.log('afterEdit');
           console.log(event_id);
-          var evs = event_handler.scheduler.getEvents(event_handler.scheduler.getEventStartDate(event_id), event_handler.scheduler.getEventEndDate(event_id));
-          var evsCnt = 0;
-          for (var k in evs)
-            if (evs.hasOwnProperty(k))
-              if (evs[k].id != event_id)
-                evsCnt++;
-          if (evsCnt > 0) {
+          if (this.isDuplicatedEvent(event_id)) {
             alert('이미 예약된 시간입니다');
             event_handler.scheduler.setEventStartDate(event_id, edit_selected_date_from);
             event_handler.scheduler.setEventEndDate(event_id, edit_selected_date_to);
@@ -131,21 +123,30 @@
           }
           return true;
         };
+        this.isDuplicatedEvent = function (event_id) {
+          var evs = event_handler.scheduler.getEvents(event_handler.scheduler.getEventStartDate(event_id), event_handler.scheduler.getEventEndDate(event_id));
+          var evsCnt = 0;
+          var event_object = scheduler.getEvent(event_id);
+          for (var k in evs) {
+            if (!evs.hasOwnProperty(k))
+              continue;
+            if (evs[k].id == event_id)
+              continue;
+            if (evs[k].room_id != event_object.room_id)
+              continue;
+            return true;
+          }
+          return false;
+        };
         this.onEventAdded = function (event_id, event_object) {
           console.log('onEventAdded');
           console.log(event_id);
-          var evs = event_handler.scheduler.getEvents(event_handler.scheduler.getEventStartDate(event_id), event_handler.scheduler.getEventEndDate(event_id));
-          var evsCnt = 0;
-          for (var k in evs) {
-            if (evs.hasOwnProperty(k))
-              if (evs[k].id != event_id)
-                evsCnt++;
-          }
-          if (evsCnt > 0) {
+          if (this.isDuplicatedEvent(event_id)) {
             alert('이미 예약된 시간입니다');
             event_handler.scheduler.deleteEvent(event_id);
             return false;
           }
+          console.log(event_object);
 
           var from = event_handler.scheduler.getEventStartDate(event_id);
           var to = event_handler.scheduler.getEventEndDate(event_id);
@@ -156,9 +157,10 @@
               desc: event_handler.scheduler.getEventText(event_id),
               from: from,
               to: to,
-              room_id: $('.dhx_cal_tab.active').attr('room_id')
+              room_id: event_object.room_id
             }, function (dat) {
               try {
+                console.log(new_event_id);
                 var new_event_id = parseInt(dat);
                 if (isNaN(new_event_id) || new_event_id == 0) {
                   alert(dat);
@@ -179,41 +181,6 @@
           $.post('/rooms/del/id/' + event_id);
           return true;
         };
-        this.renderPc = function () {
-          $('#js_howto').show(0);
-          $('.js_room_select_mobile').hide(0);
-          $('.js_room_select_pc').show(0);
-          {% for num, room in rooms %}
-          scheduler.locale.labels.room{{ room.id }}_tab = "{{ room.name }}";
-          scheduler.date.room{{ room.id }}_start = scheduler.date.week_start;
-          scheduler.templates.room{{ room.id }}_date = scheduler.templates.week_date;
-          scheduler.templates.room{{ room.id }}_scale_date = scheduler.templates.week_scale_date;
-          scheduler.date.add_room{{ room.id }} = function (date, inc) {
-            return scheduler.date.add(date, inc * 7, "day");
-          };
-          scheduler.date.get_room{{ room.id }}_end = function (date) {
-            return scheduler.date.add(date, 5, "day");
-          };
-          {% endfor %}
-        };
-
-        this.renderMobile = function () {
-          $('#js_howto').hide(0);
-          $('.js_room_select_mobile').show(0);
-          $('.js_room_select_pc').hide(0);
-          {% for num, room in rooms %}
-          scheduler.locale.labels.room{{ room.id }}_tab = "{{ room.name }}";
-          scheduler.date.room{{ room.id }}_start = scheduler.date.day_start;
-          scheduler.templates.room{{ room.id }}_date = scheduler.templates.day_date;
-          scheduler.templates.room{{ room.id }}_scale_date = scheduler.templates.week_scale_date;
-          scheduler.date.add_room{{ room.id }} = function (date, inc) {
-            return scheduler.date.add(date, inc, "day");
-          };
-          scheduler.date.get_room{{ room.id }}_end = function (date) {
-            return scheduler.date.add(date, 1, "day");
-          };
-          {% endfor %}
-        };
       };
 
       scheduler.config.mark_now = true;
@@ -225,53 +192,51 @@
       scheduler.config.hour_size_px = 88;
       scheduler.config.icons_select = ["icon_edit", "icon_delete"];
 
-      scheduler.templates.week_date_class = function (date, today) {
-        if (date.getDay() == 0 || date.getDay() == 6)
-          return "weekday";
-        return "";
-      };
-
-      {% for num, room in rooms %}
-      scheduler.locale.labels.room{{ room.id }}_tab = "{{ room.name }}";
-      {% endfor %}
-
-      scheduler.attachEvent("onTemplatesReady", event_handler.handler_helper('onTemplatesReady'));
+      scheduler.attachEvent("onEventCreated", event_handler.handler_helper('onEventCreated'));
+      scheduler.attachEvent("onEventAdded", event_handler.handler_helper('onEventAdded'));
       scheduler.attachEvent("onBeforeDrag", event_handler.handler_helper('beforeEdit'));
       scheduler.attachEvent("onDblClick", event_handler.handler_helper('beforeEdit'));
       scheduler.attachEvent("onClick", event_handler.handler_helper('beforeEdit'));
       scheduler.attachEvent("onEventChanged", event_handler.handler_helper('afterEdit'));
-      scheduler.attachEvent("onEventCreated", event_handler.handler_helper('onEventCreated'));
-      scheduler.attachEvent("onEventAdded", event_handler.handler_helper('onEventAdded'));
       scheduler.attachEvent("onBeforeEventDelete", event_handler.handler_helper('onBeforeEventDelete'));
+
+      var sections = [
+        {% for num,room in rooms %}
+        {key: {{ room.id }}, label: "{{ room.name }}"},
+        {% endfor %}
+      ];
 
       scheduler.config.xml_date = "%Y-%m-%d %H:%i";
       scheduler.config.default_date = "%Y/%m/%d";
       scheduler.config.day_date = "%m/%d";
-      scheduler.init('scheduler_here', null, "week");
-      scheduler.setLoadMode("week");
+      scheduler.createUnitsView({
+        name: "unit_pc",
+        property: "room_id",
+        list: sections
+      });
+      scheduler.createUnitsView({
+        name: "unit_m",
+        property: "room_id",
+        list: sections,
+        size: 1,
+        step: 1
+      });
+      scheduler.config.multi_day = true;
 
-      if (window.innerWidth < 980)
-        event_handler.renderMobile();
+      scheduler.setLoadMode("day");
+      if (window.innerWidth < 980) {
+        scheduler.init('scheduler_here', null, "unit_m");
+        $('#js_howto').hide();
+      }
       else
-        event_handler.renderPc();
+        scheduler.init('scheduler_here', null, "unit_pc");
+      scheduler.load("/rooms/get/");
 
-      $('.dhx_cal_tab')
-        .click(function () {
-          var room_id = $(this).attr('room_id');
-          scheduler.clearAll();
-          scheduler.load("/rooms/get/room_id/" + room_id);
-        })
-        .first()
-        .trigger('click');
     }
     require(["jquery"], function ($) {
       $(init($));
       $('#js_howto_button').click(function () {
         $('#js_howto_detail').toggle();
-      });
-      $('#js_room').on('change', function () {
-        var room_id = $(this).val();
-        $('.dhx_cal_tab[room_id=' + room_id + ']').click();
       });
     });
   </script>
@@ -281,10 +246,6 @@
   <div id="scheduler_here" class="dhx_cal_container"
        style='width:100%; height:100%;margin-top:35px;overflow: visible'>
     <div class="dhx_cal_navline" style="margin-bottom: 100px;">
-      {% for num,room in rooms %}
-        <div class="dhx_cal_tab js_room_select_pc" room_id='{{ room.id }}' name="room{{ room.id }}_tab"
-             style="margin-left:-205px;"></div>
-      {% endfor %}
       <div class="dhx_cal_prev_button" style="margin-top:-40px;">&nbsp;</div>
       <div class="dhx_cal_next_button" style="margin-top:-40px;">&nbsp;</div>
       <div class="dhx_cal_today_button" style="margin-top:-40px;"></div>
@@ -294,15 +255,6 @@
     </div>
     <div class="dhx_cal_data">
     </div>
-  </div>
-  <div style="position:absolute;left:15px;top:120px;z-index: 1000;" class="js_room_select_mobile">
-    <label for="js_room">
-      <select id="js_room">
-        {% for num,room in rooms %}
-          <option value="{{ room.id }}">{{ room.name }}</option>
-        {% endfor %}
-      </select>
-    </label>
   </div>
   <div style="position:absolute;right:15px;top:120px;z-index: 1000;">
     <div style="float:right;text-align: right" id="js_howto">
@@ -314,7 +266,6 @@
 4. 삭제 시 내가 저장한 시간을 클릭하고 왼쪽에 ‘휴지통’ 버튼을 눌러주세요. (수정 시에는 ‘펜’ 버튼을 눌러주세요.)
 
 *주의사항
-- 점심시간(12:50~14:00), 저녁시간(19:00~20:00)에는 10-1과 11-1 회의실은 예약이 불가합니다. (식사 용도) (미확정)
 - 회의실 예약 후, 미팅이 취소된 경우 다른 사람을 위해 예약 내역을 꼭 삭제해주세요.
 
 - 모든 외부 손님의 미팅은 10층에서 진행해주세요. (예. 출판사 미팅, 면접 등)

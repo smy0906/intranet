@@ -5,16 +5,15 @@
 $db = \Intra\Service\IntraDb::getGnfDb();
 
 $request = $this->getRequest();
-$room_id = $request->get('room_id');
 $from = $request->get('from');
 $to = $request->get('to');
 
 $where = [
-	'room_id' => $room_id,
 	'deleted' => 0,
 	'from' => sqlGreaterEqual($from),
 	'to' => sqlLesser($to)
 ];
+
 $events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
 
 $return = '';
@@ -27,6 +26,7 @@ foreach ($events as $e) {
 				<end_date>' . $e['to'] . '</end_date>
 				<text><![CDATA[' . htmlspecialchars($e['desc']) . ']]></text>
 				<details><![CDATA[' . htmlspecialchars($e['desc']) . ']]></details>
+				<room_id><![CDATA[' . htmlspecialchars($e['room_id']) . ']]></room_id>
 			</event>
 			';
 }

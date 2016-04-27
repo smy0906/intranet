@@ -1,8 +1,7 @@
 <?php
 /** @var $this Intra\Core\Route */
 
-$this->matchIf('/get/room_id/{room_id}')
-	->assertAsInt('room_id')
+$this->matchIf('/get')
 	->query('get');
 
 $this->matchIf('/del/id/{id}')
