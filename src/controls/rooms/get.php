@@ -15,23 +15,17 @@ $where = [
 ];
 
 $events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
-
-$return = '';
-$return .= '<' . '?xml version=\'1.0\' encoding=\'utf-8\'?' . '>';
-$return .= '<data>';
-foreach ($events as $e) {
-	$return .= '
-			<event id="' . $e['id'] . '">
-				<start_date>' . $e['from'] . '</start_date>
-				<end_date>' . $e['to'] . '</end_date>
-				<text><![CDATA[' . htmlspecialchars($e['desc']) . ']]></text>
-				<details><![CDATA[' . htmlspecialchars($e['desc']) . ']]></details>
-				<room_id><![CDATA[' . htmlspecialchars($e['room_id']) . ']]></room_id>
-			</event>
-			';
+$datas = [];
+foreach ($events as $event) {
+	$datas[] = [
+		'id' => $event['id'],
+		'start_date' => $event['from'],
+		'end_date' => $event['to'],
+		'text' => $event['desc'],
+		'details' => $event['desc'],
+		'room_id' => $event['room_id'],
+	];
 }
-$return .= '</data>';
+$return['data'] = $datas;
 
-header("content-type: text/xml");
-echo $return;
-exit;
+exit(json_encode($return));
