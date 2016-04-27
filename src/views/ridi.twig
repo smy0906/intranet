@@ -50,6 +50,9 @@
     var sentry_public_key = '{{ sentryPublicKey }}';
     if (sentry_public_key.length && window.Raven)
       window.Raven.config(sentry_public_key).install();
+    requirejs(["bootstrap"], function () {
+      //nav var를 위해 강제 호출
+    });
   </script>
 
   {% block head %}
@@ -65,7 +68,7 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              data-target="#navbar" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -79,7 +82,7 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <nav id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+    <nav id="navbar" class="collapse navbar-collapse">
       {% if globalDomain == "ridi.com" %}
         <ul class="nav navbar-nav">
           <li><a href="/posts/notice">공지사항</a></li>
