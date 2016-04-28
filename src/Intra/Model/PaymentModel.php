@@ -27,7 +27,7 @@ class PaymentModel
 		];
 
 		return $this->db->sqlDicts(
-			'select payments.*, users.name from ? where ? order by `request_date` asc, paymentid asc',
+			'select payments.*, users.name from ? where ? order by `status`, `request_date` asc, paymentid asc',
 			sqlLeftJoin($table),
 			sqlWhere($where)
 		);
@@ -65,7 +65,7 @@ class PaymentModel
 		];
 
 		return $this->db->sqlDicts(
-			'select payments.*, users.name from ? where ? order by `pay_date` asc, paymentid asc',
+			'select payments.*, users.name from ? where ? order by `status`,`pay_date` asc, paymentid asc',
 			sqlLeftJoin($table),
 			sqlWhere($where)
 		);

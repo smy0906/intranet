@@ -2,24 +2,20 @@
 namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
-use Intra\Model\PaymentModel;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 class UserPaymentStatService
 {
-	public function sendExcelResposeAndExit($month)
+	/**
+	 * @param $payments PaymentDto[]
+	 * @return string
+	 */
+	public function sendExcelResposeAndExit($payments)
 	{
 		if (!UserSession::getSelfDto()->is_admin) {
 			return '권한이 없습니다';
 		}
-		$month = date('Y/m/1', strtotime($month));
-
-		$user_payment_model = new PaymentModel();
-		/**
-		 * @var $payments PaymentDto[]
-		 */
-		$payments = PaymentDto::importFromDatabaseRowMap($user_payment_model->getAllPayments($month));
 		//header
 		$csvs = [];
 		$arr = [

@@ -192,12 +192,12 @@
         <th>상세내역</th>
         <th>파일</th>
         <th>업체명</th>
-        <th>입금은행</th>
-        <th>입금계좌번호</th>
-        <th>예금주</th>
         <th>입금금액</th>
         <th>결제(예정)일</th>
         <th>세금계산서수취여부</th>
+        <th>입금은행</th>
+        <th>입금계좌번호</th>
+        <th>예금주</th>
         <th>비고</th>
         <th>결제수단</th>
         <th>상태</th>
@@ -207,7 +207,7 @@
       {% for key, payment in payments %}
         <tr class='payment
                 {% if payment.status == '결제 완료' %}
-                    warning
+                    payment_done warning
                 {% endif %}
                 ' data-paymentid='{{ payment.paymentid }}'>
           <td>
@@ -268,12 +268,12 @@
           <td data-key='desc'>{{ payment.desc }}</td>
           <td>{{ payment.files }}</td>
           <td data-key='company_name'>{{ payment.company_name }}</td>
-          <td data-key='bank'>{{ payment.bank }}</td>
-          <td data-key='bank_account'>{{ payment.bank_account }}</td>
-          <td data-key='bank_account_owner'>{{ payment.bank_account_owner }}</td>
           <td data-key='price'>{{ payment.price | number_format }}</td>
           <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
           <td data-key='tax' data-keyselect>{{ payment.tax }}</td>
+          <td data-key='bank'>{{ payment.bank }}</td>
+          <td data-key='bank_account'>{{ payment.bank_account }}</td>
+          <td data-key='bank_account_owner'>{{ payment.bank_account_owner }}</td>
           <td data-key='note'>{{ payment.note }}</td>
           {% if isSuperAdmin %}
             <td data-key='paytype' data-keyselect>{{ payment.paytype }}</td>
@@ -288,7 +288,10 @@
                      attrajax
                      data-aa-url='/payments/paymentid/{{ payment.paymentid }}'
                      data-aa-method='DELETE'
-                     data-aa-confirm='정말 삭제하시겠습니까?'
+                     data-aa-confirm='정말 삭제하시겠습니까?
+
+업체명 : {{ payment.company_name }}
+금액 : {{ payment.price | number_format }}'
                      data-aa-datatype="text"
                      data-aa-success-if-result-is="1"
                      data-aa-onsuccess-msg="삭제되었습니다"
@@ -349,9 +352,6 @@
         <td><input type='text' name='desc' style='width:250px' placeholder='행사지원 쿠폰 인쇄'/></td>
         <td></td>
         <td><input type='text' name='company_name' placeholder=''/></td>
-        <td><input type='text' name='bank' style='width:60px' placeholder='우리'/></td>
-        <td><input type='text' name='bank_account' placeholder='xxx-xxxxxxx-xx-xxx'/></td>
-        <td><input type='text' name='bank_account_owner' placeholder='홍길동'/></td>
         <td><input type='text' name='price' js_number_format placeholder=''/></td>
         <td>
           <label>
@@ -373,6 +373,9 @@
             </select>
           </label>
         </td>
+        <td><input type='text' name='bank' style='width:60px' placeholder='우리'/></td>
+        <td><input type='text' name='bank_account' placeholder='xxx-xxxxxxx-xx-xxx'/></td>
+        <td><input type='text' name='bank_account_owner' placeholder='홍길동'/></td>
         <td><input type='text' name='note' placeholder='비고'/></td>
         <td>
           {% if isSuperAdmin %}
@@ -476,6 +479,15 @@ B. 결제정보
           <td>
             <input type="button" value="받기"
                    onclick="location.href='/payments/download/{{ month }}'"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            이번달 미승인 자료 모두 다운받기
+          </td>
+          <td>
+            <input type="button" value="받기"
+                   onclick="location.href='/payments/downloadRemain/{{ month }}'"/>
           </td>
         </tr>
         <tr>

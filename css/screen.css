@@ -21,3 +21,8 @@ body, div, td, p {
     display: none;
     z-index: 100;
 }
+
+
+tr.payment_done td{
+    color: #bbbbbb;
+}

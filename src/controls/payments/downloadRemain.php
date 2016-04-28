@@ -22,5 +22,5 @@ $month = date('Y/m/1', strtotime($month));
 
 $payment_service = new UserPaymentStatService();
 $user_payment_model = new PaymentModel();
-$payments = PaymentDto::importFromDatabaseRowMap($user_payment_model->getAllPayments($month));
+$payments = PaymentDto::importFromDatabaseRowMap($user_payment_model->queuedPayments());
 $payment_service->sendExcelResposeAndExit($payments);
