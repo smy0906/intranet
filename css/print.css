@@ -1,5 +1,21 @@
-#menu, #admin, #member, .js_user_popup, #receipts_notice, .receipts_command {
+#menu, #admin, #member, .js_user_popup, #receipts_notice, .navbar {
     display: none;
+}
+
+.hidden_on_print, .receipts_command {
+    display: none;
+}
+
+body, div, td, p {
+    font-size: 0.5em;
+}
+
+h2 {
+    font-size: 3em;
+}
+
+h4 {
+    font-size: 1em;
 }
 
 #main {
@@ -10,20 +26,22 @@
     bottom: 0;
 }
 
-.receipts_info {
-    display: block;
+table.table {
+    margin-top: 50px;
+    border-top: 3px solid black;
 }
 
-td {
-    font-size: 10px;
-    padding: 2px;
+table.table th {
+    padding: 5px;
+    text-align: left;
 }
 
-table {
-    border: 1px solid black;
-    margin: 20px;
+table.table td {
+    padding: 5px;
+    margin: 0;
+    border-bottom: 1px solid #dddddd;
 }
 
-td {
-    border-bottom: 1px dotted #aaa;
+table.table tr {
+    margin: 0;
 }

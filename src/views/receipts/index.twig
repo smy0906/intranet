@@ -87,6 +87,15 @@
 {% endblock %}
 
 {% block body %}
+  <div></div>
+  <h2>
+    <span class='js_recipts_title'>{{ user.name }}</span>
+  </h2>
+  <h4>
+    <span class="hidden_on_print"><a href='/receipts/index/{{ prevmonth }}'>{{ prevmonth }}</a> /</span>
+    {{ month }}
+    <span class="hidden_on_print"> / <a href='/receipts/index }}/month/{{ nextmonth }}'>{{ nextmonth }}</a></span>
+  </h4>
   <form
     attrajax
     data-aa-url='/receipts/add'
@@ -100,30 +109,18 @@
   >
     <input type='hidden' name='month' value='{{ month }}'/>
 
-    <div class='receipts_info'>
-      <h2>[{{ month }}] <span class='js_recipts_title'>{{ user.name }}</span></h2>
-    </div>
-    <table>
+    <table class="table table-striped table-hover table-bordered table-condensed" style="width:auto">
       <thead>
       <tr>
-        <td colspan='9'>
-          <span>[{{ month }}] 영수증 목록 (<span class='js_recipts_title'>{{ user.name }}</span>)</span>
-				<span style='float:right'>
-					<a href='/receipts/index/{{ prevmonth }}' class='receipts_command'>전달</a>
-					<a href='/receipts/index/{{ nextmonth }}' class='receipts_command'>다음달</a>
-				</span>
-        </td>
-      </tr>
-      <tr>
-        <td>영수증번호</td>
-        <td>날짜</td>
-        <td>사용처</td>
-        <td>분류</td>
-        <td>용도</td>
-        <td>금액</td>
-        <td>지불방식</td>
-        <td>적요</td>
-        <td class='receipts_command'></td>
+        <th>영수증번호</th>
+        <th>날짜</th>
+        <th>사용처</th>
+        <th>분류</th>
+        <th>용도</th>
+        <th>금액</th>
+        <th>지불방식</th>
+        <th>적요</th>
+        <th class=''></th>
       </tr>
       </thead>
       <tbody>
@@ -213,19 +210,14 @@
     </table>
   </form>
 
-  <table>
+  <table class="table table-hover  table-condensed" style="width:400px">
     <thead>
     <tr>
-      <td colspan='{{ cols|length + 1 }}'>
-        [{{ month }}] 용도별 통계
-      </td>
-    </tr>
-    <tr>
-      <td></td>
+      <th>용도별</th>
       {% for col, null in cols %}
-        <td>
+        <th>
           {{ col }}
-        </td>
+        </th>
       {% endfor %}
     </tr>
     </thead>
@@ -243,16 +235,11 @@
     </tbody>
   </table>
 
-  <table>
+  <table class="table table-hover  table-condensed" style="width:200px">
     <thead>
     <tr>
-      <td colspan='2'>
-        [{{ month }}] 지불방식별 통계
-      </td>
-    </tr>
-    <tr>
-      <td>지불방식</td>
-      <td>금액</td>
+      <th>지불방식별</th>
+      <th>합계</th>
     </tr>
     </thead>
     <tbody>

@@ -17,7 +17,7 @@ require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie"
 
             var cookied_value = $.cookie(key);
             if (cookied_value !== undefined)
-                _this.val(cookied_value).trigger('change');
+                _this.val(cookied_value).trigger('change').trigger('chosen:updated');
         });
 });
 

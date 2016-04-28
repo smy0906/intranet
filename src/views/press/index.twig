@@ -76,7 +76,7 @@
             <td data-key='title'>{{ press.title }}</td>
             <td data-key='link_url'>{{ press.link_url }}</td>
             <td data-key='note'>{{ press.note }}</td>
-            <td class="receipts_command">
+            <td>
               <input type='button' value='삭제'
                      attrajax
                      data-aa-url='/press/del/{{ press.id }}'
@@ -90,7 +90,7 @@
             </td>
           </tr>
         {% endfor %}
-        <tr class='receipts_command'>
+        <tr>
           <td></td>
           <td>
             <input type='text' name='date' maxlength='8' size='10' title="date" placeholder="yyyymmdd"/>

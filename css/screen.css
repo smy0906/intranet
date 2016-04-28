@@ -2,38 +2,6 @@ body, div, td, p {
     font-size: 12px;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-#menu li {
-    margin: 2px;
-}
-
-#menu li a:link {
-    text-decoration: none;
-}
-
-#menu li a:hover {
-    text-decoration: underline;
-}
-
-thead > tr > td {
-    background-color: #999;
-    color: #eee;
-    padding: 4px;
-    border-right:1px dashed #ddd;
-    border-bottom:1px dashed #ddd;
-}
-
-tbody td {
-    text-align: right;
-    padding-left: 10px;
-    border-bottom: 1px solid #eee;
-}
-
 .js_user {
     position: absolute;
     width: 60px;
@@ -52,21 +20,4 @@ tbody td {
     position: absolute;
     display: none;
     z-index: 100;
-}
-
-.a {
-    border: 1px solid #daa;
-}
-
-.main {
-    margin-top: 50px;
-    padding: 10px;
-}
-
-.receipts_info {
-    display: none;
-}
-
-.payment_done td {
-    color: #aaa;
 }
