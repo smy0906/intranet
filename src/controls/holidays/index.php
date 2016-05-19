@@ -21,7 +21,7 @@ if (!intval($year)) {
 	$year = date('Y');
 }
 
-$is_holiday_master = UserPolicy::is_holiday_editable($self);
+$is_holiday_master = UserPolicy::isHolidayEditable($self);
 $editable = $is_holiday_master;
 if (!$is_holiday_master) {
 	if ($uid != $self->uid) {

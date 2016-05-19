@@ -10,7 +10,7 @@ use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 
-if (!UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
+if (!UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
 	exit;
 }
 

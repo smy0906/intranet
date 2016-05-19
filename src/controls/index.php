@@ -6,7 +6,7 @@ use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $self = UserSession::getSelfDto();
-$replaceable = UserPolicy::is_first_page_replaceable($self);
+$replaceable = UserPolicy::isFirstPageEditable($self);
 
 return [
 	'replaceable' => $replaceable,

@@ -10,15 +10,15 @@ namespace Intra\Service\User;
 
 class UserPolicy
 {
-	public static function is_first_page_replaceable($self)
+	public static function isFirstPageEditable($self)
 	{
-		if ($self->is_admin || in_array($self->name, ['한진규', '임다영'])) {
+		if ($self->is_admin || in_array($self->name, ['임다영'])) {
 			return true;
 		}
 		return false;
 	}
 
-	public static function is_holiday_editable($self)
+	public static function isHolidayEditable($self)
 	{
 		if ($self->is_admin || in_array($self->name, ['임다영'])) {
 			return true;
@@ -28,22 +28,25 @@ class UserPolicy
 
 	public static function isPressManager($self)
 	{
-		$press_manager = [
-			'kimhs',
-			'sanghoon.kim'
-		];
-
-		return in_array($self->id, $press_manager);
+		if ($self->is_admin || in_array($self->name, ['김희수', '김상훈'])) {
+			return true;
+		}
+		return false;
 	}
 
 	public static function isUserManager($self)
 	{
-		$user_manager = [
-			'blu',
-			'm.kwon',
-			'dayoung.lim',
-		];
+		if ($self->is_admin || in_array($self->name, ['임다영', '권민석'])) {
+			return true;
+		}
+		return false;
+	}
 
-		return in_array($self->id, $user_manager);
+	public static function isPostAdmin($self)
+	{
+		if ($self->is_admin || in_array($self->name, ['임다영', '권민석', '김미정'])) {
+			return true;
+		}
+		return false;
 	}
 }

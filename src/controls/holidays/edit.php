@@ -9,7 +9,7 @@ use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 
-if (UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
+if (UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
 	$uid = $request->get('uid');
 	$dto = UserService::getDtobyUid($uid);
 } else {

@@ -12,6 +12,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Intra\Config\Config;
 use Intra\Core\MsgException;
 use Intra\Model\PostModel;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 use Mailgun\Mailgun;
 
@@ -30,7 +31,7 @@ class Post
 
 	private function assertAdd($post_list_view)
 	{
-		if (!UserSession::getSelfDto()->is_admin) {
+		if (!UserPolicy::isPostAdmin(UserSession::getSelfDto())) {
 			throw new MsgException('권한이 없습니다');
 		}
 	}
@@ -47,7 +48,7 @@ class Post
 
 	private function assertModify($post_list_view)
 	{
-		if (!UserSession::getSelfDto()->is_admin) {
+		if (!UserPolicy::isPostAdmin(UserSession::getSelfDto())) {
 			throw new MsgException('권한이 없습니다');
 		}
 	}

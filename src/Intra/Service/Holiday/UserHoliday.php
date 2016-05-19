@@ -95,7 +95,7 @@ class UserHoliday
 		if ($self->uid == $this->user->uid) {
 			return;
 		}
-		if (!UserPolicy::is_holiday_editable(UserSession::getSelfDto())) {
+		if (!UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
 			throw new \Exception('권한이 없습니다.');
 		}
 	}

@@ -9,6 +9,8 @@
 namespace Intra\Service\Post;
 
 use Intra\Model\PostModel;
+use Intra\Service\User\UserPolicy;
+use Intra\Service\User\UserSession;
 
 class PostListDto
 {
@@ -50,6 +52,7 @@ class PostListDto
 			'group' => $this->group,
 			'posts' => $posts,
 			'lastItem' => $this->paginate->lastItem(),
+			'isPostAdmin'=> UserPolicy::isPostAdmin(UserSession::getSelfDto()),
 		];
 	}
 }
