@@ -52,7 +52,6 @@ class PostListDto
 			'group' => $this->group,
 			'posts' => $posts,
 			'lastItem' => $this->paginate->lastItem(),
-			'isPostAdmin'=> UserPolicy::isPostAdmin(UserSession::getSelfDto()),
 		];
 	}
 }

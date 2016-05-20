@@ -3,11 +3,12 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
 $response = $this->getResponse();
 $response->add(
-	['isSuperAdmin' => UserSession::getSelfDto()->is_admin]
+	['isPostAdmin' => UserPolicy::isPostAdmin(UserSession::getSelfDto())]
 );
 
 $schema = Capsule::schema();

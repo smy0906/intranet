@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model as EloquentBaseModel;
 use Intra\Core\BaseDto;
 use Intra\Model\PostModel;
 use Intra\Service\User\UserInstanceService;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 
