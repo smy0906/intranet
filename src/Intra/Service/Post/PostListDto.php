@@ -9,8 +9,6 @@
 namespace Intra\Service\Post;
 
 use Intra\Model\PostModel;
-use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserSession;
 
 class PostListDto
 {
@@ -33,7 +31,7 @@ class PostListDto
 	{
 		$return = new self($post_group);
 
-		$return->paginate = PostModel::on()->where('group', $post_group)->orderBy('id', 'desc')->paginate(15);
+		$return->paginate = PostModel::on()->where('group', $post_group)->orderBy('id', 'desc')->paginate(100);
 		$return->postModels = $return->paginate->items();
 
 		return $return;
