@@ -52,10 +52,10 @@ class PaymentDto extends BaseDto
 
 	/**
 	 * @param $payment_row []
-	 * @param $payment_accept_rows PaymentAcceptDto[]
+	 * @param $payment_accepts PaymentAcceptDto[]
 	 * @return PaymentDto
 	 */
-	private static function implementsImportFromDatabaseRow(array $payment_row, array $payment_accept_rows)
+	public static function importFromDatabase(array $payment_row, array $payment_accepts)
 	{
 		$return = new self;
 		$return->initFromArray($payment_row);
@@ -65,7 +65,7 @@ class PaymentDto extends BaseDto
 		$return->is_manager_accepted = false;
 		$return->is_co_accepted = false;
 
-		foreach ($payment_accept_rows as $payment_accept) {
+		foreach ($payment_accepts as $payment_accept) {
 			if ($payment_accept->paymentid == $return->paymentid) {
 				if ($payment_accept->user_type == 'manager') {
 					$return->manger_accept = $payment_accept;
@@ -76,48 +76,6 @@ class PaymentDto extends BaseDto
 					$return->is_co_accepted = true;
 				}
 			}
-		}
-		return $return;
-	}
-
-	/**
-	 * @param array $payment_row
-	 * @return PaymentDto
-	 */
-	public static function importFromDatabaseRow($payment_row)
-	{
-		return self::importFromDatabaseRowMap([$payment_row])[0];
-	}
-
-	/**
-	 * @param array $payment_rows
-	 * @return PaymentDto[]
-	 */
-	public static function importFromDatabaseRowMap(array $payment_rows)
-	{
-		if (count($payment_rows) == 0) {
-			return [];
-		}
-		$paymentids = [];
-		foreach ($payment_rows as $payment_row) {
-			$paymentids[] = $payment_row['paymentid'];
-		}
-		$payment_accept_rows = PaymentAcceptModel::getsByPaymentids($paymentids);
-
-		$payment_accept_by_payment_id = [];
-		foreach ($payment_accept_rows as $payment_accept_row) {
-			$payment_accept = PaymentAcceptDto::importFromDatabaseRow($payment_accept_row);
-			$payment_accept_by_payment_id[$payment_accept->paymentid][] = $payment_accept;
-		}
-
-		$return = [];
-		foreach ($payment_rows as $payment_row) {
-			$paymentid = $payment_row['paymentid'];
-			$payment_accepts = $payment_accept_by_payment_id[$paymentid];
-			if (!is_array($payment_accepts)) {
-				$payment_accepts = [];
-			}
-			$return[] = self::implementsImportFromDatabaseRow($payment_row, $payment_accepts);
 		}
 		return $return;
 	}

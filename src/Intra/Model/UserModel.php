@@ -41,9 +41,8 @@ class UserModel extends BaseModel
 		return self::getDb()->sqlCount('users', ['id' => $id]);
 	}
 
-	public static function getRowWithUid($uid)
+	public static function getDictWithUid($uid)
 	{
-		return self::getDb()->sqlDict('select * from ? where uid = ?', sqlTable(self::$table), $uid);
 		return self::cachingCallback(
 			$uid,
 			function () use ($uid) {
@@ -52,11 +51,8 @@ class UserModel extends BaseModel
 		);
 	}
 
-	public static function getRowWithUids(array $uids)
+	public static function getDictWithUids(array $uids)
 	{
-		return self::getDb()->sqlDicts(
-			'select * from ? where ?', sqlTable(self::$table), sqlWhere(['uid' => $uids])
-		);
 		return self::cachingCallback(
 			$uids,
 			function () use ($uids) {
@@ -81,7 +77,7 @@ class UserModel extends BaseModel
 		return self::getDb()->sqlData('select count(*) from users where uid = ?', $uid);
 	}
 
-	public static function getRowsAvailable()
+	public static function getDictsAvailable()
 	{
 		$where = [];
 		$where['on_date'] = sqlLesserEqual(sqlNow());
@@ -90,12 +86,12 @@ class UserModel extends BaseModel
 		return self::getDb()->sqlDicts('select * from users where ? order by name', sqlWhere($where));
 	}
 
-	public static function getAllRows()
+	public static function getAllDicts()
 	{
 		return self::getDb()->sqlDicts('select * from users order by off_date desc, on_date');
 	}
 
-	public static function getRowsManager()
+	public static function getDictsOfManager()
 	{
 		$where = [];
 		$where['on_date'] = sqlLesserEqual(sqlNow());

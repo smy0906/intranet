@@ -3,6 +3,7 @@
 
 use Intra\Model\PaymentModel;
 use Intra\Service\Payment\PaymentDto;
+use Intra\Service\Payment\PaymentDtoFactory;
 use Intra\Service\Payment\UserPaymentRequestFilter;
 use Intra\Service\Payment\UserPaymentStatService;
 use Intra\Service\User\UserSession;
@@ -22,5 +23,5 @@ $month = date('Y/m/1', strtotime($month));
 
 $payment_service = new UserPaymentStatService();
 $user_payment_model = new PaymentModel();
-$payments = PaymentDto::importFromDatabaseRowMap($user_payment_model->queuedPayments());
+$payments = PaymentDtoFactory::importFromDatabaseDicts($user_payment_model->queuedPayments());
 $payment_service->sendExcelResposeAndExit($payments);

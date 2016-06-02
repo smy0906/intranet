@@ -26,8 +26,8 @@ class UserService
 			return null;
 		}
 		$uid = UserModel::convertUidFromId($id);
-		$row = UserModel::getRowWithUid($uid);
-		return UserDto::importFromDatabase($row);
+		$dict = UserModel::getDictWithUid($uid);
+		return UserDto::importFromDatabase($dict);
 	}
 
 
@@ -40,8 +40,8 @@ class UserService
 		if (!UserModel::isExistByUid($uid)) {
 			return null;
 		}
-		$row = UserModel::getRowWithUid($uid);
-		return UserDto::importFromDatabase($row);
+		$dict = UserModel::getDictWithUid($uid);
+		return UserDto::importFromDatabase($dict);
 	}
 
 	/**
@@ -70,12 +70,8 @@ class UserService
 	 */
 	public static function getAvailableUserDtos()
 	{
-		$return = [];
-		$rows = UserModel::getRowsAvailable();
-		foreach ($rows as $row) {
-			$return[] = UserDto::importFromDatabase($row);
-		}
-		return $return;
+		$dicts = UserModel::getDictsAvailable();
+		return UserDtoFactory::createFromDatabaseDicts($dicts);
 	}
 
 
@@ -84,12 +80,8 @@ class UserService
 	 */
 	public static function getAllUserDtos()
 	{
-		$return = [];
-		$rows = UserModel::getAllRows();
-		foreach ($rows as $row) {
-			$return[] = UserDto::importFromDatabase($row);
-		}
-		return $return;
+		$dicts = UserModel::getAllDicts();
+		return UserDtoFactory::createFromDatabaseDicts($dicts);
 	}
 
 	/**
@@ -98,11 +90,8 @@ class UserService
 	public static function getManagerUserDtos()
 	{
 		$return = [];
-		$rows = UserModel::getRowsManager();
-		foreach ($rows as $row) {
-			$return[] = UserDto::importFromDatabase($row);
-		}
-		return $return;
+		$dicts = UserModel::getDictsOfManager();
+		return UserDtoFactory::createFromDatabaseDicts($dicts);
 	}
 
 	/**
@@ -112,9 +101,9 @@ class UserService
 	public static function getUserDtosByUid($uids)
 	{
 		$return = [];
-		$rows = UserModel::getRowWithUids($uids);
-		foreach ($rows as $row) {
-			$return[] = UserDto::importFromDatabase($row);
+		$dicts = UserModel::getDictWithUids($uids);
+		foreach ($dicts as $dict) {
+			$return[] = UserDto::importFromDatabase($dict);
 		}
 		return $return;
 	}
@@ -157,8 +146,8 @@ class UserService
 		if (!UserModel::isExistByUid($uid)) {
 			return null;
 		}
-		$row = UserModel::getRowWithUid($uid);
-		$dto = UserDto::importFromDatabase($row);
+		$dict = UserModel::getDictWithUid($uid);
+		$dto = UserDto::importFromDatabase($dict);
 		return $dto->name;
 	}
 
@@ -167,8 +156,8 @@ class UserService
 		if (!UserModel::isExistByUid($uid)) {
 			return null;
 		}
-		$row = UserModel::getRowWithUid($uid);
-		$dto = UserDto::importFromDatabase($row);
+		$dict = UserModel::getDictWithUid($uid);
+		$dto = UserDto::importFromDatabase($dict);
 		return $dto->email;
 	}
 }

@@ -38,7 +38,7 @@ class UserPaymentService
 
 		$self = UserSession::getSelfDto();
 		if ($self->is_admin) {
-			$return['queuedPayments'] = PaymentDto::importFromDatabaseRowMap(
+			$return['queuedPayments'] = PaymentDtoFactory::importFromDatabaseDicts(
 				$this->payment_model->queuedPayments()
 			);
 			$return['todayQueuedCount'] = $this->payment_model->todayQueuedCount();
@@ -51,12 +51,12 @@ class UserPaymentService
 			if ($self->is_admin) {
 				$payments = $return['queuedPayments'];
 			} else {
-				$payments = PaymentDto::importFromDatabaseRowMap(
+				$payments = PaymentDtoFactory::importFromDatabaseDicts(
 					$this->payment_model->queuedPaymentsByManager($this->user->uid)
 				);
 			}
 		} else {
-			$payments = PaymentDto::importFromDatabaseRowMap(
+			$payments = PaymentDtoFactory::importFromDatabaseDicts(
 				$this->payment_model->getPayments($uid, $month)
 			);
 		}

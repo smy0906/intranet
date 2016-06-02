@@ -11,7 +11,6 @@ namespace Intra\Service\Payment;
 
 use Intra\Config\Config;
 use Intra\Core\Application;
-use Intra\Model\PaymentModel;
 use Intra\Service\User\UserService;
 use Mailgun\Mailgun;
 
@@ -19,9 +18,7 @@ class UserPaymentMailService
 {
 	public static function sendMail($type, $payment_id)
 	{
-		$user_payment_model = new PaymentModel();
-		$payment_row = $user_payment_model->getPaymentWithoutUid($payment_id);
-		$payment_dto = PaymentDto::importFromDatabaseRow($payment_row);
+		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($payment_id);
 		list($title, $html, $receivers) = self::getMailContents($type, $payment_dto);
 		self::sendMailRaw($receivers, $title, $html);
 	}

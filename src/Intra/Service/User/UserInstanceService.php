@@ -29,7 +29,7 @@ class UserInstanceService extends BaseInstanceService
 	public static function importFromDatabaseWithId($id)
 	{
 		$uid = UserModel::convertUidFromId($id);
-		$row = UserModel::getRowWithUid($uid);
+		$row = UserModel::getDictWithUid($uid);
 		self::assertDatabaseRowExist($row);
 		return self::importFromDto(UserDto::importFromDatabase($row));
 	}
@@ -41,7 +41,7 @@ class UserInstanceService extends BaseInstanceService
 	 */
 	public static function importFromDatabaseWithUid($uid)
 	{
-		$row = UserModel::getRowWithUid($uid);
+		$row = UserModel::getDictWithUid($uid);
 		self::assertDatabaseRowExist($row);
 		return self::importFromDto(UserDto::importFromDatabase($row));
 	}

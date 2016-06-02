@@ -22,7 +22,7 @@ class PaymentAcceptDto extends BaseDto
 	 */
 	public $created_datetime;
 
-	public static function importFromDatabaseRow(array $payment_accept_row)
+	public static function importFromDatabaseDict(array $payment_accept_row)
 	{
 		$return = new self;
 		$return->initFromArray($payment_accept_row);

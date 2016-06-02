@@ -28,9 +28,7 @@ class UserPaymentRowInstance
 
 	public function edit($key, $new_value)
 	{
-		$payment_dto = PaymentDto::importFromDatabaseRow(
-			$this->user_payment_model->getPaymentWithoutUid($this->payment_id)
-		);
+		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($this->payment_id);
 		$old_value = $payment_dto->$key;
 
 		if (!$this->assertEdit($key, $old_value, $new_value, $payment_dto)) {
@@ -38,9 +36,7 @@ class UserPaymentRowInstance
 		}
 		$this->user_payment_model->update($this->payment_id, $key, $new_value);
 
-		$updated_payment_dto = PaymentDto::importFromDatabaseRow(
-			$this->user_payment_model->getPaymentWithoutUid($this->payment_id)
-		);
+		$updated_payment_dto = PaymentDtoFactory::createFromDatabaseByPk($this->payment_id);
 		$updated_value = $updated_payment_dto->$key;;
 
 		if ($key == 'status') {
@@ -100,9 +96,7 @@ class UserPaymentRowInstance
 
 	public function acceptManageer()
 	{
-		$payment_dto = PaymentDto::importFromDatabaseRow(
-			$this->user_payment_model->getPaymentWithoutUid($this->payment_id)
-		);
+		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($this->payment_id);
 		$self = UserSession::getSelfDto();
 		if ($payment_dto->manager_uid != $self->uid) {
 			throw new MsgException("담당 승인자가 아닙니다.");
