@@ -112,6 +112,9 @@
           <li><a href="/rooms">회의실</a></li>
           <li><a href="http://htms.himgt.net" target="_blank">Payday</a></li>
         </ul>
+        {% if isUserManager %}
+          <li><a href="/users/list"><span class="glyphicon glyphicon-list"></span>회원목록</a></li>
+        {% endif %}
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/usersession/logout">로그아웃 <span class="glyphicon glyphicon-log-out"></span></a></li>
         </ul>
