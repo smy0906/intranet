@@ -2,11 +2,11 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\Payment\UserPaymentRequestFilter;
-use Intra\Service\Payment\UserPaymentService;
 use Intra\Service\Receipt\UserReceiptsStat;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
-if (!UserSession::getSelfDto()->is_admin) {
+if (UserPolicy::isReceiptsAdmin(UserSession::getSelfDto())) {
 	exit;
 }
 

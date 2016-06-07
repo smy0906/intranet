@@ -49,4 +49,20 @@ class UserPolicy
 		}
 		return false;
 	}
+
+	public static function isPaymentAdmin($self)
+	{
+		if ($self->is_admin) {
+			return true;
+		}
+		return false;
+	}
+
+	public static function isReceiptsAdmin($self)
+	{
+		if ($self->is_admin || in_array($self->name, ['임다영', '권민석'])) {
+			return true;
+		}
+		return false;
+	}
 }
