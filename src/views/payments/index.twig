@@ -3,7 +3,7 @@
 {% block head %}
   {{ parent() }}
   <script>
-    require(["jquery", "jquery.jeditable"], function ($) {
+    require(["jquery", "jquery.jeditable", "jquery.fileupload"], function ($) {
       $("input").on("keypress", function (e) {
         return e.which != 13;
       });
@@ -87,7 +87,32 @@
           });
         });
       });
+      // Change this to the location of your server-side upload handler:
+      var url = '/payments/file_upload/';
+      $('.js_fileupload').each(function () {
+        var paymentid = $(this).data('paymentid');
+        $(this).fileupload({
+          formData: {paymentid: paymentid},
+          dropZone: $(this),
+          url: url,
+          dataType: 'json',
+          done: function (e, data) {
+            $('#progress .progress-bar').css('width', '0');
+            $.each(data.result.files, function (index, file) {
+              $('<p/>').text(file.name).appendTo('#files');
+            });
+            $('#progress .progress-bar').css('width', '0');
+          },
+          progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css('width', progress + '%');
+          }
+        })
+          .prop('disabled', !$.support.fileInput)
+          .parent()
+          .addClass($.support.fileInput ? undefined : 'disabled');
 
+      });
       {% if editable %}
       $('.payment td[data-key]').each(function () {
         var paymentid = $(this).parent().data('paymentid');
@@ -266,7 +291,12 @@
           <td data-key='product' data-keyselect>{{ payment.product }}</td>
           <td data-key='category'>{{ payment.category }}</td>
           <td data-key='desc'>{{ payment.desc }}</td>
-          <td>{{ payment.files }}</td>
+          <td>
+            <input class="js_fileupload" type="file" name="files[]" multiple data-paymentid="{{ payment.paymentid }}">
+            {% for file in payment.files %}
+              <div>{{ file.original_filename }} / {{ file.location }}</div>
+            {% endfor %}
+          </td>
           <td data-key='company_name'>{{ payment.company_name }}</td>
           <td data-key='price'>{{ payment.price | number_format }}</td>
           <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
@@ -445,6 +475,10 @@
       </tbody>
     </table>
   </form>
+
+  <div id="progress" class="progress">
+    <div class="progress-bar progress-bar-success"></div>
+  </div>
 
   <div style="width: 800px">
         <pre>

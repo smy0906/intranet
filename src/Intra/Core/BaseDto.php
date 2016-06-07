@@ -22,7 +22,7 @@ class BaseDto
 	 * Request class를 이용하여 클래스를 초기화한다.
 	 * @param Request $request
 	 */
-	public function initFromRequest($request)
+	protected function initFromRequest($request)
 	{
 		$reflect = new ReflectionClass(get_called_class());
 		$properties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED);
@@ -34,7 +34,7 @@ class BaseDto
 	/**stdClass 일 경우 클래스 초기화
 	 * @param \stdClass $stdClass
 	 */
-	public function initFromStdClass($stdClass)
+	protected function initFromStdClass($stdClass)
 	{
 		$reflect = new ReflectionClass(get_called_class());
 		$properties = $reflect->getDefaultProperties();
@@ -47,7 +47,7 @@ class BaseDto
 	 * 배열을 이용하여 클래스를 초기화한다
 	 * @param array $array
 	 */
-	public function initFromArray($array)
+	protected function initFromArray($array)
 	{
 		$reflect = new ReflectionClass(get_called_class());
 		$properties = $reflect->getDefaultProperties();
@@ -61,7 +61,7 @@ class BaseDto
 	/**interface의 function을 가져와 클래스를 초기화 한다.
 	 * @param $reader
 	 */
-	public function initFromInterface($reader)
+	protected function initFromInterface($reader)
 	{
 		$reflect = new ReflectionClass(get_called_class());
 		$default_properties = $reflect->getDefaultProperties();
@@ -77,7 +77,7 @@ class BaseDto
 	 * 단, Null값을 가진 column은 제외한다.
 	 * @return array
 	 */
-	public function exportAsArrayExceptNull()
+	protected function exportAsArrayExceptNull()
 	{
 		$columns = $this->exportAsArray();
 
@@ -94,7 +94,7 @@ class BaseDto
 	 * 함수를 호출한 클래스의 기본 멤버변수만을(동적, 부모 멤버변수 제외) 리턴한다.
 	 * @return array
 	 */
-	public function exportAsArray()
+	protected function exportAsArray()
 	{
 		$reflect = new ReflectionClass(get_called_class());
 		$default_properties = $reflect->getDefaultProperties();
@@ -107,7 +107,7 @@ class BaseDto
 		return $columns;
 	}
 
-	public function exportAsArrayByKeys(array $keys)
+	protected function exportAsArrayByKeys(array $keys)
 	{
 		$columns = [];
 		foreach ($keys as $key) {

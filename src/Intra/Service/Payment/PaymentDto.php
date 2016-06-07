@@ -10,7 +10,7 @@ namespace Intra\Service\Payment;
 
 
 use Intra\Core\BaseDto;
-use Intra\Model\PaymentAcceptModel;
+use Intra\Core\MsgException;
 use Intra\Service\User\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -43,19 +43,31 @@ class PaymentDto extends BaseDto
 	public $register_name;
 	public $manager_name;
 
-	public $is_manager_accepted;
+	/**
+	 * @var $manger_accept PaymentAcceptDto
+	 */
 	public $manger_accept;
+	public $is_manager_accepted;
 
-	public $is_co_accepted;
+	/**
+	 * @var $co_accept PaymentAcceptDto
+	 */
 	public $co_accept;
+	public $is_co_accepted;
+
+	/**
+	 * @var $files FileUploadDto[]
+	 */
+	public $files;
 
 
 	/**
-	 * @param $payment_row []
-	 * @param $payment_accepts PaymentAcceptDto[]
+	 * @param array $payment_row []
+	 * @param $payment_accepts_dtos PaymentAcceptDto[]
+	 * @param $payment_files_dtos FileUploadDto[]
 	 * @return PaymentDto
 	 */
-	public static function importFromDatabase(array $payment_row, array $payment_accepts)
+	public static function importFromDatabase(array $payment_row, array $payment_accepts_dtos, $payment_files_dtos)
 	{
 		$return = new self;
 		$return->initFromArray($payment_row);
@@ -65,7 +77,9 @@ class PaymentDto extends BaseDto
 		$return->is_manager_accepted = false;
 		$return->is_co_accepted = false;
 
-		foreach ($payment_accepts as $payment_accept) {
+		$return->files = $payment_files_dtos;
+
+		foreach ($payment_accepts_dtos as $payment_accept) {
 			if ($payment_accept->paymentid == $return->paymentid) {
 				if ($payment_accept->user_type == 'manager') {
 					$return->manger_accept = $payment_accept;
@@ -119,19 +133,19 @@ class PaymentDto extends BaseDto
 			unset($return->status);
 		}
 		if (!$return->manager_uid) {
-			throw new \Exception('승인자가 누락되었습니다. 다시 입력해주세요');
+			throw new MsgException('승인자가 누락되었습니다. 다시 입력해주세요');
 		}
 		if (!$return->product) {
-			throw new \Exception('프로덕트가 누락되었습니다. 다시 입력해주세요');
+			throw new MsgException('프로덕트가 누락되었습니다. 다시 입력해주세요');
 		}
 		if (strlen($return->paytype) == 0) {
 			unset($return->paytype);
 		}
 		if (!strtotime($return->month . '-1')) {
-			throw new \Exception('귀속월을 다시 입력해주세요');
+			throw new MsgException('귀속월을 다시 입력해주세요');
 		}
 		if (!strtotime($return->pay_date)) {
-			throw new \Exception('결제(예정)일을 다시 입력해주세요');
+			throw new MsgException('결제(예정)일을 다시 입력해주세요');
 		}
 		return $return;
 	}

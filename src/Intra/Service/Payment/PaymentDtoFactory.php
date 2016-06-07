@@ -36,15 +36,25 @@ class PaymentDtoFactory
 			return [];
 		}
 		$paymentids = DictsUtils::extractValuesByKey($payment_dicts, 'paymentid');
+
 		$payment_accept_dicts = PaymentAcceptModel::getsByPaymentids($paymentids);
 		$payment_accept_dicts_by_payment_id = DictsUtils::alignListByKey($payment_accept_dicts, 'paymentid');
+
+		$payment_files_dicts = FileUploadModel::getDictsByGroupAndKeys('payment_files', $paymentids);
+		$payment_files_dicts_by_payment_id = DictsUtils::alignListByKey($payment_files_dicts, 'key');
+
 
 		$return = [];
 		foreach ($payment_dicts as $payment_dict) {
 			$paymentid = $payment_dict['paymentid'];
+
 			$payment_accepts_dicts = $payment_accept_dicts_by_payment_id[$paymentid];
-			$payment_accepts = PaymentAcceptDtoFactory::createFromDatabaseDicts($payment_accepts_dicts);
-			$return[] = PaymentDto::importFromDatabase($payment_dict, $payment_accepts);
+			$payment_accept_dtos = PaymentAcceptDtoFactory::createFromDatabaseDicts($payment_accepts_dicts);
+
+			$payment_files_dicts = $payment_files_dicts_by_payment_id[$paymentid];
+			$payment_files_dtos = FileUploadDtoFactory::createFromDatabaseDicts($payment_files_dicts);
+
+			$return[] = PaymentDto::importFromDatabase($payment_dict, $payment_accept_dtos, $payment_files_dtos);
 		}
 		return $return;
 	}

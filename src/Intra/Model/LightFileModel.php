@@ -45,4 +45,19 @@ class LightFileModel
 	{
 		return $this->dir . '/' . $filename;
 	}
+
+	public function makeDirectory($dirname)
+	{
+		if (is_dir($dirname)) {
+			return;
+		}
+		mkdir($dirname, 0777, true);
+	}
+
+	public function getUploadableLocation($filename)
+	{
+		$return = $this->dir . '/' . $filename;
+		$this->makeDirectory(dirname($return));
+		return $return;
+	}
 }

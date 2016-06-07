@@ -49,4 +49,9 @@ class UserPolicy
 		}
 		return false;
 	}
+
+	public static function isAdmin($self)
+	{
+		return $self->is_admin;
+	}
 }

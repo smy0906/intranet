@@ -1,10 +1,13 @@
 <?php
 namespace Intra\Service\Payment;
 
+use Intra\Core\MsgException;
 use Intra\Model\PaymentModel;
 use Intra\Service\User\UserDto;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UserPaymentService
 {
@@ -19,6 +22,39 @@ class UserPaymentService
 		$this->user = $user;
 
 		$this->payment_model = new PaymentModel();
+	}
+
+	/**
+	 * @param $payment_id
+	 * @param $file UploadedFile
+	 * @return UploadedFile|false
+	 * @throws MsgException
+	 */
+	public static function addFiles($payment_id, $file)
+	{
+		$self = UserSession::getSelfDto();
+		$payment = PaymentDtoFactory::createFromDatabaseByPk($payment_id);
+		self::assertAddFiles($payment, $self);
+
+		$file_upload_service = new FileUploadService('payment_files');
+		return $file_upload_service->upload($payment_id, $file);
+	}
+
+	/**
+	 * @param $payment PaymentDto
+	 * @param $self UserDto
+	 * @throws MsgException
+	 */
+	private static function assertAddFiles($payment, $self)
+	{
+		if (UserPolicy::isAdmin($self)) {
+			return;
+		}
+		if ($self->uid != $payment->uid
+			&& $self->uid != $payment->manager_uid
+		) {
+			throw new MsgException("본인이나 승인자만 파일을 업로드 가능합니다.");
+		}
 	}
 
 	public function index($month, $is_type_remain_only)
