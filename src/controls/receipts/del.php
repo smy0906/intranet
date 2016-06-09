@@ -6,7 +6,7 @@ use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $receiptid = $request->get('receiptid');
+$self = UserSession::getSelfDto();
 
-$user = UserSession::getSupereditUserDto();
-$payment_service = new UserReceipts($user);
+$payment_service = new UserReceipts($self);
 return $payment_service->del($receiptid);

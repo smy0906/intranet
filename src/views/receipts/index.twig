@@ -38,8 +38,8 @@
       $('.receipt td[data-key]').each(function () {
         var receiptid = $(this).parent().data('receiptid');
         var key = $(this).data('key');
-        var submitdata = {receiptid: receiptid, key: key};
-        var args = {submitdata: submitdata};
+        var submitdata = {key: key};
+        var args = {submitdata: submitdata, method: 'PUT'};
         if (key == 'cost') {
           args['data'] = function (value) {
             return value.replace(/\D/gi, '');
@@ -52,24 +52,15 @@
           };
         }
 
-
-        $(this).editable('/receipts/edit', args);
+        $(this).editable('/receipts/receiptid/' + receiptid, args);
       });
       {% endif %}
       $('select#js_super_edit')
+        .val({{ currentUid }})
+        .trigger("chosen:updated")
         .change(function () {
-          $.post('/usersession/superedit'
-            , {uid: $(this).val()}
-            , function (dat) {
-              if (dat == '1')
-                window.location.reload();
-              else
-                alert(dat);
-            }
-          );
-        })
-        .val(currentUid)
-        .trigger("chosen:updated");
+          location.href = '/receipts/uid/' + $(this).val();
+        });
       var $js_recipts_title = $('.js_recipts_title');
       var text = $("select#js_super_edit option:selected").text();
       if (text && text.length)
@@ -92,13 +83,13 @@
     <span class='js_recipts_title'>{{ user.name }}</span>
   </h2>
   <h4>
-    <span class="hidden_on_print"><a href='/receipts/index/{{ prevmonth }}'>{{ prevmonth }}</a> /</span>
+    <span class="hidden_on_print"><a href='/receipts/uid/{{ currentUid }}/month/{{ prevmonth }}'>{{ prevmonth }}</a> /</span>
     {{ month }}
-    <span class="hidden_on_print"> / <a href='/receipts/index/{{ nextmonth }}'>{{ nextmonth }}</a></span>
+    <span class="hidden_on_print"> / <a href='/receipts/uid/{{ currentUid }}/month/{{ nextmonth }}'>{{ nextmonth }}</a></span>
   </h4>
   <form
     attrajax
-    data-aa-url='/receipts/add'
+    data-aa-url='/receipts/uid/{{ currentUid }}'
     data-aa-method='post'
     data-aa-datatype="text"
     data-aa-success-if-result-is="1"
@@ -138,7 +129,8 @@
             {% if editable %}
               <input type='button' value='삭제'
                      attrajax
-                     data-aa-url='/receipts/del/{{ receipt.receiptid }}'
+                     data-aa-url='/receipts/receiptid/{{ receipt.receiptid }}'
+                     data-aa-method='DELETE'
                      data-aa-confirm='정말 삭제하시겠습니까?'
                      data-aa-datatype="text"
                      data-aa-success-if-result-is="1"
@@ -280,7 +272,7 @@
       <input type="button" value=" 영수증 겉표지 인쇄! " onclick="receiptsPrint();return false;"/>
     </div>
     <br/>
-    {% if isSuperAdmin %}
+    {% if isAdmin %}
       <div>
         <table class="table table-condensed" style="width: auto">
           <thead>

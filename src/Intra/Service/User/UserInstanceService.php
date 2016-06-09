@@ -41,9 +41,9 @@ class UserInstanceService extends BaseInstanceService
 	 */
 	public static function importFromDatabaseWithUid($uid)
 	{
-		$row = UserModel::getDictWithUid($uid);
-		self::assertDatabaseRowExist($row);
-		return self::importFromDto(UserDto::importFromDatabase($row));
+		$dict = UserModel::getDictWithUid($uid);
+		self::assertDatabaseRowExist($dict);
+		return self::importFromDto(UserDto::importFromDatabase($dict));
 	}
 
 	public function isValid()

@@ -4,6 +4,7 @@ namespace Intra\Service\Receipt;
 
 use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
@@ -44,7 +45,7 @@ class UserReceipts
 		$return = [];
 
 		$return['user'] = $this->user;
-		$uid = $this->getSupereditUid();
+		$uid = $this->user->uid;
 
 		$prevmonth = date('Y-m', strtotime('-1 month', strtotime($month)));
 		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
@@ -155,7 +156,7 @@ class UserReceipts
 		$return['paymentCosts'][] = ['payment' => '합계', 'cost' => $sum];
 
 
-		$return['currentUid'] = $this->getSupereditUid();
+		$return['currentUid'] = $this->user->uid;
 		$return['editable'] = (UserReceipts::parseMonth() <= $month);
 		if (UserSession::getSelfDto()->is_admin) {
 			$return['isSuperAdmin'] = 1;
@@ -196,7 +197,7 @@ class UserReceipts
 			'payment' => $payment,
 			'note' => $note
 		];
-		$row['uid'] = $this->getSupereditUid();
+		$row['uid'] = $this->user->uid;
 		$row['date'] = date('Y-m-d', strtotime($month . '-' . $day));
 		if ($row['note'] == '저녁식사비' && self::isWeekend($row['date'])) {
 			$row['note'] = '휴일식사비';
@@ -235,8 +236,9 @@ class UserReceipts
 	{
 		$db = IntraDb::getGnfDb();
 
-		$uid = $this->getSupereditUid();
-		$res = $db->sqlDelete('receipts', compact('receiptid', 'uid'));
+		$where = $this->getSafeEditableWhereCalues($receiptid);
+
+		$res = $db->sqlDelete('receipts', $where);
 		if ($res) {
 			return 1;
 		}
@@ -247,10 +249,10 @@ class UserReceipts
 	{
 		$db = IntraDb::getGnfDb();
 
-		$uid = $this->getSupereditUid();
+		$uid = $this->user->uid;
 
 		$update = [$key => $value];
-		$where = compact('uid', 'receiptid');
+		$where = $this->getSafeEditableWhereCalues($receiptid);
 
 		$old_value = $db->sqlData('select ? from receipts where ?', sqlColumn($key), sqlWhere($where));
 		if ($key == 'date') {
@@ -261,11 +263,20 @@ class UserReceipts
 			}
 		}
 
-		$db->sqlUpdate('receipts', $update, compact('receiptid', 'uid'));
+		$db->sqlUpdate('receipts', $update, $where);
 		$new_value = $db->sqlData('select ? from receipts where ?', sqlColumn($key), sqlWhere($where));
 		if ($key == 'cost') {
 			return number_format($new_value) . ' 원';
 		}
 		return $new_value;
+	}
+
+	private function getSafeEditableWhereCalues($receiptid)
+	{
+		$self = UserSession::getSelfDto();
+		if (UserPolicy::isReceiptsAdmin($self)) {
+			return ['receiptid' => $receiptid];
+		}
+		return ['receiptid' => $receiptid, 'uid' => $this->user->uid];
 	}
 }

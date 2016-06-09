@@ -1,16 +1,17 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\Payment\UserPaymentService;
 use Intra\Service\Payment\UserPaymentRequestFilter;
+use Intra\Service\Payment\UserPaymentService;
 use Intra\Service\User\UserInstanceService;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 $self = UserSession::getSelfDto();
 
 $uid = $request->get('uid');
-if (!intval($uid)) {
+if (!intval($uid) || !UserPolicy::isPaymentAdmin($self)) {
 	$uid = $self->uid;
 }
 $month = $request->get('month');
