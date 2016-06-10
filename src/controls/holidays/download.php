@@ -5,11 +5,12 @@ use Intra\Lib\Response\CsvResponse;
 use Intra\Service\Holiday\UserHolidayStat;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
+use Symfony\Component\HttpFoundation\Response;
 
 $request = $this->getRequest();
 
 if (!UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
-	exit;
+	return new Response("권한이 없습니다", 403);
 }
 
 //input
@@ -42,6 +43,4 @@ foreach ($holidays as $holiday) {
 	$rows[] = $row;
 }
 
-$response = new CsvResponse($rows);
-$response->send();
-exit;
+return new CsvResponse($rows);

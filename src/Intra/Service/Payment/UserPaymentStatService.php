@@ -2,8 +2,10 @@
 namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserPaymentStatService
 {
@@ -11,10 +13,10 @@ class UserPaymentStatService
 	 * @param $payments PaymentDto[]
 	 * @return string
 	 */
-	public function sendExcelResposeAndExit($payments)
+	public function getCsvRespose($payments)
 	{
-		if (!UserSession::getSelfDto()->is_admin) {
-			return '권한이 없습니다';
+		if (!UserPolicy::isPaymentAdmin(UserSession::getSelfDto())) {
+			return new Response("권한이 없습니다", 403);
 		}
 		//header
 		$csvs = [];
@@ -63,8 +65,6 @@ class UserPaymentStatService
 			$csvs[] = $arr;
 		}
 
-		$csvresponse = new CsvResponse($csvs);
-		$csvresponse->send();
-		exit;
+		return new CsvResponse($csvs);
 	}
 }

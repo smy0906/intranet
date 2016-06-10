@@ -7,11 +7,12 @@ use Intra\Service\Holiday\UserHolidayPolicy;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
+use Symfony\Component\HttpFoundation\Response;
 
 $request = $this->getRequest();
 
 if (!UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
-	exit;
+	return new Response("권한이 없습니다", 403);
 }
 
 $year = $request->get('year');
@@ -47,6 +48,4 @@ foreach ($users as $user) {
 	];
 }
 
-$response = new CsvResponse($rows);
-$response->send();
-exit;
+return new CsvResponse($rows);

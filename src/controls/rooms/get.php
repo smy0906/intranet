@@ -2,6 +2,8 @@
 
 /** @var $this Intra\Core\Control */
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 $db = \Intra\Service\IntraDb::getGnfDb();
 
 $request = $this->getRequest();
@@ -28,4 +30,4 @@ foreach ($events as $event) {
 }
 $return['data'] = $datas;
 
-exit(json_encode($return));
+return new JsonResponse($return);

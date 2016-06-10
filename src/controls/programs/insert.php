@@ -34,5 +34,4 @@ $programs_insert = $post_data;
 $db = IntraDb::getGnfDb();
 $db->sqlInsert('userprograms', $programs_insert);
 
-echo "프로그램과 폰트목록이 확인되었습니다";
-exit;
+return "프로그램과 폰트목록이 확인되었습니다";
