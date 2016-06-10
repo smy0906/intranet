@@ -22,4 +22,10 @@ class FileUploadDtoFactory
 		}
 		return $return;
 	}
+
+	public static function importDtoByPk($id)
+	{
+		$dict = FileUploadModel::getDictByPk($id);
+		return FileUploadDto::importFromDatabaseDict($dict);
+	}
 }

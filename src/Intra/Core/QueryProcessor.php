@@ -72,11 +72,7 @@ class QueryProcessor
 				$ret = $target->call();
 			} catch (MsgException $e) {
 				$ret = $e->getMessage();
-				echo($ret);
-			}
-			if ($ret instanceof Response) {
-				$ret->send();
-				exit;
+				return new Response($ret);
 			}
 			return $ret;
 		}

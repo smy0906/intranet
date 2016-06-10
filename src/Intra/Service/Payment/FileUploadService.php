@@ -10,7 +10,9 @@ namespace Intra\Service\Payment;
 
 
 use Intra\Model\LightFileModel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 
 class FileUploadService
 {
@@ -28,17 +30,20 @@ class FileUploadService
 	}
 
 	/**
+	 * @param $uid
 	 * @param $payment_id
 	 * @param $file UploadedFile
-	 * @return UploadedFile|false
+	 * @return false|UploadedFile
 	 */
-	public function upload($payment_id, $file)
+	public function upload($uid, $payment_id, $file)
 	{
 		$return = false;
 		FileUploadModel::transactional(
-			function () use (&$return, $payment_id, $file) {
+			function () use (&$return, $uid, $payment_id, $file) {
 				$count = FileUploadModel::getAlreadyRegistedCount($this->group, $payment_id);
-				$file_upload_dto = FileUploadDto::importFromUploadReqeust($file, $this->group, $payment_id, $count + 1);
+				$file_upload_dto = FileUploadDto::importFromUploadReqeust(
+					$uid, $file, $this->group, $payment_id, $count + 1
+				);
 				$dest = $this->light_file_model->getUploadableLocation($file_upload_dto->location);
 				if ($file->move(dirname($dest), basename($dest))) {
 					if (FileUploadModel::insert($file_upload_dto)) {
@@ -48,5 +53,14 @@ class FileUploadService
 			}
 		);
 		return $return;
+	}
+
+	public function getBinaryFileResponseWithDto($file_upload_dto)
+	{
+		$dest = $this->light_file_model->getUploadableLocation($file_upload_dto->location);
+		if (is_file($dest)) {
+			return new BinaryFileResponse($dest);
+		}
+		return new Response('file not exist', 404);
 	}
 }

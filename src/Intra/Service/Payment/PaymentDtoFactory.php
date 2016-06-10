@@ -23,6 +23,9 @@ class PaymentDtoFactory
 	{
 		$user_payment_model = new PaymentModel();
 		$payment_row = $user_payment_model->getPaymentWithoutUid($payment_id);
+		if (!$payment_row) {
+			return null;
+		}
 		return self::importFromDatabaseDicts([$payment_row])[0];
 	}
 

@@ -37,7 +37,7 @@ class UserPaymentService
 		self::assertAddFiles($payment, $self);
 
 		$file_upload_service = new FileUploadService('payment_files');
-		return $file_upload_service->upload($payment_id, $file);
+		return $file_upload_service->upload($self->uid, $payment_id, $file);
 	}
 
 	/**
@@ -47,7 +47,7 @@ class UserPaymentService
 	 */
 	private static function assertAddFiles($payment, $self)
 	{
-		if (UserPolicy::isAdmin($self)) {
+		if (UserPolicy::isPaymentAdmin($self)) {
 			return;
 		}
 		if ($self->uid != $payment->uid
@@ -55,6 +55,39 @@ class UserPaymentService
 		) {
 			throw new MsgException("본인이나 승인자만 파일을 업로드 가능합니다.");
 		}
+	}
+
+	public static function downloadFile($self, $fileid)
+	{
+		$file_upload_dto = FileUploadDtoFactory::importDtoByPk($fileid);
+		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($file_upload_dto->key);
+		self::assertDownloadFile($self, $file_upload_dto, $payment_dto);
+
+		$file_upload_service = new FileUploadService('payment_files');
+		return $file_upload_service->getBinaryFileResponseWithDto($file_upload_dto);
+	}
+
+	/**
+	 * @param $self UserDto
+	 * @param $file_upload_dto FileUploadDto
+	 * @param $payment_dto PaymentDto
+	 * @throws MsgException
+	 */
+	private static function assertDownloadFile($self, $file_upload_dto, $payment_dto)
+	{
+		if (UserPolicy::isPaymentAdmin($self)) {
+			return;
+		}
+		if ($self->id == $file_upload_dto->uid) {
+			return;
+		}
+		if (!$payment_dto) {
+			throw new MsgException("파일에 해당하는 결제정보가 없습니다. 플랫폼팀에 문의해주세요.");
+		}
+		if ($self->id == $payment_dto->manager_uid) {
+			return;
+		}
+		throw new MsgException("파일 다운로드 권한이 없습니다.");
 	}
 
 	public function index($month, $is_type_remain_only)

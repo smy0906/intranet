@@ -2,6 +2,34 @@
 
 {% block head %}
   {{ parent() }}
+  <style>
+    .fileupload_button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fileupload_button input.js_fileupload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+
+    .js_file_list {
+      border: 1px #999999 solid;
+      padding: 10px;
+      position: absolute;
+      background-color: white;
+      z-index: 2;
+      display: none;
+    }
+
+  </style>
   <script>
     require(["jquery", "jquery.jeditable", "jquery.fileupload"], function ($) {
       $("input").on("keypress", function (e) {
@@ -59,6 +87,10 @@
         }
         $('input[name=category]').val(category);
       }).trigger('change');
+      $('.js_file_list_button').click(function () {
+          $(this).parent().find('.js_file_list').toggle();
+        }
+      );
 
       $('.js_payments_check').click(function () {
         var $checked = $(this).prop('checked');
@@ -98,10 +130,7 @@
           dataType: 'json',
           done: function (e, data) {
             $('#progress .progress-bar').css('width', '0');
-            $.each(data.result.files, function (index, file) {
-              $('<p/>').text(file.name).appendTo('#files');
-            });
-            $('#progress .progress-bar').css('width', '0');
+            document.location.reload();
           },
           progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -292,10 +321,24 @@
           <td data-key='category'>{{ payment.category }}</td>
           <td data-key='desc'>{{ payment.desc }}</td>
           <td>
-            <input class="js_fileupload" type="file" name="files[]" multiple data-paymentid="{{ payment.paymentid }}">
-            {% for file in payment.files %}
-              <div>{{ file.original_filename }} / {{ file.location }}</div>
-            {% endfor %}
+            <div class="fileupload_button btn btn-primary">
+              <span>올리기</span>
+              <input class="js_fileupload" type="file" name="files[]" multiple data-paymentid="{{ payment.paymentid }}">
+            </div>
+            {% if payment.files %}
+              <div class="js_file_list_button btn btn-warning">
+                <span>목록</span>
+              </div>
+              <div class="js_file_list">
+                {% for file in payment.files %}
+                  <div>
+                    <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}">
+                      {{ file.original_filename }}
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
           </td>
           <td data-key='company_name'>{{ payment.company_name }}</td>
           <td data-key='price'>{{ payment.price | number_format }}</td>

@@ -32,4 +32,9 @@ class FileUploadModel extends BaseModel
 	{
 		return self::getDb()->sqlDicts('select * from files where ?', sqlWhere(['group' => $group, 'key' => $keys]));
 	}
+
+	public static function getDictByPk($id)
+	{
+		return self::getDb()->sqlDict('select * from files where ?', sqlWhere(['id' => $id]));
+	}
 }
