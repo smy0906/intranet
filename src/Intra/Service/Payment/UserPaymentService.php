@@ -61,7 +61,7 @@ class UserPaymentService
 	{
 		$file_upload_dto = FileUploadDtoFactory::importDtoByPk($fileid);
 		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($file_upload_dto->key);
-		self::assertDownloadFile($self, $file_upload_dto, $payment_dto);
+		self::assertAccessFile($self, $file_upload_dto, $payment_dto);
 
 		$file_upload_service = new FileUploadService('payment_files');
 		return $file_upload_service->getBinaryFileResponseWithDto($file_upload_dto);
@@ -73,7 +73,7 @@ class UserPaymentService
 	 * @param $payment_dto PaymentDto
 	 * @throws MsgException
 	 */
-	private static function assertDownloadFile($self, $file_upload_dto, $payment_dto)
+	private static function assertAccessFile($self, $file_upload_dto, $payment_dto)
 	{
 		if (UserPolicy::isPaymentAdmin($self)) {
 			return;
@@ -88,6 +88,27 @@ class UserPaymentService
 			return;
 		}
 		throw new MsgException("파일 다운로드 권한이 없습니다.");
+	}
+
+	public static function deleteFile($self, $fileid)
+	{
+		$file_upload_dto = FileUploadDtoFactory::importDtoByPk($fileid);
+		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($file_upload_dto->key);
+		self::assertAccessFile($self, $file_upload_dto, $payment_dto);
+		self::assertDeleteFile($self, $file_upload_dto, $payment_dto);
+
+		$file_upload_service = new FileUploadService('payment_files');
+		return $file_upload_service->remove($file_upload_dto);
+	}
+
+	private static function assertDeleteFile($self, $file_upload_dto, $payment_dto)
+	{
+		if (UserPolicy::isPaymentAdmin($self)) {
+			return;
+		}
+		if ($payment_dto->is_co_accepted || $payment_dto->is_manager_accepted) {
+			throw new MsgException("승인된 이후에는 재무팀만 변경할 수 있습니다. 파일을 재무팀에 전달해주세요.");
+		}
 	}
 
 	public function index($month, $is_type_remain_only)

@@ -88,7 +88,9 @@
         $('input[name=category]').val(category);
       }).trigger('change');
       $('.js_file_list_button').click(function () {
-          $(this).parent().find('.js_file_list').toggle();
+          var target_popup = $(this).parent().find('.js_file_list');
+          $('.js_file_list').not(target_popup).hide();
+          target_popup.toggle();
         }
       );
 
@@ -129,6 +131,8 @@
           url: url,
           dataType: 'json',
           done: function (e, data) {
+            console.log(e);
+            console.log(data);
             $('#progress .progress-bar').css('width', '0');
             document.location.reload();
           },
@@ -321,10 +325,13 @@
           <td data-key='category'>{{ payment.category }}</td>
           <td data-key='desc'>{{ payment.desc }}</td>
           <td>
-            <div class="fileupload_button btn btn-primary">
-              <span>올리기</span>
-              <input class="js_fileupload" type="file" name="files[]" multiple data-paymentid="{{ payment.paymentid }}">
-            </div>
+            {% if payment.is_file_uploadable %}
+              <div class="fileupload_button btn btn-primary">
+                <span>올리기</span>
+                <input class="js_fileupload" type="file" name="files[]" multiple
+                       data-paymentid="{{ payment.paymentid }}">
+              </div>
+            {% endif %}
             {% if payment.files %}
               <div class="js_file_list_button btn btn-warning">
                 <span>목록</span>
@@ -335,6 +342,18 @@
                     <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}">
                       {{ file.original_filename }}
                     </a>
+                    <button attrajax
+                            data-aa-url='/payments/file/{{ file.id }}'
+                            data-aa-method='DELETE'
+                            data-aa-confirm='{{ file.original_filename }} 파일을 정말 삭제하시겠습니까?'
+                            data-aa-datatype="text"
+                            data-aa-success-if-result-is="1"
+                            data-aa-onsuccess-msg="삭제되었습니다"
+                            data-aa-onsuccess="refresh"
+                            data-aa-onfail-alert="true"
+                    >
+                      삭제
+                    </button>
                   </div>
                 {% endfor %}
               </div>

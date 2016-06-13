@@ -36,7 +36,12 @@ $this->matchIf('const/{key}')
 $this->matchIf('download/{month}')
 	->query('download');
 
+$this->matchIf('file/{fileid}')
+	->assertAsInt('fileid')
+	->isMethod('delete')
+	->query('file_delete');
 
 $this->matchIf('file/{fileid}')
 	->assertAsInt('fileid')
+	->isMethod('get')
 	->query('file_download');

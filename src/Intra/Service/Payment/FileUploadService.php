@@ -55,6 +55,10 @@ class FileUploadService
 		return $return;
 	}
 
+	/**
+	 * @param $file_upload_dto FileUploadDto
+	 * @return BinaryFileResponse|Response
+	 */
 	public function getBinaryFileResponseWithDto($file_upload_dto)
 	{
 		$dest = $this->light_file_model->getUploadableLocation($file_upload_dto->location);
@@ -62,5 +66,14 @@ class FileUploadService
 			return new BinaryFileResponse($dest);
 		}
 		return new Response('file not exist', 404);
+	}
+
+	/**
+	 * @param $file_upload_dto FileUploadDto
+	 * @return bool
+	 */
+	public function remove($file_upload_dto)
+	{
+		return FileUploadModel::remove($file_upload_dto->id);
 	}
 }

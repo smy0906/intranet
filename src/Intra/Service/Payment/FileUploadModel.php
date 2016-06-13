@@ -25,16 +25,30 @@ class FileUploadModel extends BaseModel
 
 	public static function getAlreadyRegistedCount($group, $key)
 	{
-		return self::getDb()->sqlCount('files', ['group' => $group, 'key' => $key]);
+		$where = ['group' => $group, 'key' => $key];
+		return self::getDb()->sqlCount('files', $where);
 	}
 
 	public static function getDictsByGroupAndKeys($group, $keys)
 	{
-		return self::getDb()->sqlDicts('select * from files where ?', sqlWhere(['group' => $group, 'key' => $keys]));
+		$where = ['group' => $group, 'key' => $keys, 'is_delete' => 0];
+		return self::getDb()->sqlDicts('select * from files where ?', sqlWhere($where));
 	}
 
 	public static function getDictByPk($id)
 	{
-		return self::getDb()->sqlDict('select * from files where ?', sqlWhere(['id' => $id]));
+		$where = ['id' => $id, 'is_delete' => 0];
+		return self::getDb()->sqlDict('select * from files where ?', sqlWhere($where));
+	}
+
+	/**
+	 * @param $id
+	 * @return int
+	 */
+	public static function remove($id)
+	{
+		$update = ['is_delete' => 1];
+		$where = ['id' => $id];
+		return self::getDb()->sqlUpdate('files', $update, $where);
 	}
 }

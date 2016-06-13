@@ -59,6 +59,7 @@ class PaymentDto extends BaseDto
 	 * @var $files FileUploadDto[]
 	 */
 	public $files;
+	public $is_file_uploadable;
 
 
 	/**
@@ -78,6 +79,7 @@ class PaymentDto extends BaseDto
 		$return->is_co_accepted = false;
 
 		$return->files = $payment_files_dtos;
+		$return->is_file_uploadable = (!in_array($return->status, ['결제 완료', '삭제']));
 
 		foreach ($payment_accepts_dtos as $payment_accept) {
 			if ($payment_accept->paymentid == $return->paymentid) {
