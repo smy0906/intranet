@@ -326,36 +326,41 @@
           <td data-key='desc'>{{ payment.desc }}</td>
           <td>
             {% if payment.is_file_uploadable %}
-              <div class="fileupload_button btn btn-primary">
-                <span>올리기</span>
+              <div class="fileupload_button btn btn-primary btn-xs">
+                <span class="glyphicon glyphicon-open"></span>
                 <input class="js_fileupload" type="file" name="files[]" multiple
                        data-paymentid="{{ payment.paymentid }}">
               </div>
             {% endif %}
             {% if payment.files %}
-              <div class="js_file_list_button btn btn-warning">
-                <span>목록</span>
-              </div>
-              <div class="js_file_list">
-                {% for file in payment.files %}
-                  <div>
-                    <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}">
-                      {{ file.original_filename }}
-                    </a>
-                    <button attrajax
-                            data-aa-url='/payments/file/{{ file.id }}'
-                            data-aa-method='DELETE'
-                            data-aa-confirm='{{ file.original_filename }} 파일을 정말 삭제하시겠습니까?'
-                            data-aa-datatype="text"
-                            data-aa-success-if-result-is="1"
-                            data-aa-onsuccess-msg="삭제되었습니다"
-                            data-aa-onsuccess="refresh"
-                            data-aa-onfail-alert="true"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                {% endfor %}
+              <div class="dropdown" style="display: inline-block">
+                <div class=" btn btn-warning btn-xs dropdown-toggle " id="dropdownMenu{{ payment.paymentid }}"
+                     data-toggle="dropdown"
+                     aria-haspopup="true" aria-expanded="true">
+                  <span class="glyphicon glyphicon-download-alt"></span>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu{{ payment.paymentid }}">
+                  {% for file in payment.files %}
+                    <div style="clear: both;">
+                      <button attrajax
+                              data-aa-url='/payments/file/{{ file.id }}'
+                              data-aa-method='DELETE'
+                              data-aa-confirm='{{ file.original_filename }} 파일을 정말 삭제하시겠습니까?'
+                              data-aa-datatype="text"
+                              data-aa-success-if-result-is="1"
+                              data-aa-onsuccess-msg="삭제되었습니다"
+                              data-aa-onsuccess="refresh"
+                              data-aa-onfail-alert="true"
+                              class="glyphicon glyphicon-trash btn btn-default btn-xs"
+                              style="margin:3px;"
+                      >
+                      </button>
+                      <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}"                         >
+                        {{ file.original_filename }}
+                      </a>
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
             {% endif %}
           </td>
