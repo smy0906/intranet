@@ -10,6 +10,7 @@ namespace Intra\Core;
 
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class Application
 {
@@ -34,6 +35,11 @@ class Application
 		if ($return_by_controler === false) {
 			return false;
 			#throw new Exception('control action error');
+		}
+		if ($return_by_controler instanceof Response) {
+			$return_by_controler->prepare($request);
+			$return_by_controler->send();
+			exit;
 		}
 		if (!is_array($return_by_controler)) {
 			exit((string)$return_by_controler);
