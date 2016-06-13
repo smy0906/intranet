@@ -43,9 +43,7 @@ class UserReceiptsStat
 			];
 			$csvs[] = $arr;
 		}
-		$csvresponse = new CsvResponse($csvs, 'download.' . $month);
-		$csvresponse->send();
-		exit;
+		return $csvresponse = new CsvResponse($csvs, 'download.' . $month);
 	}
 
 	public function downloadYear($month)
@@ -82,8 +80,6 @@ class UserReceiptsStat
 			];
 			$csvs[] = $arr;
 		}
-		$csvresponse = new CsvResponse($csvs, 'downloadYear.' . $year);
-		$csvresponse->send();
-		exit;
+		return new CsvResponse($csvs, 'downloadYear.' . $year);
 	}
 }

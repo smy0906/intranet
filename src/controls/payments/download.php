@@ -6,10 +6,12 @@ use Intra\Service\Payment\PaymentDto;
 use Intra\Service\Payment\PaymentDtoFactory;
 use Intra\Service\Payment\UserPaymentRequestFilter;
 use Intra\Service\Payment\UserPaymentStatService;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
+use Symfony\Component\HttpFoundation\Response;
 
-if (!UserSession::getSelfDto()->is_admin) {
-	exit;
+if (!UserPolicy::isPaymentAdmin(UserSession::getSelfDto())) {
+	return new Response("권한이 없습니다", 403);
 }
 
 /**
@@ -24,4 +26,4 @@ $month = date('Y/m/1', strtotime($month));
 $payment_service = new UserPaymentStatService();
 $user_payment_model = new PaymentModel();
 $payments = PaymentDtoFactory::importFromDatabaseDicts($user_payment_model->getAllPayments($month));
-$payment_service->sendExcelResposeAndExit($payments);
+return $payment_service->getCsvRespose($payments);

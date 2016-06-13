@@ -15,8 +15,8 @@ $insert = [
 	$key => $value
 ];
 if ($db->sqlInsert($key . 's', $insert)) {
-	echo "추가 되었습니다";
+	return "추가 되었습니다";
 } else {
-	echo "추가 되지않았습니다";
+	return "추가 되지않았습니다";
 }
-exit;
+
