@@ -263,11 +263,8 @@
       </thead>
       <tbody>
       {% for key, payment in payments %}
-        <tr class='payment
-                {% if payment.status == '결제 완료' %}
-                    payment_done warning
-                {% endif %}
-                ' data-paymentid='{{ payment.paymentid }}'>
+        <tr class='payment{% if payment.status == '결제 완료' %}payment_done warning{% endif %}'
+            data-paymentid='{{ payment.paymentid }}'>
           <td>
             <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}"
                    title="payment_checkbox"/>
@@ -341,7 +338,7 @@
                 </div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu{{ payment.paymentid }}">
                   {% for file in payment.files %}
-                    <div style="clear: both;">
+                    <div style="clear: both;padding-right: 5px;">
                       <button attrajax
                               data-aa-url='/payments/file/{{ file.id }}'
                               data-aa-method='DELETE'
@@ -355,7 +352,7 @@
                               style="margin:3px;"
                       >
                       </button>
-                      <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}"                         >
+                      <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}">
                         {{ file.original_filename }}
                       </a>
                     </div>
