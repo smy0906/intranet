@@ -1,3 +1,5 @@
 /.idea
 composer.lock
 ConfigRelease.php
+_ConfigRelease.php
+/upload/*

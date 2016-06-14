@@ -2,8 +2,36 @@
 
 {% block head %}
   {{ parent() }}
+  <style>
+    .fileupload_button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fileupload_button input.js_fileupload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+
+    .js_file_list {
+      border: 1px #999999 solid;
+      padding: 10px;
+      position: absolute;
+      background-color: white;
+      z-index: 2;
+      display: none;
+    }
+
+  </style>
   <script>
-    require(["jquery", "jquery.jeditable"], function ($) {
+    require(["jquery", "jquery.jeditable", "jquery.fileupload"], function ($) {
       $("input").on("keypress", function (e) {
         return e.which != 13;
       });
@@ -59,6 +87,12 @@
         }
         $('input[name=category]').val(category);
       }).trigger('change');
+      $('.js_file_list_button').click(function () {
+          var target_popup = $(this).parent().find('.js_file_list');
+          $('.js_file_list').not(target_popup).hide();
+          target_popup.toggle();
+        }
+      );
 
       $('.js_payments_check').click(function () {
         var $checked = $(this).prop('checked');
@@ -87,7 +121,31 @@
           });
         });
       });
+      // Change this to the location of your server-side upload handler:
+      var url = '/payments/file_upload/';
+      $('.js_fileupload').each(function () {
+        var paymentid = $(this).data('paymentid');
+        $(this).fileupload({
+          formData: {paymentid: paymentid},
+          dropZone: $(this),
+          url: url,
+          dataType: 'json',
+          done: function (e, data) {
+            console.log(e);
+            console.log(data);
+            $('#progress .progress-bar').css('width', '0');
+            document.location.reload();
+          },
+          progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css('width', progress + '%');
+          }
+        })
+          .prop('disabled', !$.support.fileInput)
+          .parent()
+          .addClass($.support.fileInput ? undefined : 'disabled');
 
+      });
       {% if editable %}
       $('.payment td[data-key]').each(function () {
         var paymentid = $(this).parent().data('paymentid');
@@ -205,11 +263,8 @@
       </thead>
       <tbody>
       {% for key, payment in payments %}
-        <tr class='payment
-                {% if payment.status == '결제 완료' %}
-                    payment_done warning
-                {% endif %}
-                ' data-paymentid='{{ payment.paymentid }}'>
+        <tr class='payment{% if payment.status == '결제 완료' %}payment_done warning{% endif %}'
+            data-paymentid='{{ payment.paymentid }}'>
           <td>
             <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}"
                    title="payment_checkbox"/>
@@ -266,7 +321,46 @@
           <td data-key='product' data-keyselect>{{ payment.product }}</td>
           <td data-key='category'>{{ payment.category }}</td>
           <td data-key='desc'>{{ payment.desc }}</td>
-          <td>{{ payment.files }}</td>
+          <td>
+            {% if payment.is_file_uploadable %}
+              <div class="fileupload_button btn btn-primary btn-xs">
+                <span class="glyphicon glyphicon-open"></span>
+                <input class="js_fileupload" type="file" name="files[]" multiple
+                       data-paymentid="{{ payment.paymentid }}">
+              </div>
+            {% endif %}
+            {% if payment.files %}
+              <div class="dropdown" style="display: inline-block">
+                <div class=" btn btn-warning btn-xs dropdown-toggle " id="dropdownMenu{{ payment.paymentid }}"
+                     data-toggle="dropdown"
+                     aria-haspopup="true" aria-expanded="true">
+                  <span class="glyphicon glyphicon-download-alt"></span>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu{{ payment.paymentid }}">
+                  {% for file in payment.files %}
+                    <div style="clear: both;padding-right: 5px;">
+                      <button attrajax
+                              data-aa-url='/payments/file/{{ file.id }}'
+                              data-aa-method='DELETE'
+                              data-aa-confirm='{{ file.original_filename }} 파일을 정말 삭제하시겠습니까?'
+                              data-aa-datatype="text"
+                              data-aa-success-if-result-is="1"
+                              data-aa-onsuccess-msg="삭제되었습니다"
+                              data-aa-onsuccess="refresh"
+                              data-aa-onfail-alert="true"
+                              class="glyphicon glyphicon-trash btn btn-default btn-xs"
+                              style="margin:3px;"
+                      >
+                      </button>
+                      <a href="/payments/file/{{ file.id }}" target="_blank" title="{{ file.reg_date }}">
+                        {{ file.original_filename }}
+                      </a>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </td>
           <td data-key='company_name'>{{ payment.company_name }}</td>
           <td data-key='price'>{{ payment.price | number_format }}</td>
           <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
@@ -445,6 +539,10 @@
       </tbody>
     </table>
   </form>
+
+  <div id="progress" class="progress">
+    <div class="progress-bar progress-bar-success"></div>
+  </div>
 
   <div style="width: 800px">
         <pre>

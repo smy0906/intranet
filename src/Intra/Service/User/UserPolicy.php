@@ -49,7 +49,6 @@ class UserPolicy
 		}
 		return false;
 	}
-
 	public static function isPaymentAdmin($self)
 	{
 		if ($self->is_admin) {
