@@ -148,7 +148,7 @@
       });
       $('.payment td[data-key]').each(function () {
         var tr_object = $(this).parentsUntil('table').filter('tr');
-        var is_editable_by_admin = {{ editable | e('js') }};
+        var is_editable_by_admin = '{{ editable | e('js') }}';
         var is_editable_by_user = tr_object.hasClass('js_is_editable');
         if (!(is_editable_by_admin || is_editable_by_user))
           return;
