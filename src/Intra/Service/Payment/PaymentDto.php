@@ -40,6 +40,7 @@ class PaymentDto extends BaseDto
 	/**
 	 * html view only
 	 */
+	public $is_editable;
 	public $register_name;
 	public $manager_name;
 
@@ -93,6 +94,13 @@ class PaymentDto extends BaseDto
 				}
 			}
 		}
+		if (!$return->is_manager_accepted && !$return->is_co_accepted) {
+			$return->is_editable = true;
+		} else {
+			$return->is_editable = false;
+		}
+
+
 		return $return;
 	}
 

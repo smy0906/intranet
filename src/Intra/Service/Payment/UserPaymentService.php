@@ -127,7 +127,7 @@ class UserPaymentService
 		$return['todayDate'] = date('Y-m-d');
 
 		$self = UserSession::getSelfDto();
-		if ($self->is_admin) {
+		if (UserPolicy::isPaymentAdmin($self)) {
 			$return['queuedPayments'] = PaymentDtoFactory::importFromDatabaseDicts(
 				$this->payment_model->queuedPayments()
 			);
@@ -138,7 +138,7 @@ class UserPaymentService
 		$return['selfUid'] = $self->uid;
 
 		if ($is_type_remain_only) {
-			if ($self->is_admin) {
+			if (UserPolicy::isPaymentAdmin($self)) {
 				$payments = $return['queuedPayments'];
 			} else {
 				$payments = PaymentDtoFactory::importFromDatabaseDicts(
@@ -152,7 +152,7 @@ class UserPaymentService
 		}
 		$return['payments'] = $payments;
 
-		if ($self->is_admin) {
+		if (UserPolicy::isPaymentAdmin($self)) {
 			$return['isSuperAdmin'] = 1;
 			$return['editable'] |= 1;
 		}
@@ -164,7 +164,7 @@ class UserPaymentService
 		$return['const'] = UserPaymentConst::get();
 
 		if ($is_type_remain_only) {
-			if ($self->is_admin) {
+			if (UserPolicy::isPaymentAdmin($self)) {
 				$return['title'] = '모든 미결제 항목(관리자)';
 			} else {
 				$return['title'] = '모든 미승인 목록';
@@ -193,7 +193,7 @@ class UserPaymentService
 
 	public function getRowService($paymentid)
 	{
-		if ($this->user->is_admin) {
+		if (UserPolicy::isPaymentAdmin($this->user)) {
 			$payment = $this->payment_model->getPaymentWithoutUid($paymentid);
 		} else {
 			$payment = $this->payment_model->getPayment($paymentid, $this->user->uid);

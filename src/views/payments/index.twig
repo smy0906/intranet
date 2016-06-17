@@ -146,9 +146,14 @@
           .addClass($.support.fileInput ? undefined : 'disabled');
 
       });
-      {% if editable %}
       $('.payment td[data-key]').each(function () {
-        var paymentid = $(this).parent().data('paymentid');
+        var tr_object = $(this).parentsUntil('table').filter('tr');
+        var is_editable_by_admin = {{ editable | e('js') }};
+        var is_editable_by_user = tr_object.hasClass('js_is_editable');
+        if (!(is_editable_by_admin || is_editable_by_user))
+          return;
+
+        var paymentid = tr_object.data('paymentid');
         var key = $(this).data('key');
         var is_keyselect = ($(this).data('keyselect') != undefined);
         var submitdata = {key: key};
@@ -168,7 +173,6 @@
 
         $(this).editable('/payments/paymentid/' + paymentid, args);
       });
-      {% endif %}
 
       $('select[name=js_super_edit]')
         .val({{ currentUid }})
@@ -263,7 +267,10 @@
       </thead>
       <tbody>
       {% for key, payment in payments %}
-        <tr class='payment{% if payment.status == '결제 완료' %}payment_done warning{% endif %}'
+        <tr class='payment
+        {% if payment.status == '결제 완료' %}payment_done warning{% endif %}
+        {% if payment.is_editable %}js_is_editable{% endif %}
+        '
             data-paymentid='{{ payment.paymentid }}'>
           <td>
             <input type="checkbox" class="js_payment_check" data-paymentid="{{ payment.paymentid }}"

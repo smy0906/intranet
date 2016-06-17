@@ -9,6 +9,7 @@
 namespace Intra\Service\Payment;
 
 
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
@@ -74,7 +75,7 @@ class UserPaymentConst
 			'지급수수료',
 			'저작권료 (마케팅용 콘텐츠 매절)',
 		];
-		if (UserSession::getSelfDto()->is_admin) {
+		if (UserPolicy::isPaymentAdmin(UserSession::getSelfDto())) {
 			$const['category'][] = '기타';
 		}
 		$const['pay_date'] = ['선택해주세요', '7일', '10일', '25일', '월말일', '긴급'];

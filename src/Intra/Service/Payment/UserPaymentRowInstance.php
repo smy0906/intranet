@@ -12,6 +12,7 @@ namespace Intra\Service\Payment;
 use Intra\Core\MsgException;
 use Intra\Model\PaymentAcceptModel;
 use Intra\Model\PaymentModel;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
@@ -79,7 +80,9 @@ class UserPaymentRowInstance
 				throw new MsgException("아직 승인되지 않았습니다");
 			}
 		}
-		if (!UserSession::getSelfDto()->is_admin) {
+		$is_payment_admin = UserPolicy::isPaymentAdmin(UserSession::getSelfDto());
+		$is_editable = $payment_dto->is_editable;
+		if (!($is_payment_admin || $is_editable)) {
 			return false;
 		}
 		return true;
@@ -107,7 +110,7 @@ class UserPaymentRowInstance
 	public function acceptCO()
 	{
 		$self = UserSession::getSelfDto();
-		if (!$self->is_admin) {
+		if (!UserPolicy::isPaymentAdmin($self)) {
 			throw new MsgException("담당 승인자가 아닙니다.");
 		}
 		return $this->accept('co', $self->uid);

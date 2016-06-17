@@ -15,7 +15,7 @@ if (!intval($uid) || !UserPolicy::isPaymentAdmin($self)) {
 	$uid = $self->uid;
 }
 
-$payment_dto = PaymentDto::importFromAddRequest($request, $uid, $self->is_admin);
+$payment_dto = PaymentDto::importFromAddRequest($request, $uid, UserPolicy::isPaymentAdmin($self));
 
 $user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
 $target_user_dto = $user_dto_object->exportDto();
