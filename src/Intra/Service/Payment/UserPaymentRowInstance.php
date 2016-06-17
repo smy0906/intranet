@@ -32,7 +32,7 @@ class UserPaymentRowInstance
 		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($this->payment_id);
 		$old_value = $payment_dto->$key;
 
-		if (!$this->assertEdit($key, $old_value, $new_value, $payment_dto)) {
+		if (!$this->validateEditAuth($key, $old_value, $new_value, $payment_dto)) {
 			return $old_value;
 		}
 		$this->user_payment_model->update($this->payment_id, $key, $new_value);
@@ -65,7 +65,7 @@ class UserPaymentRowInstance
 	 * @return bool
 	 * @throws MsgException
 	 */
-	private function assertEdit($key, $old_value, $new_value, $payment_dto)
+	private function validateEditAuth($key, $old_value, $new_value, $payment_dto)
 	{
 		if ($key == 'date') {
 			//날짜를 변경할때 다른 월로는 변경불가
@@ -90,11 +90,23 @@ class UserPaymentRowInstance
 
 	public function del()
 	{
+		$payment_dto = PaymentDtoFactory::createFromDatabaseByPk($this->payment_id);
+		$this->assertDel($payment_dto);
 		$res = $this->user_payment_model->del($this->payment_id);
 		if ($res) {
 			return 1;
 		}
 		return '삭제가 실패했습니다!';
+	}
+
+	private function assertDel($payment_dto)
+	{
+		$is_payment_admin = UserPolicy::isPaymentAdmin(UserSession::getSelfDto());
+		$is_editable = $payment_dto->is_editable;
+		if (!($is_payment_admin || $is_editable)) {
+			throw new MsgException("삭제 권한이 없습니다.");
+		}
+		return true;
 	}
 
 	public function acceptManageer()
