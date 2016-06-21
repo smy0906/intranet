@@ -19,4 +19,3 @@ if (UserPaymentService::deleteFile($self, $fileid)) {
 } else {
 	return Response::create('삭제실패했습니다.');
 }
-

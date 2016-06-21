@@ -35,4 +35,3 @@ $this->matchIf('/download/{year}')
 $this->matchIf('/downloadRemain/{year}')
 	->assertAsInt('year')
 	->query('downloadRemain');
-

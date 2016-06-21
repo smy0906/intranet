@@ -4,7 +4,6 @@
 use Intra\Core\MsgException;
 use Intra\Service\Payment\UserPaymentService;
 use Intra\Service\User\UserSession;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 $request = $this->getRequest();
 $self = UserSession::getSelfDto();

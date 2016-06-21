@@ -6,7 +6,6 @@ use Intra\Service\Payment\UserPaymentService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 $request = $this->getRequest();
 $self = UserSession::getSelfDto();

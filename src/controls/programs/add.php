@@ -19,4 +19,3 @@ if ($db->sqlInsert($key . 's', $insert)) {
 } else {
 	return "추가 되지않았습니다";
 }
-

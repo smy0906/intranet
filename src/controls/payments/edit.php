@@ -18,4 +18,3 @@ if ($key == 'is_manager_accepted') {
 } else {
 	return $row->edit($key, $value);
 }
-
