@@ -109,18 +109,18 @@ class UserHoliday
 	}
 
 	/**
-	 * @param UserHolidayDto $holidayRaw
+	 * @param UserHolidayDto $holiday_dto
 	 * @throws \Exception
 	 */
-	private function assertAdd($holidayRaw)
+	private function assertAdd($holiday_dto)
 	{
-		$dateTimestamp = strtotime($holidayRaw->date);
+		$dateTimestamp = strtotime($holiday_dto->date);
 		if (!$dateTimestamp || $dateTimestamp <= 0) {
 			throw new \Exception("사용날짜를 다시 입력해주세요");
 		}
 
-		if ($dateTimestamp < $this->user_holiday_policy->getYearlyBeginTimestamp($holidayRaw->yearly)
-			|| $this->user_holiday_policy->getYearlyEndTimestamp($holidayRaw->yearly) < $dateTimestamp
+		if ($dateTimestamp < $this->user_holiday_policy->getYearlyBeginTimestamp($holiday_dto->yearly)
+			|| $this->user_holiday_policy->getYearlyEndTimestamp($holiday_dto->yearly) < $dateTimestamp
 		) {
 			//throw new Exception("연차가 맞지 않습니다. 사용년도를 확인해주세요");
 		}
@@ -129,50 +129,49 @@ class UserHoliday
 			throw new \Exception("연차 사용날짜를 다시 입력해주세요. 이미 지난 시간입니다.");
 		}
 
-		if (in_array($holidayRaw->type, $this->COST_ZERO_DAY_VARIABLE_TYPE)) {
-			$holidayRaw->cost = 0;
-			$int_cost = intval($holidayRaw->cost);
-			if ($int_cost != $holidayRaw->cost || $int_cost < 0) {
+		if (in_array($holiday_dto->type, $this->COST_ZERO_DAY_VARIABLE_TYPE)) {
+			$int_cost = intval($holiday_dto->cost);
+			if ($int_cost != $holiday_dto->cost || $int_cost < 0) {
 				throw new \Exception('기간은 자연수로만 입력가능합니다');
 			}
-		} elseif (in_array($holidayRaw->type, $this->COST_ZERO_TYPE)) {
-			$holidayRaw->cost = 0;
-		} elseif (in_array($holidayRaw->type, $this->COST_HALF_TYPE)) {
-			$holidayRaw->cost = 0.5;
-		} elseif (in_array($holidayRaw->type, $this->COST_INT_TYPE)) {
-			$int_cost = intval($holidayRaw->cost);
-			if ($int_cost != $holidayRaw->cost || $int_cost <= 0) {
+		} elseif (in_array($holiday_dto->type, $this->COST_ZERO_TYPE)) {
+			$holiday_dto->cost = 0;
+		} elseif (in_array($holiday_dto->type, $this->COST_HALF_TYPE)) {
+			$holiday_dto->cost = 0.5;
+		} elseif (in_array($holiday_dto->type, $this->COST_INT_TYPE)) {
+			$int_cost = intval($holiday_dto->cost);
+			if ($int_cost != $holiday_dto->cost || $int_cost <= 0) {
 				throw new \Exception('연차는 자연수로만 입력가능합니다');
 			}
-			$holidayRaw->cost = $int_cost;
+			$holiday_dto->cost = $int_cost;
 		} else {
 			throw new \Exception("연차종류를 다시 확인해주세요");
 		}
 
-		if ($holidayRaw->cost > 0) {
-			$remain_cost = $this->user_holiday_policy->getRemainCost($holidayRaw->yearly);
-			if ($remain_cost < $holidayRaw->cost) {
-				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다." . $holidayRaw->yearly);
+		if ($holiday_dto->cost > 0) {
+			$remain_cost = $this->user_holiday_policy->getRemainCost($holiday_dto->yearly);
+			if ($remain_cost < $holiday_dto->cost) {
+				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다." . $holiday_dto->yearly);
 			}
 		}
 
-		if ($this->isDuplicate($holidayRaw->date)) {
+		if ($this->isDuplicate($holiday_dto->date)) {
 			throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
 		}
 
-		if ($holidayRaw->keeper_uid == 0) {
+		if ($holiday_dto->keeper_uid == 0) {
 			throw new \Exception("업무인수인계자를 선택해주세요");
 		}
 
-		if ($holidayRaw->manager_uid == 0) {
+		if ($holiday_dto->manager_uid == 0) {
 			throw new \Exception("결재자를 선택해주세요");
 		}
 
-		if ($holidayRaw->type == 'PWT' && $this->isDuplicatePWT($holidayRaw->date)) {
+		if ($holiday_dto->type == 'PWT' && $this->isDuplicatePWT($holiday_dto->date)) {
 			throw new \Exception("이미 이번달에는 PWT를 사용하셨습니다");
 		}
 
-		if (!preg_match('/\d{3}-?\d{3,4}-?\d{4}/', $holidayRaw->phone_emergency)) {
+		if (!preg_match('/\d{3}-?\d{3,4}-?\d{4}/', $holiday_dto->phone_emergency)) {
 			throw new \Exception("비상시 연락처를 다시 입력해주세요");
 		}
 	}
