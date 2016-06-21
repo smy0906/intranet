@@ -17,7 +17,8 @@ use Intra\Service\User\UserSession;
 class UserHoliday
 {
 	private $COST_UNSELECTABLE_TYPE = ['PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차'];
-	private $COST_ZERO_TYPE = ['공가', '경조', '대체휴가', '무급휴가', 'PWT', '무급오전반차', '무급오후반차'];
+	private $COST_ZERO_DAY_VARIABLE_TYPE = ['공가', '경조', '대체휴가', '무급휴가'];
+	private $COST_ZERO_TYPE = ['PWT', '무급오전반차', '무급오후반차'];
 	private $COST_HALF_TYPE = ['오전반차', '오후반차'];
 	private $COST_INT_TYPE = ['연차'];
 	/**
@@ -128,7 +129,13 @@ class UserHoliday
 			throw new \Exception("연차 사용날짜를 다시 입력해주세요. 이미 지난 시간입니다.");
 		}
 
-		if (in_array($holidayRaw->type, $this->COST_ZERO_TYPE)) {
+		if (in_array($holidayRaw->type, $this->COST_ZERO_DAY_VARIABLE_TYPE)) {
+			$holidayRaw->cost = 0;
+			$int_cost = intval($holidayRaw->cost);
+			if ($int_cost != $holidayRaw->cost || $int_cost < 0) {
+				throw new \Exception('기간은 자연수로만 입력가능합니다');
+			}
+		} elseif (in_array($holidayRaw->type, $this->COST_ZERO_TYPE)) {
 			$holidayRaw->cost = 0;
 		} elseif (in_array($holidayRaw->type, $this->COST_HALF_TYPE)) {
 			$holidayRaw->cost = 0.5;
@@ -242,15 +249,16 @@ class UserHoliday
 	}
 
 	/**
-	 * @param $holidayRaw
+	 * @param $holiday_raw
+	 * @return mixed
 	 */
-	private function filterAdd($holidayRaw)
+	private function filterAdd($holiday_raw)
 	{
-		if (!in_array($holidayRaw->type, $this->COST_UNSELECTABLE_TYPE) && strlen(trim($holidayRaw->cost)) == 0) {
-			$holidayRaw->cost = 1;
+		if (!in_array($holiday_raw->type, $this->COST_UNSELECTABLE_TYPE) && strlen(trim($holiday_raw->cost)) == 0) {
+			$holiday_raw->cost = 1;
 		}
-		$holidayRaw->uid = $this->user->uid;
-		return $holidayRaw;
+		$holiday_raw->uid = $this->user->uid;
+		return $holiday_raw;
 	}
 
 	/**
@@ -263,25 +271,32 @@ class UserHoliday
 	}
 
 	/**
-	 * @param $holidayRaw UserHolidayDto
+	 * @param $holiday_raw UserHolidayDto
 	 * @return UserHolidayDto[]
 	 */
-	private function convertToArrayToAdd($holidayRaw)
+	private function convertToArrayToAdd($holiday_raw)
 	{
-		if ($holidayRaw->cost > 1) {
+		if ($holiday_raw->cost > 1) {
 			$return = [];
-			$cost = $holidayRaw->cost;
-			$date = $holidayRaw->date;
-			while ($cost > 0) {
-				$holidayRaw->cost = 1;
-				$holidayRaw->date = $date;
-				$return[] = clone $holidayRaw;
-				$cost--;
+			$days = $holiday_raw->cost;
+			$date = $holiday_raw->date;
+
+			if (in_array($holiday_raw->type, $this->COST_ZERO_DAY_VARIABLE_TYPE)) {
+				$cost = 0;
+			} else {
+				$cost = 1;
+			}
+
+			while ($days > 0) {
+				$days--;
+				$holiday_raw->cost = $cost;
+				$holiday_raw->date = $date;
+				$return[] = clone $holiday_raw;
 				$date = $this->getNextDateWhichIsNotWeekend($date);
 			}
 			return $return;
 		} else {
-			return [$holidayRaw];
+			return [$holiday_raw];
 		}
 	}
 
