@@ -54,6 +54,7 @@ class PaymentDto extends BaseDto
 	 * @var $co_accept PaymentAcceptDto
 	 */
 	public $co_accept;
+	public $co_accpeter_name;
 	public $is_co_accepted;
 
 	/**
@@ -91,6 +92,7 @@ class PaymentDto extends BaseDto
 				if ($payment_accept->user_type == 'co') {
 					$return->co_accept = $payment_accept;
 					$return->is_co_accepted = true;
+					$return->co_accpeter_name = UserService::getNameByUidSafe($payment_accept->uid);
 				}
 			}
 		}
