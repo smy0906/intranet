@@ -2,10 +2,13 @@
 
 namespace Intra\Model;
 
+use Intra\Core\BaseModel;
 use Intra\Service\IntraDb;
 
-class PaymentModel
+class PaymentModel extends BaseModel
 {
+	private $db;
+
 	public function __construct()
 	{
 		$this->db = IntraDb::getGnfDb();
@@ -153,5 +156,15 @@ class PaymentModel
 	{
 		$where = compact('paymentid');
 		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));
+	}
+
+	public static function getRemindMailBefore3days()
+	{
+		$on_3days_ago = date('Y/m/d 00:00:00', strtotime('-3 day'));
+		$on_2days_ago = date('Y/m/d 00:00:00', strtotime('-2 day'));
+		$where = [
+			'pay_date' => sqlBetween($on_3days_ago, $on_2days_ago)
+		];
+		return self::getDb()->sqlDicts('select * from payments where ?', sqlWhere($where));
 	}
 }
