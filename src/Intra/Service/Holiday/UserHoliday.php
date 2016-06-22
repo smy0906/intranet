@@ -148,10 +148,10 @@ class UserHoliday
 			throw new \Exception("연차종류를 다시 확인해주세요");
 		}
 
-		if ($holiday_dto->cost > 0) {
+		if ($holiday_dto->cost > 0 && !in_array($holiday_dto->type, $this->COST_ZERO_DAY_VARIABLE_TYPE)) {
 			$remain_cost = $this->user_holiday_policy->getRemainCost($holiday_dto->yearly);
 			if ($remain_cost < $holiday_dto->cost) {
-				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다." . $holiday_dto->yearly);
+				throw new \Exception("남아있는 연차가 없습니다. 무급휴가만 사용가능합니다.");
 			}
 		}
 
