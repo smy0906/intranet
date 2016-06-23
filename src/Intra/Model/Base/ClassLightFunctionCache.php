@@ -86,8 +86,10 @@ trait ClassLightFunctionCache
 
 		foreach ($domain_primary_keys as $domain_primary_key) {
 			$hashes = self::$cacheHashesByKey[$class][$domain_primary_key];
-			foreach ($hashes as $hash) {
-				unset(self::$cache[$class][$hash]);
+			if (is_array($hashes)) {
+				foreach ($hashes as $hash) {
+					unset(self::$cache[$class][$hash]);
+				}
 			}
 			unset(self::$cacheHashesByKey[$class][$domain_primary_key]);
 		}
