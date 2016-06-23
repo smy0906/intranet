@@ -25,7 +25,15 @@ class MailingDto
 	 */
 	public $title;
 	/**
+	 * @var $body_header string
+	 */
+	public $body_header;
+	/**
 	 * @var $dicts array[]
 	 */
 	public $dicts;
+	/**
+	 * @var $body_footer string
+	 */
+	public $body_footer;
 }

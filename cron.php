@@ -15,6 +15,5 @@ date_default_timezone_set('Asia/Seoul');
 
 Ridi::enableSentry();
 IntraDb::bootDB();
-SessionModel::init();
 
 CronMaster::run();

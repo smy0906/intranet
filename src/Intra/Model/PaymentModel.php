@@ -158,7 +158,7 @@ class PaymentModel extends BaseModel
 		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));
 	}
 
-	public static function getRemindMailBefore3days()
+	public static function getPaydayIsAfter3days()
 	{
 		$on_3days_ago = date('Y/m/d 00:00:00', strtotime('-3 day'));
 		$on_2days_ago = date('Y/m/d 00:00:00', strtotime('-2 day'));
@@ -166,5 +166,16 @@ class PaymentModel extends BaseModel
 			'pay_date' => sqlBetween($on_3days_ago, $on_2days_ago)
 		];
 		return self::getDb()->sqlDicts('select * from payments where ?', sqlWhere($where));
+	}
+
+	public static function getManagerNotYetAccepts()
+	{
+		$table = [
+			'payments.paymentid' => ['payment_accept.paymentid', 'payment_accept.user_type' => 'manager']
+		];
+		$where = [
+			'payment_accept.id' => null
+		];
+		return self::getDb()->sqlDicts('select payments.* from ? where ?', sqlLeftJoin($table), sqlWhere($where));
 	}
 }

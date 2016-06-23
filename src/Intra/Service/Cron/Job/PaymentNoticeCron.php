@@ -1,23 +1,31 @@
 <?php
 
-namespace Intra\Service\Cron;
+namespace Intra\Service\Cron\Job;
 
 use Intra\Lib\ObjectsUtils;
 use Intra\Model\PaymentModel;
+use Intra\Service\Cron\Interfacer\CronMailingInterface;
+use Intra\Service\Cron\MailingDto;
 use Intra\Service\Payment\PaymentDtoFactory;
 use Intra\Service\User\UserService;
 
-class PaymentCron extends CronInterface
+class PaymentNoticeCronMailing extends CronMailingInterface
 {
+	/**
+	 * @return string
+	 */
+	public function getUniqueName()
+	{
+		return 'PaymentNoticeCronMailing';
+	}
+
 	/**
 	 * @param $last_executed_datetime \DateTime
 	 * @return bool
 	 */
-	public function isOnTimeToRun($last_executed_datetime)
+	public function isTimeToRun($last_executed_datetime)
 	{
-		$last_date = $last_executed_datetime->format('Y/m/d');
-		$today_date = date('Y/m/d');
-		if ($last_date == $today_date) {
+		if ($this->isToday($last_executed_datetime)) {
 			return false;
 		}
 		$hour = date('H');
@@ -30,14 +38,16 @@ class PaymentCron extends CronInterface
 	/**
 	 * @return MailingDto[]
 	 */
-	public function getMailContentsDicts()
+	public function getMailContentsDtos()
 	{
 		$dto_template = new MailingDto;
 		$dto_template->replyTo = ['***REMOVED***'];
-		$dto_template->title = '[결제요청] 결제 3일전 리마인드 메일 (' . date('Y-m-d') . ')';
+		$dto_template->title = '[확인요청] ' . date('Y-m-d') . ' 결제 예정 내역';
+		$dto_template->body_header = date('Y-m-d') . "에 아래 결제가 완료될 예정입니다.<br/>
+		혹시 변동사항이 있는지 확인해 주세요.<br/><br/><br/>";
 
 		$return_dtos = [];
-		$dicts = PaymentModel::getRemindMailBefore3days();
+		$dicts = PaymentModel::getPaydayIsAfter3days();
 		$payments = PaymentDtoFactory::importFromDatabaseDicts($dicts);
 		$payments_by_uid = ObjectsUtils::alignListByKey($payments, 'uid');
 
@@ -53,9 +63,9 @@ class PaymentCron extends CronInterface
 			foreach ($payments as $payment) {
 				$dto->dicts[] =
 					[
-						'요청일' => $payment->request_date,
+						'요청일' => $this->reformatDatetime('Y/m/d', $payment->request_date),
 						'요청자' => $payment->register_name,
-						'결제 예정일' => $payment->pay_date,
+						'결제 예정일' => $this->reformatDatetime('Y/m/d', $payment->pay_date),
 						'귀속부서' => $payment->team,
 						'프로덕트' => $payment->product,
 						'분류' => $payment->category,

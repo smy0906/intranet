@@ -153,11 +153,11 @@ class DictsUtils
 			$td = '';
 			foreach ($dict as $key => $value) {
 				if ($index == 0) {
-					$th = $th . "<th align='left'>" . $key . "</th>\n";
+					$th .= "<th align='left'>" . $key . "</th>\n";
 				}
-				$td = $td . "<td align='left'>" . $value . "</td>\n";
+				$td .= "<td align='left'>" . $value . "</td>\n";
 			}
-			$tr = $tr . "<tr>" . $td . "</tr>\n";
+			$tr .= "<tr>" . $td . "</tr>\n";
 		}
 
 		$html_table = "
