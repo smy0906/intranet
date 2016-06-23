@@ -180,8 +180,6 @@
         .change(function () {
           location.href = '/payments/uid/' + $(this).val();
         });
-      var js_recipts_title = $('.js_recipts_title');
-      js_recipts_title.text($("select[name=js_super_edit]:first option:selected").text());
     });
   </script>
   <style>
@@ -203,7 +201,13 @@
 
 {% block body %}
   <h2>
-    <span class='js_recipts_title'>{{ user.name }}</span>
+    <span>
+      {% if title %}
+        {{ title }}
+      {% else %}
+        {{ user.name }}
+      {% endif %}
+    </span>
   </h2>
   <h4>
     <a href='/payments/uid/{{ currentUid }}/month/{{ prevmonth }}'>{{ prevmonth }}</a>
@@ -211,6 +215,10 @@
     <a href='/payments/uid/{{ currentUid }}/month/{{ nextmonth }}'>{{ nextmonth }}</a>
     /
     <a href='/payments/remain' class='paymentsCommand'>미승인</a>
+    {% if isSuperAdmin %}
+      /
+      <a href='/payments/today' class='paymentsCommand'>오늘 결제 예정</a> ({{ todayQueuedCost }}원, {{ todayQueuedCount }}건)
+    {% endif %}
 
   </h4>
   <form

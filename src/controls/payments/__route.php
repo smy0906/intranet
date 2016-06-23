@@ -10,6 +10,10 @@ $this->matchIf('remain')
 	->setRequest('type', 'remain')
 	->query('index');
 
+$this->matchIf('today')
+	->setRequest('type', 'today')
+	->query('index');
+
 $this->matchIf('uid/{uid}/month/{month}')
 	->assertAsInt('uid')
 	->isMethod('get')

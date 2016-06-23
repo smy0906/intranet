@@ -18,7 +18,7 @@ $month = $request->get('month');
 if (!strlen($month)) {
 	$month = date('Y-m');
 }
-$is_type_remain_only = ($request->get('type') == 'remain');
+$type = ($request->get('type'));
 
 $month = UserPaymentRequestFilter::parseMonth($month);
 
@@ -26,4 +26,4 @@ $user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
 $target_user_dto = $user_dto_object->exportDto();
 
 $payment_service = new UserPaymentService($target_user_dto);
-return $payment_service->index($month, $is_type_remain_only);
+return $payment_service->index($month, $type);

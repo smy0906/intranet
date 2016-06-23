@@ -178,4 +178,18 @@ class PaymentModel extends BaseModel
 		];
 		return self::getDb()->sqlDicts('select payments.* from ? where ?', sqlLeftJoin($table), sqlWhere($where));
 	}
+
+	public function todayQueued()
+	{
+		$table = [
+			'payments.uid' => 'users.uid'
+		];
+		$where = $this->getTodayQueuedWhere();
+
+		return $this->db->sqlDicts(
+			'select payments.*, users.name from ? where ? order by `pay_date` asc, paymentid asc',
+			sqlLeftJoin($table),
+			sqlWhere($where)
+		);
+	}
 }

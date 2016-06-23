@@ -111,7 +111,7 @@ class UserPaymentService
 		}
 	}
 
-	public function index($month, $is_type_remain_only)
+	public function index($month, $type)
 	{
 		$return = [];
 		$return['user'] = $this->user;
@@ -137,13 +137,21 @@ class UserPaymentService
 		$return['currentUid'] = $this->user->uid;
 		$return['selfUid'] = $self->uid;
 
-		if ($is_type_remain_only) {
+		if ($type == 'remain') {
 			if (UserPolicy::isPaymentAdmin($self)) {
 				$payments = $return['queuedPayments'];
 			} else {
 				$payments = PaymentDtoFactory::importFromDatabaseDicts(
 					$this->payment_model->queuedPaymentsByManager($this->user->uid)
 				);
+			}
+		} elseif ($type == 'today') {
+			if (UserPolicy::isPaymentAdmin($self)) {
+				$payments = PaymentDtoFactory::importFromDatabaseDicts(
+					$this->payment_model->todayQueued()
+				);
+			} else {
+				$payments = [];
 			}
 		} else {
 			$payments = PaymentDtoFactory::importFromDatabaseDicts(
@@ -163,12 +171,14 @@ class UserPaymentService
 
 		$return['const'] = UserPaymentConst::get();
 
-		if ($is_type_remain_only) {
+		if ($type == 'remain') {
 			if (UserPolicy::isPaymentAdmin($self)) {
 				$return['title'] = '모든 미결제 항목(관리자)';
 			} else {
 				$return['title'] = '모든 미승인 목록';
 			}
+		} elseif ($type == 'today') {
+			$return['title'] = '오늘 결제 예정';
 		}
 
 		return $return;
