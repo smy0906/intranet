@@ -17,6 +17,10 @@ class CronMaster
 
 	public static function run()
 	{
+		$lock = fopen(sys_get_temp_dir() . '/ridi.intranet.cron.lock', 'c+');
+		if (!flock($lock, LOCK_EX | LOCK_NB)) {
+			die('already running');
+		}
 		foreach (self::$CRON_CLASSES as $cron_class) {
 			try {
 				/**
