@@ -9,7 +9,7 @@ require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie"
       var $this = $(this);
       var key = $this[0].tagName + '#' + $this.attr('name') + '#' + $this.attr('id');
       var val;
-      if ($this.is('[type=checkbox'))
+      if ($this.is('[type=checkbox]'))
         val = $this.is(":checked");
       else
         val = $this.val();
@@ -21,7 +21,7 @@ require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie"
 
       var cookied_value = $.cookie(key);
       if (cookied_value !== undefined)
-        if ($this.is('[type=checkbox')) {
+        if ($this.is('[type=checkbox]')) {
           if (cookied_value == 'true') {
             $this.attr("checked", cookied_value);
           }
