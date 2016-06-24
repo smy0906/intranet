@@ -163,7 +163,8 @@ class PaymentModel extends BaseModel
 		$on_3days_ago = date('Y/m/d 00:00:00', strtotime('-3 day'));
 		$on_2days_ago = date('Y/m/d 00:00:00', strtotime('-2 day'));
 		$where = [
-			'pay_date' => sqlBetween($on_3days_ago, $on_2days_ago)
+			'pay_date' => sqlBetween($on_3days_ago, $on_2days_ago),
+			'payments.status' => sqlNot('결제 완료'),
 		];
 		return self::getDb()->sqlDicts('select * from payments where ?', sqlWhere($where));
 	}
@@ -174,7 +175,8 @@ class PaymentModel extends BaseModel
 			'payments.paymentid' => ['payment_accept.paymentid', 'payment_accept.user_type' => 'manager']
 		];
 		$where = [
-			'payment_accept.id' => null
+			'payment_accept.id' => null,
+			'payments.status' => sqlNot('결제 완료'),
 		];
 		return self::getDb()->sqlDicts('select payments.* from ? where ?', sqlLeftJoin($table), sqlWhere($where));
 	}
