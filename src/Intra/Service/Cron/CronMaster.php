@@ -18,10 +18,10 @@ class CronMaster
 	public static function run()
 	{
 		$lock_unique_name = 'cron.master';
-
 		if (self::tryLockAndIfFailed($lock_unique_name)) {
 			die('already running');
 		}
+
 		foreach (self::$CRON_CLASSES as $cron_class) {
 			try {
 				/**
