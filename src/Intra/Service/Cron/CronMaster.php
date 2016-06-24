@@ -17,8 +17,9 @@ class CronMaster
 
 	public static function run()
 	{
-		$lock = fopen(sys_get_temp_dir() . '/ridi.intranet.cron.lock', 'c+');
-		if (!flock($lock, LOCK_EX | LOCK_NB)) {
+		$lock_unique_name = 'cron.master';
+
+		if (self::tryLockAndIfFailed($lock_unique_name)) {
 			die('already running');
 		}
 		foreach (self::$CRON_CLASSES as $cron_class) {
@@ -30,6 +31,9 @@ class CronMaster
 				$cron_unique_name = $cron->getUniqueName();
 				if (strlen($cron_unique_name) <= 0) {
 					throw new MsgException('invalid $cron_unique_name : ' . $cron_class);
+				}
+				if (self::tryLockAndIfFailed($cron_unique_name)) {
+					continue;
 				}
 				$last_executed_datetime = self::getLastExecutedDatetime($cron_unique_name);
 
@@ -52,5 +56,18 @@ class CronMaster
 			return new \DateTime($datetime);
 		}
 		return new \DateTime('1000-00-00 00:00:00');
+	}
+
+	/**
+	 * @param $lock_unique_name
+	 * @return bool
+	 */
+	private static function tryLockAndIfFailed($lock_unique_name)
+	{
+		$lock = fopen(sys_get_temp_dir() . '/ridi.intranet.' . $lock_unique_name . '.lock', 'c+');
+		if (!flock($lock, LOCK_EX | LOCK_NB)) {
+			return true;
+		}
+		return false;
 	}
 }
