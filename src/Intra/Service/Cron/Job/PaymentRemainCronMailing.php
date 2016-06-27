@@ -58,7 +58,8 @@ class PaymentRemainCronMailing extends CronMailingInterface
 			$dto = clone $dto_template;
 			$dto->receiver = [
 				UserService::getEmailByUidSafe($first_payment->manager_uid),
-				UserService::getEmailByUidSafe($first_payment->uid),
+			];
+			$dto->CC = [
 				'***REMOVED***',
 			];
 			$dto->dicts = [];
