@@ -60,7 +60,7 @@ class UserService
 
 		if (!$user_dto_object->isValid()) {
 			throw new MsgException(
-				'로그인 불가능한 계정입니다. 인프라팀에 확인해주세요. <a href="https://login.windows.net/common/oauth2/logout?response_type=code&client_id=***REMOVED***&resource=https://graph.windows.net&redirect_uri=">로그인 계정을 여러개 쓰는경우 로그인 해제</a>하고 다시 시도해주세요'
+				'로그인 불가능한 계정입니다. 인사팀에 확인해주세요. <a href="https://login.windows.net/common/oauth2/logout?response_type=code&client_id=***REMOVED***&resource=https://graph.windows.net&redirect_uri=">로그인 계정을 여러개 쓰는경우 로그인 해제</a>하고 다시 시도해주세요'
 			);
 		}
 	}
