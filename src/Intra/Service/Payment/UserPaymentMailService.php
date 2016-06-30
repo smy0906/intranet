@@ -48,6 +48,7 @@ class UserPaymentMailService
 	{
 		$receivers[] = '***REMOVED***';
 		$receivers[] = '***REMOVED***';
+		$receivers[] = '***REMOVED***';
 
 		if (Config::$is_dev) {
 			if (strlen(Config::$test_mail)) {

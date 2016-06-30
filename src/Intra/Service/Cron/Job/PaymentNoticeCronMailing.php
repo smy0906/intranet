@@ -41,7 +41,7 @@ class PaymentNoticeCronMailing extends CronMailingInterface
 	public function getMailContentsDtos()
 	{
 		$dto_template = new MailingDto;
-		$dto_template->replyTo = ['***REMOVED***'];
+		$dto_template->replyTo = ['***REMOVED***', '***REMOVED***'];
 		$dto_template->title = '[확인요청] ' . date('Y-m-d') . ' 결제 예정 내역';
 		$dto_template->body_header = date('Y-m-d') . "에 아래 결제가 완료될 예정입니다.<br/>
 		혹시 변동사항이 있는지 확인해 주세요.<br/><br/><br/>";
@@ -60,6 +60,7 @@ class PaymentNoticeCronMailing extends CronMailingInterface
 			$dto->CC = [
 				UserService::getEmailByUidSafe($first_payment->manager_uid),
 				'***REMOVED***',
+				'***REMOVED***'
 			];
 			$dto->dicts = [];
 			foreach ($payments as $payment) {
