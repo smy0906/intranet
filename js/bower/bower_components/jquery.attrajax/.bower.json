@@ -10,11 +10,11 @@
     "README.md"
   ],
   "homepage": "https://github.com/genesos/AttrAjax",
-  "_release": "48570fa969",
+  "_release": "f4f9485ef2",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "48570fa9690477bd6c76ba3b03ae8ada4e9cd955"
+    "commit": "f4f9485ef2ac7af5ff73af85299bc8423a121349"
   },
   "_source": "https://github.com/genesos/AttrAjax.git",
   "_target": "*",
