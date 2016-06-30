@@ -15,6 +15,7 @@
     "jquery-form": "~3",
     "jquery-number": "~2",
     "blueimp-file-upload": "~9",
+    "datatables": "~1",
     "jquery.jeditable": "https://github.com/tuupola/jquery_jeditable.git",
     "jquery.tmpl": "https://github.com/BorisMoore/jquery-tmpl.git",
     "jquery.attrajax": "https://github.com/genesos/AttrAjax.git"
