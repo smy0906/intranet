@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-7">
+      <div class="col-xs-6">
         <a href="/posts/{{ group }}">
           <button class="btn" type="button">
             목록으로
@@ -37,6 +37,22 @@
               수정하기
             </button>
           </a>
+        {% endif %}
+      </div>
+      <div class="col-xs-1">
+        {% if isPostAdmin %}
+          <button attrajax
+                  data-aa-url='/posts/{{ group }}/{{ id }}'
+                  data-aa-method='DELETE'
+                  data-aa-confirm='정말 삭제하시겠습니까?'
+                  data-aa-datatype="json"
+                  data-aa-onsuccess-msg="삭제되었습니다"
+                  data-aa-onsuccess-url="/posts/notice"
+                  data-aa-onfail-alert="true"
+                  class="btn btn-warning"
+                  type="button"
+          >삭제하기
+          </button>
         {% endif %}
       </div>
     </div>

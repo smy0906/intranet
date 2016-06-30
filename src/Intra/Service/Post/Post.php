@@ -15,6 +15,7 @@ use Intra\Model\PostModel;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 use Mailgun\Mailgun;
+use Symfony\Component\HttpFoundation\Request;
 
 class Post
 {
@@ -39,14 +40,14 @@ class Post
 	public function modify($request)
 	{
 		$postDto = PostDetailDto::importFromWriteRequest($request);
-		$this->assertModify($postDto);
+		$this->assertModify();
 
 		$post = PostModel::on()->find($postDto->id);
 		$post->update($postDto->exportAsArrayForModify());
 		$post->save();
 	}
 
-	private function assertModify($post_list_view)
+	private function assertModify()
 	{
 		if (!UserPolicy::isPostAdmin(UserSession::getSelfDto())) {
 			throw new MsgException('권한이 없습니다');
@@ -90,5 +91,19 @@ class Post
 			}
 		);
 		return $result;
+	}
+
+	/**
+	 * @param $request Request
+	 * @return bool|mixed|null
+	 * @throws MsgException
+	 */
+	public function del($request)
+	{
+		$id = $request->get('id');
+		$this->assertModify();
+
+		$post = PostModel::on()->find($id);
+		return $post->delete();
 	}
 }

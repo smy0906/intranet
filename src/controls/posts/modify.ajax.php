@@ -3,6 +3,7 @@
 
 use Intra\Core\JsonDto;
 use Intra\Service\Post\Post;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 $jsonDto = new JsonDto();
 try {
@@ -14,6 +15,4 @@ try {
 	$jsonDto->setException($e);
 }
 
-return json_encode(
-	(array)$jsonDto
-);
+return JsonResponse::create($jsonDto);

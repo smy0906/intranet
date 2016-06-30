@@ -25,8 +25,9 @@ $this->matchIf('/{group}/{id}/modify')
 	->isMethod('post')
 	->query('modify.ajax');
 
-$this->matchIf('/{group}/{id}/delete')
+$this->matchIf('/{group}/{id}')
 	->assertAsInt('id')
+	->isMethod('delete')
 	->query('delete');
 
 $this->matchIf('/{group}/{id}')

@@ -8,73 +8,10 @@
       if (location.search == '?after_login' && window.innerWidth < 980) {
         location.href = '/rooms';
       }
-      $(document).on('mouseover', '.js_user', function (e) {
-        var id = $(this).data('userid');
-        $('.js_user_popup[data-userid=' + id + ']').show(0);
-        e.stopPropagation();
-        return false;
-      });
-      $(document).on('mouseout', '.js_user', function (e) {
-        var id = $(this).data('userid');
-        $('.js_user_popup[data-userid=' + id + ']').hide(0);
-        e.stopPropagation();
-        return false;
-      });
-      $(document).on('mousemove', '.js_user', function (e) {
-        var id = $(this).data('userid');
-        var bodyPos = $('#user_map').position();
-        $('.js_user_popup[data-userid=' + id + ']')
-          .css('left', (e.pageX - bodyPos.left) + 'px')
-          .css('top', (e.pageY - bodyPos.top) + 'px');
-        e.stopPropagation();
-        return false;
-      });
-
-      {% if replaceable %}
-      $('.js_user').draggable({
-        snap: true, containment: '#user_map', stop: function (e, ui) {
-          var id = $(this).data('userid');
-          var x = parseInt(ui.position.left);
-          var y = parseInt(ui.position.top);
-          $.post('/users/' + id + '/updateExtra/posX/' + x);
-          $.post('/users/' + id + '/updateExtra/posY/' + y);
-        }
-      });
-      {% endif %}
+      else {
+        location.href = '/posts/notice';
+      }
     });
   </script>
 
-{% endblock %}
-
-{% block body_head %}
-  {% if globalDomain == "ridi.com" %}
-    {% for user in users %}
-      <div class='js_user_popup' data-userid='{{ user.uid }}'>
-        <div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>
-        {% if user.outer_call %}
-          <div><strong>외선</strong> {{ user.outer_call }}</div>
-        {% endif %}
-        {% if user.inner_call %}
-          <div><strong>내선</strong> {{ user.inner_call }}</div>
-        {% endif %}
-        <div><strong>긴급</strong> {{ user.mobile }}</div>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endblock %}
-
-{% block body %}
-  {% if globalDomain == "ridi.com" %}
-    <div style="position: absolute;top:50px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
-      {% for user in users %}
-        <div class='js_user'
-             style='padding:0;left:{{ user.extra.posX }}px;top:{{ user.extra.posY }}px'
-             data-userid='{{ user.uid }}'>
-          <div style='padding:0;margin:0;height:100px;overflow:hidden;'>
-            <div>{{ user.name }}</div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
 {% endblock %}
