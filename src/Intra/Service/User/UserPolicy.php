@@ -49,9 +49,10 @@ class UserPolicy
 		}
 		return false;
 	}
+
 	public static function isPaymentAdmin($self)
 	{
-		if ($self->is_admin) {
+		if (in_array($self->name, ['설다인', '신은선', '한서윤', '박주현'])) {
 			return true;
 		}
 		return false;
