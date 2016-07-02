@@ -31,7 +31,7 @@ class Weekly
 			throw new Exception('권한이 없습니다.');
 		}
 
-		// It's Monday only
+		// 월.화요일만 열람 가능
 		if (date('w') != 1 && date('w') != '2') {
 			throw new Exception('열람 가능한 요일이 아닙니다.');
 		}
