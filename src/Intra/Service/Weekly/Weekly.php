@@ -32,8 +32,7 @@ class Weekly
 		}
 
 		// It's Monday only
-		// 추석연휴 후 수요일 예외 처리
-		if (date('w') != 1 && date('Ymd') != '20150930') {
+		if (date('w') != 1 && date('w') != '2') {
 			throw new Exception('열람 가능한 요일이 아닙니다.');
 		}
 	}
