@@ -1,0 +1,182 @@
+// Mixins
+
+.serif() {
+	font-family: Georgia, 'Times New Roman', serif;
+}
+
+.sans-serif () {
+	font-family: 'Apple SD Gothic Neo', NanumGothic, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.clear {
+	clear: both;
+}
+.clear() {
+	&:after { 
+	   content: "."; 
+	   visibility: hidden; 
+	   display: block; 
+	   height: 0; 
+	   clear: both;
+	}
+}
+
+.button() {
+	.border-radius();
+	.transition();
+	font-size: 0.875em;
+	padding: 12px 30px;
+	display: inline-block;
+	letter-spacing: -0.03em;
+	font-weight: bold;
+	i {
+		opacity: 0.5;
+	}
+}
+.button-orange() {
+	.button();
+	.drop-shadow();
+	background: @bright-orange;
+	color: #6f210b;
+	&:hover {
+		color: @bright-orange;
+		background: #fff;
+	}
+}
+.button-gray() {
+	.button();
+	.drop-shadow();
+	background: #333;
+	color: #fff;
+	&:hover {
+		color: #eee;
+		background: #222;
+	}
+}
+.button-skyblue() {
+	.button();
+	.drop-shadow();
+	background: #78caf3;
+	color: #fff;
+	&:hover {
+		background: #fff;
+		color: #30356e;
+	}
+}
+.button-navy() {
+	.button();
+	background: #0a1b39;
+	color: #fff;
+	&:hover {
+		color: #fff;
+		background: #050f22;
+	}
+}
+.button-gray-stroke() {
+	.button();
+	background: transparent;
+	border: 2px solid #c9c9c9;
+	color: #484848;
+	&:hover {
+		border-color: #484848;
+	}
+}
+.button-white() {
+	.button();
+	background: #fff;
+	color: #165097;
+	&:hover {
+		background: #d8eaff;
+	}
+}
+.button-blue() {
+	.button();
+	padding: 16px 30px;
+	background: #1f8ee6;
+	color: #fff;
+	&:hover {
+		color: #fff;
+		background: #1477c5;
+	}
+}
+.button-blue-stroke() {
+	.button();
+	background: transparent;
+	border: 2px solid #1f8ee6;
+	color: #1f8ee6;
+	&:hover {
+		background-color: #eef8ff;
+	}
+	i {
+		opacity: 1;
+	}
+}
+.button-white-stroke() {
+	.button();
+	background: transparent;
+	border: 2px solid #fff;
+	color: #fff;
+	&:hover {
+		border-color: rgba(255,255,255,.7);
+		color: rgba(255,255,255,.7);
+	}
+	i {
+		opacity: 1;
+	}
+}
+
+
+.transition(@type: all, @time: 0.15s) {
+    -webkit-transition: @type @time;
+    -moz-transition: @type @time;
+    transition: @type @time;
+}
+
+.background-cover() {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.text-shadow (@string: 0 1px 3px rgba(0, 0, 0, 0.25)) {
+	text-shadow: @string;
+}
+
+.drop-shadow (@x: 0, @y: 1px, @blur: 2px, @spread: 0, @color: rgba(0, 0, 0, 0.25)) {
+	-webkit-box-shadow:	@x @y @blur @spread @color;
+	-moz-box-shadow:	@x @y @blur @spread @color;
+	box-shadow:		@x @y @blur @spread @color;
+}
+
+.inner-shadow (@x: 0, @y: 1px, @blur: 2px, @spread: 0, @color: rgba(0, 0, 0, 0.25)) {
+	-webkit-box-shadow:	inset @x @y @blur @spread @color;
+	-moz-box-shadow:	inset @x @y @blur @spread @color;
+	box-shadow:		inset @x @y @blur @spread @color;
+}
+
+.border-radius (@radius: 4px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius:    @radius;
+	border-radius:         @radius;
+
+	-moz-background-clip:    padding;
+	-webkit-background-clip: padding-box;
+	background-clip:         padding-box;
+}
+
+.opacity (@opacity: 0.5) {
+	-webkit-opacity: 	@opacity;
+	-moz-opacity: 		@opacity;
+	opacity: 		@opacity;
+}
+
+.no-select () {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
