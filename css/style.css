@@ -1,0 +1,81 @@
+/* 
+
+Custom CSS for RIDI 
+Author: Jaemin Bae
+
+*/
+/* 
+
+Custom CSS for RIDI 
+Author: Jaemin Bae
+
+*/
+.clear {
+  clear: both;
+}
+nav.navbar-default {
+  background-color: #1f8ee6;
+  border-bottom: 1px solid #2b85cc;
+  box-shadow: 0 3px 5px rgba(31, 142, 230, 0.3);
+}
+nav.navbar-default .navbar-brand {
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 18px 26px;
+  height: auto;
+  line-height: 1;
+  -webkit-transition: all 0.15s;
+  -moz-transition: all 0.15s;
+  transition: all 0.15s;
+}
+nav.navbar-default .navbar-brand span {
+  color: #cbf0ff;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  vertical-align: 14%;
+}
+@media only screen and (max-width: 767px) {
+  nav.navbar-default .navbar-brand {
+    padding: 16px 16px;
+  }
+}
+nav.navbar-default .navbar-brand:focus,
+nav.navbar-default .navbar-brand:hover {
+  color: #fff;
+  transform: translate3d(0, -1px, 0);
+  background: #369be9;
+}
+nav.navbar-default .navbar-nav > li > a {
+  color: #cbf0ff;
+  font-size: 13px;
+  padding: 18px 12px;
+  -webkit-transition: all 0.15s;
+  -moz-transition: all 0.15s;
+  transition: all 0.15s;
+}
+nav.navbar-default .navbar-nav > li > a:focus,
+nav.navbar-default .navbar-nav > li > a:hover {
+  color: #fff;
+  transform: translate3d(0, -1px, 0);
+  background: #369be9;
+}
+@media only screen and (max-width: 767px) {
+  nav.navbar-default .navbar-nav > li > a {
+    padding: 10px 16px;
+  }
+}
+nav.navbar-default .navbar-collapse,
+nav.navbar-default .navbar-form {
+  border-color: #369be9;
+}
+nav.navbar-default .navbar-toggle {
+  border-color: #369be9;
+}
+nav.navbar-default .navbar-toggle .icon-bar {
+  background: #fff;
+}
+nav.navbar-default .navbar-toggle:focus,
+nav.navbar-default .navbar-toggle:hover {
+  background: #369be9;
+}
