@@ -16,11 +16,11 @@ use Intra\Service\User\UserSession;
 
 class UserHoliday
 {
-	private $COST_UNSELECTABLE_TYPE = ['PWT', '오전반차', '오후반차', '무급오전반차', '무급오후반차'];
 	private $COST_ZERO_DAY_VARIABLE_TYPE = ['공가', '경조', '대체휴가', '무급휴가'];
-	private $COST_ZERO_TYPE = ['PWT', '무급오전반차', '무급오후반차'];
+	private $COST_ZERO_DAY_UNVARAIABLE_TYPE = ['PWT', '무급오전반차', '무급오후반차'];
 	private $COST_HALF_TYPE = ['오전반차', '오후반차'];
 	private $COST_INT_TYPE = ['연차'];
+
 	/**
 	 * @var UserDto
 	 */
@@ -134,7 +134,7 @@ class UserHoliday
 			if ($int_cost != $holiday_dto->cost || $int_cost < 0) {
 				throw new \Exception('기간은 자연수로만 입력가능합니다');
 			}
-		} elseif (in_array($holiday_dto->type, $this->COST_ZERO_TYPE)) {
+		} elseif (in_array($holiday_dto->type, $this->COST_ZERO_DAY_UNVARAIABLE_TYPE)) {
 			$holiday_dto->cost = 0;
 		} elseif (in_array($holiday_dto->type, $this->COST_HALF_TYPE)) {
 			$holiday_dto->cost = 0.5;
@@ -253,7 +253,8 @@ class UserHoliday
 	 */
 	private function filterAdd($holiday_raw)
 	{
-		if (!in_array($holiday_raw->type, $this->COST_UNSELECTABLE_TYPE) && strlen(trim($holiday_raw->cost)) == 0) {
+		if (in_array($holiday_raw->type, $this->COST_INT_TYPE) && strlen(trim($holiday_raw->cost)) == 0
+		) {
 			$holiday_raw->cost = 1;
 		}
 		$holiday_raw->uid = $this->user->uid;
