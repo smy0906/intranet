@@ -36,7 +36,7 @@ class PostDetailDto extends BaseDto
 	{
 		$return = new self;
 		$return->initFromArray($post->getAttributes());
-		if (strtotime('-1 day') < strtotime($return->updated_at)) {
+		if (strtotime('-7 day') < strtotime($return->updated_at)) {
 			$return->is_new = true;
 		} else {
 			$return->is_new = false;
