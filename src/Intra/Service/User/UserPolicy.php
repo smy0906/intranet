@@ -52,7 +52,7 @@ class UserPolicy
 
 	public static function isPaymentAdmin($self)
 	{
-		if (in_array($self->name, ['설다인', '신은선', '한서윤', '박주현'])) {
+		if (in_array($self->name, ['설다인', '신은선', '한서윤', '박주현', '김은애'])) {
 			return true;
 		}
 		return false;
