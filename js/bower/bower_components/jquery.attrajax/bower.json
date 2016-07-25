@@ -1,13 +1,14 @@
 {
   "name": "jquery.attrajax",
-  "version": "0.1",
+  "version": "0.1.4",
   "main": "jquery.attrajax.js",
   "author": "genesos",
   "dependencies": {
-    "jquery": ">=1.5",
+    "jquery": "~2",
     "jquery-form": "~3"
   },
   "ignore": [
-    "README.md"
+    "README.md",
+    ".eslintrc.js"
   ]
 }
