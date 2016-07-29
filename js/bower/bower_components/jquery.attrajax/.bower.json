@@ -19,6 +19,6 @@
     "commit": "d5ce1c68d40ce6d46970dd737693d06113319e4f"
   },
   "_source": "https://github.com/genesos/AttrAjax.git",
-  "_target": "~0.1",
+  "_target": "^0.1",
   "_originalSource": "jquery.attrajax"
 }

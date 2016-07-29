@@ -929,21 +929,21 @@
 				$htmlContent = strings.replace(/\n/gim,'').replace(/\r/gim,'').replace(/\t/gim,'').replace(/&nbsp;/gim,' ');
 
 				$htmlPattern =  [
-					/\<span(|\s+.*?)><span\1>(.*?)<\/span><\/span>/gim, // trim nested spans
-					/<((?!p|br|td)\w*)\s*[^\/>]*>\s*<\/\1>/gim, // remove empty or white-spaces tags (ignore paragraphs (<p>), breaks (<br>) and table (<td>) )
+					/\<span(|\s+.*?)><span(|\s+.*?)>(.*?)<\/span><\/span>/gim, // trim nested spans
+					/<(\w*[^p])\s*[^\/>]*>\s*<\/\1>/gim, // remove empty or white-spaces tags (ignore paragraphs (<p>) and breaks (<br>))
 					/\<div(|\s+.*?)>(.*?)\<\/div>/gim, // convert div to p
 					/\<strong(|\s+.*?)>(.*?)\<\/strong>/gim, // convert strong to b
 					/\<em(|\s+.*?)>(.*?)\<\/em>/gim // convert em to i
 				];
 
 				$htmlReplace = [
-					'<span$1>$2</span>',
+					'<span$2>$3</span>',
 					'',
 					'<p$1>$2</p>',
 					'<b$1>$2</b>',
 					'<i$1>$2</i>'
 				];
-
+				
 				// repeat the cleaning process 5 times
 				for(c=0; c<5; c++)
 				{

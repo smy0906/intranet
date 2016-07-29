@@ -3,7 +3,7 @@ require(["jquery", "jquery.attrajax", "jquery-number", "chosen", "jquery.cookie"
     $('*[attrajax]').attrAjax();
     $('input[js_number_format]').number(true);
   });
-  $('select[js_data_chosen]').chosen({search_contains: true});
+  $('select[js_data_chosen]').chosen({ search_contains: true });
   $('select[js_cookie_save],input[js_cookie_save]')
     .change(function () {
       var $this = $(this);
