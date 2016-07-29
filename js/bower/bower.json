@@ -11,13 +11,14 @@
     "bower_components"
   ],
   "dependencies": {
-    "jquery": "~2.1",
-    "jquery-form": "~3",
-    "jquery-number": "~2",
-    "blueimp-file-upload": "~9",
-    "datatables": "~1",
-    "jquery.attrajax": "~0.1",
+    "blueimp-file-upload": "^9.12",
+    "datatables": "^1.10",
+    "jquery": "^2.2",
+    "jquery-form": "^3.46",
+    "jquery-number": "^2.1",
+    "jquery.attrajax": "^0.1",
     "jquery.jeditable": "https://github.com/tuupola/jquery_jeditable.git",
-    "jquery.tmpl": "https://github.com/BorisMoore/jquery-tmpl.git"
+    "jquery.tmpl": "https://github.com/BorisMoore/jquery-tmpl.git",
+    "scheduler": "^4.3.1"
   }
 }
