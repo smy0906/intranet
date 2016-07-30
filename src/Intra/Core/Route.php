@@ -46,7 +46,7 @@ class Route
 
 	public function postProcessLastMatchIfExist()
 	{
-		if ($this->lastMatch !== null) {
+		if (isset($this->lastMatch)) {
 			$lastMatched = $this->lastMatch;
 			$this->lastMatch = null;
 
