@@ -22,4 +22,20 @@ class Config
 
 	public static $is_dev = false;
 	public static $test_mail = '';
+
+	public static $recipients = [
+		'payment' => [
+			'***REMOVED***',
+			'***REMOVED***',
+			'***REMOVED***'
+		],
+		'payment_admin' => [
+			'***REMOVED***',
+			'***REMOVED***'
+		],
+		'holiday' => [
+			'***REMOVED***',
+			'***REMOVED***'
+		]
+	];
 }

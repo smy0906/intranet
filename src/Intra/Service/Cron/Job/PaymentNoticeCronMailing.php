@@ -2,6 +2,7 @@
 
 namespace Intra\Service\Cron\Job;
 
+use Intra\Config\Config;
 use Intra\Lib\ObjectsUtils;
 use Intra\Model\PaymentModel;
 use Intra\Service\Cron\Interfacer\CronMailingInterface;
@@ -41,7 +42,7 @@ class PaymentNoticeCronMailing extends CronMailingInterface
 	public function getMailContentsDtos()
 	{
 		$dto_template = new MailingDto;
-		$dto_template->replyTo = ['***REMOVED***', '***REMOVED***'];
+		$dto_template->replyTo = Config::$recipients['payment_admin'];
 		$dto_template->title = '[확인요청] ' . date('Y-m-d') . ' 결제 예정 내역';
 		$dto_template->body_header = date('Y-m-d') . "에 아래 결제가 완료될 예정입니다.<br/>
 		혹시 변동사항이 있는지 확인해 주세요.<br/><br/><br/>";
@@ -57,11 +58,7 @@ class PaymentNoticeCronMailing extends CronMailingInterface
 			$dto->receiver = [
 				UserService::getEmailByUidSafe($first_payment->uid),
 			];
-			$dto->CC = [
-				UserService::getEmailByUidSafe($first_payment->manager_uid),
-				'***REMOVED***',
-				'***REMOVED***'
-			];
+			$dto->CC = array_merge(UserService::getEmailByUidSafe($first_payment->manager_uid), Config::$recipients['payment_admin']);
 			$dto->dicts = [];
 			foreach ($payments as $payment) {
 				$dto->dicts[] =

@@ -99,12 +99,7 @@ class UserHolidayNotification
 		foreach ($users as $user) {
 			$emails[] = $user->id . '@' . Config::$domain;
 		}
-		if (Config::$domain == 'ridi.com') {
-			$emails[] = '***REMOVED***';
-			$emails[] = '***REMOVED***';
-		} else {
-			$emails[] = '***REMOVED***';
-		}
+		$emails = array_merge($emails, Config::$recipients['holiday']);
 
 		return array_unique(array_filter($emails));
 	}

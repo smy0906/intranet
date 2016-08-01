@@ -38,9 +38,7 @@ class UserPaymentMailService
 	 */
 	private function sendMailRaw($receivers, $title, $html)
 	{
-		$receivers[] = '***REMOVED***';
-		$receivers[] = '***REMOVED***';
-		$receivers[] = '***REMOVED***';
+		$receivers = array_merge($receivers, Config::$recipients['payment']);
 
 		if (Config::$is_dev) {
 			if (strlen(Config::$test_mail)) {
