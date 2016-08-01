@@ -38,4 +38,37 @@ class Config
 			'***REMOVED***'
 		]
 	];
+
+	public static $user_policy = [
+		'first_page_editable' => [
+			'***REMOVED***'
+		],
+		'holiday_editable' => [
+			'***REMOVED***'
+		],
+		'press_manager' => [
+			'***REMOVED***'
+		],
+		'user_manager' => [
+			'***REMOVED***',
+			'***REMOVED***',
+			'***REMOVED***'
+		],
+		'post_admin' => [
+			'***REMOVED***',
+			'***REMOVED***',
+			'***REMOVED***'
+		],
+		'payment_admin' => [
+			'***REMOVED***',
+			'***REMOVED***',
+			'***REMOVED***',
+			'***REMOVED***',
+			'***REMOVED***',
+		],
+		'receipts_admin' => [
+			'***REMOVED***',
+			'***REMOVED***',
+		]
+	];
 }
