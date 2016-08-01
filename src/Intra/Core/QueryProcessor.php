@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 13. 12. 23
- * Time: 오후 6:29
- */
-
 namespace Intra\Core;
 
 use Symfony\Component\HttpFoundation\Request;

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 14. 4. 1
- * Time: 오후 2:13
- */
-
 namespace Intra\Lib\Response;
 
 use Symfony\Component\HttpFoundation\Response;

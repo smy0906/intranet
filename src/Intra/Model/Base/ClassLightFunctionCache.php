@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-07-21
- * Time: 오후 6:44
- */
-
 namespace Intra\Model\Base;
 
 /**
@@ -15,7 +8,6 @@ namespace Intra\Model\Base;
  * 모델 객체에대해 pk 기준으로 캐시를 보장하기위한 시스템
  *
  */
-
 trait ClassLightFunctionCache
 {
 	static private $cacheHashesByKey = [];

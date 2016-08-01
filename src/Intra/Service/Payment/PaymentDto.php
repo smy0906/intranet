@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-04-14
- * Time: 오전 11:29
- */
-
 namespace Intra\Service\Payment;
-
 
 use Intra\Core\BaseDto;
 use Intra\Core\MsgException;

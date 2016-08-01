@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-08-13
- * Time: 오후 6:25
- */
-
 namespace Intra\Service\Post;
 
 use Intra\Model\PostModel;

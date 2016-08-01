@@ -1,18 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-08-13
- * Time: 오후 6:28
- */
-
 namespace Intra\Service\Post;
 
 use Illuminate\Database\Eloquent\Model as EloquentBaseModel;
 use Intra\Core\BaseDto;
 use Intra\Model\PostModel;
 use Intra\Service\User\UserInstanceService;
-use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Request;
 

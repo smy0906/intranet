@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-08-15
- * Time: 오전 12:20
- */
-
 namespace Intra\Core;
 
 use ReflectionClass;

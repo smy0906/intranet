@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 14. 1. 7
- * Time: 오후 3:50
- */
-
 namespace Intra\Service\User;
 
 use Intra\Model\SessionModel;

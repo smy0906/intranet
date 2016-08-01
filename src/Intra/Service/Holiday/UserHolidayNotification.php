@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-07-27
- * Time: 오후 12:16
- */
-
 namespace Intra\Service\Holiday;
 
 use Intra\Config\Config;

@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-06-03
- * Time: 오전 12:30
- */
-
 namespace Intra\Service\Payment;
-
 
 use Intra\Core\BaseModel;
 

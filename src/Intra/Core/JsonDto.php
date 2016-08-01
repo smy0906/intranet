@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-08-16
- * Time: 오후 3:47
- */
-
 namespace Intra\Core;
 
 use Intra\Service\Ridi;
 
-/**Json 객체를 위한 Dto class
+/**
+ * Json 객체를 위한 Dto class
  * Class JsonDto
  * @package Ridibooks\Platform\Common\Base
  */

@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-02-18
- * Time: 오후 1:58
- */
-
 namespace Intra\Core;
-
 
 use Exception;
 

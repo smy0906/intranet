@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KHS
- * Date: 2016. 1. 4.
- * Time: 오후 12:04
- */
-
 namespace Intra\Service\Press;
 
 use Intra\Core\JsonDto;

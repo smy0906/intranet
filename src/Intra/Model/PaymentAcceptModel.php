@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-04-14
- * Time: 오후 2:50
- */
-
 namespace Intra\Model;
-
 
 use Intra\Core\BaseModel;
 use Intra\Service\Payment\PaymentAcceptDto;

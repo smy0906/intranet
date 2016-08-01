@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-06-03
- * Time: 오전 12:13
- */
-
 namespace Intra\Service\Payment;
-
 
 use Intra\Model\LightFileModel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

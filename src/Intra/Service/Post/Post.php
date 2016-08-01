@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-08-16
- * Time: 오후 4:41
- */
-
 namespace Intra\Service\Post;
 
 use Illuminate\Database\Capsule\Manager as Capsule;

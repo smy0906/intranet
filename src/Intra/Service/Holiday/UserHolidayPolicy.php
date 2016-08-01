@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 13. 12. 24
- * Time: 오후 4:14
- */
-
 namespace Intra\Service\Holiday;
 
 use DateTime;

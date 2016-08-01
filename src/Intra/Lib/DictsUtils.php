@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-04-15
- * Time: 오후 4:16
- */
-
 namespace Intra\Lib;
 
 /**
@@ -14,7 +7,6 @@ namespace Intra\Lib;
  *
  * sqlDicts 통해서 얻어진 배열에 대해 자주 사용하는 함수들
  */
-
 class DictsUtils
 {
 	/**

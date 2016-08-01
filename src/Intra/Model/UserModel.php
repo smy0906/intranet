@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 13. 12. 20
- * Time: 오전 11:49
- */
-
 namespace Intra\Model;
 
 use Intra\Core\BaseModel;

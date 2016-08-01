@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-02-18
- * Time: 오후 1:57
- */
-
 namespace Intra\Service\User;
 
 

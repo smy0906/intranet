@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-04-12
- * Time: 오후 3:07
- */
-
 namespace Intra\Service\Payment;
-
 
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;

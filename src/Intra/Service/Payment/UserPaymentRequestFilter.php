@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2016-04-12
- * Time: 오후 2:45
- */
-
 namespace Intra\Service\Payment;
-
 
 class UserPaymentRequestFilter
 {

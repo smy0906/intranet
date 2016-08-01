@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 13. 12. 20
- * Time: 오전 11:55
- */
-
 namespace Intra\Model;
 
 class SessionModel

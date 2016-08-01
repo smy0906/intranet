@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ridi
- * Date: 2015-07-17
- * Time: 오후 5:35
- */
-
 namespace Intra\Service;
 
 use Intra\Config\Config;
