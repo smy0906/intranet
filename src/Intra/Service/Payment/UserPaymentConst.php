@@ -52,7 +52,7 @@ class UserPaymentConst
 		];
 		$const['product'] = ['리디북스', '페이퍼샵', '공통'];
 		$const['tax'] = ['Y', 'N', 'N/A'];
-		$const['paytype'] = ['현금', '법인카드', '연구비계좌'];
+		$const['paytype'] = ['현금', '법인카드'];
 		$const['status'] = ['결제 대기중', '결제 완료'];
 		$const['category'] = [
 			'상품매입 (페이퍼샵 판매용 상품 매입 비용)',
