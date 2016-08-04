@@ -9,11 +9,18 @@ $db = \Intra\Service\IntraDb::getGnfDb();
 $request = $this->getRequest();
 $from = $request->get('from');
 $to = $request->get('to');
+$room_ids = $request->get('room_ids');
+$room_ids = explode(',', $room_ids);
+
+if (count($room_ids) == 0) {
+	return new JsonResponse([]);
+}
 
 $where = [
 	'deleted' => 0,
 	'from' => sqlGreaterEqual($from),
-	'to' => sqlLesser($to)
+	'to' => sqlLesser($to),
+	'room_id' => $room_ids,
 ];
 
 $events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));

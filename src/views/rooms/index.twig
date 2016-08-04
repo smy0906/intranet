@@ -237,7 +237,11 @@
       else {
         scheduler.init('scheduler_here', null, "unit_pc");
       }
-      scheduler.load("/rooms/get/", 'json');
+      var room_ids = [];
+      $.each(sections, function (index,section) {
+        room_ids.push(section.key);
+      });
+      scheduler.load("/rooms/get/?room_ids=" + room_ids.join(','), 'json');
 
     }
     require(["jquery"], function ($) {
