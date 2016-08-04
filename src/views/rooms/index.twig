@@ -69,16 +69,18 @@
           };
         };
         this.handler = function (event_type, event_id, event_object) {
-          if (this.hasOwnProperty(event_type))
+          if (this.hasOwnProperty(event_type)) {
             return this[event_type](event_id, event_object);
-          else
+          } else {
             throw "not exist handler " + event_type;
+          }
         };
         this.beforeEdit = function (event_id) {
           console.log('beforeEdit');
           console.log(event_id);
-          if (String(event_id).indexOf('#') >= 0)
+          if (String(event_id).indexOf('#') >= 0) {
             return false;
+          }
           try {
             edit_selected_date_from = new Date(event_handler.scheduler.getEventStartDate(event_id));
             edit_selected_date_to = new Date(event_handler.scheduler.getEventEndDate(event_id));
@@ -128,12 +130,15 @@
           var evsCnt = 0;
           var event_object = scheduler.getEvent(event_id);
           for (var k in evs) {
-            if (!evs.hasOwnProperty(k))
+            if (!evs.hasOwnProperty(k)) {
               continue;
-            if (evs[k].id == event_id)
+            }
+            if (evs[k].id == event_id) {
               continue;
-            if (evs[k].room_id != event_object.room_id)
+            }
+            if (evs[k].room_id != event_object.room_id) {
               continue;
+            }
             return true;
           }
           return false;
@@ -166,8 +171,9 @@
                   alert(dat);
                   event_handler.scheduler.deleteEvent(event_id);
                 }
-                else
+                else {
                   event_handler.scheduler.changeEventId(event_id, new_event_id);
+                }
               }
               catch (e) {
                 alert('이벤트 추가가 실패하였습니다');
@@ -202,7 +208,7 @@
 
       var sections = [
         {% for num,room in rooms %}
-        { key: {{ room.id }}, label: "{{ room.name }}" },
+        {key: {{ room.id }}, label: "{{ room.name }}"},
         {% endfor %}
       ];
 
@@ -228,8 +234,9 @@
         scheduler.init('scheduler_here', null, "unit_m");
         $('#js_howto').hide();
       }
-      else
+      else {
         scheduler.init('scheduler_here', null, "unit_pc");
+      }
       scheduler.load("/rooms/get/", 'json');
 
     }
