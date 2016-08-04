@@ -28,17 +28,44 @@
       bottom: 10px;
     }
   </style>
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
   <script src="//npmcdn.com/flickity@2.0/dist/flickity.pkgd.min.js"></script>
-
 </head>
 <body>
-<div class="carousel js-flickity" data-flickity-options='{ "autoPlay": 3000, "setGallerySize": false, "wrapAround": true, "pauseAutoPlayOnHover": false, "prevNextButtons": false }'>
-  <div class="carousel-cell"><img src="./images/portrait_1.png" alt=""></div>
-  <div class="carousel-cell"><img src="./images/portrait_2.png" alt=""></div>
-  <div class="carousel-cell"><img src="./images/portrait_3.png" alt=""></div>
-  <div class="carousel-cell"><img src="./images/portrait_4.png" alt=""></div>
-  <div class="carousel-cell"><img src="./images/portrait_5.png" alt=""></div>
-  <div class="carousel-cell"><img src="./images/portrait_6.png" alt=""></div>
-</div>
+<script>
+  const baseUrl = './images/';
+
+  function loadImage(index, html) {
+    const filename = (index + 100).toString().substr(1, 2) + '.png';
+    const image_url = baseUrl + filename + '?' + Date.now().toString();
+
+    $.get(image_url)
+      .done(function () {
+        html += `<div class="carousel-cell"><img src="${image_url}" alt=""></div>`;
+        loadImage(index + 1, html);
+      })
+      .fail(function () {
+        renderCarousel(html);
+      });
+  }
+
+  function renderCarousel(html) {
+    $('body').empty();
+    $(`<div class="carousel">`)
+      .appendTo('body')
+      .html(html)
+      .flickity({
+        "autoPlay": 3000,
+        "setGallerySize": false,
+        "wrapAround": true,
+        "pauseAutoPlayOnHover": false,
+        "prevNextButtons": false
+      });
+
+    setTimeout(() => loadImage(1, ''), 1000 * 60 * 5);
+  }
+
+  loadImage(1, '');
+</script>
 </body>
 </html>
