@@ -1,7 +1,6 @@
 <?php
 namespace Intra\Service\User;
 
-
 use Intra\Core\BaseDto;
 use Symfony\Component\HttpFoundation\Request;
 

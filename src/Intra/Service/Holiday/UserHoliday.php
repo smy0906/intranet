@@ -189,7 +189,7 @@ class UserHoliday
 
 	/**
 	 * @param UserHolidayDto $holidayRaw
-	 * @return int[]
+	 * @return int[]|false
 	 */
 	public function add($holidayRaw)
 	{

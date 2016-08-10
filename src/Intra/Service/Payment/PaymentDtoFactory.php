@@ -53,5 +53,4 @@ class PaymentDtoFactory
 		}
 		return $return;
 	}
-
 }

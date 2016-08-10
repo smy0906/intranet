@@ -37,7 +37,7 @@ class UserHolidayNotification
 		$ret = $this->sendMailNotification($title);
 		//$this->sendSlackNotification($title);
 
-		return $ret->http_response_code == 200;
+		return $ret;
 	}
 
 	/**
@@ -54,7 +54,7 @@ class UserHolidayNotification
 
 	/**
 	 * @param $title
-	 * @return \stdClass
+	 * @return bool
 	 * @throws \Exception
 	 */
 	private function sendMailNotification($title)
@@ -81,7 +81,7 @@ class UserHolidayNotification
 				'text' => $contents
 			]
 		);
-		return $ret;
+		return ($ret->http_response_code == 200);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 <?php
 namespace Intra\Service\User;
 
-
 use Intra\Core\MsgException;
 use Intra\Model\UserModel;
 
@@ -82,7 +81,6 @@ class UserService
 	 */
 	public static function getManagerUserDtos()
 	{
-		$return = [];
 		$dicts = UserModel::getDictsOfManager();
 		return UserDtoFactory::createFromDatabaseDicts($dicts);
 	}

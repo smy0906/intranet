@@ -169,11 +169,6 @@ class UserReceipts
 		return $return;
 	}
 
-	private function getSupereditUid()
-	{
-		return $this->user->uid;
-	}
-
 	public static function parseMonth($month = null)
 	{
 		if ($month == null) {
@@ -248,8 +243,6 @@ class UserReceipts
 	public function edit($receiptid, $key, $value)
 	{
 		$db = IntraDb::getGnfDb();
-
-		$uid = $this->user->uid;
 
 		$update = [$key => $value];
 		$where = $this->getSafeEditableWhereCalues($receiptid);

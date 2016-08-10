@@ -1,7 +1,6 @@
 <?php
 namespace Intra\Service\User;
 
-
 use Exception;
 use Intra\Config\Config;
 use Intra\Core\BaseInstanceService;
