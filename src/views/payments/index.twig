@@ -449,7 +449,7 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select name='team' js_cookie_save js_data_chosen>
+            <select name='team' js_cookie_save js_data_chosen style="width:250px;">
               {% for team in const.team %}
                 <option value='{{ team }}'>{{ team }}</option>
               {% endfor %}
@@ -458,7 +458,7 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select name='product' js_cookie_save js_data_chosen>
+            <select name='product' js_cookie_save js_data_chosen style="width:100px;">
               {% for product in const.product %}
                 <option value='{{ product }}'>{{ product }}</option>
               {% endfor %}
@@ -467,9 +467,9 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select id='js_category_input' js_cookie_save js_data_chosen>
-              {% for product in const.category %}
-                <option value='{{ product }}'>{{ product }}</option>
+            <select id='js_category_input' js_cookie_save js_data_chosen style="width:350px;">
+              {% for category in const.category %}
+                <option value='{{ category }}'>{{ category }}</option>
               {% endfor %}
             </select>
             <input type='hidden' name='category'/>
