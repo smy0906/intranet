@@ -4,6 +4,9 @@
 $this->matchIf('/{userid}/updateExtra/{key}/{value}')
 	->query('updateExtra.ajax');
 
+$this->matchIf('jeditable_key/{key}')
+	->query('jeditable_key');
+
 $this->matchIf('/join')
 	->isMethod('post')
 	->query('join.ajax');

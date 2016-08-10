@@ -37,7 +37,9 @@
       $('tr.user td[data-key]').each(function () {
         var uid = $(this).parent().data('uid');
         var key = $(this).data('key');
+        var select_url = $(this).data('select-url');
         var submitdata = {uid: uid, key: key};
+
         var args = {
           submitdata: submitdata,
           height: '20px',
@@ -47,6 +49,10 @@
             return value;
           }
         };
+        if (select_url) {
+          args.loadurl = select_url;
+          args.type = 'select';
+        }
 
         $(this).editable('/users/edit', args);
       });
@@ -70,7 +76,7 @@
                  data-content="이름이 TA로 시작하면 조직도, 전사주간 조회불가"></i></td>
         <td>이메일</td>
         <td>팀<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
-                data-content="현재 사용않음"></i></td>
+                data-content="엑셀 다운로드시 표시 됨"></i></td>
         <td>직급<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
                  data-content="'CEO', '팀장', 'CTO', 'COO', 'CDO', '기타' 중 하나이면 승인자(결제요청 등)으로 지정가능"></i></td>
         <td>외부전화</td>
@@ -101,7 +107,7 @@
           <td data-key="id">{{ user.id }}</td>
           <td data-key="name">{{ user.name }}</td>
           <td data-key="email">{{ user.email }}</td>
-          <td data-key="team">{{ user.team }}</td>
+          <td data-key="team" data-select-url="/users/jeditable_key/team">{{ user.team }}</td>
           <td data-key="position">{{ user.position }}</td>
           <td data-key="outer_call">{{ user.outer_call }}</td>
           <td data-key="inner_call">{{ user.inner_call }}</td>
