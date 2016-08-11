@@ -45,6 +45,6 @@ class FileUploadDto extends BaseDto
 
 	public function exportDatabaseInsert()
 	{
-		return $this->exportAsArray();
+		return $this->exportAsArrayExceptNull();
 	}
 }

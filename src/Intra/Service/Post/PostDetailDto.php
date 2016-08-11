@@ -48,7 +48,7 @@ class PostDetailDto extends BaseDto
 
 	public function exportAsArrayForDetailView()
 	{
-		$return = $this->exportAsArray();
+		$return = $this->exportAsArrayExceptNull();
 		$return['name'] = UserInstanceService::importFromDatabaseWithUid($this->uid)->getName();
 		$return['content_html'] = nl2br($return['content_html']);
 		return $return;
@@ -64,7 +64,7 @@ class PostDetailDto extends BaseDto
 
 	public function exportAsArrayForModify()
 	{
-		$return = $this->exportAsArray();
+		$return = $this->exportAsArrayExceptNull();
 		return $return;
 	}
 
