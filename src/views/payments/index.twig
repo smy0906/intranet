@@ -67,7 +67,6 @@
         })
         .each(function () {
           var index = datatable.column(this).index();
-          var $this = $(this);
           var key = 'payment_column_' + index;
 
           var cookied_value = $.cookie(key);
@@ -166,18 +165,19 @@
       var url = '/payments/file_upload/';
       $('.js_fileupload').each(function () {
         var paymentid = $(this).data('paymentid');
+        var $progress = $('div.progress-bar');
         $(this).fileupload({
           formData: {paymentid: paymentid},
           dropZone: $(this),
           url: url,
           dataType: 'json',
-          done: function (e, data) {
-            $('#progress .progress-bar').css('width', '0');
+          done: function () {
+            $progress.css('width', '0');
             document.location.reload();
           },
           progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#progress .progress-bar').css('width', progress + '%');
+            $progress.css('width', progress + '%');
           }
         })
           .prop('disabled', !$.support.fileInput)
@@ -199,7 +199,7 @@
         var args = {submitdata: submitdata, method: 'PUT'};
 
         if (key == 'price') {
-          args['data'] = function (value, settings) {
+          args['data'] = function (value) {
             return value.replace(/\D/gi, '');
           };
         }
@@ -449,7 +449,7 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select name='team' js_cookie_save js_data_chosen>
+            <select name='team' js_cookie_save js_data_chosen style="width:250px;">
               {% for team in const.team %}
                 <option value='{{ team }}'>{{ team }}</option>
               {% endfor %}
@@ -458,7 +458,7 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select name='product' js_cookie_save js_data_chosen>
+            <select name='product' js_cookie_save js_data_chosen style="width:100px;">
               {% for product in const.product %}
                 <option value='{{ product }}'>{{ product }}</option>
               {% endfor %}
@@ -467,9 +467,9 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select id='js_category_input' js_cookie_save js_data_chosen>
-              {% for product in const.category %}
-                <option value='{{ product }}'>{{ product }}</option>
+            <select id='js_category_input' js_cookie_save js_data_chosen style="width:350px;">
+              {% for category in const.category %}
+                <option value='{{ category }}'>{{ category }}</option>
               {% endfor %}
             </select>
             <input type='hidden' name='category'/>

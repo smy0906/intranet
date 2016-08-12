@@ -2,7 +2,6 @@
 
 namespace Intra\Service\User;
 
-
 class UserDtoFactory
 {
 

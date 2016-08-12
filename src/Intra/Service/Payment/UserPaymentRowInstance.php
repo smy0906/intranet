@@ -30,7 +30,7 @@ class UserPaymentRowInstance
 		$this->user_payment_model->update($this->payment_id, $key, $new_value);
 
 		$updated_payment_dto = PaymentDtoFactory::createFromDatabaseByPk($this->payment_id);
-		$updated_value = $updated_payment_dto->$key;;
+		$updated_value = $updated_payment_dto->$key;
 
 		if ($key == 'status') {
 			if ($updated_value == '결제 완료') {

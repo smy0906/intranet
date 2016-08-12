@@ -4,7 +4,7 @@
   {{ parent() }}
 
   <script>
-    require(["jquery", "jquery-ui"], function ($) {
+    require(["jquery", "jquery-ui"], function () {
       if (location.search == '?after_login' && window.innerWidth < 980) {
         location.href = '/rooms';
       }

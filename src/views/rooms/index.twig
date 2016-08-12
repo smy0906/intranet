@@ -127,7 +127,6 @@
         };
         this.isDuplicatedEvent = function (event_id) {
           var evs = event_handler.scheduler.getEvents(event_handler.scheduler.getEventStartDate(event_id), event_handler.scheduler.getEventEndDate(event_id));
-          var evsCnt = 0;
           var event_object = scheduler.getEvent(event_id);
           for (var k in evs) {
             if (!evs.hasOwnProperty(k)) {
@@ -165,7 +164,6 @@
               room_id: event_object.room_id
             }, function (dat) {
               try {
-                console.log(new_event_id);
                 var new_event_id = parseInt(dat);
                 if (isNaN(new_event_id) || new_event_id == 0) {
                   alert(dat);
@@ -183,7 +181,7 @@
           );
           return true;
         };
-        this.onBeforeEventDelete = function (event_id, event_object) {
+        this.onBeforeEventDelete = function (event_id) {
           $.post('/rooms/del/id/' + event_id);
           return true;
         };

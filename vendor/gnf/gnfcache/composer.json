@@ -1,0 +1,14 @@
+{
+    "name": "gnf/gnfcache",
+    "description": "A lightweight cache library",
+    "license": "MIT",
+    "autoload": {
+        "files": ["lib/Gnf/gnfCache.php"]
+    },
+    "authors": [
+        {
+            "name": "genesos",
+            "email": "genesos@gmail.com"
+        }
+    ]
+}

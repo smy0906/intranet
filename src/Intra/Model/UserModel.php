@@ -37,26 +37,14 @@ class UserModel extends BaseModel
 	public static function getDictWithUid($uid)
 	{
 		return self::getDb()->sqlDict('select * from ? where uid = ?', sqlTable(self::$table), $uid);
-		return self::cachingCallback(
-			$uid,
-			function () use ($uid) {
-				return self::getDb()->sqlDict('select * from ? where uid = ?', sqlTable(self::$table), $uid);
-			}
-		);
 	}
 
 	public static function getDictWithUids(array $uids)
 	{
 		return self::getDb()->sqlDicts(
-			'select * from ? where ?', sqlTable(self::$table), sqlWhere(['uid' => $uids])
-		);
-		return self::cachingCallback(
-			$uids,
-			function () use ($uids) {
-				return self::getDb()->sqlDicts(
-					'select * from ? where ?', sqlTable(self::$table), sqlWhere(['uid' => $uids])
-				);
-			}
+			'select * from ? where ?',
+			sqlTable(self::$table),
+			sqlWhere(['uid' => $uids])
 		);
 	}
 

@@ -34,7 +34,11 @@ class FileUploadService
 			function () use (&$return, $uid, $payment_id, $file) {
 				$count = FileUploadModel::getAlreadyRegistedCount($this->group, $payment_id);
 				$file_upload_dto = FileUploadDto::importFromUploadReqeust(
-					$uid, $file, $this->group, $payment_id, $count + 1
+					$uid,
+					$file,
+					$this->group,
+					$payment_id,
+					$count + 1
 				);
 				$dest = $this->light_file_model->getUploadableLocation($file_upload_dto->location);
 				if ($file->move(dirname($dest), basename($dest))) {

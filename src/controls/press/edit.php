@@ -9,6 +9,6 @@ $press_id = $request->get('id');
 $key = $request->get('key');
 $value = $request->get('value');
 
-$user = UserSession::getSupereditUserDto();
+$user = UserSession::getSelfDto();
 $press_service = new Press($user);
 return $press_service->edit($press_id, $key, $value);

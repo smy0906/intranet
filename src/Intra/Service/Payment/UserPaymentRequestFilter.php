@@ -3,7 +3,7 @@ namespace Intra\Service\Payment;
 
 class UserPaymentRequestFilter
 {
-	static public function getPayDateByStr($pay_type_str)
+	public static function getPayDateByStr($pay_type_str)
 	{
 		if ($pay_type_str == '7일' || $pay_type_str == '10일' || $pay_type_str == '25일') {
 			$dest_day = preg_replace('/\D/', '', $pay_type_str);

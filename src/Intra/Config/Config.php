@@ -65,8 +65,10 @@ class Config
 			'***REMOVED***',
 			'***REMOVED***',
 			'***REMOVED***',
+			'***REMOVED***',
 		],
 		'receipts_admin' => [
+			'***REMOVED***',
 			'***REMOVED***',
 			'***REMOVED***',
 		]

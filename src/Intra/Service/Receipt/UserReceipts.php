@@ -63,25 +63,25 @@ class UserReceipts
 
 		//용도별 통계
 
-		$tbls = $db->sqlDicts(
+		$summaryDicts = $db->sqlDicts(
 			'select scope, type, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by scope, type order by scope, type',
 			$uid,
 			$month,
 			$nextmonth
 		);
-		$sumByScope = $db->sqlDicts(
+		$summaryDictsByScope = $db->sqlDicts(
 			'select scope, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by scope order by scope',
 			$uid,
 			$month,
 			$nextmonth
 		);
-		$sumByType = $db->sqlDicts(
+		$summaryDictsByType = $db->sqlDicts(
 			'select type, sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d") group by type order by type',
 			$uid,
 			$month,
 			$nextmonth
 		);
-		$sum = $db->sqlDict(
+		$allSummaryDict = $db->sqlDict(
 			'select sum(cost) as cost, count(*) as count from receipts where uid = ? and str_to_date(?, "%Y-%m-%d") <= date and date < str_to_date(?, "%Y-%m-%d")',
 			$uid,
 			$month,
@@ -89,15 +89,15 @@ class UserReceipts
 		);
 
 
-		$cols = [
+		$columns = [
 			'합계' => 1
 		];
-		foreach ($sumByScope as $tbl) {
-			$cols[$tbl['scope']] = 1;
+		foreach ($summaryDictsByScope as $dict) {
+			$columns[$dict['scope']] = 1;
 		}
-		foreach ($cols as $k => $v) {
+		foreach ($columns as $k => $v) {
 			if (!$v) {
-				unset($cols[$k]);
+				unset($columns[$k]);
 			}
 		}
 
@@ -112,8 +112,8 @@ class UserReceipts
 			'기타' => 0,
 			'합계' => 1
 		];
-		foreach ($sumByType as $tbl) {
-			$rows[$tbl['type']] = 1;
+		foreach ($summaryDictsByType as $dict) {
+			$rows[$dict['type']] = 1;
 		}
 		foreach ($rows as $k => $v) {
 			if (!$v) {
@@ -123,22 +123,22 @@ class UserReceipts
 
 		$costs = [];
 		foreach ($rows as $row => $null) {
-			foreach ($cols as $col => $null2) {
-				$costs[$row][$col] = ['cost' => 0, 'count' => 0];
+			foreach ($columns as $column => $null2) {
+				$costs[$row][$column] = ['cost' => 0, 'count' => 0];
 			}
 		}
-		foreach ($tbls as $tbl) {
-			$costs[$tbl['type']][$tbl['scope']] = $tbl;
+		foreach ($summaryDicts as $dict) {
+			$costs[$dict['type']][$dict['scope']] = $dict;
 		}
-		foreach ($sumByScope as $tbl) {
-			$costs['합계'][$tbl['scope']] = $tbl;
+		foreach ($summaryDictsByScope as $dict) {
+			$costs['합계'][$dict['scope']] = $dict;
 		}
-		foreach ($sumByType as $tbl) {
-			$costs[$tbl['type']]['합계'] = $tbl;
+		foreach ($summaryDictsByType as $dict) {
+			$costs[$dict['type']]['합계'] = $dict;
 		}
-		$costs['합계']['합계'] = $sum;
+		$costs['합계']['합계'] = $allSummaryDict;
 
-		$return['cols'] = $cols;
+		$return['columns'] = $columns;
 		$return['costs'] = $costs;
 
 		//지불방식별 통계
@@ -167,11 +167,6 @@ class UserReceipts
 		$return['allUsers'] = UserService::getAllUserDtos();
 
 		return $return;
-	}
-
-	private function getSupereditUid()
-	{
-		return $this->user->uid;
 	}
 
 	public static function parseMonth($month = null)
@@ -248,8 +243,6 @@ class UserReceipts
 	public function edit($receiptid, $key, $value)
 	{
 		$db = IntraDb::getGnfDb();
-
-		$uid = $this->user->uid;
 
 		$update = [$key => $value];
 		$where = $this->getSafeEditableWhereCalues($receiptid);

@@ -1,9 +1,0 @@
-[submodule "vendor/gnf/gnfdb"]
-	path = vendor/gnf/gnfdb
-	url = git://github.com/genesos/gnf-gnfdb.git
-[submodule "vendor/gnf/gnfcache"]
-	path = vendor/gnf/gnfcache
-	url = git://github.com/genesos/gnf-gnfcache.git
-[submodule "vendor/illuminate/database"]
-	path = vendor/illuminate/database
-	url = git://github.com/illuminate/database.git
