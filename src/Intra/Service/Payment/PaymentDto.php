@@ -3,6 +3,7 @@ namespace Intra\Service\Payment;
 
 use Intra\Core\BaseDto;
 use Intra\Core\MsgException;
+use Intra\Lib\DateUtil;
 use Intra\Service\User\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -150,6 +151,9 @@ class PaymentDto extends BaseDto
 		}
 		if (!strtotime($return->pay_date)) {
 			throw new MsgException('결제(예정)일을 다시 입력해주세요');
+		}
+		if (DateUtil::isWeekend($return->pay_date)) {
+			throw new MsgException('결제(예정)일을 주말로 설정할 수 없습니다');
 		}
 		return $return;
 	}
