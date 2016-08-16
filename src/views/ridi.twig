@@ -52,8 +52,9 @@
   <script type="text/javascript" src="/js/common.js"></script>
   <script>
     var sentry_public_key = '{{ sentryPublicKey }}';
-    if (sentry_public_key.length && window.Raven)
+    if (sentry_public_key.length && window.Raven) {
       window.Raven.config(sentry_public_key).install();
+    }
     requirejs(["bootstrap"], function () {
       //nav var를 위해 강제 호출
     });
@@ -67,7 +68,7 @@
 {% block body_head %}
 {% endblock %}
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -90,7 +91,9 @@
       {% if globalDomain == "ridi.com" %}
         <ul class="nav navbar-nav">
           <li><a href="/users">직원찾기</a></li>
-          <li><a href="https://ridicorp.sharepoint.com/intranet/SitePages/%EB%A6%AC%EB%94%94%20%EC%83%9D%ED%99%9C%20%EA%B0%80%EC%9D%B4%EB%93%9C.aspx" target="_blank">리디 생활 가이드</a></li>
+          <li><a
+              href="https://ridicorp.sharepoint.com/intranet/SitePages/%EB%A6%AC%EB%94%94%20%EC%83%9D%ED%99%9C%20%EA%B0%80%EC%9D%B4%EB%93%9C.aspx"
+              target="_blank">리디 생활 가이드</a></li>
           <li><a href="/weekly">전사 주간 업무 요약</a></li>
           <li><a href="/rooms">회의실</a></li>
           <li><a href="/rooms?type=focus">포커스룸</a></li>
@@ -129,10 +132,10 @@
     <!-- /.navbar-collapse -->
   </div>
   <!-- /.container-fluid -->
-</nav>
-<div style="height: 70px;" class="hidden_on_print">
 </div>
-{% block body %}
-{% endblock %}
+<div class="container">
+  {% block body %}
+  {% endblock %}
+</div>
 </body>
 </html>
