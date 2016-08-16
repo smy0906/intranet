@@ -1,6 +1,7 @@
 <?php
 namespace Intra\Service\Holiday;
 
+use Intra\Lib\DateUtil;
 use Intra\Model\HolidayModel;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserPolicy;
@@ -293,15 +294,10 @@ class UserHoliday
 		}
 	}
 
-	private function isWeekend($date)
-	{
-		return (date('N', strtotime($date)) >= 6);
-	}
-
 	private function getNextDateWhichIsNotWeekend($date)
 	{
 		$date = $this->getNextDate($date);
-		while ($this->isWeekend($date)) {
+		while (DateUtil::isWeekend($date)) {
 			$date = $this->getNextDate($date);
 		}
 		return $date;

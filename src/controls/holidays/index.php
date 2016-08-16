@@ -4,7 +4,7 @@
 use Intra\Model\HolidayModel;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
-use Intra\Service\User\UserInstanceService;
+use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
@@ -29,7 +29,7 @@ if (!$is_holiday_master) {
 	}
 }
 
-$user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
+$user_dto_object = UserDtoHandler::importFromDatabaseWithUid($uid);
 $target_user_dto = $user_dto_object->exportDto();
 $user_holiday = new UserHoliday($target_user_dto);
 $user_holiday_policy = new UserHolidayPolicy($target_user_dto);

@@ -3,10 +3,10 @@ namespace Intra\Service\User;
 
 use Exception;
 use Intra\Config\Config;
-use Intra\Core\BaseInstanceService;
+use Intra\Core\BaseDtoHandler;
 use Intra\Model\UserModel;
 
-class UserInstanceService extends BaseInstanceService
+class UserDtoHandler extends BaseDtoHandler
 {
 	/**
 	 * @var UserDto
@@ -15,7 +15,7 @@ class UserInstanceService extends BaseInstanceService
 
 	/**
 	 * @param $id
-	 * @return UserInstanceService
+	 * @return UserDtoHandler
 	 * @throws Exception
 	 */
 	public static function importFromDatabaseWithId($id)
@@ -28,7 +28,7 @@ class UserInstanceService extends BaseInstanceService
 
 	/**
 	 * @param $uid
-	 * @return UserInstanceService
+	 * @return UserDtoHandler
 	 * @throws Exception
 	 */
 	public static function importFromDatabaseWithUid($uid)

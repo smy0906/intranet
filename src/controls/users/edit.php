@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\User\UserInstanceService;
+use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
@@ -19,7 +19,7 @@ if ($user_dto === null) {
 	return '오류';
 }
 
-$user = UserInstanceService::importFromDatabaseWithUid($uid);
+$user = UserDtoHandler::importFromDatabaseWithUid($uid);
 $user->updateByKey($key, $value);
 
 $user_dto = UserService::getDtobyUid($uid);

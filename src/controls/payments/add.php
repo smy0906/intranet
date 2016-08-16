@@ -3,7 +3,7 @@
 
 use Intra\Service\Payment\PaymentDto;
 use Intra\Service\Payment\UserPaymentService;
-use Intra\Service\User\UserInstanceService;
+use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
@@ -17,8 +17,8 @@ if (!intval($uid) || !UserPolicy::isPaymentAdmin($self)) {
 
 $payment_dto = PaymentDto::importFromAddRequest($request, $uid, UserPolicy::isPaymentAdmin($self));
 
-$user_dto_object = UserInstanceService::importFromDatabaseWithUid($uid);
-$target_user_dto = $user_dto_object->exportDto();
+$user_dto_instancce = UserDtoHandler::importFromDatabaseWithUid($uid);
+$target_user_dto = $user_dto_instancce->exportDto();
 
 $payment_service = new UserPaymentService($target_user_dto);
 return $payment_service->add($payment_dto);
