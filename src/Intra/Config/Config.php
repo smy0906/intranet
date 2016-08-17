@@ -41,23 +41,24 @@ class Config
 
 	public static $user_policy = [
 		'first_page_editable' => [
-			'***REMOVED***'
+			'***REMOVED***',
+			'***REMOVED***',
 		],
 		'holiday_editable' => [
-			'***REMOVED***'
+			'***REMOVED***',
 		],
 		'press_manager' => [
-			'***REMOVED***'
+			'***REMOVED***',
 		],
 		'user_manager' => [
 			'***REMOVED***',
 			'***REMOVED***',
-			'***REMOVED***'
+			'***REMOVED***',
 		],
 		'post_admin' => [
 			'***REMOVED***',
 			'***REMOVED***',
-			'***REMOVED***'
+			'***REMOVED***',
 		],
 		'payment_admin' => [
 			'***REMOVED***',
