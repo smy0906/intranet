@@ -2,27 +2,3 @@ body, div, td, p {
     font-size: 12px;
 }
 
-.js_user {
-    position: absolute;
-    width: 60px;
-    /*height: 100px;*/
-    text-align: center;
-    border: 1px solid #1f8ee6;
-    border-bottom: 3px solid #1f8ee6;
-    padding: 10px;
-}
-
-.js_user_popup {
-    margin: 10px;
-    padding: 5px;
-    background-color: white;
-    border: 1px dotted #aaa;
-    position: absolute;
-    display: none;
-    z-index: 100;
-}
-
-
-tr.payment_done td{
-    color: #bbbbbb;
-}
