@@ -10,6 +10,10 @@
       margin: 0;
     }
 
+    body {
+      overflow: hidden;
+    }
+
     .carousel {
       height: 100vh;
     }
@@ -33,7 +37,7 @@
 </head>
 <body>
 <script>
-  const AUTO_PLAY_INTERVAL = 5000;
+  const AUTO_PLAY_INTERVAL = 8000;
   const REFRESH_INTERVAL = 1000 * 60 * 5;
   const BASE_URL = '//cdn.ridicorp.com/digitalsignage/';
 
@@ -63,17 +67,20 @@
 
   function renderCarousel(parent) {
     $('body').empty();
-    $(parent)
+    var carousel = $(parent)
       .appendTo('body')
       .flickity({
         "autoPlay": AUTO_PLAY_INTERVAL,
         "setGallerySize": false,
         "wrapAround": true,
         "pauseAutoPlayOnHover": false,
-        "prevNextButtons": false
+        "prevNextButtons": false,
+        "imagesLoaded": true
       });
+      // to fix : stop scroll after click
+    carousel.bind('mouseleave', function(e) { carousel.flickity('playPlayer') });
 
-    setTimeout(() => loadImages(), REFRESH_INTERVAL);
+    setTimeout(() => location.reload(true), REFRESH_INTERVAL);
   }
 
   loadImages();
