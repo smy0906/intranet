@@ -67,6 +67,7 @@ class UserPaymentConst
 			'제작비용 (표지, 일러스트, 편집료 등)',
 			'광고선전비',
 			'지급수수료',
+			'고객캐시환불',
 		];
 		if (UserPolicy::isPaymentAdmin(UserSession::getSelfDto())) {
 			$const['category'][] = '기타';
