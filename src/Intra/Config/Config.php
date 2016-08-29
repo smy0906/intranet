@@ -49,6 +49,7 @@ class Config
 		],
 		'press_manager' => [
 			'***REMOVED***',
+			'***REMOVED***',
 		],
 		'user_manager' => [
 			'***REMOVED***',
