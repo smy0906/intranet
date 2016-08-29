@@ -78,13 +78,13 @@ class UserPaymentService
 		if (UserPolicy::isPaymentAdmin($self)) {
 			return;
 		}
-		if ($self->id == $file_upload_dto->uid) {
+		if ($self->uid == $file_upload_dto->uid) {
 			return;
 		}
 		if (!$payment_dto) {
 			throw new MsgException("파일에 해당하는 결제정보가 없습니다. 플랫폼팀에 문의해주세요.");
 		}
-		if ($self->id == $payment_dto->manager_uid) {
+		if ($self->uid == $payment_dto->manager_uid) {
 			return;
 		}
 		throw new MsgException("파일 다운로드 권한이 없습니다.");
