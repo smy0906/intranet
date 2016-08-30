@@ -15,6 +15,7 @@ class UserModel extends BaseModel
 
 	/**
 	 * @param $userJoinDto UserDto
+	 *
 	 * @return bool
 	 * @throws MsgException
 	 */
@@ -50,6 +51,7 @@ class UserModel extends BaseModel
 
 	/**
 	 * @param $id
+	 *
 	 * @return mixed
 	 */
 	public static function convertUidFromId($id)
@@ -104,5 +106,15 @@ class UserModel extends BaseModel
 		self::getDb()->sqlUpdate(self::$table, $update, $where);
 
 		return 1;
+	}
+
+	public static function getDictsWithTeam($team)
+	{
+		$where = [];
+		$where['on_date'] = sqlLesserEqual(sqlNow());
+		$where['off_date'] = sqlGreaterEqual(sqlNow());
+		$where['team'] = $team;
+
+		return self::getDb()->sqlDicts('select * from users where ? order by name', sqlWhere($where));
 	}
 }

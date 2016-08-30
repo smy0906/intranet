@@ -1,7 +1,9 @@
 <?php
 namespace Intra\Service\User;
 
+use Intra\Config\Config;
 use Intra\Core\MsgException;
+use Intra\Lib\DictsUtils;
 use Intra\Model\UserModel;
 
 class UserService
@@ -9,6 +11,7 @@ class UserService
 
 	/**
 	 * @param $id
+	 *
 	 * @return UserDto
 	 */
 
@@ -25,6 +28,7 @@ class UserService
 
 	/**
 	 * @param $uid
+	 *
 	 * @return UserDto
 	 */
 	public static function getDtobyUid($uid)
@@ -38,6 +42,7 @@ class UserService
 
 	/**
 	 * @param $id
+	 *
 	 * @throws MsgException
 	 */
 	public static function assertUserIdExist($id)
@@ -87,6 +92,7 @@ class UserService
 
 	/**
 	 * @param $uids
+	 *
 	 * @return UserDto[]
 	 */
 	public static function getUserDtosByUid($uids)
@@ -150,5 +156,16 @@ class UserService
 		$dict = UserModel::getDictWithUid($uid);
 		$dto = UserDto::importFromDatabase($dict);
 		return $dto->email;
+	}
+
+	public static function getEmailsByTeam($team)
+	{
+		$dicts = UserModel::getDictsWithTeam($team);
+		$ids = DictsUtils::extractValuesByKey($dicts, 'id');
+		return array_map(
+			function ($id) {
+				return $id . '@' . Config::$domain;
+			}, $ids
+		);
 	}
 }
