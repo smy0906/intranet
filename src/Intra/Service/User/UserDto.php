@@ -11,6 +11,7 @@ class UserDto extends BaseDto
 	public $name;
 	public $email;
 	public $team;
+	public $team_detail;
 	public $position;
 	public $outer_call;
 	public $inner_call;

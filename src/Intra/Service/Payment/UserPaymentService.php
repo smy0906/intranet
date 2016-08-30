@@ -3,6 +3,7 @@ namespace Intra\Service\Payment;
 
 use Intra\Core\MsgException;
 use Intra\Model\PaymentModel;
+use Intra\Service\User\UserConstant;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
@@ -27,6 +28,7 @@ class UserPaymentService
 	/**
 	 * @param $payment_id
 	 * @param $file UploadedFile
+	 *
 	 * @return UploadedFile|false
 	 * @throws MsgException
 	 */
@@ -42,7 +44,8 @@ class UserPaymentService
 
 	/**
 	 * @param $payment PaymentDto
-	 * @param $self UserDto
+	 * @param $self    UserDto
+	 *
 	 * @throws MsgException
 	 */
 	private static function assertAddFiles($payment, $self)
@@ -68,9 +71,10 @@ class UserPaymentService
 	}
 
 	/**
-	 * @param $self UserDto
+	 * @param $self            UserDto
 	 * @param $file_upload_dto FileUploadDto
-	 * @param $payment_dto PaymentDto
+	 * @param $payment_dto     PaymentDto
+	 *
 	 * @throws MsgException
 	 */
 	private static function assertAccessFile($self, $file_upload_dto, $payment_dto)
@@ -127,10 +131,9 @@ class UserPaymentService
 		$return['todayDate'] = date('Y-m-d');
 
 		$self = UserSession::getSelfDto();
+		$queued_payment_dicts = $this->payment_model->queuedPayments();
 		if (UserPolicy::isPaymentAdmin($self)) {
-			$return['queuedPayments'] = PaymentDtoFactory::importFromDatabaseDicts(
-				$this->payment_model->queuedPayments()
-			);
+			$return['queuedPayments'] = PaymentDtoFactory::importFromDatabaseDicts($queued_payment_dicts);
 			$return['todayQueuedCount'] = $this->payment_model->todayQueuedCount();
 			$return['todayQueuedCost'] = $this->payment_model->todayQueuedCost();
 		}
@@ -139,25 +142,25 @@ class UserPaymentService
 
 		if ($type == 'remain') {
 			if (UserPolicy::isPaymentAdmin($self)) {
-				$payments = $return['queuedPayments'];
+				$payment_dicts = $queued_payment_dicts;
 			} else {
-				$payments = PaymentDtoFactory::importFromDatabaseDicts(
-					$this->payment_model->queuedPaymentsByManager($this->user->uid)
-				);
+				$payment_dicts = $this->payment_model->queuedPaymentsByManager($this->user->uid);
 			}
 		} elseif ($type == 'today') {
 			if (UserPolicy::isPaymentAdmin($self)) {
-				$payments = PaymentDtoFactory::importFromDatabaseDicts(
-					$this->payment_model->todayQueued()
-				);
+				$payment_dicts = $this->payment_model->todayQueued();
 			} else {
-				$payments = [];
+				$payment_dicts = [];
 			}
 		} else {
-			$payments = PaymentDtoFactory::importFromDatabaseDicts(
-				$this->payment_model->getPayments($uid, $month)
-			);
+			$payment_dicts = $this->payment_model->getPayments($uid, $month);
+			if ($self->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE) {
+				$payment_dicts_append = $this->payment_model->getPaymentsWithOption($month, ['category' => UserPaymentConst::CATEGORY_PC]);
+				$payment_dicts = array_merge($payment_dicts, $payment_dicts_append);
+				$payment_dicts = array_unique($payment_dicts, SORT_REGULAR);
+			}
 		}
+		$payments = PaymentDtoFactory::importFromDatabaseDicts($payment_dicts);
 		$return['payments'] = $payments;
 
 		if (UserPolicy::isPaymentAdmin($self)) {
@@ -186,6 +189,7 @@ class UserPaymentService
 
 	/**
 	 * @param PaymentDto $payment_dto
+	 *
 	 * @return int
 	 * @throws \Exception
 	 */

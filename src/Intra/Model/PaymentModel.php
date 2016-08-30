@@ -194,4 +194,21 @@ class PaymentModel extends BaseModel
 			sqlWhere($where)
 		);
 	}
+
+	public function getPaymentsWithOption($month, $where)
+	{
+		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
+
+		$table = [
+			'payments.uid' => 'users.uid'
+		];
+
+		$where['request_date'] = sqlRange($month . '-1', $nextmonth . '-1');
+
+		return $this->db->sqlDicts(
+			'select payments.*, users.name from ? where ? order by `status`, `request_date` asc, paymentid asc',
+			sqlLeftJoin($table),
+			sqlWhere($where)
+		);
+	}
 }
