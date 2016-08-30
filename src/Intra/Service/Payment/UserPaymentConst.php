@@ -7,7 +7,9 @@ use Intra\Service\User\UserSession;
 
 class UserPaymentConst
 {
-	const CATEGORY_PC = '자산(PC, 공사대금 등)';
+	const CATEGORY_JA_SAN = '자산(PC, 공사대금 등)';
+	const CATEGORY_SO_MO_PUM = '소모품비 (페이퍼샵 판매를 위한 포장자재, 기타 소모품)';
+	const CATEGORY_BOK_RI_HU_SAENG_BI = '복리후생비';
 
 	public static function getConstValueByKey($key)
 	{
@@ -59,9 +61,9 @@ class UserPaymentConst
 			'상품매입 (페이퍼샵 판매용 상품 매입 비용)',
 			'운반비 (택배, 퀵서비스 이용대금)',
 			'잡급 (로맨스, 판무 가이드 알바 급여)',
-			'복리후생비',
-			'소모품비 (페이퍼샵 판매를 위한 포장자재, 기타 소모품)',
-			self::CATEGORY_PC,
+			self::CATEGORY_BOK_RI_HU_SAENG_BI,
+			self::CATEGORY_SO_MO_PUM,
+			self::CATEGORY_JA_SAN,
 			'도서구입 및 인쇄비 (쿠폰, 상품권, 명함등 인쇄, 도서구입비)',
 			'저작권료 (마케팅용X, 콘텐츠 매절, 저작권 양수)',
 			'저작권료 (마케팅용O, 콘텐츠 매절)',

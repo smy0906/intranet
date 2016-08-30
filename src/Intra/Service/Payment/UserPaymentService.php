@@ -155,7 +155,7 @@ class UserPaymentService
 		} else {
 			$payment_dicts = $this->payment_model->getPayments($uid, $month);
 			if ($self->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE) {
-				$payment_dicts_append = $this->payment_model->getPaymentsWithOption($month, ['category' => UserPaymentConst::CATEGORY_PC]);
+				$payment_dicts_append = $this->payment_model->getPaymentsWithOption($month, ['category' => [UserPaymentConst::CATEGORY_JA_SAN, UserPaymentConst::CATEGORY_BOK_RI_HU_SAENG_BI]]);
 				$payment_dicts = array_merge($payment_dicts, $payment_dicts_append);
 				$payment_dicts = array_unique($payment_dicts, SORT_REGULAR);
 			}
