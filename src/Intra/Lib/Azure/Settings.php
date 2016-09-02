@@ -11,7 +11,7 @@ class Settings
 		'studiod.co.kr' => '***REMOVED***'
 	];
 	private static $password = [
-		'ridi.com' => 'KpZt7XrwDuJw2/I/NTHDCbQZ6jmrtbcUefZta4Lv90w=',
+		'ridi.com' => '***REMOVED***',
 		'studiod.co.kr' => '***REMOVED***'
 	];
 	private static $redirectURI = [
