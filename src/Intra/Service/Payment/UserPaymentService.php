@@ -160,7 +160,12 @@ class UserPaymentService
 				$payment_dicts = array_unique($payment_dicts, SORT_REGULAR);
 			}
 			if ($self->team == UserConstant::TEAM_CCPQ) {
-				$payment_dicts_append = $this->payment_model->getPaymentsWithOption($month, ['category' => [UserPaymentConst::CATEGORY_USER_CANCELMENT]]);
+				$payment_dicts_append = $this->payment_model->getPaymentsWithOption($month, ['category' => [UserPaymentConst::CATEGORY_USER_BOOK_CANCELMENT]]);
+				$payment_dicts = array_merge($payment_dicts, $payment_dicts_append);
+				$payment_dicts = array_unique($payment_dicts, SORT_REGULAR);
+			}
+			if ($self->team == UserConstant::TEAM_DEVICE) {
+				$payment_dicts_append = $this->payment_model->getPaymentsWithOption($month, ['category' => [UserPaymentConst::CATEGORY_USER_DEVICE_CANCELMENT]]);
 				$payment_dicts = array_merge($payment_dicts, $payment_dicts_append);
 				$payment_dicts = array_unique($payment_dicts, SORT_REGULAR);
 			}

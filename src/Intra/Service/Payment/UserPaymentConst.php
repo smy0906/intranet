@@ -10,7 +10,8 @@ class UserPaymentConst
 	const CATEGORY_ASSETS = '자산(PC, 공사대금 등)';
 	const CATEGORY_OFFICE_SUPPLIES = '소모품비 (페이퍼샵 판매를 위한 포장자재, 기타 소모품)';
 	const CATEGORY_WELFARE_EXPENSE = '복리후생비';
-	const CATEGORY_USER_CANCELMENT = '고객캐시환불';
+	const CATEGORY_USER_BOOK_CANCELMENT = '고객 서점 캐시 환불';
+	const CATEGORY_USER_DEVICE_CANCELMENT = '고객 기기 AS비용 환불';
 
 	public static function getConstValueByKey($key)
 	{
@@ -72,7 +73,8 @@ class UserPaymentConst
 			'제작비용 (표지, 일러스트, 편집료 등)',
 			'광고선전비',
 			'지급수수료',
-			self::CATEGORY_USER_CANCELMENT,
+			self::CATEGORY_USER_BOOK_CANCELMENT,
+			self::CATEGORY_USER_DEVICE_CANCELMENT,
 		];
 		if (UserPolicy::isPaymentAdmin(UserSession::getSelfDto())) {
 			$const['category'][] = '기타';
