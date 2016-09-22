@@ -33,6 +33,7 @@ class UserHolidayPolicy
 
 	/**
 	 * @param $yearly
+	 *
 	 * @return int
 	 */
 
@@ -93,10 +94,10 @@ class UserHolidayPolicy
 			$endofPart->setTimestamp($yearly_begin_timestamp);
 
 			$diff = $beginOfPart->diff($endofPart);
-			$costByUpdatingYearRaw = 15 * ($diff->days - 1) / 365;
+			$costByUpdatingYearRaw = 15 * $diff->days / 365;
 			$costByUpdatingYear = $this->floorByZeroDotFive($costByUpdatingYearRaw);
 			$ret['base_holiday_count'] = $costByUpdatingYear;
-			$ret['worked_day_last_year'] = $diff->days - 1;
+			$ret['worked_day_last_year'] = $diff->days;
 		}
 		if ($yearly == 1) {
 			$ret['preused_cost_prev_year'] = floatval($this->getUsedCost($yearly - 1));
@@ -137,6 +138,7 @@ class UserHolidayPolicy
 
 	/**
 	 * @param $yearly
+	 *
 	 * @return int
 	 */
 
@@ -149,6 +151,7 @@ class UserHolidayPolicy
 
 	/**
 	 * @param $fullCost
+	 *
 	 * @return float
 	 */
 	private function floorByZeroDotFive($fullCost)
