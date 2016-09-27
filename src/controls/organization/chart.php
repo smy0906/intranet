@@ -8,11 +8,6 @@ if (!Ridi::isRidiIP() || UserSession::isTa()) {
 	throw new Exception('권한이 없습니다.');
 }
 
-$self = UserSession::getSelfDto();
-if (preg_match('/TA/', $self->name)) {
-	throw new Exception('권한이 없습니다.');
-}
-
 $filebag = new LightFileModel('organization');
 
 return BinaryFileResponse::create($filebag->getLocation('recent'));

@@ -93,7 +93,10 @@ class UserSession
 	{
 		$user = self::getSelfDto();
 
-		if (strpos($user->email, ".ta@") !== false || strpos(strtoupper($user->name), "TA") === 0) {
+		if (strpos($user->email, ".ta") !== false
+			|| strpos($user->email, ".oa") !== false
+			|| strpos(strtoupper($user->name), "TA") !== false
+		) {
 			return true;
 		}
 

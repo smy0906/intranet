@@ -21,13 +21,15 @@ class Ridi
 		 * ***REMOVED*** (어반벤치 #1)
 		 * ***REMOVED*** (어반벤치 #2)
 		 * ***REMOVED*** (어반벤치 #3)
+		 * ***REMOVED*** (어반벤치 #4)
 		 */
 		$ridi_ips = [
 			'***REMOVED***',
 			'***REMOVED***',
 			'***REMOVED***',
 			'***REMOVED***',
-			
+			'***REMOVED***',
+
 			'***REMOVED***',
 			'***REMOVED***',
 			'***REMOVED***',
