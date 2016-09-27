@@ -12,14 +12,15 @@ $id = $request->get('id');
 $desc = $request->get('desc');
 $from = $request->get('from');
 $to = $request->get('to');
+$room_id = $request->get('room_id');
 
 if ($user->is_admin) {
 	$where = compact('id');
 } else {
 	$where = compact('id', 'uid');
 }
-$dat = compact('desc', 'from', 'to');
-if ($db->sqlUpdate('room_events', $dat, $where)) {
+$update = compact('desc', 'from', 'to', 'room_id');
+if ($db->sqlUpdate('room_events', $update, $where)) {
 	return 1;
 }
 

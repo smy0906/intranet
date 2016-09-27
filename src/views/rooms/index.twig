@@ -98,13 +98,18 @@
             return false;
           }
 
+          var event_object = scheduler.getEvent(event_id);
           var from = event_handler.scheduler.getEventStartDate(event_id);
           var to = event_handler.scheduler.getEventEndDate(event_id);
           from = from.getFullYear() + "-" + (from.getMonth() + 1) + "-" + from.getDate() + " " + from.getHours() + ":" + from.getMinutes();
           to = to.getFullYear() + "-" + (to.getMonth() + 1) + "-" + to.getDate() + " " + to.getHours() + ":" + to.getMinutes();
 
           var postArg = {
-            desc: event_handler.scheduler.getEventText(event_id), from: from, to: to, id: event_id
+            desc: event_handler.scheduler.getEventText(event_id),
+            from: from,
+            to: to,
+            id: event_id,
+            room_id: event_object.room_id
             //			,rid : $('.dhx_cal_tab.active').attr('rid')
           };
 
