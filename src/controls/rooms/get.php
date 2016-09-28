@@ -25,7 +25,7 @@ $where = [
 
 $events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
 $datas = [];
-$datas = addDefaultReservation($from, $datas);
+$datas = addDefaultReservation($from, $datas, $room_ids);
 
 
 foreach ($events as $event) {
@@ -48,7 +48,7 @@ return new JsonResponse($return);
  *
  * @return array
  */
-function addDefaultReservation($from, $datas)
+function addDefaultReservation($from, $datas, $room_ids)
 {
 	//디바이스팀 장기 예약
 	/*
@@ -64,27 +64,30 @@ function addDefaultReservation($from, $datas)
 		];
 	}
 	*/
-	//플랫폼팀 주간미팅
-	if (date('w', strtotime($from)) == 1) {
+	$room_11_4 = 15;
+	if (in_array($room_11_4, $room_ids)) {
+		//플랫폼팀 주간미팅
+		if (date('w', strtotime($from)) == 1) {
+			$datas[] =
+				[
+					'id' => 0,
+					'start_date' => $from . ' 11:00:00',
+					'end_date' => $from . ' 12:30:00',
+					'text' => '[예약자] 박주현 [예약내용] 주간미팅',
+					'details' => '[예약자] 박주현 [예약내용] 주간미팅',
+					'room_id' => $room_11_4,
+				];
+		}
+		//플랫폼팀 일간미팅
 		$datas[] =
 			[
 				'id' => 0,
-				'start_date' => $from . ' 11:00:00',
-				'end_date' => $from . ' 12:30:00',
-				'text' => '[예약자] 박주현 [예약내용] 주간미팅',
-				'details' => '[예약자] 박주현 [예약내용] 주간미팅',
-				'room_id' => '15',
+				'start_date' => $from . ' 18:30:00',
+				'end_date' => $from . ' 19:00:00',
+				'text' => '[예약자] 박주현 [예약내용] 일간미팅',
+				'details' => '[예약자] 박주현 [예약내용] 일간미팅',
+				'room_id' => $room_11_4,
 			];
 	}
-	//플랫폼팀 일간미팅
-	$datas[] =
-		[
-			'id' => 0,
-			'start_date' => $from . ' 18:30:00',
-			'end_date' => $from . ' 19:00:00',
-			'text' => '[예약자] 박주현 [예약내용] 일간미팅',
-			'details' => '[예약자] 박주현 [예약내용] 일간미팅',
-			'room_id' => '15',
-		];
 	return $datas;
 }
