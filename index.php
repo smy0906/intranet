@@ -17,6 +17,6 @@ Ridi::enableSentry();
 IntraDb::bootDB();
 SessionModel::init();
 
-if (Application::run(__DIR__ . "/src/controls", __DIR__ . "/src/views")) {
+if (Application::run(__DIR__ . "/controls", __DIR__ . "/views")) {
 	exit;
 }

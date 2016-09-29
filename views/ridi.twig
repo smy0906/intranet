@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="/css/style.css" media="screen"/>
   <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap.min.css" media="screen"/>
   <link rel="stylesheet" href="/js/bower/bower_components/chosen/chosen.css" media="screen"/>
-  <link rel="stylesheet" href="/js/bower/bower_components/datatables/media/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="/js/bower/bower_components/jquery-ui/themes/base/jquery-ui.min.css" media="screen"/>
+  <link rel="stylesheet" href="/js/bower/bower_components/datatables/media/css/dataTables.bootstrap.min.css" media="screen">
   <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
   <script>
@@ -29,7 +30,10 @@
         "chosen": "chosen/chosen.jquery",
         'datatables.net': 'datatables/media/js/jquery.dataTables',
         "bootstrap": "bootstrap/dist/js/bootstrap.min",
-        'bootstrap.datatables': 'datatables/media/js/dataTables.bootstrap'
+        'bootstrap.datatables': 'datatables/media/js/dataTables.bootstrap',
+        
+        // jquery.fileupload bug hotfix
+        "jquery.ui.widget": "../empty"
       },
       shim: {
         "jquery-ui": ["jquery"],
@@ -98,6 +102,16 @@
           <li><a href="/rooms">회의실</a></li>
           <li><a href="/rooms?type=focus">포커스룸</a></li>
           <li><a href="/holidays">휴가신청</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">지원요청<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/support/device">기기 설치/장애 문의</a></li>
+              <li><a href="/support/family_event">경조 지원</a></li>
+              <li><a href="/support/business_card">명함 신청</a></li>
+              <li><a href="/support/depot">구매 요청</a></li>
+              <li><a href="/support/gift_card">상품권 제작</a></li>
+            </ul>
+          </li>
           <li><a href="/payments">결제요청</a></li>
           <li><a href="/receipts">비용정산</a></li>
           <li><a href="http://htms.himgt.net" target="_blank">급여관리</a></li>

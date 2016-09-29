@@ -1,6 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
@@ -14,7 +15,7 @@ if (!UserSession::isUserManager()) {
 	return '권한이 없습니다';
 }
 
-$user_dto = UserService::getDtobyUid($uid);
+$user_dto = UserDtoFactory::getDtobyUid($uid);
 if ($user_dto === null) {
 	return '오류';
 }
@@ -22,6 +23,6 @@ if ($user_dto === null) {
 $user = UserDtoHandler::importFromDatabaseWithUid($uid);
 $user->updateByKey($key, $value);
 
-$user_dto = UserService::getDtobyUid($uid);
+$user_dto = UserDtoFactory::getDtobyUid($uid);
 
 return $user_dto->$key;

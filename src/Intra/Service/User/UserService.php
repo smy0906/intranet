@@ -8,38 +8,6 @@ use Intra\Model\UserModel;
 
 class UserService
 {
-
-	/**
-	 * @param $id
-	 *
-	 * @return UserDto
-	 */
-
-	public static function getDtobyId($id)
-	{
-		if (!UserModel::isExistById($id)) {
-			return null;
-		}
-		$uid = UserModel::convertUidFromId($id);
-		$dict = UserModel::getDictWithUid($uid);
-		return UserDto::importFromDatabase($dict);
-	}
-
-
-	/**
-	 * @param $uid
-	 *
-	 * @return UserDto
-	 */
-	public static function getDtobyUid($uid)
-	{
-		if (!UserModel::isExistByUid($uid)) {
-			return null;
-		}
-		$dict = UserModel::getDictWithUid($uid);
-		return UserDto::importFromDatabase($dict);
-	}
-
 	/**
 	 * @param $id
 	 *

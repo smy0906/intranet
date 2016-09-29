@@ -48,7 +48,7 @@ class UserSession
 		$self = self::getSelfDto();
 
 		if ($super_edit_uid && $self && $self->is_admin) {
-			return UserService::getDtobyUid($super_edit_uid);
+			return UserDtoFactory::getDtobyUid($super_edit_uid);
 		} else {
 			return $self;
 		}
@@ -66,7 +66,7 @@ class UserSession
 		}
 		if (self::$session->get('users_uid')) {
 			$users_uid = self::$session->get('users_uid');
-			return UserService::getDtobyUid($users_uid);
+			return UserDtoFactory::getDtobyUid($users_uid);
 		}
 		return null;
 	}

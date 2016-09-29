@@ -4,15 +4,15 @@
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayDto;
 use Intra\Service\IntraDb;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
 
 if (UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
 	$uid = $request->get('uid');
-	$dto = UserService::getDtobyUid($uid);
+	$dto = UserDtoFactory::getDtobyUid($uid);
 } else {
 	$dto = UserSession::getSelfDto();
 }

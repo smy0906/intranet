@@ -1,0 +1,282 @@
+{% extends 'ridi.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <style>
+    th {
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    td {
+      white-space: nowrap;
+    }
+
+    .js_column_fold {
+      width: 20px !important;
+      overflow: hidden;
+      box-shadow: -10px 0 10px #f0f0f0 inset;
+    }
+
+    tr.add td {
+      margin: 0;
+      padding: 0;
+    }
+
+    tr.payment_done td {
+      color: #bbbbbb;
+    }
+
+    .fileupload_button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fileupload_button input.js_fileupload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
+
+  </style>
+  <script>
+    require(["jquery", "jquery.jeditable", "jquery.attrajax", 'bootstrap.datatables', 'jquery.cookie'], function ($) {
+      $('button#add').attrAjax({
+        'url': '/support/{{ target }}/add',
+        'method': 'post',
+        'success-if-result-is': "1",
+        'param-form': 'tr.add',
+        'onsuccess-url': location.href,
+        'oncomplete-alert': true
+      });
+
+      $("input").on("keypress", function (e) {
+        return e.which != 13;
+      });
+
+      $('tr.support_row td[data-key]').each(function () {
+        var tr_object = $(this).parentsUntil('table').filter('tr');
+        var is_editable_by_admin = '{{ editable | e('js') }}';
+        var is_editable_by_user = tr_object.hasClass('js_is_editable');
+        if (!(is_editable_by_admin || is_editable_by_user)) {
+          //return;
+        }
+
+        var supportid = tr_object.data('id');
+        var key = $(this).data('key');
+        var is_keyselect = ($(this).data('keyselect') != undefined);
+        var submitdata = {key: key};
+        var args = {
+          'submitdata': submitdata,
+          'placeholder': '',
+          'method': 'PUT'
+        };
+
+        if (key == 'price') {
+          args['data'] = function (value) {
+            return value.replace(/\D/gi, '');
+          };
+        }
+
+        if (is_keyselect) {
+          args['type'] = 'select';
+          args['loadurl'] = '/support/{{ target }}/const/' + key;
+          args['submit'] = "OK";
+        }
+
+        $(this).editable('/support/{{ target }}/id/' + supportid, args);
+      });
+      $('tr.support_row').each(function () {
+        var supportid = $(this).data('id');
+        $("button.js_delete", this).attrAjax({
+          'url': "/support/{{ target }}/id/" + supportid,
+          'method': "delete",
+          'confirm': '정말 삭제하시겠습니까?',
+          'onsuccess-url': location.href,
+          'oncomplete-alert': true
+        });
+        $("button.js_complete", this).attrAjax({
+          'url': "/support/{{ target }}/id/" + supportid + "/complete",
+          'method': "put",
+          'confirm': '정말 승인하시겠습니까??',
+          'onsuccess-url': location.href,
+          'oncomplete-alert': true
+        });
+      });
+
+      $('select[name=js_super_edit]')
+        .val({{ uid }})
+        .trigger("chosen:updated")
+        .change(function () {
+          location.href = "/support/{{ target }}/uid/" + $(this).val() + "/yearmonth/{{ yearmonth }}";
+        });
+
+    });
+
+  </script>
+{% endblock %}
+
+{% block body %}
+  <h2>
+    <span>
+      {% if title %}
+        {{ title }}
+      {% else %}
+        {{ user.name }}
+      {% endif %}
+    </span>
+  </h2>
+  <h4>
+    <a href='/support/{{ target }}/uid/{{ uid }}/yearmonth/{{ prev_yearmonth }}'>{{ prev_yearmonth }}</a>
+    / {{ yearmonth }} /
+    <a href='/support/{{ target }}/uid/{{ uid }}/yearmonth/{{ next_yearmonth }}'>{{ next_yearmonth }}</a>
+    /
+    <a href='/support/{{ target }}/remain'>미승인</a>
+
+  </h4>
+  <table class="table table-striped table-hover table-bordered table-condensed" datatable>
+    <thead>
+    <tr>
+      {% for column_name, column in columns %}
+        <th>{{ column_name }}</th>
+      {% endfor %}
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for column_dict in column_dicts %}
+      <tr class="support_row
+          {% if payment.status == '결제 완료' %}payment_done warning{% endif %}
+        {% if payment.is_editable %}js_is_editable{% endif %}
+        js_is_editable
+        "
+          data-id='{{ column_dict.id }}'>
+        {% for column_name, column in columns %}
+          {% set key = column.key %}
+          {% if column.getClass() == 'SupportColumnTeam' %}
+            <td data-key='{{ key }}' data-keyselect>{{ column_dict[key] }}</td>
+          {% elseif column.getClass() == 'SupportColumnCategory' %}
+            <td data-key='{{ key }}' data-keyselect>{{ column_dict[key] }}</td>
+          {% elseif column.getClass() == 'SupportColumnText' %}
+            <td data-key='{{ key }}'>{{ column_dict[key] }}</td>
+          {% elseif column.getClass() == 'SupportColumnDate' %}
+            <td data-key='{{ key }}'>{{ column_dict[key] }}</td>
+          {% elseif column.getClass() == 'SupportColumnComplete' %}
+            {% if column_dict[key] == '승인가능' %}
+              <td>
+                <button class="btn btn-default js_complete" name="key" value="{{ key }}">승인가능</button>
+              </td>
+            {% else %}
+              <td>{{ column_dict[key] }}</td>
+            {% endif %}
+          {% elseif column.getClass() == 'SupportColumnMutual' %}
+            <td>{{ column_dict[key] }}</td>
+          {% else %}
+            <td>{{ column_dict[key] }}</td>
+          {% endif %}
+        {% endfor %}
+        <td>
+          <button class="glyphicon glyphicon-trash btn btn-default js_delete">삭제</button>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr class='add'>
+      {% for column_name, column in columns %}
+        {% if column.getClass() == 'SupportColumnReadonly' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnRegisterUser' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnComplete' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteUser' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnTeam' %}
+          <td>
+            <label>
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen style="width:250px;">
+                {% for team in const.team %}
+                  <option value='{{ team }}'>{{ team }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </td>
+        {% elseif column.getClass() == 'SupportColumnCategory' %}
+          <td>
+            <label>
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen style="width:250px;">
+                {% for category_item in column.category_items %}
+                  <option value='{{ category_item }}'>{{ category_item }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </td>
+        {% elseif column.getClass() == 'SupportColumnText' %}
+          <td>
+            <input type='text' name='{{ column.key }}' style='width:250px' placeholder='{{ column.placeholder }}' value='{{ column.default }}'/>
+          </td>
+        {% elseif column.getClass() == 'SupportColumnDate' %}
+          <td>
+            <input type="text" name='{{ column.key }}' style='width:250px' js_datepicker value='{{ column.default }}'/>
+          </td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
+          <td></td>
+        {% else %}
+          <td>
+            {{ column.getClass() }}
+          </td>
+        {% endif %}
+      {% endfor %}
+      <td>
+        <button id="add" type="submit">추가</button>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+
+  {% if is_admin %}
+    <div style="width: 500px;">
+      <table class="table table-condensed">
+        <thead>
+        <tr>
+          <th>관리자 메뉴</th>
+          <th></th>
+        <tr>
+        </thead>
+        <tr>
+          <td>
+            다른 사람 편집하기
+          </td>
+          <td>
+            <label>
+              <select name='js_super_edit' js_data_chosen style="width:100px">
+                {% for user in allUsers %}
+                  <option value='{{ user.uid }}'>{{ user.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </td>
+        </tr>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

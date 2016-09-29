@@ -1,6 +1,7 @@
 <?php
 namespace Intra\Service\Payment;
 
+use Intra\Service\User\UserConstant;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
@@ -35,26 +36,7 @@ class UserPaymentConst
 	public static function get()
 	{
 		$const = [];
-		$const['team'] = [
-			'단행본 / 개발센터 / 데이터팀',
-			'단행본 / 개발센터 / 뷰어팀',
-			'단행본 / 개발센터 / 스토어팀',
-			'단행본 / 개발센터 / 플랫폼팀',
-			'단행본 / 운영지원센터 / CC / PQ팀',
-			'단행본 / 운영지원센터 / 사업분석팀',
-			'단행본 / 운영지원센터 / 운영지원팀',
-			'단행본 / Growth팀',
-			'단행본 / 디바이스팀',
-			'단행본 / 디자인팀',
-			'단행본 / 콘텐츠운영1팀',
-			'단행본 / 콘텐츠운영2팀',
-			'스튜디오D',
-			'연재',
-			'공통/인사팀',
-			'공통/재무팀',
-			'공통/홍보팀',
-			'전사공통',
-		];
+		$const['team'] = UserConstant::$jeditable_key_list['te'];
 		$const['product'] = ['리디북스', '페이퍼샵', '공통'];
 		$const['tax'] = ['Y', 'N', 'N/A'];
 		$const['paytype'] = ['현금', '법인카드'];

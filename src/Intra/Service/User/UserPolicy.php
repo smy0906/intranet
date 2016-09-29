@@ -53,6 +53,14 @@ class UserPolicy
 		return false;
 	}
 
+	public static function isSupportAdmin(UserDto $self)
+	{
+		if ($self->is_admin) {
+			return true;
+		}
+		return false;
+	}
+
 	public static function isReceiptsAdmin(UserDto $self)
 	{
 		if ($self->is_admin || in_array($self->email, Config::$user_policy['receipts_admin'])) {
