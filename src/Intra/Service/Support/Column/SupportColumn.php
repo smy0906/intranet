@@ -10,6 +10,7 @@ class SupportColumn
 	public function __construct($column_name)
 	{
 		$this->key = $column_name;
-		$this->class_name = basename(get_called_class());
+		$class_name = preg_replace('/\w+\\\\/', '', get_called_class());
+		$this->class_name = $class_name;
 	}
 }
