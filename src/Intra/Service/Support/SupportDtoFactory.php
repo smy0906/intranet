@@ -1,11 +1,8 @@
 <?php
 
-namespace Intra\Service\Support\Column;
+namespace Intra\Service\Support;
 
 use Intra\Core\MsgException;
-use Intra\Service\Support\SupportDto;
-use Intra\Service\Support\SupportModel;
-use Intra\Service\Support\SupportPolicy;
 
 class SupportDtoFactory
 {

@@ -3,8 +3,10 @@
 
 use Intra\Service\Support\Column\SupportColumnCategory;
 use Intra\Service\Support\Column\SupportColumnTeam;
+use Intra\Service\Support\Column\SupportColumnWorker;
 use Intra\Service\Support\SupportPolicy;
 use Intra\Service\User\UserConstant;
+use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -21,6 +23,10 @@ foreach ($columns as $column) {
 		if ($column instanceof SupportColumnTeam) {
 			foreach (UserConstant::$jeditable_key_list['team'] as $team) {
 				$return[$team] = $team;
+			}
+		} elseif ($column instanceof SupportColumnWorker) {
+			foreach (UserService::getAvailableUserDtos() as $user_dto) {
+				$return[$user_dto->uid] = $user_dto->name;
 			}
 		} elseif ($column instanceof SupportColumnCategory) {
 			foreach ($column->category_items as $category_item) {

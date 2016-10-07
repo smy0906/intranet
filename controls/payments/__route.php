@@ -42,10 +42,10 @@ $this->matchIf('download/{month}')
 
 $this->matchIf('file/{fileid}')
 	->assertAsInt('fileid')
-	->isMethod('delete')
-	->query('file_delete');
+	->isMethod('get')
+	->query('file_download');
 
 $this->matchIf('file/{fileid}')
 	->assertAsInt('fileid')
-	->isMethod('get')
-	->query('file_download');
+	->isMethod('delete')
+	->query('file_delete');

@@ -23,7 +23,7 @@ class JsonDtoWrapper
 			$json_dto = new JsonDto($e->getMessage());
 			$json_dto->success = false;
 		} catch (\Exception $e) {
-			$json_dto = new JsonDto('실패했습니다. 플랫폼팀에 오류내용이 전달되었습니다.');
+			$json_dto = new JsonDto($e->getMessage());
 			$json_dto->success = false;
 		}
 		return new JsonResponse($json_dto);

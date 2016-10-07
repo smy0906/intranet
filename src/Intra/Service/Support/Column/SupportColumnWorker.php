@@ -1,7 +1,5 @@
 <?php
-namespace Intra\Service\Support;
-
-use Intra\Service\Support\Column\SupportColumn;
+namespace Intra\Service\Support\Column;
 
 class SupportColumnWorker extends SupportColumn
 {

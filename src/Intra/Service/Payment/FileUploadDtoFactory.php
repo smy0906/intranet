@@ -25,4 +25,10 @@ class FileUploadDtoFactory
 		}
 		return FileUploadDto::importFromDatabaseDict($dict);
 	}
+
+	public static function createFromGroupId($group, $id)
+	{
+		$dicts = FileUploadModel::getDictsByGroupAndKeys($group, $id);
+		return self::createFromDatabaseDicts($dicts);
+	}
 }

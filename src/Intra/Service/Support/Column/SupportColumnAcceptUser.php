@@ -20,5 +20,4 @@ class SupportColumnAcceptUser extends SupportColumn
 		parent::__construct($string);
 		$this->parent_column = $parent_column_name;
 	}
-
 }

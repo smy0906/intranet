@@ -101,7 +101,7 @@ class SupportModel extends BaseModel
 		);
 	}
 
-	public static function getDictsRemain($columns, $target, $uid)
+	public static function getDictsRemainByAccept($columns, $target, $uid)
 	{
 		$order_column = null;
 		$accept_columns = [];
@@ -179,5 +179,4 @@ class SupportModel extends BaseModel
 		];
 		return self::getDb()->sqlUpdate($table, $update, $where);
 	}
-
 }

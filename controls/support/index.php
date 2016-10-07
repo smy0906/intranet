@@ -2,7 +2,7 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\Support\SupportPolicy;
-use Intra\Service\Support\SupportService;
+use Intra\Service\Support\SupportViewDtoFactory;
 use Intra\Service\User\UserConstant;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserService;
@@ -28,9 +28,11 @@ $next_yearmonth = date('Y-m', strtotime('+1 month', strtotime($yearmonth)));
 
 $columns = SupportPolicy::getColumns($target);
 $const = [
-	'team' => UserConstant::$jeditable_key_list['team']
+	'teams' => UserConstant::$jeditable_key_list['team'],
+	'managers' => UserService::getManagerUserDtos(),
+	'users' => UserService::getAvailableUserDtos(),
 ];
-$column_dicts = SupportService::getDicts($columns, $target, $uid, $date, $type);
+$support_view_dtos = SupportViewDtoFactory::gets($columns, $target, $uid, $date, $type);
 
 return [
 	'uid' => $uid,
@@ -39,8 +41,8 @@ return [
 	'next_yearmonth' => $next_yearmonth,
 	'target' => $target,
 	'columns' => $columns,
-	'column_dicts' => $column_dicts,
+	'support_view_dtos' => $support_view_dtos,
 	'const' => $const,
 	'is_admin' => UserPolicy::isSupportAdmin($self),
-	'allUsers' => UserService::getAllUserDtos(),
+	'all_users' => UserService::getAllUserDtos(),
 ];

@@ -12,19 +12,13 @@
       white-space: nowrap;
     }
 
-    .js_column_fold {
-      width: 20px !important;
-      overflow: hidden;
-      box-shadow: -10px 0 10px #f0f0f0 inset;
+    tr.is_done td{
+      color: #bbbbbb;
     }
 
     tr.add td {
       margin: 0;
       padding: 0;
-    }
-
-    tr.payment_done td {
-      color: #bbbbbb;
     }
 
     .fileupload_button {
@@ -46,79 +40,176 @@
 
   </style>
   <script>
-    require(["jquery", "jquery.jeditable", "jquery.attrajax", 'bootstrap.datatables', 'jquery.cookie'], function ($) {
-      $('button#add').attrAjax({
-        'url': '/support/{{ target }}/add',
-        'method': 'post',
-        'success-if-result-is': "1",
-        'param-form': 'tr.add',
-        'onsuccess-url': location.href,
-        'oncomplete-alert': true
-      });
+    require(["jquery", "jquery.jeditable", "jquery.fileupload", "jquery.attrajax", 'bootstrap.datatables', 'jquery.cookie'], function ($) {
+      $(function () {
+        $('button#add').attrAjax({
+          'url': '/support/{{ target }}/add',
+          'method': 'post',
+          'success-if-result-is': "1",
+          'param-form': 'tr.add',
+          'onsuccess-url': location.href,
+          'oncomplete-alert': true
+        });
 
-      $("input").on("keypress", function (e) {
-        return e.which != 13;
-      });
+        $("input").on("keypress", function (e) {
+          return e.which != 13;
+        });
+        // Change this to the location of your server-side upload handler:
+        var url = '/support/{{ target }}/file_upload';
+        $('.js_fileupload').each(function () {
+          var $this = $(this);
+          var tr_object = $this.parentsUntil('table').filter('tr');
+          var id = tr_object.data('id');
+          var column_key = $this.data('key');
+          var $progress = $('div.progress-bar');
+          $(this).fileupload({
+            formData: {
+              id: id,
+              column_key: column_key
+            },
+            dropZone: $(this),
+            url: url,
+            dataType: 'json',
+            done: function () {
+              $progress.css('width', '0');
+              document.location.reload();
+            },
+            progressall: function (e, data) {
+              var progress = parseInt(data.loaded / data.total * 100, 10);
+              $progress.css('width', progress + '%');
+            }
+          })
+            .prop('disabled', !$.support.fileInput)
+            .parent()
+            .addClass($.support.fileInput ? undefined : 'disabled');
 
-      $('tr.support_row td[data-key]').each(function () {
-        var tr_object = $(this).parentsUntil('table').filter('tr');
-        var is_editable_by_admin = '{{ editable | e('js') }}';
-        var is_editable_by_user = tr_object.hasClass('js_is_editable');
-        if (!(is_editable_by_admin || is_editable_by_user)) {
-          //return;
-        }
+        });
 
-        var supportid = tr_object.data('id');
-        var key = $(this).data('key');
-        var is_keyselect = ($(this).data('keyselect') != undefined);
-        var submitdata = {key: key};
-        var args = {
-          'submitdata': submitdata,
-          'placeholder': '',
-          'method': 'PUT'
-        };
+        $('tr.support_row td span[data-editable]').each(function () {
+          var tr_object = $(this).parentsUntil('table').filter('tr');
+          var is_editable_by_admin = '{{ editable | e('js') }}';
+          var is_editable_by_user = tr_object.hasClass('js_is_editable');
+          if (!(is_editable_by_admin || is_editable_by_user)) {
+            //return;
+          }
 
-        if (key == 'price') {
-          args['data'] = function (value) {
-            return value.replace(/\D/gi, '');
+          var supportid = tr_object.data('id');
+          var key = $(this).data('editable');
+          var is_keyselect = ($(this).data('keyselect') != undefined);
+          var submitdata = {key: key};
+          var args = {
+            'submitdata': submitdata,
+            'placeholder': '[EMPTY]',
+            'method': 'PUT'
           };
-        }
 
-        if (is_keyselect) {
-          args['type'] = 'select';
-          args['loadurl'] = '/support/{{ target }}/const/' + key;
-          args['submit'] = "OK";
-        }
+          if (key == 'price') {
+            args['data'] = function (value) {
+              return value.replace(/\D/gi, '');
+            };
+          }
 
-        $(this).editable('/support/{{ target }}/id/' + supportid, args);
+          if (is_keyselect) {
+            args['type'] = 'select';
+            args['loadurl'] = '/support/{{ target }}/const/' + key;
+            args['submit'] = "OK";
+          }
+
+          $(this).editable('/support/{{ target }}/id/' + supportid, args);
+        });
+        $('tr.support_row').each(function () {
+          var supportid = $(this).data('id');
+          $("button.js_delete", this).attrAjax({
+            'url': "/support/{{ target }}/id/" + supportid,
+            'method': "delete",
+            'confirm': '정말 삭제하시겠습니까?',
+            'onsuccess-url': location.href,
+            'oncomplete-alert': true
+          });
+          $("button.js_complete", this).attrAjax({
+            'url': "/support/{{ target }}/id/" + supportid + "/complete",
+            'method': "put",
+            'confirm': '정말 승인하시겠습니까??',
+            'onsuccess-url': location.href,
+            'oncomplete-alert': true
+          });
+        });
+
+        $('select[name=js_super_edit]')
+          .val({{ uid }})
+          .trigger("chosen:updated")
+          .change(function () {
+            location.href = "/support/{{ target }}/uid/" + $(this).val() + "/yearmonth/{{ yearmonth }}";
+          });
+
+        var columnManager = new function () {
+          var columns;
+          var column;
+          var column_name;
+          var map_name_to_key = {};
+
+          this.initColumns = function (input_columns) {
+            columns = input_columns;
+            for (column_name in columns) {
+              if (!columns.hasOwnProperty(column_name)) {
+                continue
+              }
+              column = columns[column_name];
+              map_name_to_key[column_name] = column.key;
+            }
+            for (column_name in columns) {
+              if (!columns.hasOwnProperty(column_name)) {
+                continue
+              }
+              column = columns[column_name];
+              if (column.class_name == 'SupportColumnMutual') {
+                columnManager.SupportColumnMutual(column);
+              }
+              if (column.class_name == 'SupportColumnTextDetail') {
+                columnManager.SupportColumnTextDetail(column);
+              }
+            }
+          };
+          this.SupportColumnMutual = function (column) {
+            var key = column.key;
+            var groups = column.groups;
+            $('select[name=' + key + ']').on('change', (function () {
+              var $this = $(this);
+              var selected_val = $this.val();
+              $.each(groups, function (group_name, group) {
+                var is_visible = (group_name == selected_val);
+                $.each(group, function (index, column_name) {
+                  if (map_name_to_key.hasOwnProperty(column_name)) {
+                    var column_key = map_name_to_key[column_name];
+                    var target_object = $this.parentsUntil('table').find('td[data-key=' + column_key + ']');
+                    if (is_visible) {
+                      target_object.addClass('disabled');
+                    } else {
+                      target_object.removeClass('disabled');
+                    }
+                    target_object.find('input,select').attr('disabled', !is_visible).trigger("chosen:updated").trigger('change')
+                  }
+                })
+              });
+            })).trigger('change');
+          };
+          this.SupportColumnTextDetail = function (column) {
+            var key = column.key;
+            var parent_column = column.parent_column;
+            var parent_column_value = column.parent_column_value;
+            $('tr.add [name=' + parent_column + ']').on('change', (function () {
+              var $this = $(this);
+              var selected_val = $this.val();
+              var is_visible;
+              is_visible = (selected_val == parent_column_value);
+              var target_object = $this.parentsUntil('table').find('input[name=' + key + ']');
+              target_object.attr('disabled', !is_visible).trigger("chosen:updated")
+            })).trigger('change');
+          };
+        };
+        columnManager.initColumns({{ columns | json_encode | raw }});
       });
-      $('tr.support_row').each(function () {
-        var supportid = $(this).data('id');
-        $("button.js_delete", this).attrAjax({
-          'url': "/support/{{ target }}/id/" + supportid,
-          'method': "delete",
-          'confirm': '정말 삭제하시겠습니까?',
-          'onsuccess-url': location.href,
-          'oncomplete-alert': true
-        });
-        $("button.js_complete", this).attrAjax({
-          'url': "/support/{{ target }}/id/" + supportid + "/complete",
-          'method': "put",
-          'confirm': '정말 승인하시겠습니까??',
-          'onsuccess-url': location.href,
-          'oncomplete-alert': true
-        });
-      });
-
-      $('select[name=js_super_edit]')
-        .val({{ uid }})
-        .trigger("chosen:updated")
-        .change(function () {
-          location.href = "/support/{{ target }}/uid/" + $(this).val() + "/yearmonth/{{ yearmonth }}";
-        });
-
     });
-
   </script>
 {% endblock %}
 
@@ -150,36 +241,89 @@
     </tr>
     </thead>
     <tbody>
-    {% for column_dict in column_dicts %}
+    {% for support_view_dto in support_view_dtos %}
+      {% set display_dict = support_view_dto.display_dict %}
       <tr class="support_row
-          {% if payment.status == '결제 완료' %}payment_done warning{% endif %}
-        {% if payment.is_editable %}js_is_editable{% endif %}
+      {% if support_view_dto.is_all_complted %}
+        is_done
+      {% endif %}
         js_is_editable
         "
-          data-id='{{ column_dict.id }}'>
+          data-id='{{ display_dict.id }}'>
         {% for column_name, column in columns %}
           {% set key = column.key %}
-          {% if column.getClass() == 'SupportColumnTeam' %}
-            <td data-key='{{ key }}' data-keyselect>{{ column_dict[key] }}</td>
-          {% elseif column.getClass() == 'SupportColumnCategory' %}
-            <td data-key='{{ key }}' data-keyselect>{{ column_dict[key] }}</td>
-          {% elseif column.getClass() == 'SupportColumnText' %}
-            <td data-key='{{ key }}'>{{ column_dict[key] }}</td>
-          {% elseif column.getClass() == 'SupportColumnDate' %}
-            <td data-key='{{ key }}'>{{ column_dict[key] }}</td>
-          {% elseif column.getClass() == 'SupportColumnComplete' %}
-            {% if column_dict[key] == '승인가능' %}
-              <td>
+          <td data-key="{{ column.key }}">
+            {% if column.class_name == 'SupportColumnTeam' %}
+              <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnCategory' %}
+              <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnWorker' %}
+              <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnText' %}
+              <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnTextDetail' %}
+              <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnDate' %}
+              <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnComplete' %}
+              {% if display_dict[key] == '승인가능' %}
                 <button class="btn btn-default js_complete" name="key" value="{{ key }}">승인가능</button>
-              </td>
+              {% else %}
+                {{ display_dict[key] }}
+              {% endif %}
+            {% elseif column.class_name == 'SupportColumnAccept' %}
+              {% if display_dict[key] == '승인가능' %}
+                <button class="btn btn-default js_complete" name="key" value="{{ key }}">승인가능</button>
+              {% else %}
+                {{ display_dict[key] }}
+              {% endif %}
+            {% elseif column.class_name == 'SupportColumnMoney' %}
+              {{ display_dict[key] | number_format }}
+            {% elseif column.class_name == 'SupportColumnFile' %}
+              {% if not support_view_dto.is_all_complted %}
+                <div class="fileupload_button btn btn-primary btn-xs">
+                  <span class="glyphicon glyphicon-open"></span>
+                  <input class="js_fileupload" type="file" name="files[]" multiple data-key="{{ key }}">
+                </div>
+              {% endif %}
+              {% if support_view_dto.files[key] is iterable %}
+                {% if support_view_dto.files[key] | length %}
+                  <div class="dropdown" style="display: inline-block">
+                    <div class=" btn btn-warning btn-xs dropdown-toggle " id="dropdownMenu{{ display_dict.id }}"
+                         data-toggle="dropdown"
+                         aria-haspopup="true" aria-expanded="true">
+                      <span class="glyphicon glyphicon-download-alt"></span>
+                    </div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu{{ display_dict.id }}">
+                      {% for file in support_view_dto.files[key] %}
+                        <div style="clear: both;padding-right: 5px;">
+                          <button attrajax
+                                  data-aa-url='/support/{{ target }}/file/{{ file.id }}'
+                                  data-aa-method='DELETE'
+                                  data-aa-confirm='{{ file.original_filename }} 파일을 정말 삭제하시겠습니까?'
+                                  data-aa-datatype="text"
+                                  data-aa-success-if-result-is="1"
+                                  data-aa-onsuccess-msg="삭제되었습니다"
+                                  data-aa-onsuccess="refresh"
+                                  data-aa-onfail-alert="true"
+                                  class="glyphicon glyphicon-trash btn btn-default btn-xs"
+                                  style="margin:3px;"
+                          >
+                          </button>
+                          <a href="/support/{{ target }}/file/{{ file.id }}" title="{{ file.reg_date }}">
+                            {{ file.original_filename }}
+                          </a>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% else %}
+              {% endif %}
             {% else %}
-              <td>{{ column_dict[key] }}</td>
+              {{ display_dict[key] }}
             {% endif %}
-          {% elseif column.getClass() == 'SupportColumnMutual' %}
-            <td>{{ column_dict[key] }}</td>
-          {% else %}
-            <td>{{ column_dict[key] }}</td>
-          {% endif %}
+          </td>
         {% endfor %}
         <td>
           <button class="glyphicon glyphicon-trash btn btn-default js_delete">삭제</button>
@@ -190,61 +334,67 @@
     <tfoot>
     <tr class='add'>
       {% for column_name, column in columns %}
-        {% if column.getClass() == 'SupportColumnReadonly' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnRegisterUser' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnComplete' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteUser' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnTeam' %}
-          <td>
+        <td data-key="{{ column.key }}">
+          {% if column.class_name == 'SupportColumnReadonly' %}
+          {% elseif column.class_name == 'SupportColumnRegisterUser' %}
+          {% elseif column.class_name == 'SupportColumnComplete' %}
+          {% elseif column.class_name == 'SupportColumnCompleteUser' %}
+          {% elseif column.class_name == 'SupportColumnCompleteDatetime' %}
+          {% elseif column.class_name == 'SupportColumnAccept' %}
+          {% elseif column.class_name == 'SupportColumnAcceptUser' %}
             <label>
-              <select name='{{ column.key }}' js_cookie_save js_data_chosen style="width:250px;">
-                {% for team in const.team %}
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen>
+                {% for manager in const.managers %}
+                  <option value='{{ manager.uid }}'>{{ manager.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          {% elseif column.class_name == 'SupportColumnAcceptDatetime' %}
+          {% elseif column.class_name == 'SupportColumnMutual' %}
+            <label>
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen>
+                {% for group_name, group in column.groups %}
+                  <option value='{{ group_name }}'>{{ group_name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          {% elseif column.class_name == 'SupportColumnTeam' %}
+            <label>
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen>
+                {% for team in const.teams %}
                   <option value='{{ team }}'>{{ team }}</option>
                 {% endfor %}
               </select>
             </label>
-          </td>
-        {% elseif column.getClass() == 'SupportColumnCategory' %}
-          <td>
+          {% elseif column.class_name == 'SupportColumnWorker' %}
             <label>
-              <select name='{{ column.key }}' js_cookie_save js_data_chosen style="width:250px;">
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen style="width:100px">
+                {% for user in const.users %}
+                  <option value='{{ user.uid }}'>{{ user.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          {% elseif column.class_name == 'SupportColumnCategory' %}
+            <label>
+              <select name='{{ column.key }}' js_cookie_save js_data_chosen>
                 {% for category_item in column.category_items %}
                   <option value='{{ category_item }}'>{{ category_item }}</option>
                 {% endfor %}
               </select>
             </label>
-          </td>
-        {% elseif column.getClass() == 'SupportColumnText' %}
-          <td>
-            <input type='text' name='{{ column.key }}' style='width:250px' placeholder='{{ column.placeholder }}' value='{{ column.default }}'/>
-          </td>
-        {% elseif column.getClass() == 'SupportColumnDate' %}
-          <td>
-            <input type="text" name='{{ column.key }}' style='width:250px' js_datepicker value='{{ column.default }}'/>
-          </td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% elseif column.getClass() == 'SupportColumnCompleteDatetime' %}
-          <td></td>
-        {% else %}
-          <td>
-            {{ column.getClass() }}
-          </td>
-        {% endif %}
+          {% elseif column.class_name == 'SupportColumnText' %}
+            <input type='text' name='{{ column.key }}' style='width:150px' placeholder='{{ column.placeholder }}' value='{{ column.default }}'/>
+          {% elseif column.class_name == 'SupportColumnTextDetail' %}
+            <input type='text' name='{{ column.key }}' style='width:150px' placeholder='{{ column.placeholder }}' value='{{ column.default }}'/>
+          {% elseif column.class_name == 'SupportColumnDate' %}
+            <input type="text" name='{{ column.key }}' style='width:150px' value='{{ column.default }}' js_datepicker/>
+          {% elseif column.class_name == 'SupportColumnMoney' %}
+            <input type="text" name='{{ column.key }}' style='width:70px' value='{{ column.default }}' js_number_format/>
+          {% elseif column.class_name == 'SupportColumnFile' %}
+          {% else %}
+            {{ column.class_name }}
+          {% endif %}
+        </td>
       {% endfor %}
       <td>
         <button id="add" type="submit">추가</button>
@@ -269,7 +419,7 @@
           <td>
             <label>
               <select name='js_super_edit' js_data_chosen style="width:100px">
-                {% for user in allUsers %}
+                {% for user in all_users %}
                   <option value='{{ user.uid }}'>{{ user.name }}</option>
                 {% endfor %}
               </select>

@@ -5,6 +5,7 @@ use Intra\Model\LightFileModel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class FileUploadService
 {
@@ -13,6 +14,7 @@ class FileUploadService
 
 	/**
 	 * FileUploadService constructor.
+	 *
 	 * @param $group
 	 */
 	public function __construct($group)
@@ -25,6 +27,7 @@ class FileUploadService
 	 * @param $uid
 	 * @param $payment_id
 	 * @param $file UploadedFile
+	 *
 	 * @return false|UploadedFile
 	 */
 	public function upload($uid, $payment_id, $file)
@@ -53,19 +56,23 @@ class FileUploadService
 
 	/**
 	 * @param $file_upload_dto FileUploadDto
+	 *
 	 * @return BinaryFileResponse|Response
 	 */
 	public function getBinaryFileResponseWithDto($file_upload_dto)
 	{
 		$dest = $this->light_file_model->getUploadableLocation($file_upload_dto->location);
 		if (is_file($dest)) {
-			return new BinaryFileResponse($dest);
+			$binaryFileResponse = new BinaryFileResponse($dest, 200, ['Content-Type' => 'application/octet-stream']);
+			$binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file_upload_dto->original_filename);
+			return $binaryFileResponse;
 		}
 		return new Response('file not exist', 404);
 	}
 
 	/**
 	 * @param $file_upload_dto FileUploadDto
+	 *
 	 * @return bool
 	 */
 	public function remove($file_upload_dto)

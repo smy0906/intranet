@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\Support\UserSupport;
+use Intra\Service\Support\SupportRowService;
 
 $request = $this->getRequest();
 $target = $request->get('target');
@@ -11,6 +11,6 @@ $value = $request->get('value');
 
 $type = $request->get('type');
 if ($type == 'complete') {
-	return UserSupport::complete($target, $id, $key);
+	return SupportRowService::complete($target, $id, $key);
 }
-return UserSupport::edit($target, $id, $key, $value);
+return SupportRowService::edit($target, $id, $key, $value);

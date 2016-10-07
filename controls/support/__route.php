@@ -29,3 +29,16 @@ $this->matchIf('/{target}/id/{id}')
 
 $this->matchIf('/{target}/const/{key}')
 	->query('const');
+
+$this->matchIf('{target}/file_upload')
+	->query('file_upload');
+
+$this->matchIf('{target}/file/{fileid}')
+	->assertAsInt('fileid')
+	->isMethod('get')
+	->query('file_download');
+
+$this->matchIf('{target}/file/{fileid}')
+	->assertAsInt('fileid')
+	->isMethod('delete')
+	->query('file_delete');

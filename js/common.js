@@ -1,7 +1,7 @@
 require(["jquery", "jquery.attrajax", 'jquery-ui', "jquery-number", "chosen", "jquery.cookie", "jquery-form"], function ($) {
   $(function () {
     $('*[attrajax]').attrAjax();
-    $('input[js_number_format]').number(true);
+    $('input[js_number_format]').number(true).css('text-align', 'right');
   });
   $('select[js_data_chosen]').chosen({search_contains: true});
   $('input[js_datepicker]').datepicker({dateFormat: "yy-mm-dd"});
