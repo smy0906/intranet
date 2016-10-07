@@ -38,7 +38,7 @@
 <body>
 <script>
   const AUTO_PLAY_INTERVAL = 8000;
-  const REFRESH_INTERVAL = 1000 * 60 * 5;
+  const REFRESH_INTERVAL = 1000 * 60 * 10;
   const BASE_URL = '//cdn.ridicorp.com/digitalsignage/';
 
   function loadImages() {
@@ -48,7 +48,7 @@
   }
 
   function loadImage(index, parent) {
-    const filename = (index + 100).toString().substr(1, 2) + '.png';
+    const filename = (index + 100).toString().substr(1, 2) + '.jpg';
     const image_url = BASE_URL + filename + '?' + Date.now().toString();
 
     const image = new Image();
