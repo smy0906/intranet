@@ -2,8 +2,8 @@
 
 namespace Intra\Service\Menu;
 
-use Intra\Service\Auth\ExceptTaAuthChecker;
-use Intra\Service\Auth\Superclass\AuthCheckerInterface;
+use Intra\Service\Auth\ExceptTaAuth;
+use Intra\Service\Auth\Superclass\AuthMultiplexer;
 use Intra\Service\User\UserSession;
 
 class Link
@@ -19,22 +19,22 @@ class Link
 	 *
 	 * @param                      $title
 	 * @param                      $url
-	 * @param AuthCheckerInterface $auth_checker
+	 * @param AuthMultiplexer      $auth_checker
 	 * @param null                 $target
 	 * @param null                 $glyphicon
 	 */
 	public function __construct($title, $url, $auth_checker = null, $target = null, $glyphicon = null)
 	{
 		/**
-		 * @var AuthCheckerInterface $auth_checker_instacne
+		 * @var AuthMultiplexer $auth_checker_instacne
 		 */
 		if (is_null($auth_checker)) {
-			$auth_checker = ExceptTaAuthChecker::class;
+			$auth_checker = new ExceptTaAuth;
 		}
-		$auth_checker_instacne = new $auth_checker;
+
 		$this->title = $title;
 		$this->url = $url;
-		$this->is_visible = $auth_checker_instacne->hasAuth(UserSession::getSelfDto());
+		$this->is_visible = $auth_checker->multiplexingAuth(UserSession::getSelfDto());
 		$this->target = $target;
 		$this->glyphicon = $glyphicon;
 	}

@@ -1,17 +1,17 @@
 <?php
 namespace Intra\Service\Auth;
 
-use Intra\Service\Auth\Superclass\AuthCheckerInterface;
+use Intra\Service\Auth\Superclass\AuthMultiplexer;
 use Intra\Service\User\UserDto;
 
-class PublicAuth implements AuthCheckerInterface
+class PublicAuth extends AuthMultiplexer
 {
 	/**
 	 * @param UserDto $user_dto
 	 *
 	 * @return bool
 	 */
-	public function hasAuth(UserDto $user_dto)
+	protected function hasAuth(UserDto $user_dto)
 	{
 		return true;
 	}
