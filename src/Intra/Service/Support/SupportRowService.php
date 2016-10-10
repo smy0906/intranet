@@ -19,7 +19,7 @@ use Intra\Service\Support\Column\SupportColumnText;
 use Intra\Service\Support\Column\SupportColumnWorker;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -58,7 +58,7 @@ class SupportRowService
 		SupportModel::edit($target, $id, $key, $value);
 		$support_dto = SupportDtoFactory::get($target, $id);
 		if (SupportPolicy::getColumn($target, $key) instanceof SupportColumnWorker) {
-			return UserService::getNameByUidSafe($support_dto->dict[$key]);
+			return UserJoinService::getNameByUidSafe($support_dto->dict[$key]);
 		}
 		return $support_dto->dict[$key];
 	}

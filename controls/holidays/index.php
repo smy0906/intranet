@@ -4,9 +4,9 @@
 use Intra\Model\HolidayModel;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
@@ -29,7 +29,7 @@ if (!$is_holiday_master) {
 	}
 }
 
-$user_dto_object = UserDtoHandler::importFromDatabaseWithUid($uid);
+$user_dto_object = new UserDtoHandler(UserDtoFactory::createByUid($uid));
 $target_user_dto = $user_dto_object->exportDto();
 $user_holiday = new UserHoliday($target_user_dto);
 $user_holiday_policy = new UserHolidayPolicy($target_user_dto);
@@ -53,8 +53,8 @@ $yearly = $year - $joinYear;
 	$holidays = $user_holiday->getUserHolidays($yearly);
 	$holidayInfo = $user_holiday_policy->getDetailInfomationByYearly($yearly);
 
-	$availableUsers = UserService::getAvailableUserDtos();
-	$managerUsers = UserService::getManagerUserDtos();
+	$availableUsers = UserDtoFactory::createAvailableUserDtos();
+	$managerUsers = UserDtoFactory::createManagerUserDtos();
 }
 
 return [

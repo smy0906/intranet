@@ -4,7 +4,7 @@ namespace Intra\Service\Payment;
 use Intra\Config\Config;
 use Intra\Core\Application;
 use Intra\Service\User\UserConstant;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Mailgun\Mailgun;
 
 class UserPaymentMailService
@@ -27,16 +27,16 @@ class UserPaymentMailService
 		$title = "[{$type}][{$dto->team}][{$dto->month}] {$dto->register_name}님의 요청, {$dto->category}";
 		$html = Application::$view->render('payments/template/add', ['item' => $dto]);
 		$receivers = [
-			UserService::getEmailByUidSafe($dto->uid),
-			UserService::getEmailByUidSafe($dto->manager_uid)
+			UserJoinService::getEmailByUidSafe($dto->uid),
+			UserJoinService::getEmailByUidSafe($dto->manager_uid)
 		];
 		if ($dto->category == UserPaymentConst::CATEGORY_USER_BOOK_CANCELMENT) {
-			$receivers_append = UserService::getEmailsByTeam(UserConstant::TEAM_CCPQ);
+			$receivers_append = UserJoinService::getEmailsByTeam(UserConstant::TEAM_CCPQ);
 			$receivers = array_merge($receivers, $receivers_append);
 			$receivers = array_unique($receivers);
 		}
 		if ($dto->category == UserPaymentConst::CATEGORY_USER_DEVICE_CANCELMENT) {
-			$receivers_append = UserService::getEmailsByTeam(UserConstant::TEAM_DEVICE);
+			$receivers_append = UserJoinService::getEmailsByTeam(UserConstant::TEAM_DEVICE);
 			$receivers = array_merge($receivers, $receivers_append);
 			$receivers = array_unique($receivers);
 		}

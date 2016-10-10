@@ -1,8 +1,6 @@
 <?php
 namespace Intra\Core;
 
-use Exception;
-
 class BaseDtoHandler
 {
 	protected $dto;
@@ -21,12 +19,5 @@ class BaseDtoHandler
 	public function exportDto()
 	{
 		return clone($this->dto);
-	}
-
-	protected static function assertDatabaseRowExist($row)
-	{
-		if (!is_array($row) || count($row) == 0) {
-			throw new Exception("Database Row Not Exist");
-		}
 	}
 }

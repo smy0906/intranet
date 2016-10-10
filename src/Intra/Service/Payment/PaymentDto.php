@@ -4,7 +4,7 @@ namespace Intra\Service\Payment;
 use Intra\Core\BaseDto;
 use Intra\Core\MsgException;
 use Intra\Lib\DateUtil;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentDto extends BaseDto
@@ -67,8 +67,8 @@ class PaymentDto extends BaseDto
 	{
 		$return = new self;
 		$return->initFromArray($payment_row);
-		$return->register_name = UserService::getNameByUidSafe($return->uid);
-		$return->manager_name = UserService::getNameByUidSafe($return->manager_uid);
+		$return->register_name = UserJoinService::getNameByUidSafe($return->uid);
+		$return->manager_name = UserJoinService::getNameByUidSafe($return->manager_uid);
 
 		$return->is_manager_accepted = false;
 		$return->is_co_accepted = false;
@@ -85,7 +85,7 @@ class PaymentDto extends BaseDto
 				if ($payment_accept->user_type == 'co') {
 					$return->co_accept = $payment_accept;
 					$return->is_co_accepted = true;
-					$return->co_accpeter_name = UserService::getNameByUidSafe($payment_accept->uid);
+					$return->co_accpeter_name = UserJoinService::getNameByUidSafe($payment_accept->uid);
 				}
 			}
 		}

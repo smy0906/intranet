@@ -3,7 +3,7 @@ namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -44,8 +44,8 @@ class UserPaymentStatService
 		foreach ($payments as $payment) {
 			$arr = [
 				$payment->request_date,
-				UserService::getNameByUidSafe($payment->uid),
-				UserService::getNameByUidSafe($payment->manager_uid),
+				UserJoinService::getNameByUidSafe($payment->uid),
+				UserJoinService::getNameByUidSafe($payment->manager_uid),
 				$payment->month,
 				$payment->team,
 				$payment->product,

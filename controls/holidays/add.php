@@ -12,7 +12,7 @@ $request = $this->getRequest();
 
 if (UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
 	$uid = $request->get('uid');
-	$dto = UserDtoFactory::getDtobyUid($uid);
+	$dto = UserDtoFactory::createByUid($uid);
 } else {
 	$dto = UserSession::getSelfDto();
 }

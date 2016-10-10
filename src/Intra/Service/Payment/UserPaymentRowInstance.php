@@ -5,7 +5,7 @@ use Intra\Core\MsgException;
 use Intra\Model\PaymentAcceptModel;
 use Intra\Model\PaymentModel;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 
 class UserPaymentRowInstance
@@ -40,7 +40,7 @@ class UserPaymentRowInstance
 		} elseif ($key == 'price') {
 			return number_format($updated_value) . ' 원';
 		} elseif ($key == 'manager_uid') {
-			$user_name = UserService::getNameByUidSafe($updated_value);
+			$user_name = UserJoinService::getNameByUidSafe($updated_value);
 			if ($user_name === null) {
 				return 'error';
 			}

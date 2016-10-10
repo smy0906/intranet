@@ -16,7 +16,7 @@ class UserSession
 	{
 		self::initStatic();
 
-		UserService::assertUserIdExist($id);
+		UserJoinService::assertUserIdExist($id);
 		$uid = UserModel::convertUidFromId($id);
 		self::$session->set('users_uid', $uid);
 
@@ -37,25 +37,6 @@ class UserSession
 
 	/**
 	 * @return UserDto
-	 * @deprecated
-	 * "현재 편집중인 유저" or "본인"
-	 */
-	public static function getSupereditUserDto()
-	{
-		self::initStatic();
-
-		$super_edit_uid = self::$session->get('super_edit_uid');
-		$self = self::getSelfDto();
-
-		if ($super_edit_uid && $self && $self->is_admin) {
-			return UserDtoFactory::getDtobyUid($super_edit_uid);
-		} else {
-			return $self;
-		}
-	}
-
-	/**
-	 * @return UserDto
 	 */
 	public static function getSelfDto()
 	{
@@ -66,7 +47,7 @@ class UserSession
 		}
 		if (self::$session->get('users_uid')) {
 			$users_uid = self::$session->get('users_uid');
-			return UserDtoFactory::getDtobyUid($users_uid);
+			return UserDtoFactory::createByUid($users_uid);
 		}
 		return null;
 	}
@@ -79,28 +60,13 @@ class UserSession
 		return intval($users_uid);
 	}
 
-	public static function setSupereditUser($uid)
-	{
-		self::initStatic();
-
-		$self = self::getSelfDto();
-		if ($self && $self->is_admin) {
-			self::$session->set('super_edit_uid', $uid);
-		}
-	}
-
 	public static function isTa()
 	{
 		$user = self::getSelfDto();
-
-		if (strpos($user->email, ".ta") !== false
-			|| strpos($user->email, ".oa") !== false
-			|| strpos(strtoupper($user->name), "TA") !== false
-		) {
-			return true;
+		if ($user === null) {
+			return false;
 		}
-
-		return false;
+		return UserPolicy::isTa($user);
 	}
 
 	public static function isPressManager()

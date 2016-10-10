@@ -13,7 +13,7 @@ use Intra\Service\Support\Column\SupportColumnCompleteUser;
 use Intra\Service\Support\Column\SupportColumnFile;
 use Intra\Service\Support\Column\SupportColumnRegisterUser;
 use Intra\Service\Support\Column\SupportColumnWorker;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 
 class SupportViewDto
@@ -120,20 +120,20 @@ class SupportViewDto
 			) {
 				$key = $column->key;
 				$uid = $display_dict[$key];
-				$display_dict[$key] = UserService::getNameByUidSafe($uid);
+				$display_dict[$key] = UserJoinService::getNameByUidSafe($uid);
 			} elseif ($column instanceof SupportColumnCompleteUser) {
 				$parent_key = $column->parent_column;
 				$key = $column->key;
 				if ($this->completes_dict[$parent_key]) {
 					$uid = $display_dict[$key];
-					$display_dict[$key] = UserService::getNameByUidSafe($uid);
+					$display_dict[$key] = UserJoinService::getNameByUidSafe($uid);
 				} else {
 					unset($display_dict[$key]);
 				}
 			} elseif ($column instanceof SupportColumnAcceptUser) {
 				$key = $column->key;
 				$uid = $display_dict[$key];
-				$display_dict[$key] = UserService::getNameByUidSafe($uid);
+				$display_dict[$key] = UserJoinService::getNameByUidSafe($uid);
 			} elseif ($column instanceof SupportColumnCompleteDatetime ||
 				$column instanceof SupportColumnAcceptDatetime
 			) {

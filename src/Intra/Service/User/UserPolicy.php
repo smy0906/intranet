@@ -68,4 +68,16 @@ class UserPolicy
 		}
 		return false;
 	}
+
+	public static function isTa(UserDto $user)
+	{
+		if (strpos($user->email, ".ta") !== false
+			|| strpos($user->email, ".oa") !== false
+			|| strpos(strtoupper($user->name), "TA") !== false
+		) {
+			return true;
+		}
+
+		return false;
+	}
 }

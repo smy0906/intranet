@@ -2,7 +2,6 @@
 namespace Intra\Service\User;
 
 use Exception;
-use Intra\Config\Config;
 use Intra\Core\BaseDtoHandler;
 use Intra\Model\UserModel;
 
@@ -13,29 +12,9 @@ class UserDtoHandler extends BaseDtoHandler
 	 */
 	protected $dto;
 
-	/**
-	 * @param $id
-	 * @return UserDtoHandler
-	 * @throws Exception
-	 */
-	public static function importFromDatabaseWithId($id)
+	public function __construct(UserDto $dto)
 	{
-		$uid = UserModel::convertUidFromId($id);
-		$row = UserModel::getDictWithUid($uid);
-		self::assertDatabaseRowExist($row);
-		return self::importFromDto(UserDto::importFromDatabase($row));
-	}
-
-	/**
-	 * @param $uid
-	 * @return UserDtoHandler
-	 * @throws Exception
-	 */
-	public static function importFromDatabaseWithUid($uid)
-	{
-		$dict = UserModel::getDictWithUid($uid);
-		self::assertDatabaseRowExist($dict);
-		return self::importFromDto(UserDto::importFromDatabase($dict));
+		parent::__construct($dto);
 	}
 
 	public function isValid()
@@ -54,31 +33,6 @@ class UserDtoHandler extends BaseDtoHandler
 	public function getName()
 	{
 		return $this->dto->name;
-	}
-
-	public function isSuperAdmin()
-	{
-		return ($this->dto->is_admin == '1');
-	}
-
-	public function getOnDate()
-	{
-		return $this->dto->on_date;
-	}
-
-	public function getEmail()
-	{
-		return $this->getId() . '@' . Config::$domain;
-	}
-
-	public function getId()
-	{
-		return $this->dto->id;
-	}
-
-	public function getUid()
-	{
-		return $this->dto->uid;
 	}
 
 	public function setExtra($key, $value)

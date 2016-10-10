@@ -20,6 +20,6 @@ if (!intval($uid) || !UserPolicy::isSupportAdmin($self)) {
 }
 
 $support_dto = SupportDto::importFromAddRequest($request, $uid, $columns);
-$target_user_dto = UserDtoFactory::getDtobyUid($uid);
+$target_user_dto = UserDtoFactory::createByUid($uid);
 
 return SupportRowService::add($target_user_dto, $support_dto);

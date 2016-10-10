@@ -43,7 +43,8 @@ class ControlRouteMatch
 
 	/**
 	 * @param $string
-	 * @return ControlRouteMatch
+	 *
+	 * @return ControlRouteMatch|ControlRouteNull
 	 * @throws \Exception
 	 */
 	public function assertAsInt($string)

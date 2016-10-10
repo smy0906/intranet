@@ -2,6 +2,7 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\Receipt\UserReceipts;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
@@ -23,7 +24,7 @@ if (!intval($uid) || !UserPolicy::isReceiptsAdmin($self)) {
 	$uid = $self->uid;
 }
 
-$user_dto_object = UserDtoHandler::importFromDatabaseWithUid($uid);
+$user_dto_object = new UserDtoHandler(UserDtoFactory::createByUid($uid));
 $target_user_dto = $user_dto_object->exportDto();
 
 $payment_service = new UserReceipts($target_user_dto);

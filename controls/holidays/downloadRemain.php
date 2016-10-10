@@ -4,8 +4,9 @@
 use Intra\Lib\Response\CsvResponse;
 use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,7 +25,7 @@ $rows = [
 	['연도', '이름', '입사일자', '퇴사일자', '연차부여', '사용일수', '잔여일수']
 ];
 
-$users = UserService::getAllUserDtos();
+$users = UserDtoFactory::createAllUserDtos();
 
 foreach ($users as $user) {
 	$user_holiday = new UserHoliday($user);

@@ -1,8 +1,8 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 
 $request = $this->getRequest();
-UserService::join($request);
+UserJoinService::join($request);
 return '1';

@@ -8,7 +8,7 @@ use Intra\Model\PaymentModel;
 use Intra\Service\Cron\Interfacer\CronMailingInterface;
 use Intra\Service\Cron\MailingDto;
 use Intra\Service\Payment\PaymentDtoFactory;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 
 class PaymentRemainCronMailing extends CronMailingInterface
 {
@@ -58,7 +58,7 @@ class PaymentRemainCronMailing extends CronMailingInterface
 			$first_payment = $payments[0];
 			$dto = clone $dto_template;
 			$dto->receiver = [
-				UserService::getEmailByUidSafe($first_payment->manager_uid),
+				UserJoinService::getEmailByUidSafe($first_payment->manager_uid),
 			];
 			$dto->CC = Config::$recipients['payment_admin'];
 			$dto->dicts = [];

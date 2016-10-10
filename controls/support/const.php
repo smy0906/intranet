@@ -6,7 +6,8 @@ use Intra\Service\Support\Column\SupportColumnTeam;
 use Intra\Service\Support\Column\SupportColumnWorker;
 use Intra\Service\Support\SupportPolicy;
 use Intra\Service\User\UserConstant;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserDtoFactory;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -25,7 +26,7 @@ foreach ($columns as $column) {
 				$return[$team] = $team;
 			}
 		} elseif ($column instanceof SupportColumnWorker) {
-			foreach (UserService::getAvailableUserDtos() as $user_dto) {
+			foreach (UserDtoFactory::createAvailableUserDtos() as $user_dto) {
 				$return[$user_dto->uid] = $user_dto->name;
 			}
 		} elseif ($column instanceof SupportColumnCategory) {

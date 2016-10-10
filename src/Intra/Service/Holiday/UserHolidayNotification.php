@@ -3,8 +3,8 @@ namespace Intra\Service\Holiday;
 
 use Intra\Config\Config;
 use Intra\Service\User\UserDto;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserDtoHandler;
-use Intra\Service\User\UserService;
 use Mailgun\Mailgun;
 
 class UserHolidayNotification
@@ -54,6 +54,7 @@ class UserHolidayNotification
 
 	/**
 	 * @param $title
+	 *
 	 * @return bool
 	 * @throws \Exception
 	 */
@@ -93,7 +94,7 @@ class UserHolidayNotification
 		$uids = [$holiday_raw->uid, $holiday_raw->manager_uid, $holiday_raw->keeper_uid];
 		$uids = array_filter(array_unique($uids));
 
-		$users = UserService::getUserDtosByUid($uids);
+		$users = UserDtoFactory::createDtosByUid($uids);
 
 		$emails = [];
 		foreach ($users as $user) {
@@ -111,7 +112,7 @@ class UserHolidayNotification
 	private function getMailContents()
 	{
 		$holiday_raw = $this->holiday_raws[0];
-		$keeper = UserDtoHandler::importFromDatabaseWithUid($holiday_raw->keeper_uid);
+		$keeper = new UserDtoHandler(UserDtoFactory::createByUid($holiday_raw->keeper_uid));
 		if ($keeper === null) {
 			throw new \Exception('$keeper === null');
 		}

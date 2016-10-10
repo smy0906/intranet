@@ -4,8 +4,8 @@ namespace Intra\Service\Receipt;
 
 use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 class UserReceipts
@@ -163,8 +163,8 @@ class UserReceipts
 			$return['editable'] |= 1;
 		}
 
-		$return['allCurrentUsers'] = UserService::getAvailableUserDtos();
-		$return['allUsers'] = UserService::getAllUserDtos();
+		$return['allCurrentUsers'] = UserDtoFactory::createAvailableUserDtos();
+		$return['allUsers'] = UserDtoFactory::createAllUserDtos();
 
 		return $return;
 	}

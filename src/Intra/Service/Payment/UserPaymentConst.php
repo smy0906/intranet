@@ -2,8 +2,9 @@
 namespace Intra\Service\Payment;
 
 use Intra\Service\User\UserConstant;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 
 class UserPaymentConst
@@ -18,7 +19,7 @@ class UserPaymentConst
 	{
 		if ($key == 'manager_uid') {
 			$ret = [];
-			foreach (UserService::getAvailableUserDtos() as $user) {
+			foreach (UserDtoFactory::createAvailableUserDtos() as $user) {
 				$ret[$user->uid] = $user->name;
 			}
 			return json_encode($ret);

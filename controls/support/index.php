@@ -4,8 +4,8 @@
 use Intra\Service\Support\SupportPolicy;
 use Intra\Service\Support\SupportViewDtoFactory;
 use Intra\Service\User\UserConstant;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 
 $self = UserSession::getSelfDto();
@@ -29,8 +29,8 @@ $next_yearmonth = date('Y-m', strtotime('+1 month', strtotime($yearmonth)));
 $columns = SupportPolicy::getColumns($target);
 $const = [
 	'teams' => UserConstant::$jeditable_key_list['team'],
-	'managers' => UserService::getManagerUserDtos(),
-	'users' => UserService::getAvailableUserDtos(),
+	'managers' => UserDtoFactory::createManagerUserDtos(),
+	'users' => UserDtoFactory::createAvailableUserDtos(),
 ];
 $support_view_dtos = SupportViewDtoFactory::gets($columns, $target, $uid, $date, $type);
 
@@ -44,5 +44,5 @@ return [
 	'support_view_dtos' => $support_view_dtos,
 	'const' => $const,
 	'is_admin' => UserPolicy::isSupportAdmin($self),
-	'all_users' => UserService::getAllUserDtos(),
+	'all_users' => UserDtoFactory::createAllUserDtos(),
 ];

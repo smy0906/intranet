@@ -6,7 +6,7 @@ use Intra\Core\MsgException;
 use Intra\Lib\DictsUtils;
 use Intra\Model\UserModel;
 
-class UserService
+class UserJoinService
 {
 	/**
 	 * @param $id
@@ -21,56 +21,13 @@ class UserService
 			);
 		}
 
-		$user_dto_object = UserDtoHandler::importFromDatabaseWithId($id);
+		$user_dto_object = new UserDtoHandler(UserDtoFactory::importFromDatabaseWithId($id));
 
 		if (!$user_dto_object->isValid()) {
 			throw new MsgException(
 				'로그인 불가능한 계정입니다. 인사팀에 확인해주세요. <a href="https://login.windows.net/common/oauth2/logout?response_type=code&client_id=***REMOVED***&resource=https://graph.windows.net&redirect_uri=">로그인 계정을 여러개 쓰는경우 로그인 해제</a>하고 다시 시도해주세요'
 			);
 		}
-	}
-
-	/**
-	 * @return UserDto[]
-	 */
-	public static function getAvailableUserDtos()
-	{
-		$dicts = UserModel::getDictsAvailable();
-		return UserDtoFactory::createFromDatabaseDicts($dicts);
-	}
-
-
-	/**
-	 * @return UserDto[]
-	 */
-	public static function getAllUserDtos()
-	{
-		$dicts = UserModel::getAllDicts();
-		return UserDtoFactory::createFromDatabaseDicts($dicts);
-	}
-
-	/**
-	 * @return UserDto[]
-	 */
-	public static function getManagerUserDtos()
-	{
-		$dicts = UserModel::getDictsOfManager();
-		return UserDtoFactory::createFromDatabaseDicts($dicts);
-	}
-
-	/**
-	 * @param $uids
-	 *
-	 * @return UserDto[]
-	 */
-	public static function getUserDtosByUid($uids)
-	{
-		$return = [];
-		$dicts = UserModel::getDictWithUids($uids);
-		foreach ($dicts as $dict) {
-			$return[] = UserDto::importFromDatabase($dict);
-		}
-		return $return;
 	}
 
 	public static function join($request)
@@ -133,7 +90,8 @@ class UserService
 		return array_map(
 			function ($id) {
 				return $id . '@' . Config::$domain;
-			}, $ids
+			},
+			$ids
 		);
 	}
 }

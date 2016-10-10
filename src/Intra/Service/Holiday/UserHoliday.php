@@ -5,7 +5,7 @@ use Intra\Lib\DateUtil;
 use Intra\Model\HolidayModel;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
+use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 
 class UserHoliday
@@ -261,7 +261,7 @@ class UserHoliday
 	 */
 	public static function getUserNameSafe($keeper_uid)
 	{
-		return UserService::getNameByUidSafe($keeper_uid);
+		return UserJoinService::getNameByUidSafe($keeper_uid);
 	}
 
 	/**

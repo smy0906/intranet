@@ -5,8 +5,8 @@ use Intra\Core\MsgException;
 use Intra\Model\PaymentModel;
 use Intra\Service\User\UserConstant;
 use Intra\Service\User\UserDto;
+use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -178,9 +178,9 @@ class UserPaymentService
 			$return['editable'] |= 1;
 		}
 
-		$return['allCurrentUsers'] = UserService::getAvailableUserDtos();
-		$return['managerUsers'] = UserService::getManagerUserDtos();
-		$return['allUsers'] = UserService::getAllUserDtos();
+		$return['allCurrentUsers'] = UserDtoFactory::createAvailableUserDtos();
+		$return['managerUsers'] = UserDtoFactory::createManagerUserDtos();
+		$return['allUsers'] = UserDtoFactory::createAllUserDtos();
 
 		$return['const'] = UserPaymentConst::get();
 

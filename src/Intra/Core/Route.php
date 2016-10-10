@@ -4,9 +4,9 @@ namespace Intra\Core;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @property mixed routeFile
- * @property Request request
- * @property string $query
+ * @property mixed             routeFile
+ * @property Request           request
+ * @property string            $query
  * @property ControlRouteMatch lastMatch
  */
 class Route
@@ -56,7 +56,8 @@ class Route
 
 	/**
 	 * @param $pattern
-	 * @return ControlRouteMatch
+	 *
+	 * @return ControlRouteMatch|ControlRouteNull
 	 */
 	public function matchIf($pattern)
 	{
