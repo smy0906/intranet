@@ -31,46 +31,51 @@ if (!$is_free_to_login && !UserSession::isLogined()) {
 	}
 }
 
-if (Config::$domain == 'ridi.com') {
-	$left_menu_list = [
-		new Link('직원찾기', '/users', new PublicAuth),
-		new Link('리디 생활 가이드', 'https://ridicorp.sharepoint.com/intranet/SitePages/%EB%A6%AC%EB%94%94%20%EC%83%9D%ED%99%9C%20%EA%B0%80%EC%9D%B4%EB%93%9C.aspx', null, '_blank'),
-		new Link('전사 주간 업무 요약', '/weekly', new ExceptTaAuth, '_blank'),
-		new Link('회의실', '/rooms', new PublicAuth),
-		new Link('포커스룸', '/rooms?type=focus'),
-		new Link('휴가신청', '/holidays', new PublicAuth),
-		'지원요청(테스트 중)' => [
-			new Link('기기 설치/장애 문의', '/support/device'),
-			new Link('경조 지원', '/support/family_event'),
-			new Link('명함 신청', '/support/business_card'),
-			new Link('구매 요청', '/support/depot'),
-			new Link('상품권 제작', '/support/gift_card'),
-		],
-		new Link('결제요청', '/payments', (new ExceptTaAuth)->accept(['hr.ta'])),
-		new Link('비용정산', '/receipts', new PublicAuth),
-		new Link('급여관리', 'http://htms.himgt.net', new ExceptTaAuth, '_blank'),
-		new Link('보도자료 관리', '/press', new OnlyPressManager),
-		new Link('조직도', '/organization/chart', new ExceptTaAuth, '_blank'),
-	];
-	if (!Config::$is_dev) {
-		unset($left_menu_list['지원요청(테스트 중)']);
+if (UserSession::isLogined()) {
+	if (Config::$domain == 'ridi.com') {
+		$left_menu_list = [
+			new Link('직원찾기', '/users', new PublicAuth),
+			new Link('리디 생활 가이드', 'https://ridicorp.sharepoint.com/intranet/SitePages/%EB%A6%AC%EB%94%94%20%EC%83%9D%ED%99%9C%20%EA%B0%80%EC%9D%B4%EB%93%9C.aspx', null, '_blank'),
+			new Link('전사 주간 업무 요약', '/weekly', new ExceptTaAuth, '_blank'),
+			new Link('회의실', '/rooms', new PublicAuth),
+			new Link('포커스룸', '/rooms?type=focus'),
+			new Link('휴가신청', '/holidays', new PublicAuth),
+			'지원요청(테스트 중)' => [
+				new Link('기기 설치/장애 문의', '/support/device'),
+				new Link('경조 지원', '/support/family_event'),
+				new Link('명함 신청', '/support/business_card'),
+				new Link('구매 요청', '/support/depot'),
+				new Link('상품권 제작', '/support/gift_card'),
+			],
+			new Link('결제요청', '/payments', (new ExceptTaAuth)->accept(['hr.ta'])),
+			new Link('비용정산', '/receipts', new PublicAuth),
+			new Link('급여관리', 'http://htms.himgt.net', new ExceptTaAuth, '_blank'),
+			new Link('보도자료 관리', '/press', new OnlyPressManager),
+			new Link('조직도', '/organization/chart', new ExceptTaAuth, '_blank'),
+		];
+		if (!Config::$is_dev) {
+			unset($left_menu_list['지원요청(테스트 중)']);
+		}
+	} else {
+		$left_menu_list = [
+			new Link('공지사항', '/posts/notice'),
+			new Link('휴가신청', '/holidays'),
+			new Link('비용정산', '/receipts'),
+			new Link('회의실', '/rooms'),
+			new Link('포커스룸', '/rooms?type=focus'),
+			new Link('리디 생활 가이드', '/users'),
+			new Link('급여관리', 'http://htms.himgt.net', new ExceptTaAuth, '_blank'),
+		];
 	}
-} else {
-	$left_menu_list = [
-		new Link('공지사항', '/posts/notice'),
-		new Link('휴가신청', '/holidays'),
-		new Link('비용정산', '/receipts'),
-		new Link('회의실', '/rooms'),
-		new Link('포커스룸', '/rooms?type=focus'),
-		new Link('리디 생활 가이드', '/users'),
-		new Link('급여관리', 'http://htms.himgt.net', new ExceptTaAuth, '_blank'),
-	];
-}
 
-$right_menu_list = [
-	new Link('직원목록', '/users/list', new OnlyUserManager, null, 'list'),
-	new Link('로그아웃', '/usersession/logout', new PublicAuth, null, 'log-out'),
-];
+	$right_menu_list = [
+		new Link('직원목록', '/users/list', new OnlyUserManager, null, 'list'),
+		new Link('로그아웃', '/usersession/logout', new PublicAuth, null, 'log-out'),
+	];
+} else {
+	$left_menu_list = [];
+	$right_menu_list = [];
+}
 
 $response = $this->getResponse();
 $response->add(
