@@ -57,7 +57,7 @@
       {% endif %}
       $('select#js_super_edit')
         .val({{ currentUid }})
-        .trigger("chosen:updated")
+        .trigger("change")
         .change(function () {
           location.href = '/receipts/uid/' + $(this).val();
         });

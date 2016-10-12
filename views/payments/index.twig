@@ -132,7 +132,7 @@
             category_detail = '기타(' + category_detail + ')';
           }
           $('option:selected', this).text(category_detail);
-          $(this).trigger("chosen:updated");
+          $(this).trigger("change");
           category = category_detail;
         }
         $('input[name=category]').val(category);
@@ -219,7 +219,7 @@
 
       $('select[name=js_super_edit]')
         .val({{ currentUid }})
-        .trigger("chosen:updated")
+        .trigger("change")
         .change(function () {
           location.href = '/payments/uid/' + $(this).val();
         });

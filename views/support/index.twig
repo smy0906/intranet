@@ -12,7 +12,7 @@
       white-space: nowrap;
     }
 
-    tr.is_done td{
+    tr.is_done td {
       color: #bbbbbb;
     }
 
@@ -137,7 +137,7 @@
 
         $('select[name=js_super_edit]')
           .val({{ uid }})
-          .trigger("chosen:updated")
+          .trigger("change")
           .change(function () {
             location.href = "/support/{{ target }}/uid/" + $(this).val() + "/yearmonth/{{ yearmonth }}";
           });
@@ -187,7 +187,7 @@
                     } else {
                       target_object.removeClass('disabled');
                     }
-                    target_object.find('input,select').attr('disabled', !is_visible).trigger("chosen:updated").trigger('change')
+                    target_object.find('input,select').attr('disabled', !is_visible).trigger("change");
                   }
                 })
               });
@@ -203,7 +203,7 @@
               var is_visible;
               is_visible = (selected_val == parent_column_value);
               var target_object = $this.parentsUntil('table').find('input[name=' + key + ']');
-              target_object.attr('disabled', !is_visible).trigger("chosen:updated")
+              target_object.attr('disabled', !is_visible).trigger("change")
             })).trigger('change');
           };
         };

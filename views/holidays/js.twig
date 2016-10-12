@@ -4,7 +4,7 @@
   require(["jquery", "jquery.jeditable", "bootstrap"], function ($) {
     $('select.js_superedit')
       .val({{ target_user_dto.uid }})
-      .trigger("chosen:updated")
+      .trigger("change")
       .change(function () {
         location.href = '/holidays/uid/' + $(this).val();
       });
