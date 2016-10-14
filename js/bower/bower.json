@@ -25,6 +25,7 @@
     "jquery.jeditable": "https://github.com/tuupola/jquery_jeditable.git",
     "jquery.tmpl": "https://github.com/BorisMoore/jquery-tmpl.git",
     "jqueryte": "^1.4",
+    "smalot-bootstrap-datetimepicker": "^2",
     "scheduler": "^4.3.1"
   }
 }

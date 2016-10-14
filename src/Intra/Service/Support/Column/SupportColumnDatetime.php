@@ -2,6 +2,6 @@
 
 namespace Intra\Service\Support\Column;
 
-class SupportColumnReadonly extends SupportColumn
+class SupportColumnDatetime extends SupportColumn
 {
 }

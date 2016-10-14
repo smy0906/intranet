@@ -17,12 +17,4 @@ class SupportColumnMutual extends SupportColumn
 		parent::__construct($column);
 		$this->groups = $groups;
 	}
-
-	public function getRemainColumnExceptOneGroup($value)
-	{
-		$groups = $this->groups;
-		unset($groups[$value]);
-		$remain_columns = array_flatten($groups);
-		return $remain_columns;
-	}
 }

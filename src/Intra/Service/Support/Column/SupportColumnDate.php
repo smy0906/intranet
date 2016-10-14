@@ -5,10 +5,6 @@ namespace Intra\Service\Support\Column;
 class SupportColumnDate extends SupportColumn
 {
 	/**
-	 * @var string
-	 */
-	public $default;
-	/**
 	 * @var
 	 */
 	public $is_ordering_column;

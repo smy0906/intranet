@@ -28,7 +28,7 @@ class SupportFileService
 	public static function addFiles($target, $id, $column_key, $file)
 	{
 		$self = UserSession::getSelfDto();
-		$columns = SupportPolicy::getColumns($target);
+		$columns = SupportPolicy::getColumnFields($target);
 		$support_dto = SupportDtoFactory::get($target, $id);
 		self::assertAccessFiles($support_dto, $self, $columns);
 
@@ -77,7 +77,7 @@ class SupportFileService
 	{
 		$file_upload_dto = FileUploadDtoFactory::importDtoByPk($fileid);
 		$support_dto = SupportDtoFactory::get($target, $file_upload_dto->key);
-		$columns = SupportPolicy::getColumns($target);
+		$columns = SupportPolicy::getColumnFields($target);
 		self::assertAccessFiles($support_dto, $self, $columns);
 
 		$file_upload_service = new FileUploadService($file_upload_dto->group);
@@ -88,7 +88,7 @@ class SupportFileService
 	{
 		$file_upload_dto = FileUploadDtoFactory::importDtoByPk($fileid);
 		$support_dto = SupportDtoFactory::get($target, $file_upload_dto->key);
-		$columns = SupportPolicy::getColumns($target);
+		$columns = SupportPolicy::getColumnFields($target);
 		self::assertAccessFiles($support_dto, $self, $columns);
 		self::assertDeleteFile($support_dto, $self, $columns);
 

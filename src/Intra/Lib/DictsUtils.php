@@ -12,6 +12,7 @@ class DictsUtils
 	/**
 	 * @param $dicts
 	 * @param $key
+	 *
 	 * @return array
 	 *
 	 * Dicts 에서 특정 key를 가진 값들을 모두 얻기
@@ -31,6 +32,7 @@ class DictsUtils
 	/**
 	 * @param $dicts
 	 * @param $key
+	 *
 	 * @return array
 	 *
 	 * Dicts 에서 특정 key 를 기준으로 재배치(key 기준으로 하나밖에 없을떄)
@@ -53,6 +55,7 @@ class DictsUtils
 	/**
 	 * @param $dicts
 	 * @param $key
+	 *
 	 * @return array
 	 *
 	 * Dicts 에서 특정 key 를 기준으로 재배치(key 기준으로 여러개 있을떄)
@@ -76,10 +79,11 @@ class DictsUtils
 	}
 
 	/**
-	 * @param $left_dicts
-	 * @param $right_dicts
+	 * @param     $left_dicts
+	 * @param     $right_dicts
 	 * @param int $left_dicts_column_index_to_join
 	 * @param int $right_dicts_column_index_to_join
+	 *
 	 * @return mixed
 	 *
 	 * Dicts 와 Dicts 끼리 join 할때 (SQL 에서 join 하지 않고 PHP에서 join)
@@ -141,15 +145,17 @@ class DictsUtils
 	{
 		$th = '';
 		$tr = '';
-		foreach ($dicts as $index => $dict) {
-			$td = '';
-			foreach ($dict as $key => $value) {
-				if ($index == 0) {
-					$th .= "<th align='left'>" . $key . "</th>\n";
+		if (is_array($dicts)) {
+			foreach ($dicts as $index => $dict) {
+				$td = '';
+				foreach ($dict as $key => $value) {
+					if ($index == 0) {
+						$th .= "<th align='left'>" . $key . "</th>\n";
+					}
+					$td .= "<td align='left'>" . $value . "</td>\n";
 				}
-				$td .= "<td align='left'>" . $value . "</td>\n";
+				$tr .= "<tr>" . $td . "</tr>\n";
 			}
-			$tr .= "<tr>" . $td . "</tr>\n";
 		}
 
 		$html_table = "

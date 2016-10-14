@@ -1,6 +1,6 @@
 <?php
 
-namespace Intra\Service\Cron;
+namespace Intra\Service\Mail;
 
 class MailingDto
 {

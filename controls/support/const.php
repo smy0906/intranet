@@ -17,7 +17,7 @@ $request = $this->getRequest();
 $target = $request->get('target');
 $key = $request->get('key');
 
-$columns = SupportPolicy::getColumns($target);
+$columns = SupportPolicy::getColumnFields($target);
 $return = [];
 foreach ($columns as $column) {
 	if ($key == $column->key) {

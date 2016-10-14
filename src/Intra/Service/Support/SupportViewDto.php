@@ -64,7 +64,7 @@ class SupportViewDto
 	public function filterViewDict($support_dto)
 	{
 		$target = $support_dto->target;
-		$columns = SupportPolicy::getColumns($target);
+		$columns = SupportPolicy::getColumnFields($target);
 		$display_dict = $support_dto->dict;
 		$self = UserSession::getSelfDto();
 

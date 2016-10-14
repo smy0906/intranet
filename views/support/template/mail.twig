@@ -1,0 +1,48 @@
+<!--
+columns : $column_fields
+dto : $support_view_dto
+-->
+{% set display_dict = dto.display_dict %}
+<table cellspacing='0' cellpadding='0' style='width: 100%; border-collapse: collapse; color: #333; font-size: 13px; line-height: 1.7em; border-top:1px solid #848484;'>
+  <thead>
+  <tr>
+    {% for column_name, column in columns %}
+      <th>{{ column_name }}</th>
+    {% endfor %}
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    {% for column_name, column in columns %}
+      {% set key = column.key %}
+      <td data-key="{{ column.key }}">
+        {% if column.class_name == 'SupportColumnTeam' %}
+          <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnCategory' %}
+          <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnWorker' %}
+          <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnText' %}
+          <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnTextDetail' %}
+          <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnDate' %}
+          <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnDatetime' %}
+          <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+        {% elseif column.class_name == 'SupportColumnComplete' %}
+          {{ display_dict[key] }}
+        {% elseif column.class_name == 'SupportColumnAccept' %}
+          {{ display_dict[key] }}
+        {% elseif column.class_name == 'SupportColumnMoney' %}
+          {{ display_dict[key] | number_format }}
+        {% elseif column.class_name == 'SupportColumnFile' %}
+        {% else %}
+          {{ display_dict[key] }}
+        {% endif %}
+      </td>
+    {% endfor %}
+  </tr>
+  </tbody>
+</table>

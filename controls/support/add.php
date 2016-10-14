@@ -13,7 +13,7 @@ $self = UserSession::getSelfDto();
 $request = $this->getRequest();
 $target = $request->get('target');
 
-$columns = SupportPolicy::getColumns($target);
+$columns = SupportPolicy::getColumnFields($target);
 $uid = $request->get('uid');
 if (!intval($uid) || !UserPolicy::isSupportAdmin($self)) {
 	$uid = $self->uid;

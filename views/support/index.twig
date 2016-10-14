@@ -265,6 +265,8 @@
               <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
             {% elseif column.class_name == 'SupportColumnDate' %}
               <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
+            {% elseif column.class_name == 'SupportColumnDatetime' %}
+              <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
             {% elseif column.class_name == 'SupportColumnComplete' %}
               {% if display_dict[key] == '승인가능' %}
                 <button class="btn btn-default js_complete" name="key" value="{{ key }}">승인가능</button>
@@ -387,9 +389,11 @@
           {% elseif column.class_name == 'SupportColumnTextDetail' %}
             <input type='text' name='{{ column.key }}' style='width:150px' placeholder='{{ column.placeholder }}' value='{{ column.default }}'/>
           {% elseif column.class_name == 'SupportColumnDate' %}
-            <input type="text" name='{{ column.key }}' style='width:150px' value='{{ column.default }}' js_datepicker/>
+            <input type="text" name='{{ column.key }}' style='width:150px' placeholder='{{ column.placeholder }}' value='{{ column.default }}' js_datepicker/>
+          {% elseif column.class_name == 'SupportColumnDatetime' %}
+            <input type="text" name='{{ column.key }}' style='width:150px' placeholder='{{ column.placeholder }}' value='{{ column.default }}' js_datetimepicker data-date-format="yyyy-mm-dd hh:ii"/>
           {% elseif column.class_name == 'SupportColumnMoney' %}
-            <input type="text" name='{{ column.key }}' style='width:70px' value='{{ column.default }}' js_number_format/>
+            <input type="text" name='{{ column.key }}' style='width:120px' placeholder='{{ column.placeholder }}' value='{{ column.default }}' js_number_format/>
           {% elseif column.class_name == 'SupportColumnFile' %}
           {% else %}
             {{ column.class_name }}

@@ -11,6 +11,7 @@ use Intra\Service\Support\Column\SupportColumnComplete;
 use Intra\Service\Support\Column\SupportColumnCompleteDatetime;
 use Intra\Service\Support\Column\SupportColumnCompleteUser;
 use Intra\Service\Support\Column\SupportColumnDate;
+use Intra\Service\Support\Column\SupportColumnDatetime;
 use Intra\Service\Support\Column\SupportColumnFile;
 use Intra\Service\Support\Column\SupportColumnMoney;
 use Intra\Service\Support\Column\SupportColumnMutual;
@@ -25,20 +26,83 @@ use Intra\Service\User\UserDto;
 
 class SupportPolicy
 {
+	const TYPE_DEVICE = 'device';
+	const TYPE_FAMILY_EVENT = 'family_event';
+	const TYPE_BUSINESS_CARD = 'business_card';
+	const TYPE_DEPOT = 'depot';
+	const TYPE_GIFT_CARD = 'gift_card';
+
+	/**
+	 * @var $column_fields SupportColumn[][]
+	 */
+	private static $column_fields;
+	private static $column_titles;
+
 	/**
 	 * @param $target
 	 *
 	 * @return SupportColumn[]
 	 */
-	public static function getColumns($target)
+	public static function getColumnFields($target)
 	{
-		$columns = [
-			'device' => [
+		self::initColumnFields();
+		return self::$column_fields[$target];
+	}
+
+	public static function getColumnFieldsTestUserDto($target, $self)
+	{
+		self::initColumnFields();
+		$return_columns = self::$column_fields[$target];
+		foreach ($return_columns as $key => $return_column) {
+			if (!$return_column->isVisible($self)) {
+				unset($return_columns[$key]);
+			}
+		}
+
+		return $return_columns;
+	}
+
+	/**
+	 * @param $target
+	 *
+	 * @return SupportColumn[]
+	 */
+	public static function getColumnTitle($target)
+	{
+		self::initColumnFields();
+		return self::$column_titles[$target];
+	}
+
+	public static function getColumn($target, $key)
+	{
+		foreach (self::getColumnFields($target) as $column) {
+			if ($column->key == $key) {
+				return $column;
+			}
+		}
+		throw new \Exception('invalid column ' . $target . ', ' . $key);
+	}
+
+	private static function initColumnFields()
+	{
+		self::$column_titles = [
+			self::TYPE_DEVICE => '기기 설치/장애 문의',
+			self::TYPE_FAMILY_EVENT => '경조 지원',
+			self::TYPE_BUSINESS_CARD => '명함 신청',
+			self::TYPE_DEPOT => '구매 요청',
+			self::TYPE_GIFT_CARD => '상품권 제작',
+		];
+
+		$callback_is_human_manage_team = function (UserDto $user_dto) {
+			return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
+		};
+		self::$column_fields = [
+			self::TYPE_DEVICE => [
+				'일련번호' => new SupportColumnReadonly('uuid'),
+				'일련번호2' => new SupportColumnReadonly('id'),
 				'요청일' => new SupportColumnReadonly('reg_date'),
 				'요청자' => new SupportColumnRegisterUser('uid'),
-				'인사팀 처리' => new SupportColumnComplete('is_completed', function (UserDto $user_dto) {
-					return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
-				}),
+				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
 				'귀속부서' => new SupportColumnTeam('team'),
@@ -47,15 +111,15 @@ class SupportPolicy
 				'조치희망일' => new SupportColumnDate('request_date', date('Y/m/d'), true),
 				'비고' => new SupportColumnText('note', '', '비고'),
 			],
-			'family_event' => [
+			self::TYPE_FAMILY_EVENT => [
+				'일련번호' => new SupportColumnReadonly('uuid'),
+				'일련번호2' => new SupportColumnReadonly('id'),
 				'요청일' => new SupportColumnReadonly('reg_date'),
 				'요청자' => new SupportColumnRegisterUser('uid'),
 				'승인' => new SupportColumnAccept('is_accepted'),
 				'승인자' => new SupportColumnAcceptUser('accept_uid', 'is_accepted'),
 				'승인시각' => new SupportColumnAcceptDatetime('accepted_datetime', 'is_accepted'),
-				'인사팀 처리' => new SupportColumnComplete('is_completed', function (UserDto $user_dto) {
-					return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
-				}),
+				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
 				'대상자' => new SupportColumnMutual(
@@ -79,25 +143,26 @@ class SupportPolicy
 					'사망-조부모 (배우자 조부모 포함)',
 					'기타'
 				]),
-				'분류 상세' => new SupportColumnTextDetail('category_detail', 'category', '기타'),
+				'분류 상세' => (new SupportColumnText('category_detail'))->placeholder('나리디님 결혼'),
 				'경조일자' => new SupportColumnDate('request_date', date('Y/m/d'), true),
-				'경조금' => new SupportColumnMoney('cash'),
-				'화환 종류' => new SupportColumnCategory('flower_category', ['자동선택', '화환', '과일바구니', '조화', '기타']),
-				'화환 수령자' => new SupportColumnText('flower_receiver'),
-				'화환 연락처' => new SupportColumnText('flower_call'),
+				'경조금' => (new SupportColumnMoney('cash'))->placeholder('미입력시 자동입력'),
+				'화환 종류' => new SupportColumnCategory('flower_category', ['미선택시 자동선택', '화환', '과일바구니', '조화', '기타']),
+				'화환 상세' => new SupportColumnTextDetail('flower_category_detail', 'flower_category', '기타'),
+				'화환 수령자' => new SupportColumnText('flower_receiver', '', '홍길동'),
+				'화환 연락처' => new SupportColumnText('flower_call', '', '010-1234-5678'),
 				'화환 주소' => new SupportColumnText('flower_address'),
-				'화환 도착일시' => new SupportColumnDate('flower_date', date('Y/m/d')),
+				'화환 도착일시' => (new SupportColumnDatetime('flower_datetime'))->placeholder('2016-01-02 07:10'),
 				'비고' => new SupportColumnText('note', '', '비고'),
 			],
-			'business_card' => [
+			self::TYPE_BUSINESS_CARD => [
+				'일련번호' => new SupportColumnReadonly('uuid'),
+				'일련번호2' => new SupportColumnReadonly('id'),
 				'요청일' => new SupportColumnReadonly('reg_date'),
 				'요청자' => new SupportColumnRegisterUser('uid'),
 				'승인' => new SupportColumnAccept('is_accepted'),
 				'승인자' => new SupportColumnAcceptUser('accept_uid', 'is_accepted'),
 				'승인시각' => new SupportColumnAcceptDatetime('accepted_datetime', 'is_accepted'),
-				'인사팀 처리' => new SupportColumnComplete('is_completed', function (UserDto $user_dto) {
-					return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
-				}),
+				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
 				'대상자' => new SupportColumnMutual(
@@ -108,27 +173,27 @@ class SupportPolicy
 					]
 				),
 				'대상자(직원)' => new SupportColumnWorker('receiver_uid'),
-				'대상자(현재 미입사)' => new SupportColumnText('name'),
-				'영문명' => new SupportColumnText('name_in_english'),
+				'대상자(현재 미입사)' => new SupportColumnText('name', '', '홍길동'),
+				'영문명' => new SupportColumnText('name_in_english', '', 'Gildong Hong'),
 				'부서명' => new SupportColumnTeam('team'),
 				'직급(한글)' => new SupportColumnText('grade_korean'),
 				'직급(영문)' => new SupportColumnText('grade_english'),
 				'PHONE(내선번호)' => new SupportColumnText('call'),
 				'FAX' => new SupportColumnText('fax', '02-565-0332'),
 				'주소' => new SupportColumnCategory('address', ['어반벤치빌딩 10층', '어반벤치빌딩 11층']),
-				'수량' => new SupportColumnCategory('count', [50, 100, 150, 200, '기타']),
-				'수량(기타)' => new SupportColumnTextDetail('count_detail', 'count', '기타'),
-				'제작(예정)일' => new SupportColumnDate('date', date('Y/m/d', strtotime('+7 day')), true),
+				'수량' => new SupportColumnCategory('count', [50, 100, 150, 200, '기타 - 50매 단위']),
+				'수량(기타)' => new SupportColumnTextDetail('count_detail', 'count', '기타 - 50매 단위'),
+				'제작(예정)일' => (new SupportColumnDate('date', '', true))->placeholder('미입력시 월말진행'),
 			],
-			'depot' => [
+			self::TYPE_DEPOT => [
+				'일련번호' => new SupportColumnReadonly('uuid'),
+				'일련번호2' => new SupportColumnReadonly('id'),
 				'요청일' => new SupportColumnReadonly('reg_date'),
 				'요청자' => new SupportColumnRegisterUser('uid'),
 				'승인' => new SupportColumnAccept('is_accepted'),
 				'승인자' => new SupportColumnAcceptUser('accept_uid', 'is_accepted'),
 				'승인시각' => new SupportColumnAcceptDatetime('accepted_datetime', 'is_accepted'),
-				'인사팀 처리' => new SupportColumnComplete('is_completed', function (UserDto $user_dto) {
-					return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
-				}),
+				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
 				'사용자' => new SupportColumnMutual(
@@ -155,21 +220,21 @@ class SupportPolicy
 				'상세내역' => new SupportColumnText('detail'),
 				'세팅(예정)일' => new SupportColumnDate('request_date', date('Y/m/d', strtotime('+7 day')), true),
 				'비고' => new SupportColumnText('note', '', '비고'),
+				'보유여부' => (new SupportColumnCategory('is_exist', ['재고', '신규구매']))->isVisibleIf($callback_is_human_manage_team),
+				'라벨번호' => (new SupportColumnText('label'))->isVisibleIf($callback_is_human_manage_team),
 			],
-			'gift_card' => [
+			self::TYPE_GIFT_CARD => [
+				'일련번호' => new SupportColumnReadonly('uuid'),
+				'일련번호2' => new SupportColumnReadonly('id'),
 				'요청일' => new SupportColumnReadonly('reg_date'),
 				'요청자' => new SupportColumnRegisterUser('uid'),
 				'승인' => new SupportColumnAccept('is_accepted'),
 				'승인자' => new SupportColumnAcceptUser('accept_uid', 'is_accepted'),
 				'승인시각' => new SupportColumnAcceptDatetime('accepted_datetime', 'is_accepted'),
-				'인사팀 처리' => new SupportColumnComplete('is_completed', function (UserDto $user_dto) {
-					return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
-				}),
+				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
-				'권종' => new SupportColumnCategory('category', [
-					'포인트'
-				]),
+				'권종' => new SupportColumnCategory('category', ['포인트']),
 				'금액' => new SupportColumnMoney('cash'),
 				'유효기간' => new SupportColumnDate('expire_date', date('Y/m/d', strtotime('+7 day'))),
 				'수량' => new SupportColumnMoney('count'),
@@ -179,16 +244,5 @@ class SupportPolicy
 				'이미지파일' => new SupportColumnFile('image_file'),
 			],
 		];
-		return $columns[$target];
-	}
-
-	public static function getColumn($target, $key)
-	{
-		foreach (self::getColumns($target) as $column) {
-			if ($column->key == $key) {
-				return $column;
-			}
-		}
-		throw new \Exception('invalid column ' . $target . ', ' . $key);
 	}
 }

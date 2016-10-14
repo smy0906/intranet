@@ -9,7 +9,7 @@ class SupportDtoFactory
 	public static function get($target, $id)
 	{
 		$dict = SupportModel::getDict($target, $id);
-		$columns = SupportPolicy::getColumns($target);
+		$columns = SupportPolicy::getColumnFields($target);
 		if ($dict === null) {
 			throw  new MsgException('해당 자료가 없습니다.');
 		}

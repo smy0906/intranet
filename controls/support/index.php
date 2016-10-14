@@ -26,7 +26,8 @@ if (!intval($uid) || !UserPolicy::isSupportAdmin($self)) {
 $prev_yearmonth = date('Y-m', strtotime('-1 month', strtotime($yearmonth)));
 $next_yearmonth = date('Y-m', strtotime('+1 month', strtotime($yearmonth)));
 
-$columns = SupportPolicy::getColumns($target);
+$columns = SupportPolicy::getColumnFieldsTestUserDto($target, $self);
+$title = SupportPolicy::getColumnTitle($target);
 $const = [
 	'teams' => UserConstant::$jeditable_key_list['team'],
 	'managers' => UserDtoFactory::createManagerUserDtos(),
@@ -40,6 +41,7 @@ return [
 	'yearmonth' => $yearmonth,
 	'next_yearmonth' => $next_yearmonth,
 	'target' => $target,
+	'title' => $title,
 	'columns' => $columns,
 	'support_view_dtos' => $support_view_dtos,
 	'const' => $const,
