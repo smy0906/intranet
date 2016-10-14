@@ -3,20 +3,13 @@ columns : $column_fields
 dto : $support_view_dto
 -->
 {% set display_dict = dto.display_dict %}
-<table cellspacing='0' cellpadding='0' style='width: 100%; border-collapse: collapse; color: #333; font-size: 13px; line-height: 1.7em; border-top:1px solid #848484;'>
-  <thead>
-  <tr>
-    {% for column_name, column in columns %}
-      <th>{{ column_name }}</th>
-    {% endfor %}
-    <th></th>
-  </tr>
-  </thead>
+<table cellspacing='0' cellpadding='0' style='width: 100%; border-collapse: collapse; color: #333; font-size: 13px; line-height: 1.7em; '>
   <tbody>
-  <tr>
-    {% for column_name, column in columns %}
+  {% for column_name, column in columns %}
+    <tr>
+      <td style="width:200px;text-align: center;border-right: 1px solid #848484;border-bottom: 1px solid #dddddd; padding-right: 5px;">{{ column_name }}</td>
       {% set key = column.key %}
-      <td data-key="{{ column.key }}">
+      <td data-key="{{ column.key }}" style="padding-left: 5px;border-bottom: 1px solid #dddddd;">
         {% if column.class_name == 'SupportColumnTeam' %}
           <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
         {% elseif column.class_name == 'SupportColumnCategory' %}
@@ -42,7 +35,7 @@ dto : $support_view_dto
           {{ display_dict[key] }}
         {% endif %}
       </td>
-    {% endfor %}
-  </tr>
+    </tr>
+  {% endfor %}
   </tbody>
 </table>
