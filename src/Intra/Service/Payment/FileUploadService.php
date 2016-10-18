@@ -63,9 +63,10 @@ class FileUploadService
 	{
 		$dest = $this->light_file_model->getUploadableLocation($file_upload_dto->location);
 		if (is_file($dest)) {
-			$binaryFileResponse = new BinaryFileResponse($dest, 200, ['Content-Type' => 'application/octet-stream']);
-			$binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file_upload_dto->original_filename);
-			return $binaryFileResponse;
+			$binary_file_response = new BinaryFileResponse($dest, 200, ['Content-Type' => 'application/octet-stream']);
+			$filename_fallback = preg_replace('/^.+\./', 'uploaded_file.', $file_upload_dto->original_filename);
+			$binary_file_response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file_upload_dto->original_filename, $filename_fallback);
+			return $binary_file_response;
 		}
 		return new Response('file not exist', 404);
 	}
