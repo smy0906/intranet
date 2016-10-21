@@ -26,8 +26,9 @@ class HolidayModel
 
 	/**
 	 * @param UserDto $user
-	 * @param $begin
-	 * @param $end
+	 * @param         $begin
+	 * @param         $end
+	 *
 	 * @return UserHolidayDto[]
 	 */
 	public function getHolidaysByUserYearly($user, $begin, $end)
@@ -79,6 +80,7 @@ class HolidayModel
 	/**
 	 * @param $holidayid
 	 * @param $uid
+	 *
 	 * @return UserHolidayDto
 	 */
 
@@ -90,6 +92,7 @@ class HolidayModel
 	/**
 	 * @param $holidayids
 	 * @param $uid
+	 *
 	 * @return UserHolidayDto[]
 	 */
 
@@ -99,7 +102,7 @@ class HolidayModel
 		return $this->db->sqlObjects('select * from holidays where ? order by date asc', sqlWhere($where));
 	}
 
-	public function isDuplicate($date, $uid)
+	public function isAllowedToAdd($date, $uid, $cost)
 	{
 		$date = date('Y-m-d', strtotime($date));
 		$where = [
@@ -107,7 +110,7 @@ class HolidayModel
 			'uid' => $uid,
 			'hidden' => 0
 		];
-		return $this->db->sqlCount('holidays', $where);
+		return $this->db->sqlData('select sum(cost) >= (1 - ' . intval($cost) . ') from holidays where ?', sqlWhere($where));
 	}
 
 	public function isDuplicateInDateRangeByType($this_month, $next_month, $type, $uid)

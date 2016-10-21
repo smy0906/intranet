@@ -4,8 +4,8 @@ namespace Intra\Service\Holiday;
 use Intra\Lib\DateUtil;
 use Intra\Model\HolidayModel;
 use Intra\Service\User\UserDto;
-use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserJoinService;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
 class UserHoliday
@@ -22,6 +22,7 @@ class UserHoliday
 
 	/**
 	 * UserHoliday constructor.
+	 *
 	 * @param UserDto $user
 	 */
 	public function __construct(UserDto $user)
@@ -33,6 +34,7 @@ class UserHoliday
 
 	/**
 	 * @param $yearly
+	 *
 	 * @return UserHolidayDto[]
 	 */
 
@@ -49,6 +51,7 @@ class UserHoliday
 
 	/**
 	 * @param $holidayid
+	 *
 	 * @return UserHolidayDto
 	 */
 	private function getHoliday($holidayid)
@@ -104,6 +107,7 @@ class UserHoliday
 
 	/**
 	 * @param UserHolidayDto $holiday_dto
+	 *
 	 * @throws \Exception
 	 */
 	private function assertAdd($holiday_dto)
@@ -149,7 +153,7 @@ class UserHoliday
 			}
 		}
 
-		if ($this->isDuplicate($holiday_dto->date)) {
+		if ($this->isAllowedToAdd($holiday_dto->date, $holiday_dto->cost)) {
 			throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
 		}
 
@@ -170,9 +174,9 @@ class UserHoliday
 		}
 	}
 
-	private function isDuplicate($date)
+	private function isAllowedToAdd($date, $cost)
 	{
-		return $this->user_holiday_model->isDuplicate($date, $this->user->uid);
+		return $this->user_holiday_model->isAllowedToAdd($date, $this->user->uid, $cost);
 	}
 
 	private function isDuplicatePWT($date)
@@ -190,6 +194,7 @@ class UserHoliday
 
 	/**
 	 * @param UserHolidayDto $holidayRaw
+	 *
 	 * @return int[]|false
 	 */
 	public function add($holidayRaw)
@@ -218,6 +223,7 @@ class UserHoliday
 
 	/**
 	 * @param null $timestamp
+	 *
 	 * @return int
 	 */
 
@@ -243,6 +249,7 @@ class UserHoliday
 
 	/**
 	 * @param $holiday_raw
+	 *
 	 * @return mixed
 	 */
 	private function filterAdd($holiday_raw)
@@ -257,6 +264,7 @@ class UserHoliday
 
 	/**
 	 * @param $keeper_uid
+	 *
 	 * @return mixed
 	 */
 	public static function getUserNameSafe($keeper_uid)
@@ -266,6 +274,7 @@ class UserHoliday
 
 	/**
 	 * @param $holiday_raw UserHolidayDto
+	 *
 	 * @return UserHolidayDto[]
 	 */
 	private function convertToArrayToAdd($holiday_raw)
@@ -305,6 +314,7 @@ class UserHoliday
 
 	/**
 	 * @param $date
+	 *
 	 * @return bool|string
 	 */
 	private function getNextDate($date)
