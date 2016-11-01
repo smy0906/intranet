@@ -9,6 +9,7 @@ class UserConstant
 	const TEAM_STORE = '단행본 / 개발센터 / 스토어팀';
 	const TEAM_VIERER = '단행본 / 개발센터 / 뷰어팀';
 	const TEAM_DATA = '단행본 / 개발센터 / 데이터팀';
+	const TEAM_PAPER = '단행본 / 개발센터 / 페이퍼팀';
 
 	const TEAM_GROWTH = '단행본 / 콘텐츠그룹 / Growth팀';
 	const TEAM_CM_1 = '단행본 / 콘텐츠그룹 / 일반도서팀';
@@ -34,6 +35,7 @@ class UserConstant
 	public static $jeditable_key_list = [
 		'team' => [
 			self::TEAM_DATA,
+			self::TEAM_PAPER,
 			self::TEAM_VIERER,
 			self::TEAM_STORE,
 			self::TEAM_PLATFORM,
