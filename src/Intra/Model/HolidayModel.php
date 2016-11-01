@@ -113,6 +113,17 @@ class HolidayModel
 		return $this->db->sqlData('select sum(cost) >= (1 - ' . intval($cost) . ') from holidays where ?', sqlWhere($where));
 	}
 
+	public function isDuplicated($date, $uid)
+	{
+		$date = date('Y-m-d', strtotime($date));
+		$where = [
+			'date' => $date,
+			'uid' => $uid,
+			'hidden' => 0
+		];
+		return $this->db->sqlCount('holidays', $where);
+	}
+
 	public function isDuplicateInDateRangeByType($this_month, $next_month, $type, $uid)
 	{
 		$where = [

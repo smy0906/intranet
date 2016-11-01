@@ -153,8 +153,16 @@ class UserHoliday
 			}
 		}
 
-		if ($this->isAllowedToAdd($holiday_dto->date, $holiday_dto->cost)) {
-			throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+		if (in_array($holiday_dto->type, $this->COST_HALF_TYPE) || in_array($holiday_dto->type, $this->COST_INT_TYPE)) {
+			if ($this->isAllowedToAdd($holiday_dto->date, $holiday_dto->cost)) {
+				throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+			}
+		}
+
+		if (in_array($holiday_dto->type, $this->COST_ZERO_DAY_VARIABLE_TYPE) || in_array($holiday_dto->type, $this->COST_ZERO_DAY_UNVARAIABLE_TYPE)) {
+			if ($this->isDuplicated($holiday_dto->date)) {
+				throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+			}
 		}
 
 		if ($holiday_dto->keeper_uid == 0) {
@@ -177,6 +185,11 @@ class UserHoliday
 	private function isAllowedToAdd($date, $cost)
 	{
 		return $this->user_holiday_model->isAllowedToAdd($date, $this->user->uid, $cost);
+	}
+
+	private function isDuplicated($date)
+	{
+		return $this->user_holiday_model->isDuplicated($date, $this->user->uid);
 	}
 
 	private function isDuplicatePWT($date)
