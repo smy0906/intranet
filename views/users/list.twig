@@ -12,7 +12,7 @@
     }
 
     tbody tr.js_exited_user {
-      display: none;
+      /*display: none;*/
     }
 
     tbody tr.js_exited_user td {
@@ -23,42 +23,52 @@
       background: #ddffdd;
     }
 
+    td.hidden_column {
+      display: none
+    }
+
+    ;
+
     .popover-content {
       color: #333;
     }
   </style>
   <script>
-    require(["jquery", "jquery.jeditable", "bootstrap"], function ($) {
+    require(["jquery", "jquery.jeditable", "bootstrap", "bootstrap.datatables"], function ($) {
       $('[data-toggle="popover"]').popover(
         {
           'trigger': 'hover',
           placement: 'bottom'
         });
-      $('tr.user td[data-key]').each(function () {
-        var uid = $(this).parent().data('uid');
-        var key = $(this).data('key');
-        var select_url = $(this).data('select-url');
-        var submitdata = {uid: uid, key: key};
+      $('table.table')
+        .on('draw.dt', function () {
+          $('tr.user td[data-key]').each(function () {
+            var uid = $(this).parent().data('uid');
+            var key = $(this).data('key');
+            var select_url = $(this).data('select-url');
+            var submitdata = {uid: uid, key: key};
 
-        var args = {
-          submitdata: submitdata,
-          height: '20px',
-          submit: 'OK',
-          placeholder: '[내용없음]',
-          data: function (value) {
-            return value;
-          }
-        };
-        if (select_url) {
-          args.loadurl = select_url;
-          args.type = 'select';
-        }
+            var args = {
+              submitdata: submitdata,
+              height: '20px',
+              submit: 'OK',
+              placeholder: '[내용없음]',
+              data: function (value) {
+                return value;
+              }
+            };
+            if (select_url) {
+              args.loadurl = select_url;
+              args.type = 'select';
+            }
 
-        $(this).editable('/users/edit', args);
-      });
-      $(document).on('click', '.js_toggle_exitusers', function () {
-        $('.js_exited_user').toggle();
-      })
+            $(this).editable('/users/edit', args);
+          });
+        })
+        .dataTable({
+          "lengthMenu": [[20, -1], [20, "All"]]
+        });
+
     });
   </script>
 {% endblock %}
@@ -66,10 +76,12 @@
   <div class="container-fluid">
     <table class="table">
       <colgroup>
+        <col width="1px">
         <col width="*">
       </colgroup>
       <thead>
       <tr>
+        <td class="hidden_column"></td>
         <td>아이디<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
                   data-content="TA계정 아이디을 다른 사람이 이어서 쓰는경우, 기존의 TA직원의 ID를 다른것으로 변경 후 가입진행해주세요"></i></td>
         <td>이름<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
@@ -78,7 +90,7 @@
         <td>팀<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
                 data-content="엑셀 다운로드시 표시 됨"></i></td>
         <td>팀 세부<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
-                data-content="'인사팀' or else"></i></td>
+                   data-content="'인사팀' or else"></i></td>
         <td>직급<i class="glyphicon glyphicon-question-sign" data-toggle="popover" title=""
                  data-content="'CEO', '팀장', 'CTO', 'COO', 'CDO', '기타' 중 하나이면 승인자(결제요청 등)으로 지정가능"></i></td>
         <td>외부전화</td>
@@ -98,14 +110,24 @@
         <tr
           class="
           user
-          {% if user.on_date == '9999-01-01' and user.off_date == '9999-01-01' %}
-            joined_user
-          {% elseif user.off_date != '9999-01-01' %}
-            js_exited_user
-          {% endif %}
+            {% if user.on_date == '9999-01-01' and user.off_date == '9999-01-01' %}
+              joined_user
+            {% endif %}
+            {% if user.off_date != '9999-01-01' %}
+              js_exited_user
+            {% endif %}
           "
           data-uid="{{ user.uid }}"
         >
+          <td class="hidden_column">
+            {% if user.on_date == '9999-01-01' and user.off_date == '9999-01-01' %}
+              1
+            {% elseif user.off_date != '9999-01-01' %}
+              {{ user.off_date }}
+            {% else %}
+              {{ user.on_date }}
+            {% endif %}
+          </td>
           <td data-key="id">{{ user.id }}</td>
           <td data-key="name">{{ user.name }}</td>
           <td data-key="email">{{ user.email }}</td>
@@ -125,9 +147,5 @@
       </tbody>
     </table>
   </div>
-
-  <button type="button" class="btn btn-default js_toggle_exitusers">
-    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span> 퇴사자 열고 닫기
-  </button>
 
 {% endblock %}
