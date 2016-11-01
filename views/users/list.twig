@@ -74,6 +74,14 @@
 {% endblock %}
 {% block body %}
   <div class="container-fluid">
+    <div>
+      <a href="list">
+        <button class="btn btn-default">직원만 보기</button>
+      </a>
+      <a href="list?outer=1">
+        <button class="btn btn-default">퇴사자만 보기</button>
+      </a>
+    </div>
     <table class="table">
       <colgroup>
         <col width="1px">
@@ -120,13 +128,7 @@
           data-uid="{{ user.uid }}"
         >
           <td class="hidden_column">
-            {% if user.on_date == '9999-01-01' and user.off_date == '9999-01-01' %}
-              1
-            {% elseif user.off_date != '9999-01-01' %}
-              {{ user.off_date }}
-            {% else %}
-              {{ user.on_date }}
-            {% endif %}
+            {{ user.on_date }}
           </td>
           <td data-key="id">{{ user.id }}</td>
           <td data-key="name">{{ user.name }}</td>

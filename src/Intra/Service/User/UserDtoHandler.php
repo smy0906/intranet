@@ -73,4 +73,26 @@ class UserDtoHandler extends BaseDtoHandler
 			throw new Exception("권한이 없습니다");
 		}
 	}
+
+	public function getOrderPriority()
+	{
+		if ($this->dto->on_date == '9999-01-01') {
+			return -1;
+		}
+		if ($this->dto->off_date == '9999-01-01') {
+			return str_replace('-', '', $this->dto->on_date);
+		}
+		return str_replace('-', '', $this->dto->on_date) * 10000;
+	}
+
+	public function getType()
+	{
+		if ($this->dto->on_date == '9999-01-01') {
+			return UserType::JOIN;
+		}
+		if ($this->dto->off_date == '9999-01-01') {
+			return UserType::NORMAL;
+		}
+		return UserType::OUTER;
+	}
 }
