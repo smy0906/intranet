@@ -94,7 +94,7 @@ class SupportPolicy
 		];
 
 		$callback_is_human_manage_team = function (UserDto $user_dto) {
-			return $user_dto->team_detail == UserConstant::TEAM_DETAIL_HUMAN_MANAGE;
+			return $user_dto->team == UserConstant::TEAM_HUMAN_MANAGE;
 		};
 		self::$column_fields = [
 			self::TYPE_DEVICE => [

@@ -7,7 +7,7 @@ class UserConstant
 	// Team
 	const TEAM_PLATFORM = '단행본 / 개발센터 / 플랫폼팀';
 	const TEAM_STORE = '단행본 / 개발센터 / 스토어팀';
-	const TEAM_VIERER = '단행본 / 개발센터 / 뷰어팀';
+	const TEAM_VIEWER = '단행본 / 개발센터 / 뷰어팀';
 	const TEAM_DATA = '단행본 / 개발센터 / 데이터팀';
 	const TEAM_PAPER = '단행본 / 개발센터 / 페이퍼팀';
 
@@ -22,33 +22,47 @@ class UserConstant
 
 	const TEAM_DEVICE = '단행본 / 디바이스팀 / 디바이스팀';
 
-	const TEAM_BI = '단행본 / 재무기획그룹 / 사업분석팀';
+	const TEAM_BI = '공통 / 재무기획그룹 / 사업분석팀';
+	const TEAM_CASH_FLOW = '공통 / 재무기획그룹 / 재무팀';
 
-	const TEAM_STUDIOD = '스튜디오D';
-	const TEAM_DRAGON = '연재';
-	const TEAM_CEO = 'CEO 직속';
+	const TEAM_STORY_OPERATION = '드래곤 / 콘텐츠그룹 / 운영팀';
+	const TEAM_STORY_CONTACT = '드래곤 / 콘텐츠그룹 / 제휴팀';
+	const TEAM_STORY_DEVELOP = '드래곤 / 프로덕트그룹 / 개발팀';
+	const TEAM_STORY_PLANS = '드래곤 / 프로덕트그룹 / 기획팀';
 
+	const TEAM_CEO = '공통 / CEO / CEO';
+	const TEAM_CDO = '공통 / CEO / CDO';
+	const TEAM_CTO = '공통 / CEO / CTO';
+	const TEAM_HUMAN_MANAGE = '공통 / CEO / 인사팀';
 
 	// Team Detail
 	const TEAM_DETAIL_HUMAN_MANAGE = '인사팀';
 
 	public static $jeditable_key_list = [
 		'team' => [
-			self::TEAM_DATA,
-			self::TEAM_PAPER,
-			self::TEAM_VIERER,
 			self::TEAM_STORE,
 			self::TEAM_PLATFORM,
-			self::TEAM_CCPQ,
-			self::TEAM_STORE_OP,
+			self::TEAM_VIEWER,
+			self::TEAM_DATA,
+			self::TEAM_PAPER,
 			self::TEAM_GROWTH,
-			self::TEAM_DEVICE,
-			self::TEAM_DESIGN,
 			self::TEAM_CM_1,
 			self::TEAM_CM_2,
-			self::TEAM_STUDIOD,
-			self::TEAM_DRAGON,
+			self::TEAM_CM_3,
+			self::TEAM_STORE_OP,
+			self::TEAM_CCPQ,
+			self::TEAM_DESIGN,
+			self::TEAM_DEVICE,
+			self::TEAM_BI,
+			self::TEAM_CASH_FLOW,
+			self::TEAM_STORY_OPERATION,
+			self::TEAM_STORY_CONTACT,
+			self::TEAM_STORY_DEVELOP,
+			self::TEAM_STORY_PLANS,
 			self::TEAM_CEO,
+			self::TEAM_CDO,
+			self::TEAM_CTO,
+			self::TEAM_HUMAN_MANAGE,
 		],
 	];
 }
