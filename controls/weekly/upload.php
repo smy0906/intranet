@@ -6,7 +6,8 @@ use Intra\Service\Weekly\Weekly;
 
 $infile = $_FILES["fileToUpload"]["tmp_name"];
 $filebag = new LightFileModel('weekly');
-$outfile = $filebag->getLocation(date("Ym") . '-' . floor((date('d') - 1) / 7 + 1) . ".html");
+$filename = Weekly::getFilename();
+$outfile = $filebag->getLocation($filename);
 
 if ($infile) {
 	Weekly::dumpToHtml($infile, $outfile);

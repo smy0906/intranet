@@ -23,7 +23,7 @@ class Weekly
 	public function assertPermission()
 	{
 		// free pass
-		if ($_GET['pw'] == 'mu57u53') {
+		if (isset($_GET['pw']) && $_GET['pw'] == 'mu57u53') {
 			return;
 		}
 
@@ -40,9 +40,15 @@ class Weekly
 	public function getContents()
 	{
 		$filebag = new LightFileModel('weekly');
-		$filename = date("Ym") . '-' . floor((date('d') - 1) / 7 + 1) . ".html";
+
+		$filename = self::getFilename();
 		if (!$filebag->isExist($filename)) {
-			throw new Exception('내용이 준비되지 않았습니다.');
+			// 지난주 데이터라도
+			$fallback_date = mktime(0, 0, 0, date("m"), date("d") - 7, date("Y"));
+			$filename = self::getFilename($fallback_date);
+			if (!$filebag->isExist($filename)) {
+				throw new Exception('내용이 준비되지 않았습니다.');
+			}
 		}
 		$html = file_get_contents($filebag->getLocation($filename));
 		$html = str_replace(
@@ -51,5 +57,10 @@ class Weekly
 			$html
 		);
 		return $html;
+	}
+
+	public static function getFilename($timestamp = null)
+	{
+		return date("Ym", $timestamp) . '-' . floor((date('d', $timestamp) - 1) / 7 + 1) . ".html";
 	}
 }

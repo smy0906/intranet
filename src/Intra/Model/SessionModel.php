@@ -21,9 +21,9 @@ class SessionModel
 		}
 	}
 
-	public function get($string)
+	public function get($key)
 	{
-		return $_SESSION[$string];
+		return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 	}
 
 	public function set($key, $value)
