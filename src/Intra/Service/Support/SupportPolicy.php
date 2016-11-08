@@ -176,6 +176,7 @@ class SupportPolicy
 				'대상자(현재 미입사)' => new SupportColumnText('name', '', '홍길동'),
 				'영문명' => new SupportColumnText('name_in_english', '', 'Gildong Hong'),
 				'부서명' => new SupportColumnTeam('team'),
+				'부서명(기타)' => new SupportColumnText('team_detail', '', '외부노출용 직함'),
 				'직급(한글)' => new SupportColumnText('grade_korean'),
 				'직급(영문)' => new SupportColumnText('grade_english'),
 				'PHONE(내선번호)' => new SupportColumnText('call'),

@@ -2,6 +2,7 @@
 
 namespace Intra\Service\Support;
 
+use Intra\Config\Config;
 use Intra\Core\Application;
 use Intra\Service\Mail\MailingDto;
 use Intra\Service\Mail\MailSendService;
@@ -47,7 +48,12 @@ class SupportMailService
 		$register_name = UserJoinService::getEmailByUidSafe($support_dto->uid);
 
 		$title = "[{$title}][{$type}][{$working_date}] {$register_name}님의 요청";
-		$html = Application::$view->render('support/template/mail', ['dto' => $support_view_dto, 'columns' => $column_fields]);
+		$link = 'http://intra.' . Config::$domain . '/support/' . $target;
+		$html = Application::$view->render('support/template/mail', [
+			'dto' => $support_view_dto,
+			'columns' => $column_fields,
+			'link' => $link,
+		]);
 
 		$receivers = [
 			$register_name,
@@ -61,9 +67,9 @@ class SupportMailService
 		$receivers = array_unique($receivers);
 
 		$mailing_dto = new MailingDto();
-		$mailing_dto->body_footer = $html;
 		$mailing_dto->receiver = $receivers;
 		$mailing_dto->title = $title;
+		$mailing_dto->body_header = $html;
 
 		return [$mailing_dto];
 	}

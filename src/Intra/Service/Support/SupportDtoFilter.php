@@ -2,6 +2,8 @@
 
 namespace Intra\Service\Support;
 
+use Intra\Core\MsgException;
+
 class SupportDtoFilter
 {
 
@@ -42,7 +44,19 @@ class SupportDtoFilter
 			if ($support_dto->dict[$columns['제작(예정)일']->key] == '') {
 				$support_dto->dict[$columns['제작(예정)일']->key] = date("Y-m-t");
 			}
+		} elseif ($support_dto->target == SupportPolicy::TYPE_DEPOT) {
+			$request_date = $support_dto->dict[$columns['세팅(예정)일']->key];
+			$request_datetime = date_create($request_date);
+			if ($request_datetime === false) {
+				throw new MsgException('날짜입력을 다시 확인해주세요');
+			}
+			$request_datetime_ymd = $request_datetime->format('Ymd');
+			$after_5_day = date_create('+5 day')->format('Ymd');
+			if ($request_datetime_ymd < $after_5_day) {
+				throw new MsgException('5일이내의 날짜로 요청할 수 없습니다');
+			}
 		}
+
 		$support_dto->dict['uuid'] = self::getUuidHeader($support_dto->target);
 		return $support_dto;
 	}
