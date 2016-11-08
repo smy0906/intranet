@@ -134,4 +134,15 @@ class HolidayModel
 		];
 		return $this->db->sqlCount('holidays', $where);
 	}
+
+	public function getDuplicatedType($date, $uid)
+	{
+		$date = date('Y-m-d', strtotime($date));
+		$where = [
+			'date' => $date,
+			'uid' => $uid,
+			'hidden' => 0
+		];
+		return $this->db->sqlData('select type from holidays where ?', sqlWhere($where));
+	}
 }

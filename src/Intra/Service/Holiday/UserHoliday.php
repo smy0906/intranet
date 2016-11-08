@@ -155,13 +155,23 @@ class UserHoliday
 
 		if (in_array($holiday_dto->type, $this->COST_HALF_TYPE) || in_array($holiday_dto->type, $this->COST_INT_TYPE)) {
 			if ($this->isAllowedToAdd($holiday_dto->date, $holiday_dto->cost)) {
-				throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+				throw new \Exception("이미 휴가를 사용한 날짜입니다. 다시 입력해주세요");
+			}
+		}
+
+		if (in_array($holiday_dto->type, $this->COST_HALF_TYPE)) {
+			$duplicated_type = $this->getDuplicatedType($holiday_dto->date);
+			if ($this->isDupicateInAmPm($holiday_dto->type, $duplicated_type)) {
+				throw new \Exception("이미 사용된 " . $holiday_dto->type . " 입니다. 다시 입력해주세요");
 			}
 		}
 
 		if (in_array($holiday_dto->type, $this->COST_ZERO_DAY_VARIABLE_TYPE) || in_array($holiday_dto->type, $this->COST_ZERO_DAY_UNVARAIABLE_TYPE)) {
 			if ($this->isDuplicated($holiday_dto->date)) {
-				throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+				$duplicated_type = $this->getDuplicatedType($holiday_dto->date);
+				if ($this->isDupicateInAmPm($holiday_dto->type, $duplicated_type)) {
+					throw new \Exception("날짜가 중복됩니다. 다시 입력해주세요");
+				}
 			}
 		}
 
@@ -334,5 +344,30 @@ class UserHoliday
 	{
 		$date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
 		return $date;
+	}
+
+	private function getDuplicatedType($date)
+	{
+		return $this->user_holiday_model->getDuplicatedType($date, $this->user->uid);
+	}
+
+	private function isDupicateInAmPm($type_1, $type_2)
+	{
+		$am_count = $pm_count = 0;
+		foreach ([$type_1, $type_2] as $type) {
+			if (strpos($type, '오전반차') !== false) {
+				$am_count++;
+			}
+			if (strpos($type, '오후반차') !== false) {
+				$pm_count++;
+			}
+		}
+		if ($am_count >= 2) {
+			return true;
+		}
+		if ($pm_count >= 2) {
+			return true;
+		}
+		return false;
 	}
 }
