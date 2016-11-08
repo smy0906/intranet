@@ -23,7 +23,7 @@
       padding: 0;
     }
 
-    tr.payment_done td{
+    tr.payment_done td {
       color: #bbbbbb;
     }
 
@@ -65,8 +65,9 @@
           var $this = $(this);
           var key = 'payment_column_' + index;
           var val = null;
-          if ($this.hasClass('js_column_fold'))
+          if ($this.hasClass('js_column_fold')) {
             val = '1';
+          }
           $.cookie(key, val);
         })
         .each(function () {
@@ -74,13 +75,14 @@
           var key = 'payment_column_' + index;
 
           var cookied_value = $.cookie(key);
-          if (cookied_value !== undefined)
+          if (cookied_value !== undefined) {
             if (cookied_value == '1') {
               var column = datatable.column(this);
               column.nodes().to$().addClass('js_column_fold');
               $(column.header()).addClass('js_column_fold');
               $(column.footer()).addClass('js_column_fold');
             }
+          }
         });
       $("input").on("keypress", function (e) {
         return e.which != 13;
@@ -105,20 +107,23 @@
             }
             catch (e) {
             }
-            if (date_str)
+            if (date_str) {
               break;
+            }
           }
           if (date_str) {
             $('option:selected', this).text('긴급(' + date_str + ')');
             $('input[name=pay_date]').val(date_str);
           }
-          else
+          else {
             $('input[name=pay_date]').val('');
+          }
         }
-        else
+        else {
           $.post('/payments/get_pay_date_by_str', {pay_type_str: pay_type_str}, function (dat) {
             $('input[name=pay_date]').val(dat);
           })
+        }
       }).trigger('change');
 
       $('#js_category_input').on('change', function () {
@@ -159,8 +164,9 @@
             data: arg,
             success: function () {
               checkbox_count--;
-              if (checkbox_count == 0)
+              if (checkbox_count == 0) {
                 location.reload();
+              }
             }
           });
         });
@@ -193,8 +199,9 @@
         var tr_object = $(this).parentsUntil('table').filter('tr');
         var is_editable_by_admin = '{{ editable | e('js') }}';
         var is_editable_by_user = tr_object.hasClass('js_is_editable');
-        if (!(is_editable_by_admin || is_editable_by_user))
+        if (!(is_editable_by_admin || is_editable_by_user)) {
           return;
+        }
 
         var paymentid = tr_object.data('paymentid');
         var key = $(this).data('key');
@@ -282,6 +289,9 @@
         <th>입금금액</th>
         <th>결제(예정)일</th>
         <th>세금계산서수취여부</th>
+        <th>세금계산서발행여부</th>
+        <th>세금계산서일자</th>
+        <th>장부반영여부</th>
         <th class="alert alert-info">입금은행</th>
         <th class="alert alert-info">입금계좌번호</th>
         <th class="alert alert-info">예금주</th>
@@ -401,6 +411,9 @@
           <td data-key='price'>{{ payment.price | number_format }}</td>
           <td data-key='pay_date'>{{ payment.pay_date | slice(0, 10) }}</td>
           <td data-key='tax' data-keyselect>{{ payment.tax }}</td>
+          <td data-key='tax_export' data-keyselect>{{ payment.tax_export }}</td>
+          <td data-key='tax_date'>{{ payment.tax_date }}</td>
+          <td data-key='is_account_book_registered' data-keyselect>{{ payment.is_account_book_registered }}</td>
           <td data-key='bank'>{{ payment.bank }}</td>
           <td data-key='bank_account'>{{ payment.bank_account }}</td>
           <td data-key='bank_account_owner'>{{ payment.bank_account_owner }}</td>
@@ -506,6 +519,26 @@
             </select>
           </label>
         </td>
+        <td>
+          <label>
+            <select name='tax_export' js_cookie_save>
+              <option value='N/A'>N/A</option>
+              {% for tax in const.tax_export %}
+                <option value='{{ tax }}'>{{ tax }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </td>
+        <td><input type='date' name='tax_date' style='width:60px' placeholder='일자'/></td>
+        <td>
+          <label>
+            <select name='is_account_book_registered' js_cookie_save>
+              {% for tax in const.is_account_book_registered %}
+                <option value='{{ tax }}'>{{ tax }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </td>
         <td class="alert alert-info"><input type='text' name='bank' style='width:60px' placeholder='우리'/></td>
         <td class="alert alert-info"><input type='text' name='bank_account' placeholder='xxx-xxxxxxx-xx-xxx'/></td>
         <td class="alert alert-info"><input type='text' name='bank_account_owner' placeholder='홍길동'/></td>
@@ -564,6 +597,9 @@
         <td class="alert alert-info"></td>
         <td class="alert alert-info"></td>
         <td class="alert alert-info"></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -644,6 +680,17 @@ B. 결제정보
           <td>
             <input type="button" value="받기"
                    onclick="location.href='/payments/downloadRemain/{{ month }}'"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            세금계산서 기간조회
+          </td>
+          <td>
+            <form action="/payments/downloadTaxDate" method="post">
+              <input type="month" name="month" placeholder="2016-01"/>
+              <input type="submit" value="받기"/>
+            </form>
           </td>
         </tr>
         <tr>

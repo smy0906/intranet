@@ -29,6 +29,9 @@ class PaymentDto extends BaseDto
 	public $note;
 	public $paytype;
 	public $status;
+	public $tax_export;
+	public $tax_date;
+	public $is_account_book_registered;
 
 
 	/**
@@ -117,6 +120,9 @@ class PaymentDto extends BaseDto
 			'bank_account_owner',
 			'pay_date',
 			'tax',
+			'tax_export',
+			'tax_date',
+			'is_account_book_registered',
 			'note',
 			'paytype',
 			'status',

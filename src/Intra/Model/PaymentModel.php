@@ -119,6 +119,21 @@ class PaymentModel extends BaseModel
 		);
 	}
 
+	public function getAllPaymentsByTaxDate($month)
+	{
+		$nextmonth = date('Y-m-1', strtotime('+1 month', strtotime($month)));
+
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where `tax_date` between ? and ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$month,
+			$nextmonth
+		);
+	}
+
 	public function del($paymentid)
 	{
 		return $this->db->sqlDelete('payments', compact('paymentid'));
