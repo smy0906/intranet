@@ -266,6 +266,7 @@
         <th>
           <input type="checkbox" class="js_payments_check" name="" title="payment_checkbox_all"/>
         </th>
+        <th>UUID</th>
         <th>요청일</th>
         <th>요청자</th>
         <th>승인자</th>
@@ -303,6 +304,7 @@
                    id='payment_{{ payment.paymentid }}'
                    title="payment_checkbox"/>
           </td>
+          <td>{{ payment.uuid }}</td>
           <td>{{ payment.request_date | slice(0, 10) }}</td>
           <td>{{ payment.register_name }}</td>
           <td data-key='manager_uid' data-keyselect>{{ payment.manager_name }}</td>
@@ -436,6 +438,7 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
         <td>
           <label>
             <select name='manager_uid' js_cookie_save js_data_chosen style="width:80px">
@@ -536,6 +539,7 @@
         </td>
       </tr>
       <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>

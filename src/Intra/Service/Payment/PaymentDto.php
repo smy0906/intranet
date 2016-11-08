@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentDto extends BaseDto
 {
 	public $paymentid;
+	public $uuid;
 	public $uid;
 	public $manager_uid;
 	public $request_date;

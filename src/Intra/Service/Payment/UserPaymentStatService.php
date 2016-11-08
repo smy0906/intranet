@@ -21,6 +21,7 @@ class UserPaymentStatService
 		//header
 		$csvs = [];
 		$arr = [
+			'ID',
 			'요청일',
 			'요청자',
 			'승인자',
@@ -43,6 +44,7 @@ class UserPaymentStatService
 		$csvs[] = $arr;
 		foreach ($payments as $payment) {
 			$arr = [
+				$payment->paymentid,
 				$payment->request_date,
 				UserJoinService::getNameByUidSafe($payment->uid),
 				UserJoinService::getNameByUidSafe($payment->manager_uid),

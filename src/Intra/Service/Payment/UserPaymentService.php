@@ -205,10 +205,15 @@ class UserPaymentService
 	 */
 	public function add(PaymentDto $payment_dto)
 	{
-		$insert_id = $this->payment_model->add($payment_dto->exportDatabaseInsert());
-		if (!$insert_id) {
-			throw new \Exception('자료추가 실패했습니다');
-		}
+		$insert_id = null;
+		PaymentModel::create()->transactional(function ($db) use ($payment_dto, &$insert_id) {
+			$payment_model = PaymentModel::create($db);
+			$insert_id = $payment_model->add($payment_dto->exportDatabaseInsert());
+			if (!$insert_id) {
+				throw new \Exception('자료추가 실패했습니다');
+			}
+			$payment_model->updateUuid($insert_id);
+		});
 
 		UserPaymentMailService::sendMail('결제요청', $insert_id);
 
