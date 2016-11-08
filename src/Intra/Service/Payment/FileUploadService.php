@@ -33,7 +33,7 @@ class FileUploadService
 	public function upload($uid, $payment_id, $file)
 	{
 		$return = false;
-		FileUploadModel::transactional(
+		FileUploadModel::create()->transactional(
 			function () use (&$return, $uid, $payment_id, $file) {
 				$count = FileUploadModel::getAlreadyRegistedCount($this->group, $payment_id);
 				$file_upload_dto = FileUploadDto::importFromUploadReqeust(

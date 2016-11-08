@@ -3,17 +3,9 @@
 namespace Intra\Model;
 
 use Intra\Core\BaseModel;
-use Intra\Service\IntraDb;
 
 class PaymentModel extends BaseModel
 {
-	private $db;
-
-	public function __construct()
-	{
-		$this->db = IntraDb::getGnfDb();
-	}
-
 	public function getPayments($uid, $month)
 	{
 		$nextmonth = date('Y-m', strtotime('+1 month', strtotime($month)));
@@ -210,5 +202,24 @@ class PaymentModel extends BaseModel
 			sqlLeftJoin($table),
 			sqlWhere($where)
 		);
+	}
+
+	public function updateUuid($paymentid)
+	{
+		$sql = "SELECT request_date,(select count(*) from payments where request_date = payments_root.request_date) `count` FROM payments payments_root where paymentid = ?";
+		$dict = $this->db->sqlDict($sql, $paymentid);
+		if (!$dict) {
+			throw  new \Exception('UUID 업데이트 중 정보 얻기가 실패했습니다.');
+		}
+		$request_date = $dict['request_date'];
+		$count = $dict['count'];
+		$uuid = date_create($request_date)->format('Ymd') . sprintf('%04d', $count);
+		$update = [
+			'uuid' => $uuid
+		];
+		$where = [
+			'paymentid' => $paymentid
+		];
+		$this->db->sqlUpdate('payments', $update, $where);
 	}
 }
