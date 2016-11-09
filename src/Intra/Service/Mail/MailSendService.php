@@ -22,8 +22,9 @@ class MailSendService
 			if (Config::$is_dev) {
 				if (count(Config::$test_mails)) {
 					$dto->receiver = Config::$test_mails;
+				} else {
+					return true;
 				}
-				return true;
 			}
 			self::send($dto);
 		}
