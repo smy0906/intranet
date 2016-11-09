@@ -53,8 +53,8 @@ class UserPaymentMailService
 		$receivers = array_merge($receivers, Config::$recipients['payment']);
 
 		if (Config::$is_dev) {
-			if (strlen(Config::$test_mail)) {
-				$receivers = [Config::$test_mail];
+			if (count(Config::$test_mails)) {
+				$receivers = Config::$test_mails;
 			} else {
 				return;
 			}

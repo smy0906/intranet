@@ -21,7 +21,7 @@ class Config
 	public static $domain = "ridi.com";
 
 	public static $is_dev = false;
-	public static $test_mail = '';
+	public static $test_mails = [];
 
 	public static $recipients = [
 		'payment' => [

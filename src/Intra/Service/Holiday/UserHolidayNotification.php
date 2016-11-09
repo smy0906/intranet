@@ -64,8 +64,8 @@ class UserHolidayNotification
 		$contents = $this->getMailContents();
 
 		if (Config::$is_dev) {
-			if (strlen(Config::$test_mail)) {
-				$receivers = [Config::$test_mail];
+			if (count(Config::$test_mails)) {
+				$receivers = Config::$test_mails;
 			} else {
 				return true;
 			}

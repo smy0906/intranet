@@ -12,16 +12,22 @@ class MailSendService
 	/**
 	 * @param MailingDto[] $dtos
 	 *
+	 * @return bool
 	 * @throws MsgException
 	 * @throws \Mailgun\Messages\Exceptions\MissingRequiredMIMEParameters
 	 */
 	public static function sends($dtos)
 	{
-		$test_mail = Config::$test_mail;
-
 		foreach ($dtos as $dto) {
-			self::send($dto, $test_mail);
+			if (Config::$is_dev) {
+				if (count(Config::$test_mails)) {
+					$dto->receiver = Config::$test_mails;
+				}
+				return true;
+			}
+			self::send($dto);
 		}
+		return true;
 	}
 
 	/**
@@ -30,7 +36,7 @@ class MailSendService
 	 * @throws MsgException
 	 * @throws \Mailgun\Messages\Exceptions\MissingRequiredMIMEParameters
 	 */
-	public static function send($dto, $test_mail)
+	public static function send($dto)
 	{
 		$mg = new Mailgun("***REMOVED***");
 		$domain = "ridibooks.com";
@@ -53,9 +59,6 @@ class MailSendService
 
 		if ($dto->receiver) {
 			$mail_post['to'] = $dto->receiver;
-			if (strlen($test_mail)) {
-				$mail_post['to'] = $test_mail;
-			}
 		}
 		if ($dto->replyTo) {
 			$mail_post['h:Reply-To'] = $dto->replyTo;
