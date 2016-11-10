@@ -71,7 +71,7 @@ function addDefaultReservation($from, $datas, $room_ids)
 			$datas[] =
 				[
 					'id' => 0,
-					'start_date' => $from . ' 11:00:00',
+					'start_date' => $from . ' 11:30:00',
 					'end_date' => $from . ' 12:30:00',
 					'text' => '[예약자] 박주현 [예약내용] 주간미팅',
 					'details' => '[예약자] 박주현 [예약내용] 주간미팅',
