@@ -19,7 +19,16 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Translation\\' => 30,
+            'Symfony\\Component\\Routing\\' => 26,
+            'Symfony\\Component\\HttpKernel\\' => 29,
+            'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\EventDispatcher\\' => 34,
+            'Symfony\\Component\\Debug\\' => 24,
+            'Silex\\' => 6,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
         ),
         'I' => 
         array (
@@ -28,6 +37,12 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
             'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\Annotations\\' => 28,
+            'Doctrine\\Common\\' => 16,
         ),
         'C' => 
         array (
@@ -44,9 +59,33 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
+        'Symfony\\Component\\Routing\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/routing',
+        ),
+        'Symfony\\Component\\HttpKernel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-kernel',
+        ),
+        'Symfony\\Component\\HttpFoundation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-foundation',
+        ),
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
+        ),
+        'Symfony\\Component\\Debug\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/debug',
+        ),
+        'Silex\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/silex/silex/src/Silex',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -68,6 +107,18 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\Annotations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
+        ),
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
@@ -82,13 +133,6 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
                 0 => __DIR__ . '/..' . '/twig/twig/lib',
             ),
         ),
-        'S' => 
-        array (
-            'Symfony\\Component\\HttpFoundation\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/symfony/http-foundation',
-            ),
-        ),
         'R' => 
         array (
             'Raven_' => 
@@ -98,6 +142,10 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         ),
         'P' => 
         array (
+            'Pimple' => 
+            array (
+                0 => __DIR__ . '/..' . '/pimple/pimple/src',
+            ),
             'PHPExcel' => 
             array (
                 0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
@@ -131,15 +179,23 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         ),
         'D' => 
         array (
+            'Doctrine\\DBAL\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
+            ),
+            'Doctrine\\Common\\Lexer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
+            ),
             'Doctrine\\Common\\Inflector\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
             ),
+            'Doctrine\\Common\\Collections\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/collections/lib',
+            ),
         ),
-    );
-
-    public static $classMap = array (
-        'SessionHandlerInterface' => __DIR__ . '/..' . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -148,7 +204,6 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
             $loader->prefixLengthsPsr4 = ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95::$classMap;
 
         }, null, ClassLoader::class);
     }

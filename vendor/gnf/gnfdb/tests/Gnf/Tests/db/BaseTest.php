@@ -9,6 +9,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param $sql
 	 * @param $where
+	 *
 	 * @dataProvider providerWhere
 	 */
 	public function testWhere($sql, $where)
@@ -22,7 +23,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	{
 		return [
 			[
-				'`a` = "1" and `b` = "2" and `c` is null',
+				'`a` = "1" and `b` = "2" and `c` is NULL',
 				['a' => '1', 'b' => '2', 'c' => sqlNull()]
 			],
 			[
@@ -42,8 +43,16 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 				['a' => sqlLike('any string')]
 			],
 			[
+				'`a` like "%any string?%"',
+				['a' => sqlLike('any string?')]
+			],
+			[
 				'`a` like "any prefix%"',
 				['a' => sqlLikeBegin('any prefix')]
+			],
+			[
+				'`a` like "any prefix?%"',
+				['a' => sqlLikeBegin('any prefix?')]
 			],
 			[
 				'`a` = __\'\'` + 123 + 5 + `alive`',
@@ -62,15 +71,15 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 				['a' => sqlOr(1, ['b' => 2])]
 			],
 			[
-				'`c` is null',
+				'`c` is NULL',
 				['c' => sqlNull()]
 			],
 			[
-				'`d` is not null',
+				'`d` is not NULL',
 				['d' => sqlNot(sqlNull())]
 			],
 			[
-				'`e` is not null and `f` = "g"',
+				'`e` is not NULL and `f` = "g"',
 				['e' => sqlNot(sqlNull()), 'f' => 'g']
 			],
 			[
@@ -141,12 +150,62 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 				'( !( ( ( ( !( `a` = "1" ) ) ) or `a` in ("2") ) ) )',
 				['a' => sqlNot([sqlNot(1), 2])]
 			],
+			[
+				'( ( `a` = "1" ) and ( `b` = "2" ) )',
+				[sqlAnd(['a' => 1], ['b' => 2])]
+			],
+			[
+				'( ( `a` = "1" ) and ( `b` = "2" ) )',
+				[sqlAndArray([['a' => 1], ['b' => 2]])]
+			],
+			[
+				'( ( `a` = "1" ) or ( `b` = "2" ) )',
+				[sqlOr(['a' => 1], ['b' => 2])]
+			],
+			[
+				'( ( `a` = "1" ) or ( `b` = "2" ) )',
+				[sqlOrArray([['a' => 1], ['b' => 2]])]
+			],
+			[
+				'( ( ( ( `a` = "1" ) and ( `b` = "2" ) ) ) or ( ( ( `a` = "3" ) and ( `b` = "4" ) ) ) )',
+				[sqlOr([sqlAnd(['a' => 1], ['b' => 2])], [sqlAnd(['a' => 3], ['b' => 4])])]
+			],
+			[
+				'( ( ( ( `a` = "1" ) or ( `b` = "2" ) ) ) and ( ( ( `a` = "3" ) or ( `b` = "4" ) ) ) )',
+				[sqlAnd([sqlOr(['a' => 1], ['b' => 2])], [sqlOr(['a' => 3], ['b' => 4])])]
+			],
+			[
+				'( ( ( ( `a` = "1" ) and ( `b` = "2" ) ) ) or ( ( ( `a` = "3" ) and ( `b` = "4" ) ) ) )',
+				[sqlOrArray([[sqlAndArray([['a' => 1], ['b' => 2]])], [sqlAndArray([['a' => 3], ['b' => 4]])]])]
+			],
+			[
+				'( ( ( ( `a` = "1" ) or ( `b` = "2" ) ) ) and ( ( ( `a` = "3" ) or ( `b` = "4" ) ) ) )',
+				[sqlAndArray([[sqlOrArray([['a' => 1], ['b' => 2]])], [sqlOrArray([['a' => 3], ['b' => 4]])]])]
+			],
+			// injection test
+			[
+				'`a` = "\\"\\\\\\"\\\\\\"\\\'"',
+				['a' => '"\"\\"\'']
+			],
+			[
+				'`a` = "0x1233"',
+				['a' => '0x1233']
+			],
+			[
+				'`a` = "username=' . chr(0xbf) . '\\' . '"' . '"',
+				['a' => "username=" . chr(0xbf) . "\""]
+			],
+			[
+				'`a` = "username=' . chr(0xbf) . '\\' . '\'' . '"',
+				['a' => "username=" . chr(0xbf) . "'"]
+			],
 		];
 	}
 
 	/**
 	 * @param $sql
 	 * @param $insert
+	 *
 	 * @dataProvider providerInsert
 	 */
 	public function testInsert($sql, $insert)
@@ -171,18 +230,53 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 				['sqlNow' => sqlNow()]
 			],
 			[
-				'INSERT INTO `TABLE` (`sqlNull`) VALUES (null)',
+				'INSERT INTO `TABLE` (`sqlNull`) VALUES (NULL)',
 				['sqlNull' => sqlNull()]
 			],
 			[
-				'INSERT INTO `TABLE` (`null_column`) VALUES (null)',
+				'INSERT INTO `TABLE` (`null_column`) VALUES (NULL)',
 				['null_column' => null]
 			],
 		];
 	}
 
 	/**
+	 * @param $sql
+	 * @param $keys
+	 * @param $values
+	 *
+	 * @dataProvider providerInsertBulk
+	 */
+	public function testInsertBulk($sql, $keys, $values)
+	{
+		$base = new BaseTestTarget;
+
+		$base->sqlDumpBegin();
+		$base->sqlInsertBulk('TABLE', $keys, $values);
+		$dump = $base->sqlDumpEnd();
+		$this->assertEquals($sql, $dump[0]);
+	}
+
+	public function providerInsertBulk()
+	{
+		return [
+			[
+				'INSERT INTO `TABLE` (`key`) VALUES  ( password("password") ), ( now() ), ( NULL ), ( NULL ), ( "123" )',
+				['key'],
+				[
+					[sqlPassword('password')],
+					[sqlNow()],
+					[sqlNull()],
+					[null],
+					['123']
+				]
+			],
+		];
+	}
+
+	/**
 	 * @param $insert
+	 *
 	 * @dataProvider providerInsertException
 	 */
 	public function testInsertException($insert)
@@ -216,6 +310,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param $sql
 	 * @param $insert
+	 *
 	 * @dataProvider providerUpsert
 	 */
 	public function testUpsert($sql, $insert)
@@ -240,18 +335,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 				['sqlNow' => sqlNow()]
 			],
 			[
-				'INSERT INTO `TABLE` (`sqlNull`) VALUES (null) ON DUPLICATE KEY UPDATE `sqlNull` = null',
+				'INSERT INTO `TABLE` (`sqlNull`) VALUES (NULL) ON DUPLICATE KEY UPDATE `sqlNull` = NULL',
 				['sqlNull' => sqlNull()]
 			],
 			[
-				'INSERT INTO `TABLE` (`null_column`) VALUES (null) ON DUPLICATE KEY UPDATE `null_column` = null',
+				'INSERT INTO `TABLE` (`null_column`) VALUES (NULL) ON DUPLICATE KEY UPDATE `null_column` = NULL',
 				['null_column' => null]
 			],
 		];
 	}
+
 	/**
 	 * @param $sql
 	 * @param $update
+	 *
 	 * @dataProvider providerUpdate
 	 */
 	public function testUpdate($sql, $update)
@@ -292,11 +389,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 				['sqlNow' => sqlNow()]
 			],
 			[
-				'`sqlNull` = null',
+				'`sqlNull` = NULL',
 				['sqlNull' => sqlNull()]
 			],
 			[
-				'`null_column` = null',
+				'`null_column` = NULL',
 				['null_column' => null]
 			],
 		];
@@ -305,6 +402,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param $sql
 	 * @param $join
+	 *
 	 * @dataProvider providerTable
 	 */
 	public function testTable($sql, $join)
@@ -320,6 +418,12 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 			[
 				'`sqlTable`',
 				sqlTable(sqlTable('sqlTable'))
+			],
+			[
+				'`db1`.`table_1` 
+	join `db2`.`table_2`
+		on `db1`.`table_1`.`id` = `db2`.`table_2`.`id`',
+				sqlTable(sqlJoin(['db1.table_1.id' => 'db2.table_2.id']))
 			],
 			[
 				'`table_1` 
@@ -361,6 +465,30 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 					]
 				)
 			],
+			[
+				'`db1`.`table_7` 
+	join `db1`.`table_8`
+		on `db1`.`table_7`.`id` = `db1`.`table_8`.`id` and `db1`.`table_8`.`other_id` = `db2`.`table_9`.`id` and `db1`.`table_8`.`other_id2` = `db2`.`table_9`.`id2` 
+	join `db2`.`table_9`
+		on `db2`.`table_10`.`id` = `db2`.`table_9`.`id2` and `db2`.`table_9`.`other_id2` = "must_value_2" 
+	join `db3`.`table_11`
+		on `db2`.`table_10`.`id` = `db3`.`table_11`.`id2` and `db2`.`table_10`.`other_id2` = "must_value_1"',
+				sqlJoin(
+					[
+						'db1.table_7.id' => [
+							'db1.table_8.id',
+							'db1.table_8.other_id' => sqlColumn('db2.table_9.id'),
+							'db1.table_8.other_id2' => sqlColumn('db2.table_9.id2'),
+						],
+						'db2.table_10.id' => [
+							'db2.table_9.id2',
+							'db3.table_11.id2',
+							'db2.table_10.other_id2' => 'must_value_1',
+							'db2.table_9.other_id2' => 'must_value_2',
+						]
+					]
+				)
+			],
 		];
 	}
 
@@ -368,6 +496,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	 * @param $result
 	 * @param $sql
 	 * @param $item
+	 *
 	 * @dataProvider providerEscapeItem
 	 */
 	public function testEscapeItem($result, $sql, $item)
@@ -416,6 +545,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param $sql
 	 * @param $item
+	 *
 	 * @dataProvider providerEscapeItemException
 	 * @expectedException InvalidArgumentException
 	 */
@@ -447,6 +577,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param $sql
 	 * @param $where
+	 *
 	 * @dataProvider providerException
 	 * @expectedException InvalidArgumentException
 	 */
@@ -479,6 +610,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param $update
 	 * @param $where
+	 *
 	 * @dataProvider providerUpdateException
 	 * @expectedException InvalidArgumentException
 	 */
