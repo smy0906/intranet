@@ -37,6 +37,7 @@ $descriptions = [
 ];
 
 $notices = [
+	'default' => '정기 미팅, 장기 미팅은 인사팀 철민님 통해 예약가능합니다.',
 	'focus' => ' - FOCUS ROOM은 업무 집중 및 개인 휴식 공간입니다',
 ];
 
