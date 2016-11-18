@@ -65,6 +65,11 @@ class ControlRouteMatch
 		return $this;
 	}
 
+	/**
+	 * @param $string
+	 *
+	 * @return ControlRouteMatch|ControlRouteNull
+	 */
 	public function isMethod($string)
 	{
 		if ($this->request->isMethod($string)) {
@@ -73,6 +78,12 @@ class ControlRouteMatch
 		return new ControlRouteNull;
 	}
 
+	/**
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return ControlRouteMatch|ControlRouteNull
+	 */
 	public function setRequest($key, $value)
 	{
 		$this->request->attributes->set($key, $value);

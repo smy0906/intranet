@@ -11,20 +11,21 @@ class SupportColumnTextDetail extends SupportColumn
 	/**
 	 * @var string
 	 */
-	public $parent_column_value;
+	public $parent_column_values;
+
 	/**
 	 * SupportColumnTextDetail constructor.
 	 *
-	 * @param string $string
-	 * @param string $parent_column
-	 * @param string $parent_column_value
-	 * @param string $placeholder
+	 * @param string   $string
+	 * @param string   $parent_column
+	 * @param string[] $parent_column_values
+	 * @param string   $placeholder
 	 */
-	public function __construct($string, $parent_column, $parent_column_value, $placeholder = '')
+	public function __construct($string, $parent_column, $parent_column_values, $placeholder = '')
 	{
 		parent::__construct($string);
 		parent::placeholder($placeholder);
 		$this->parent_column = $parent_column;
-		$this->parent_column_value = $parent_column_value;
+		$this->parent_column_values = $parent_column_values;
 	}
 }

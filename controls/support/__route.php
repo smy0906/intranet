@@ -42,3 +42,8 @@ $this->matchIf('{target}/file/{fileid}')
 	->assertAsInt('fileid')
 	->isMethod('delete')
 	->query('file_delete');
+
+
+$this->matchIf('{target}/download/{type}/{yearmonth}')
+	->assertInArray('type', ['year', 'yearmonth'])
+	->query('excel_download');

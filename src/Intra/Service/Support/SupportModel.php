@@ -179,4 +179,41 @@ class SupportModel extends BaseModel
 		];
 		return self::getDb()->sqlUpdate($table, $update, $where);
 	}
+
+	/**
+	 * @param           $columns
+	 * @param           $target
+	 * @param \DateTime $begin_datetime
+	 * @param \DateTime $end_datetime
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getDictsForExcel($columns, $target, $begin_datetime, $end_datetime)
+	{
+		$order_column = null;
+		foreach ($columns as $column) {
+			if ($column instanceof SupportColumnDate) {
+				if ($column->is_ordering_column) {
+					$order_column = $column->key;
+				}
+			}
+		}
+		if ($order_column == null) {
+			throw new \Exception('정렬 컬럼지정이 되어있지 않습니다.');
+		}
+
+		$table = 'support_' . $target;
+
+		$where = [
+			$order_column => sqlRange($begin_datetime->format('Y-m-d'), $end_datetime->format('Y-m-d')),
+			'is_deleted' => 0,
+		];
+		return self::getDb()->sqlDicts(
+			'select * from ? where ? order by ? asc',
+			sqlTable($table),
+			sqlWhere($where),
+			sqlColumn($order_column)
+		);
+	}
 }
