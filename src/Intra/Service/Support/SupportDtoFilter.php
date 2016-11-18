@@ -11,6 +11,7 @@ class SupportDtoFilter
 	 * @param SupportDto $support_dto
 	 *
 	 * @return SupportDto
+	 * @throws MsgException
 	 */
 	public static function filterAddingDto($support_dto)
 	{
@@ -22,13 +23,16 @@ class SupportDtoFilter
 				$flower_type_column = '화환';
 			} elseif (in_array($category, ['자녀출생', '졸업', '장기근속(3년)'])) {
 				$flower_type_column = '과일바구니';
-			} elseif (in_array($category, ['사망-부모 (배우자 부모 포함)', '사망-조부모 (배우자 조부모 포함)'])) {
+			} elseif (in_array($category, ['사망-형제자매 (배우자 형제자매포함)', '사망-부모 (배우자 부모 포함)', '사망-조부모 (배우자 조부모 포함)'])) {
 				$flower_type_column = '조화';
 			} else {
 				$flower_type_column = '기타';
 			}
 
 			if ($support_dto->dict[$columns['화환 종류']->key] == '미선택시 자동선택') {
+				if ($support_dto->dict[$columns['대상자']->key] == '외부') {
+					throw new MsgException('대상자가 외부일 경우, 화환 종류를 직접 선택해주세요.');
+				}
 				$support_dto->dict[$columns['화환 종류']->key] = $flower_type_column;
 			}
 
@@ -40,6 +44,13 @@ class SupportDtoFilter
 				$cash = '1000000';
 				$support_dto->dict[$columns['경조금']->key] = $cash;
 			}
+
+			$flower_datetime = trim($support_dto->dict[$columns['화환 도착일시']->key]);
+			$flower_datetime_parsed = date_create($flower_datetime . ':00');
+			if ($flower_datetime_parsed === false) {
+				throw new MsgException('화환 도착일시를 다시 확인해주세요');
+			}
+
 		} elseif ($support_dto->target == SupportPolicy::TYPE_BUSINESS_CARD) {
 			if ($support_dto->dict[$columns['제작(예정)일']->key] == '') {
 				$support_dto->dict[$columns['제작(예정)일']->key] = date("Y-m-t");

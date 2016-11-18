@@ -196,13 +196,14 @@
           this.SupportColumnTextDetail = function (column) {
             var key = column.key;
             var parent_column = column.parent_column;
-            var parent_column_value = column.parent_column_value;
+            var parent_column_values = column.parent_column_values;
             $('tr.add [name=' + parent_column + ']').on('change', (function () {
               var $this = $(this);
               var selected_val = $this.val();
               var is_visible;
-              is_visible = (selected_val == parent_column_value);
-              var target_object = $this.parentsUntil('table').find('input[name=' + key + ']');
+              var target_object;
+              is_visible = !($.inArray(selected_val, parent_column_values));
+              target_object = $this.parentsUntil('table').find('input[name=' + key + ']');
               target_object.attr('disabled', !is_visible).trigger("change")
             })).trigger('change');
           };
@@ -428,6 +429,26 @@
                 {% endfor %}
               </select>
             </label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            해당월 엑셀 다운로드
+          </td>
+          <td>
+            <a href='/support/{{ target }}/download/yearmonth/{{ yearmonth }}'>
+              <button>다운로드</button>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            해당년도 엑셀 다운로드
+          </td>
+          <td>
+            <a href='/support/{{ target }}/download/year/{{ yearmonth }}'>
+              <button>다운로드</button>
+            </a>
           </td>
         </tr>
       </table>

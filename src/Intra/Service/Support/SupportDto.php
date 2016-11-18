@@ -7,6 +7,7 @@ use Intra\Service\Support\Column\SupportColumn;
 use Intra\Service\Support\Column\SupportColumnAcceptUser;
 use Intra\Service\Support\Column\SupportColumnCategory;
 use Intra\Service\Support\Column\SupportColumnDate;
+use Intra\Service\Support\Column\SupportColumnDatetime;
 use Intra\Service\Support\Column\SupportColumnMoney;
 use Intra\Service\Support\Column\SupportColumnMutual;
 use Intra\Service\Support\Column\SupportColumnRegisterUser;
@@ -52,6 +53,7 @@ class SupportDto
 				|| $column instanceof SupportColumnMutual
 				|| $column instanceof SupportColumnTextDetail
 				|| $column instanceof SupportColumnMoney
+				|| $column instanceof SupportColumnDatetime
 			) {
 				$key = $column->key;
 				$value = $request->get($key);
