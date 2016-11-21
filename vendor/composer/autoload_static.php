@@ -38,6 +38,10 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
         ),
+        'G' => 
+        array (
+            'Gnf\\NamespaceRouter\\' => 20,
+        ),
         'D' => 
         array (
             'Doctrine\\Common\\Cache\\' => 22,
@@ -106,6 +110,10 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         'Illuminate\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
+        ),
+        'Gnf\\NamespaceRouter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gnf/namespace-router/src',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (
