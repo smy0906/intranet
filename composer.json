@@ -8,7 +8,8 @@
     "raven/raven": "0.12.0",
     "illuminate/database": "^5.1",
     "illuminate/pagination": "^5.1",
-    "silex/silex": "~2.0"
+    "silex/silex": "~2.0",
+    "gnf/namespace-router": "0.1"
   },
   "config": {
     "preferred-install": "dist"
