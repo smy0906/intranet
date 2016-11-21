@@ -2,6 +2,9 @@
 namespace Intra\Service\User;
 
 use Intra\Config\Config;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserPolicy
 {
@@ -79,5 +82,28 @@ class UserPolicy
 		}
 
 		return false;
+	}
+
+	public static function assertRestrictedPath(Request $request)
+	{
+		$free_to_login_path = [
+			'/usersession/login',
+			'/usersession/login.azure',
+			'/users/join',
+			'/programs/insert',
+			'/programs/list',
+			'/api/ridibooks_ids',
+			'/press/list'
+		];
+
+		$is_free_to_login = in_array($request->getPathInfo(), $free_to_login_path);
+		if (!$is_free_to_login && !UserSession::isLogined()) {
+			if ($request->isXmlHttpRequest()) {
+				return new Response('login error');
+			} else {
+				return new RedirectResponse('/usersession/login');
+			}
+		}
+		return null;
 	}
 }
