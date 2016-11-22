@@ -113,9 +113,17 @@ class Rooms implements ControllerProviderInterface
 		$desc = $request->get('desc');
 		$from = $request->get('from');
 		$to = $request->get('to');
+		$user = UserSession::getSelfDto();
+		$uid = $user->uid;
 
 		$db = IntraDb::getGnfDb();
-		$dat = compact('room_id', 'desc', 'from', 'to', 'uid');
+		$dat = [
+			'room_id' => $room_id,
+			'desc' => $desc,
+			'from' => $from,
+			'to' => $to,
+			'uid' => $uid
+		];
 
 		$db->sqlInsert('room_events', $dat);
 		return $db->insert_id();
@@ -130,9 +138,9 @@ class Rooms implements ControllerProviderInterface
 
 		$update = ['deleted' => 1];
 		if ($user->is_admin) {
-			$where = compact('id');
+			$where = ['id' => $id];
 		} else {
-			$where = compact('id', 'uid');
+			$where = ['id' => $id, 'uid' => $uid];
 		}
 
 		return $db->sqlUpdate('room_events', $update, $where);
@@ -150,11 +158,11 @@ class Rooms implements ControllerProviderInterface
 		$uid = $user->uid;
 
 		if ($user->is_admin) {
-			$where = compact('id');
+			$where = ['id' => $id];
 		} else {
-			$where = compact('id', 'uid');
+			$where = ['id' => $id, 'uid' => $uid];
 		}
-		$update = compact('desc', 'from', 'to', 'room_id');
+		$update = ['desc' => $desc, 'from' => $from, 'to' => $to, 'room_id' => $room_id];
 		if ($db->sqlUpdate('room_events', $update, $where)) {
 			return 1;
 		}
