@@ -7,7 +7,7 @@ class SupportColumnMutual extends SupportColumn
 	public $groups;
 
 	/**
-	 * SupportColumnMutual constructor.
+	 * initSupportColumnMutual constructor.
 	 *
 	 * @param $column
 	 * @param $groups

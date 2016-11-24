@@ -10,6 +10,8 @@ class SupportColumn
 	public $class_name;
 
 	public $readonly = false;
+	public $required = false;
+	public $textInputType = 'text';
 	public $placeholder = '';
 	public $default = '';
 	private $isVisibleCallbacks;
@@ -56,5 +58,17 @@ class SupportColumn
 			}
 		}
 		return false;
+	}
+
+	public function isRequired()
+	{
+		$this->required = true;
+		return $this;
+	}
+
+	public function setTextInputType($type)
+	{
+		$this->textInputType = $type;
+		return $this;
 	}
 }

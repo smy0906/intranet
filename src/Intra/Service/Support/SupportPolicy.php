@@ -32,6 +32,14 @@ class SupportPolicy
 	const TYPE_DEPOT = 'depot';
 	const TYPE_GIFT_CARD = 'gift_card';
 
+	const DB_TABLE = [
+		self::TYPE_DEVICE => 'device',
+		self::TYPE_FAMILY_EVENT => 'familyEvent',
+		self::TYPE_BUSINESS_CARD => 'businessCard',
+		self::TYPE_DEPOT => 'depot',
+		self::TYPE_GIFT_CARD => 'giftCard',
+	];
+
 	/**
 	 * @var $column_fields SupportColumn[][]
 	 */
@@ -147,12 +155,12 @@ class SupportPolicy
 				'분류 상세' => (new SupportColumnText('category_detail'))->placeholder('나리디님 결혼'),
 				'경조금' => (new SupportColumnMoney('cash'))->placeholder('미입력시 자동입력')->isVisibleIf($callback_is_human_manage_team),
 				'경조일자' => new SupportColumnDate('request_date', date('Y/m/d'), true),
-				'화환 종류' => new SupportColumnCategory('flower_category', ['미선택시 자동선택', '화환', '과일바구니', '조화', '기타']),
+				'화환 종류' => new SupportColumnCategory('flower_category', ['자동선택', '화환', '과일바구니', '조화', '기타']),
 				'화환 상세' => new SupportColumnTextDetail('flower_category_detail', 'flower_category', ['기타', '화환']),
 				'화환 수령자' => new SupportColumnText('flower_receiver', '', '홍길동'),
 				'화환 연락처' => new SupportColumnText('flower_call', '', '010-1234-5678'),
-				'화환 주소' => new SupportColumnText('flower_address'),
-				'화환 도착일시' => (new SupportColumnDatetime('flower_datetime'))->placeholder('2016-01-02 07:10'),
+				'화환 주소' => (new SupportColumnText('flower_address'))->isRequired(),
+				'화환 도착일시' => (new SupportColumnDatetime('flower_datetime'))->placeholder('2016-01-02 07:10')->setTextInputType('datetime-local'),
 				'비고' => new SupportColumnText('note', '', '비고'),
 			],
 			self::TYPE_BUSINESS_CARD => [
@@ -180,13 +188,13 @@ class SupportPolicy
 				'부서명(기타)' => new SupportColumnText('team_detail', '', '외부노출용 직함'),
 				'직급(한글)' => new SupportColumnText('grade_korean'),
 				'직급(영문)' => new SupportColumnText('grade_english'),
-				'PHONE(내선)' => new SupportColumnText('call_interal'),
 				'MOBILE' => new SupportColumnText('call_extenal'),
-				'E-MAIL' => new SupportColumnText('email'),
+				'E-MAIL' => (new SupportColumnText('email'))->setTextInputType('email'),
+				'PHONE(내선)' => new SupportColumnText('call_interal'),
 				'FAX' => new SupportColumnText('fax', '02-565-0332'),
 				'주소' => new SupportColumnCategory('address', ['어반벤치빌딩 10층', '어반벤치빌딩 11층']),
 				'수량' => new SupportColumnCategory('count', [50, 100, 150, 200, '기타 - 50매 단위']),
-				'수량(기타)' => new SupportColumnTextDetail('count_detail', 'count', ['기타 - 50매 단위']),
+				'수량(기타)' => (new SupportColumnTextDetail('count_detail', 'count', ['기타 - 50매 단위']))->setTextInputType('number'),
 				'제작(예정)일' => (new SupportColumnDate('date', '', true))->placeholder('미입력시 월말진행'),
 			],
 			self::TYPE_DEPOT => [
@@ -222,7 +230,7 @@ class SupportPolicy
 					'기기 (테블릿, 와콤 등)'
 				]),
 				'상세내역' => new SupportColumnText('detail'),
-				'세팅(예정)일' => new SupportColumnDate('request_date', date('Y/m/d', strtotime('+7 day')), true),
+				'세팅(예정)일' => (new SupportColumnDate('request_date', date('Y/m/d', strtotime('+7 day')), true))->setTextInputType('date'),
 				'비고' => new SupportColumnText('note', '', '구매 사이트 링크 / 비고'),
 				'보유여부' => (new SupportColumnCategory('is_exist', ['재고', '신규구매']))->isVisibleIf($callback_is_human_manage_team),
 				'라벨번호' => (new SupportColumnText('label'))->isVisibleIf($callback_is_human_manage_team),
