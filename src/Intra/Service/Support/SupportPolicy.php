@@ -26,18 +26,18 @@ use Intra\Service\User\UserDto;
 
 class SupportPolicy
 {
-	const TYPE_DEVICE = 'device';
-	const TYPE_FAMILY_EVENT = 'family_event';
-	const TYPE_BUSINESS_CARD = 'business_card';
-	const TYPE_DEPOT = 'depot';
-	const TYPE_GIFT_CARD = 'gift_card';
+	const TYPE_DEVICE = 'Device';
+	const TYPE_FAMILY_EVENT = 'FamilyEvent';
+	const TYPE_BUSINESS_CARD = 'BusinessCard';
+	const TYPE_DEPOT = 'Depot';
+	const TYPE_GIFT_CARD = 'GiftCard';
 
 	const DB_TABLE = [
 		self::TYPE_DEVICE => 'device',
-		self::TYPE_FAMILY_EVENT => 'familyEvent',
-		self::TYPE_BUSINESS_CARD => 'businessCard',
+		self::TYPE_FAMILY_EVENT => 'family_event',
+		self::TYPE_BUSINESS_CARD => 'business_card',
 		self::TYPE_DEPOT => 'depot',
-		self::TYPE_GIFT_CARD => 'giftCard',
+		self::TYPE_GIFT_CARD => 'gift_card',
 	];
 
 	/**
