@@ -189,13 +189,15 @@ class Support implements ControllerProviderInterface
 		foreach ($columns as $column_name => $column) {
 			$csv_header[] = $column_name;
 		}
+		$csv_header = $this->excelPostworkHeader($csv_header, $target);
 		$csvs[] = $csv_header;
 
 		foreach ($support_view_dtos as $support_view_dto) {
 			$csv_row = [];
 			foreach ($columns as $column_name => $column) {
-				$csv_row[] = $support_view_dto->display_dict[$column->key];
+				$csv_row[$column_name] = $support_view_dto->display_dict[$column->key];
 			}
+			$csv_row = $this->excelPostworkBody($csv_row, $target);
 			$csvs[] = $csv_row;
 		}
 
@@ -252,5 +254,53 @@ class Support implements ControllerProviderInterface
 		} else {
 			return JsonResponse::create('file upload failed', 500);
 		}
+	}
+
+	private function excelPostworkHeader($csv_header, $target)
+	{
+		if ($target == SupportPolicy::TYPE_BUSINESS_CARD) {
+			$csv_header = array_merge($csv_header, [
+				'이름 - 출력용 시작',
+				'영문명',
+				'부서명',
+				'직급(한글)',
+				'직급(영문)',
+				'MOBILE',
+				'E-MAIL',
+				'PHONE(내선)',
+				'FAX',
+				'주소',
+				'수량',
+				'제작예정일'
+			]);
+		}
+		return $csv_header;
+	}
+
+	private function excelPostworkBody($csv_row, $target)
+	{
+		if ($target == SupportPolicy::TYPE_BUSINESS_CARD) {
+			if ($csv_row['대상자'] == '직원') {
+				$csv_row[] = $csv_row['대상자(직원)'];
+			} else {
+				$csv_row[] = $csv_row['대상자(현재 미입사)'];
+			}
+			$csv_row[] = $csv_row['영문명'];
+			if ($csv_row['부서명'] == '기타') {
+				$csv_row[] = $csv_row['부서명(기타)'];
+			} else {
+				$csv_row[] = $csv_row['부서명'];
+			}
+			$csv_row[] = $csv_row['직급(한글)'];
+			$csv_row[] = $csv_row['직급(영문)'];
+			$csv_row[] = $csv_row['MOBILE'];
+			$csv_row[] = $csv_row['E-MAIL'];
+			$csv_row[] = $csv_row['PHONE(내선)'];
+			$csv_row[] = $csv_row['FAX'];
+			$csv_row[] = $csv_row['주소'];
+			$csv_row[] = $csv_row['수량'];
+			$csv_row[] = $csv_row['제작(예정)일'];
+		}
+		return $csv_row;
 	}
 }
