@@ -18,11 +18,7 @@ class SupportModel extends BaseModel
 	 */
 	public static function add($support_dto)
 	{
-		$target = SupportPolicy::DB_TABLE[$support_dto->target];
-		if (!$target) {
-			throw new \Exception('invalid taget mapping  from ' . $support_dto->target);
-		}
-		$table = 'support_' . $target;
+		$table = self::getTableName($support_dto->target);
 		$dict = $support_dto->exportDictAddRequest();
 		self::getDb()->sqlInsert($table, $dict);
 		return self::getDb()->insert_id();
@@ -51,7 +47,7 @@ class SupportModel extends BaseModel
 			throw new \Exception('정렬 컬럼지정이 되어있지 않습니다.');
 		}
 
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 		$next_date = date('Y-m-1', strtotime('+1 month', strtotime($date)));
 
 		$where = [
@@ -88,7 +84,7 @@ class SupportModel extends BaseModel
 			throw new \Exception('승인가능한 컬럼지정이 되어있지 않습니다.');
 		}
 
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 
 		$where = [
 			'is_deleted' => 0,
@@ -128,7 +124,7 @@ class SupportModel extends BaseModel
 			throw new \Exception('승인가능한 컬럼지정이 되어있지 않습니다.');
 		}
 
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 
 		$where = [
 			'is_deleted' => 0,
@@ -149,7 +145,7 @@ class SupportModel extends BaseModel
 
 	public static function getDict($target, $id)
 	{
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 
 		$where = [
 			'id' => $id,
@@ -164,7 +160,7 @@ class SupportModel extends BaseModel
 
 	public static function edit($target, $id, $key, $value)
 	{
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 		$update = [$key => $value];
 		$where = [
 			'id' => $id,
@@ -175,7 +171,7 @@ class SupportModel extends BaseModel
 
 	public static function del($target, $id)
 	{
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 		$update = [
 			'is_deleted' => 1,
 		];
@@ -209,7 +205,7 @@ class SupportModel extends BaseModel
 			throw new \Exception('정렬 컬럼지정이 되어있지 않습니다.');
 		}
 
-		$table = 'support_' . $target;
+		$table = self::getTableName($target);
 
 		$where = [
 			$order_column => sqlRange($begin_datetime->format('Y-m-d'), $end_datetime->format('Y-m-d')),
@@ -221,5 +217,22 @@ class SupportModel extends BaseModel
 			sqlWhere($where),
 			sqlColumn($order_column)
 		);
+	}
+
+	/**
+	 * @param $target
+	 *
+	 * @return string
+	 * @throws \Exception
+	 *
+	 */
+	private static function getTableName($target):string
+	{
+		$target = SupportPolicy::DB_TABLE[$target];
+		if (!$target) {
+			throw new \Exception('invalid taget mapping  from ' . $target);
+		}
+		$table = 'support_' . $target;
+		return $table;
 	}
 }
