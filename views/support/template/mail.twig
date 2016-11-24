@@ -18,7 +18,7 @@ dto : $support_view_dto
           <span data-editable='{{ key }}' data-keyselect>{{ display_dict[key] }}</span>
         {% elseif column.class_name == 'SupportColumnText' %}
           <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
-        {% elseif column.class_name == 'SupportColumnTextDetail' %}
+        {% elseif column.class_name == 'initSupportColumnTextDetail' %}
           <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>
         {% elseif column.class_name == 'SupportColumnDate' %}
           <span data-editable='{{ key }}'>{{ display_dict[key] }}</span>

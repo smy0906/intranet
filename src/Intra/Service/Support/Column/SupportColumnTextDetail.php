@@ -14,7 +14,7 @@ class SupportColumnTextDetail extends SupportColumn
 	public $parent_column_values;
 
 	/**
-	 * SupportColumnTextDetail constructor.
+	 * initSupportColumnTextDetail constructor.
 	 *
 	 * @param string   $string
 	 * @param string   $parent_column

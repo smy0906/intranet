@@ -12,10 +12,16 @@ class SupportModel extends BaseModel
 {
 	/**
 	 * @param SupportDto $support_dto
+	 *
+	 * @return
+	 * @throws \Exception
 	 */
 	public static function add($support_dto)
 	{
-		$target = $support_dto->target;
+		$target = SupportPolicy::DB_TABLE[$support_dto->target];
+		if (!$target) {
+			throw new \Exception('invalid taget mapping  from ' . $support_dto->target);
+		}
 		$table = 'support_' . $target;
 		$dict = $support_dto->exportDictAddRequest();
 		self::getDb()->sqlInsert($table, $dict);

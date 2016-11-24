@@ -7,6 +7,7 @@ use Intra\Service\Auth\ExceptTaAuth;
 use Intra\Service\Auth\OnlyPressManager;
 use Intra\Service\Auth\OnlyUserManager;
 use Intra\Service\Auth\PublicAuth;
+use Intra\Service\Support\SupportPolicy;
 use Intra\Service\User\UserSession;
 use Silex\Application;
 use Twig_Environment;
@@ -38,11 +39,11 @@ class MenuService
 					new Link('포커스룸', '/Rooms?type=focus'),
 					new Link('휴가신청', '/holidays', new PublicAuth),
 					'지원요청(테스트 중)' => [
-						new Link('기기 설치/장애 문의', '/support/device'),
-						new Link('경조 지원', '/support/family_event'),
-						new Link('명함 신청', '/support/business_card'),
-						new Link('구매 요청', '/support/depot'),
-						new Link('상품권 제작', '/support/gift_card'),
+						new Link('기기 설치/장애 문의', '/Support/' . SupportPolicy::TYPE_DEVICE),
+						new Link('경조 지원', '/Support/' . SupportPolicy::TYPE_FAMILY_EVENT),
+						new Link('명함 신청', '/Support/' . SupportPolicy::TYPE_BUSINESS_CARD),
+						new Link('구매 요청', '/Support/' . SupportPolicy::TYPE_DEPOT),
+						new Link('상품권 제작', '/Support/' . SupportPolicy::TYPE_GIFT_CARD),
 					],
 					new Link('결제요청', '/payments', (new ExceptTaAuth)->accept(['hr.ta'])),
 					new Link('비용정산', '/receipts', new PublicAuth),
