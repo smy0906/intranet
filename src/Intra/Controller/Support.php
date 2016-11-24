@@ -298,7 +298,11 @@ class Support implements ControllerProviderInterface
 			$csv_row[] = $csv_row['PHONE(내선)'];
 			$csv_row[] = $csv_row['FAX'];
 			$csv_row[] = $csv_row['주소'];
-			$csv_row[] = $csv_row['수량'];
+			if ($csv_row['수량'] == '기타 - 50매 단위') {
+				$csv_row[] = $csv_row['수량(기타)'];
+			} else {
+				$csv_row[] = $csv_row['수량'];
+			}
 			$csv_row[] = $csv_row['제작(예정)일'];
 		}
 		return $csv_row;
