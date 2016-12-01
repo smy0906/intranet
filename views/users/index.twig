@@ -1,101 +1,178 @@
 {% extends 'ridi.twig' %}
 
 {% block head %}
-  {{ parent() }}
-  <style>
-    .js_user {
-      position: absolute;
-      width: 60px;
-      /*height: 100px;*/
-      text-align: center;
-      border: 1px solid #1f8ee6;
-      border-bottom: 3px solid #1f8ee6;
-      padding: 10px;
-    }
-
-    .js_user_popup {
-      margin: 10px;
-      padding: 5px;
-      background-color: white;
-      border: 1px dotted #aaa;
-      position: absolute;
-      display: none;
-      z-index: 100;
-    }
-  </style>
-
-  <script>
-    require(["jquery", "jquery-ui"], function ($) {
-      if (location.search == '?after_login' && window.innerWidth < 980) {
-        location.href = '/Rooms';
-      }
-      $(document).on('mouseover', '.js_user', function (e) {
-        var id = $(this).data('userid');
-        $('.js_user_popup[data-userid=' + id + ']').show(0);
-        e.stopPropagation();
-        return false;
-      });
-      $(document).on('mouseout', '.js_user', function (e) {
-        var id = $(this).data('userid');
-        $('.js_user_popup[data-userid=' + id + ']').hide(0);
-        e.stopPropagation();
-        return false;
-      });
-      $(document).on('mousemove', '.js_user', function (e) {
-        var id = $(this).data('userid');
-        var bodyPos = $('#user_map').position();
-        $('.js_user_popup[data-userid=' + id + ']')
-          .css('left', (e.pageX - bodyPos.left) + 'px')
-          .css('top', (e.pageY - bodyPos.top) + 'px');
-        e.stopPropagation();
-        return false;
-      });
-
-      {% if replaceable %}
-      $('.js_user').draggable({
-        snap: true, containment: '#user_map', stop: function (e, ui) {
-          var id = $(this).data('userid');
-          var x = parseInt(ui.position.left);
-          var y = parseInt(ui.position.top);
-          $.post('/users/' + id + '/updateExtra/posX/' + x);
-          $.post('/users/' + id + '/updateExtra/posY/' + y);
+    {{ parent() }}
+    <style>
+        .js_user {
+            position: absolute;
+            /*width: 60px;*/
+            /*height: 100px;*/
+            text-align: center;
+            border: 1px solid #1f8ee6;
+            border-bottom: 3px solid #1f8ee6;
+            padding: 10px;
         }
-      });
-      {% endif %}
-    });
-  </script>
+
+        .js_user_popup {
+            margin: 10px;
+            padding: 5px;
+            background-color: white;
+            border: 1px dotted #aaa;
+            position: absolute;
+            display: none;
+            z-index: 100;
+        }
+    </style>
+
+    <script>
+        require(["jquery", "jquery-ui"], function ($) {
+            if (location.search == '?after_login' && window.innerWidth < 980) {
+                location.href = '/Rooms';
+            }
+            $(document).on('mouseover', '.js_user', function (e) {
+                var id = $(this).data('userid');
+                $('.js_user_popup[data-userid=' + id + ']').show(0);
+                e.stopPropagation();
+                return false;
+            });
+            $(document).on('mouseout', '.js_user', function (e) {
+                var id = $(this).data('userid');
+                $('.js_user_popup[data-userid=' + id + ']').hide(0);
+                e.stopPropagation();
+                return false;
+            });
+            $(document).on('mousemove', '.js_user', function (e) {
+                var id = $(this).data('userid');
+                var bodyPos = $('#user_map').position();
+                $('.js_user_popup[data-userid=' + id + ']')
+                    .css('left', (e.pageX - bodyPos.left) + $('#user_map').scrollLeft() + 'px')
+                    .css('top', (e.pageY - bodyPos.top + $('#user_map').scrollTop()) + 'px');
+                return true;
+
+                //resizable 이벤트를 막아서 제거
+                //e.stopPropagation();
+                //return false;
+            });
+
+            {% if replaceable %}
+            $('.js_user').draggable({
+                snap: true,
+                containment: '#user_map',
+                stop: function (e, ui) {
+                    var id = $(this).data('userid');
+                    var x = parseInt(ui.position.left);
+                    var y = parseInt(ui.position.top);
+                    $.post('/users/' + id + '/updateExtra/posX/' + x);
+                    $.post('/users/' + id + '/updateExtra/posY/' + y);
+                }
+            });
+            $('.js_user').resizable({
+                grid: 10,
+                maxHeight: 240,
+                maxWidth: 240,
+                minHeight: 20,
+                minWidth: 40,
+                stop: function (e, ui) {
+                    var id = $(this).data('userid');
+                    var w = parseInt(ui.size.width);
+                    var h = parseInt(ui.size.height);
+                    $.post('/users/' + id + '/updateExtra/width/' + w);
+                    $.post('/users/' + id + '/updateExtra/height/' + h);
+                }
+            });
+            {% endif %}
+        });
+    </script>
 
 {% endblock %}
 
-{% block body_head %}
-  {% if globalDomain == "ridi.com" %}
-    {% for user in users %}
-      <div class='js_user_popup' data-userid='{{ user.uid }}'>
-        <div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>
-        {% if user.outer_call %}
-          <div><strong>외선</strong> {{ user.outer_call }}</div>
-        {% endif %}
-        {% if user.inner_call %}
-          <div><strong>내선</strong> {{ user.inner_call }}</div>
-        {% endif %}
-        <div><strong>긴급</strong> {{ user.mobile }}</div>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endblock %}
+{#{% block body_head %}#}
+  {#{% if globalDomain == "ridi.com" %}#}
+    {#{% for user in users %}#}
+      {#<div class='js_user_popup' data-userid='{{ user.uid }}'>#}
+        {#<div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>#}
+        {#{% if user.outer_call %}#}
+          {#<div><strong>외선</strong> {{ user.outer_call }}</div>#}
+        {#{% endif %}#}
+        {#{% if user.inner_call %}#}
+          {#<div><strong>내선</strong> {{ user.inner_call }}</div>#}
+        {#{% endif %}#}
+        {#<div><strong>긴급</strong> {{ user.mobile }}</div>#}
+      {#</div>#}
+    {#{% endfor %}#}
+  {#{% endif %}#}
+{#{% endblock %}#}
 
 {% block body %}
-  {% if globalDomain == "ridi.com" %}
-    <div style="position: absolute;top:50px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
-      {% for user in users %}
-        <div class='js_user'
-             style='padding:0;left:{{ user.extra.posX }}px;top:{{ user.extra.posY }}px'
-             data-userid='{{ user.uid }}'>
-          <div style='padding:0;margin:0;height:100px;overflow:hidden;'>
-            <div>{{ user.name }}</div>
-          </div>
+    {% if globalDomain == "ridi.com" %}
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#floor10">10층</a></li>
+            <li><a data-toggle="tab" href="#floor11">11층</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div style="position: absolute;top:140px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
+
+                <div id="floor10" class="tab-pane fade in active">
+                    {% for user in users %}
+                        {% if user.extra.area is null or user.extra.area == 'floor10' %}
+
+                            <div class='js_user_popup' data-userid='{{ user.uid }}'>
+                                <div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>
+                                {% if user.outer_call %}
+                                    <div><strong>외선</strong> {{ user.outer_call }}</div>
+                                {% endif %}
+                                {% if user.inner_call %}
+                                    <div><strong>내선</strong> {{ user.inner_call }}</div>
+                                {% endif %}
+                                <div><strong>긴급</strong> {{ user.mobile }}</div>
+                            </div>
+
+                            <div class='js_user'
+                                 style='padding:0;left:{{ user.extra.posX }}px;top:{{ user.extra.posY }}px;
+                                         width: {% if user.extra.width %} {{ user.extra.width }}px; {% else %}  60px; {% endif %}
+                                         height:{% if user.extra.height %} {{ user.extra.height }}px; {% else %} 100px; {% endif %}'
+                                 data-userid='{{ user.uid }}'>
+                                {#아래 div때문에 실제 보이는 영역과 다르게 팝업 on/off가 적용되고 있어서 제거함#}
+                                {#<div style='padding:0;margin:0;height:100px;overflow:hidden;'>#}
+                                <div>{{ user.name }}</div>
+                                {#</div>#}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div id="floor11" class="tab-pane fade">
+                    {% for user in users %}
+                        {% if user.extra.area == 'floor11' %}
+
+                            <div class='js_user_popup' data-userid='{{ user.uid }}'>
+                                <div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>
+                                {% if user.outer_call %}
+                                    <div><strong>외선</strong> {{ user.outer_call }}</div>
+                                {% endif %}
+                                {% if user.inner_call %}
+                                    <div><strong>내선</strong> {{ user.inner_call }}</div>
+                                {% endif %}
+                                <div><strong>긴급</strong> {{ user.mobile }}</div>
+                            </div>
+
+                            <div class='js_user'
+                                 style='padding:0;left:{{ user.extra.posX }}px;top:{{ user.extra.posY }}px;
+                                         width: {% if user.extra.width %} {{ user.extra.width }}px; {% else %}  60px; {% endif %}
+                                         height:{% if user.extra.height %} {{ user.extra.height }}px; {% else %} 100px; {% endif %}'
+                                 data-userid='{{ user.uid }}'>
+                                {#아래 div때문에 실제 보이는 영역과 다르게 팝업 on/off가 적용되고 있어서 제거함#}
+                                {#<div style='padding:0;margin:0;height:100px;overflow:hidden;'>#}
+                                <div>{{ user.name }}</div>
+                                {#</div>#}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+
         </div>
-      {% endfor %}
-    </div>
-  {% endif %}
+    {% endif %}
 {% endblock %}
