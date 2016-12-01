@@ -16,16 +16,16 @@
             }
 
             $(".btn.edit").click(function(e) {
-                var key = $(this).parent().parent().attr("id");
+                var key = $(this).attr("data-key");
                 setEditMode(true, key);
             });
 
             $(".btn.save").click(function(e) {
                 var self = $(this);
-                var cancelBtn = $(self.siblings("button.cancel_btn")[0]);
+                var cancelBtn = $(self.siblings("button.cancel")[0]);
 
-                var key = self.parent().parent().attr("id");
-                var value = $(self.siblings(".content")[0]).val();
+                var key = self.attr("data-key");
+                var value = $("#"+key+" .content").val();
 
                 $.ajax({
                     url:"/users/edit",
@@ -46,7 +46,7 @@
             });
 
             $(".btn.cancel").click(function(e) {
-                var key = $(this).parent().parent().attr("id");
+                var key = $(this).attr("data-key");
                 setEditMode(false, key);
             });
 
@@ -57,7 +57,7 @@
     <div class="container">
         <div class="myinfo">
             <header class="page-header">
-                <h1 class="page-title">{{list.name[1]}}</h1>
+                <h1 class="page-title">{{title}}</h1>
                 <!--<small> <i class="fa fa-clock-o"></i> Last Updated on: <time>Sunday, October 05, 2014</time></small>-->
             </header>
             <div class="row">
@@ -69,8 +69,8 @@
                                     <div class="col-xs-12 col-sm-4">
                                         <figure>
                                             <img class="img-circle img-responsive"
-                                            {% if image %}
-                                                src={{ image }}
+                                            {% if info.image %}
+                                                src={{ info.image }}
                                             {% else %}
                                                 src="http://placehold.it/300x300">
                                             {% endif %}
@@ -80,19 +80,23 @@
                                     <div class="col-xs-12 col-sm-8">
                                         <dl class="dl-horizontal">
 
-                                            {% for key,value in list %}
+                                            {% for key,value in info.body %}
                                             <dt>
                                                 <h5 class="input_title">{{ value[0] }}</h5>
                                             </dt>
                                             <dd id="{{ key }}" class="list-group-item">
                                                 <div class="normal">
                                                     <span>{{ value[1] }}</span>
-                                                    <button class="btn btn-xs pull-right edit">편집</button>
+                                                    <div class="pull-right">
+                                                        <button class="btn btn-xs edit" data-key="{{ key }}">편집</button>
+                                                    </div>
                                                 </div>
                                                 <div class="edit" style="display: none;">
                                                     <input class="content" type="text" value="{{ value[1] }}">
-                                                    <button class="btn btn-xs pull-right save">저장</button>
-                                                    <button class="btn btn-xs pull-right cancel">취소</button>
+                                                    <div class="pull-right">
+                                                        <button class="btn btn-xs save" data-key="{{ key }}">저장</button>
+                                                        <button class="btn btn-xs cancel" data-key="{{ key }}">취소</button>
+                                                    </div>
                                                 </div>
                                             </dd>
 
@@ -107,20 +111,17 @@
                             <h4>소개</h4>
                             <div id="comment" class="list-group-item">
                                 <div class="normal">
-                                    <span>{{ comment }}</span>
-                                    <button class="btn btn-xs pull-right edit">편집</button>
+                                    <span>{{ info.comment }}</span>
+                                    <button class="btn btn-xs pull-right edit" data-key="{{ key }}">편집</button>
                                 </div>
                                 <div class="edit" style="display: none;">
                                     <textarea rows="5" cols="100" class="content" type="text">{{ comment }}</textarea>
-                                    <button class="btn btn-xs pull-right save">저장</button>
-                                    <button class="btn btn-xs pull-right cancel">취소</button>
+                                    <div class="pull-right">
+                                        <button class="btn btn-xs pull-right save" data-key="{{ key }}">저장</button>
+                                        <button class="btn btn-xs pull-right cancel" data-key="{{ key }}">취소</button>
+                                    </div>
                                 </div>
                             </div>
-                            <!--
-                            <p>
-                                {{ comment }}
-                            </p>
-                            -->
                         </div>
                     </div>
 
