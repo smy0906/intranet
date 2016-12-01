@@ -12,8 +12,6 @@ $dto = UserSession::getSelfDto();
 
 return [
 	'uid' => $dto->uid,
-	'image' => $dto->image,
-	'comment' => $dto->comment,
 	'list' => [
 		'id' => ['아이디', $dto->id],
 		'name' => ['이름', $dto->name],
@@ -21,5 +19,7 @@ return [
 		'birth' => ['생년월일', $dto->birth],
 		'mobile' => ['전화번호', $dto->mobile],
 		'email' => ['이메일', $dto->email],
-	]
+	],
+	'image' => $dto->image,
+	'comment' => $dto->comment,
 ];
