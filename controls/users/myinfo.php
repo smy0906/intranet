@@ -15,7 +15,7 @@ return [
 	'title' => $dto->name,
 	'info' => [
 		'body' => [
-			//'db key value' => ['name', 'value', 'editable or not']
+			//'db key' => ['name', 'value', 'isEditable']
 			'id' => ['아이디', $dto->id, false],
 			'name' => ['이름', $dto->name, false],
 			'team' => ['팀', $dto->team, false],
