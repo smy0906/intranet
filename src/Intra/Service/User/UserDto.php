@@ -27,6 +27,7 @@ class UserDto extends BaseDto
 	 * @var []
 	 */
 	public $extra;
+	public $comment;
 
 	public static function importFromDatabase(array $user_row)
 	{
