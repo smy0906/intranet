@@ -12,14 +12,18 @@ $dto = UserSession::getSelfDto();
 
 return [
 	'uid' => $dto->uid,
-	'list' => [
-		'id' => ['아이디', $dto->id],
-		'name' => ['이름', $dto->name],
-		'team' => ['팀', $dto->team],
-		'birth' => ['생년월일', $dto->birth],
-		'mobile' => ['전화번호', $dto->mobile],
-		'email' => ['이메일', $dto->email],
-	],
-	'image' => $dto->image,
-	'comment' => $dto->comment,
+	'title' => $dto->name,
+	'info' => [
+		'body' => [
+			//'db key value' => ['name', 'value', 'editable or not']
+			'id' => ['아이디', $dto->id, false],
+			'name' => ['이름', $dto->name, false],
+			'team' => ['팀', $dto->team, false],
+			'birth' => ['생년월일', $dto->birth, true],
+			'mobile' => ['전화번호', $dto->mobile, true],
+			'email' => ['이메일', $dto->email, false],
+		],
+		'image' => $dto->image,
+		'comment' => $dto->comment,
+	]
 ];
