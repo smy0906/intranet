@@ -43,10 +43,9 @@
             });
             $(document).on('mousemove', '.js_user', function (e) {
                 var id = $(this).data('userid');
-                var bodyPos = $('#user_map').position();
                 $('.js_user_popup[data-userid=' + id + ']')
-                    .css('left', (e.pageX - bodyPos.left) + $('#user_map').scrollLeft() + 'px')
-                    .css('top', (e.pageY - bodyPos.top + $('#user_map').scrollTop()) + 'px');
+                    .css('left', e.pageX + 'px')
+                    .css('top', (e.pageY-240) + 'px');
                 return true;
 
                 //resizable 이벤트를 막아서 제거
@@ -111,7 +110,7 @@
         </ul>
 
         <div class="tab-content">
-            <div style="position: absolute;top:140px;bottom:0;left:0;right:0;overflow: auto" id="user_map">
+            <div style="position: relative; id="user_map">
 
                 <div id="floor10" class="tab-pane fade in active">
                     {% for user in users %}
