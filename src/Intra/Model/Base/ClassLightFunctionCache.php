@@ -64,6 +64,10 @@ trait ClassLightFunctionCache
 
 		self::$cache[$class][$hash] = $value;
 
+		if (!self::$cacheHashesByKey) {
+			return;
+		}
+
 		foreach ($domain_primary_keys as $domain_primary_key) {
 			self::$cacheHashesByKey[$class][$domain_primary_key][] = $hash;
 		}
@@ -74,6 +78,10 @@ trait ClassLightFunctionCache
 		$class = get_called_class();
 		if (!is_array($domain_primary_keys)) {
 			$domain_primary_keys = [$domain_primary_keys];
+		}
+
+		if (!self::$cacheHashesByKey) {
+			return;
 		}
 
 		foreach ($domain_primary_keys as $domain_primary_key) {
