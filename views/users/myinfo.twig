@@ -81,25 +81,26 @@
                                         <dl class="dl-horizontal">
 
                                             {% for key,value in info.body %}
-                                            <dt>
-                                                <h5 class="input_title">{{ value[0] }}</h5>
-                                            </dt>
-                                            <dd id="{{ key }}" class="list-group-item">
-                                                <div class="normal">
-                                                    <span>{{ value[1] }}</span>
-                                                    <div class="pull-right">
-                                                        <button class="btn btn-xs edit" data-key="{{ key }}">편집</button>
+                                                <dt>
+                                                    <h5 class="input_title">{{ value[0] }}</h5>
+                                                </dt>
+                                                <dd id="{{ key }}" class="list-group-item">
+                                                    <div class="normal">
+                                                        <span>{{ value[1] }}</span>
+                                                        {% if value[2] %}
+                                                            <div class="pull-right">
+                                                                <button class="btn btn-xs edit" data-key="{{ key }}">편집</button>
+                                                            </div>
+                                                        {% endif %}
                                                     </div>
-                                                </div>
-                                                <div class="edit" style="display: none;">
-                                                    <input class="content" type="text" value="{{ value[1] }}">
-                                                    <div class="pull-right">
-                                                        <button class="btn btn-xs save" data-key="{{ key }}">저장</button>
-                                                        <button class="btn btn-xs cancel" data-key="{{ key }}">취소</button>
+                                                    <div class="edit" style="display: none;">
+                                                        <input class="content" type="text" value="{{ value[1] }}">
+                                                        <div class="pull-right">
+                                                            <button class="btn btn-xs save" data-key="{{ key }}">저장</button>
+                                                            <button class="btn btn-xs cancel" data-key="{{ key }}">취소</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </dd>
-
+                                                </dd>
                                             {%  endfor %}
 
                                         </dl>
