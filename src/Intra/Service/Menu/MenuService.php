@@ -68,6 +68,7 @@ class MenuService
 
 			$right_menu_list = [
 				new Link('직원목록', '/users/list', new OnlyUserManager, null, 'list'),
+				new Link('내정보', '/users/myinfo', new PublicAuth, null, 'cog'),
 				new Link('로그아웃', '/usersession/logout', new PublicAuth, null, 'log-out'),
 			];
 			return [$left_menu_list, $right_menu_list];
