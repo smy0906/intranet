@@ -78,19 +78,14 @@
                     );
                 }
                 , done: function (e, data) {
-                    var code = data.result.code;
-                    var msg = data.result.msg;
-                    if(code == '1') {
-                        alert(msg);
-                    } else {
-                        alert(code + ' : ' + msg);
-                    }
+                    alert('업로드 완료');
+                    location.reload();
+
                 }, fail: function(e, data){
                     // data.errorThrown
                     // data.textStatus;
                     // data.jqXHR;
                     alert('서버와 통신 중 문제가 발생했습니다');
-                    foo = data;
                 }
             });
 

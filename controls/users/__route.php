@@ -10,3 +10,6 @@ $this->matchIf('jeditable_key/{key}')
 $this->matchIf('/join')
 	->isMethod('post')
 	->query('join.ajax');
+
+$this->matchIf('/image/{key}')
+	->query('/image');
