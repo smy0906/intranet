@@ -28,11 +28,17 @@
         let value = $("#"+key+" .content").val();
 
         $.ajax({
-          url: "/users/edit_public",
+          url: "/users/edit",
           type: "post",
           data: {uid: {{ uid }}, key:key, value:value},
           success: function (data) {
-            $("#"+key+" span").html(data);
+            let result = data;
+            if (key=='comment' && !result) {
+              result = '[내용이 없습니다.]';
+            }
+
+            $("#"+key+" span").html(result);
+
             self.attr("disabled", false);
             cancelBtn.attr("disabled", false);
             self.text("저장");
@@ -177,7 +183,7 @@
                 <div class="normal">
                   <span>
                     {% if info.comment is null or info.comment == "" %}
-                        [내용을 입력해주세요.]
+                        [내용이 없습니다.]
                     {% else %}
                       {{ info.comment }}
                     {% endif %}
@@ -185,7 +191,7 @@
                   <button class="btn btn-xs pull-right edit" data-key="comment">편집</button>
                 </div>
                 <div class="edit" style="display: none;">
-                  <textarea rows="5" cols="100" class="content" type="text">{{ comment }}</textarea>
+                  <textarea rows="5" cols="100" class="content" type="text">{{ info.comment }}</textarea>
                   <div class="pull-right">
                     <button class="btn btn-xs pull-right save" data-key="comment">저장</button>
                     <button class="btn btn-xs pull-right cancel" data-key="comment">취소</button>
