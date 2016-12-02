@@ -2,8 +2,8 @@
 namespace Intra\Service\Payment;
 
 use Intra\Lib\Response\CsvResponse;
-use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserJoinService;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Response;
 

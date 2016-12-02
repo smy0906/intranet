@@ -2,12 +2,9 @@
 
 namespace Intra\Service\Cron\Interfacer;
 
-use Intra\Config\Config;
 use Intra\Core\MsgException;
-use Intra\Lib\DictsUtils;
 use Intra\Service\Mail\MailingDto;
 use Intra\Service\Mail\MailSendService;
-use Mailgun\Mailgun;
 
 abstract class CronMailingInterface extends CronInterface
 {
