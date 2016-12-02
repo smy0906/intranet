@@ -4,8 +4,8 @@ namespace Intra\Service\Payment;
 use Intra\Core\MsgException;
 use Intra\Model\PaymentAcceptModel;
 use Intra\Model\PaymentModel;
-use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserJoinService;
+use Intra\Service\User\UserPolicy;
 use Intra\Service\User\UserSession;
 
 class UserPaymentRowInstance

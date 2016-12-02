@@ -1,9 +1,8 @@
 <?php
-
 namespace Intra\Service\User;
 
-use Intra\Model\UserModel;
 use Intra\Model\LightFileModel;
+use Intra\Model\UserModel;
 
 /**
  * Class UserEditService
