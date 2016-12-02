@@ -3,7 +3,6 @@
 
 use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserDtoHandler;
-use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 
 $request = $this->getRequest();
