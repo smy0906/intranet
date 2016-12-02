@@ -1,9 +1,9 @@
 <?php
 /** @var $this Intra\Core\Control */
 
+use Intra\Service\User\UserDtoHandler;
 use Intra\Service\User\UserEditService;
 use Intra\Service\User\UserSession;
-use Intra\Service\User\UserDtoHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 $request = $this->getRequest();
