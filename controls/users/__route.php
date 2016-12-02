@@ -11,5 +11,5 @@ $this->matchIf('/join')
 	->isMethod('post')
 	->query('join.ajax');
 
-$this->matchIf('/image/{key}')
+$this->matchIf('/{uid}/image')
 	->query('/image');

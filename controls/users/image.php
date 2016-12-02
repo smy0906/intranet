@@ -1,8 +1,8 @@
 <?php
 
-use Intra\Service\User\UserFileService;
+use Intra\Service\User\UserEditService;
 
 $request = $this->getRequest();
-$key = $request->get('uid');
+$uid = $request->get('uid');
 
-return UserFileService::getImage($key);
+return UserEditService::getImage($uid);

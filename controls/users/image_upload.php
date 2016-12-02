@@ -1,7 +1,7 @@
 <?php
 /** @var $this Intra\Core\Control */
 
-use Intra\Service\User\UserFileService;
+use Intra\Service\User\UserEditService;
 use Intra\Service\User\UserSession;
 use Intra\Service\User\UserDtoHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -9,12 +9,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 $request = $this->getRequest();
 $file = $request->files->get('files')[0];
 
-if (UserFileService::addImage($file)) {
+if (UserEditService::addImage($file)) {
 	$dto = UserSession::getSelfDto();
 	$uid = $dto->uid;
 
 	$user = new UserDtoHandler($dto);
-	$user->updateByKey('image', '/users/image?uid=' . $uid);
+	$user->updateByKey('image', '/users/' . $uid . '/image');
 
 	return JsonResponse::create('success');
 
