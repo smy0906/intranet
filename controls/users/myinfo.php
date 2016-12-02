@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: imkkt
- * Date: 2016. 11. 30.
- * Time: PM 3:54
- */
 
 use Intra\Service\User\UserSession;
 

@@ -6,8 +6,16 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Intra\Model\LightFileModel;
 
-class UserFileService
+/**
+ * Class UserEditService
+ * @package Intra\Service\User
+ */
+class UserEditService
 {
+	/**
+	 * @param $file
+	 * @return bool
+	 */
 	public static function addImage($file)
 	{
 		$self = UserSession::getSelfDto();
@@ -19,13 +27,16 @@ class UserFileService
 		}
 	}
 
+	/**
+	 * @param $key
+	 * @return BinaryFileResponse|Response
+	 */
 	public static function getImage($key)
 	{
 		$file_model = new LightFileModel('user_img');
 		$dest = $file_model->getUploadableLocation($key);
 		if (is_file($dest)) {
-			$binary_file_response = new BinaryFileResponse($dest, 200);
-			return $binary_file_response;
+			return new BinaryFileResponse($dest, 200);
 		}
 		return new Response('file not exist', 404);
 	}
