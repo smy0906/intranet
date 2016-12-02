@@ -1,5 +1,5 @@
 {
-  "name": "ridi-intra",
+  "name": "ridi-intranet",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
@@ -11,21 +11,21 @@
     "bower_components"
   ],
   "dependencies": {
-    "blueimp-file-upload": "^9.12",
-    "bootstrap": "^3.3",
-    "select2": "^3.5",
-    "select2-bootstrap-css": "^1.4",
-    "datatables": "^1.10",
-    "jquery": "^2.2",
-    "jquery-form": "^3",
-    "jquery-number": "^2.1",
-    "jquery-ui": "^1.12",
+    "blueimp-file-upload": "9.14.1",
+    "bootstrap": "3.3.7",
+    "datatables": "1.10.12",
+    "jquery": "2.2.4",
+    "jquery-form": "3.46.0",
+    "jquery-number": "2.1.6",
+    "jquery-ui": "1.12.1",
     "jquery.attrajax": "^0.1",
-    "jquery.cookie": "^1.4",
+    "jquery.cookie": "1.4.1",
     "jquery.jeditable": "https://github.com/tuupola/jquery_jeditable.git",
     "jquery.tmpl": "https://github.com/BorisMoore/jquery-tmpl.git",
-    "jqueryte": "^1.4",
-    "smalot-bootstrap-datetimepicker": "^2",
-    "scheduler": "^4.3.1"
+    "jqueryte": "1.4.0",
+    "scheduler": "4.3.1",
+    "select2": "3.5.4",
+    "select2-bootstrap-css": "1.4.6",
+    "smalot-bootstrap-datetimepicker": "2.3.11"
   }
 }
