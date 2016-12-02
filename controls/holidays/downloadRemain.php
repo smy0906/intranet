@@ -6,7 +6,6 @@ use Intra\Service\Holiday\UserHoliday;
 use Intra\Service\Holiday\UserHolidayPolicy;
 use Intra\Service\User\UserDtoFactory;
 use Intra\Service\User\UserPolicy;
-use Intra\Service\User\UserJoinService;
 use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Response;
 
