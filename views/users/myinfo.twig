@@ -114,7 +114,6 @@
     <div class="myinfo">
       <header class="page-header">
         <h1 class="page-title">{{title}}</h1>
-        <!--<small> <i class="fa fa-clock-o"></i> Last Updated on: <time>Sunday, October 05, 2014</time></small>-->
       </header>
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8">
@@ -176,14 +175,20 @@
               <h4>소개</h4>
               <div id="comment" class="list-group-item">
                 <div class="normal">
-                  <span>{{ info.comment }}</span>
-                  <button class="btn btn-xs pull-right edit" data-key="{{ key }}">편집</button>
+                  <span>
+                    {% if info.comment is null or info.comment == "" %}
+                        [내용을 입력해주세요.]
+                    {% else %}
+                      {{ info.comment }}
+                    {% endif %}
+                  </span>
+                  <button class="btn btn-xs pull-right edit" data-key="comment">편집</button>
                 </div>
                 <div class="edit" style="display: none;">
                   <textarea rows="5" cols="100" class="content" type="text">{{ comment }}</textarea>
                   <div class="pull-right">
-                    <button class="btn btn-xs pull-right save" data-key="{{ key }}">저장</button>
-                    <button class="btn btn-xs pull-right cancel" data-key="{{ key }}">취소</button>
+                    <button class="btn btn-xs pull-right save" data-key="comment">저장</button>
+                    <button class="btn btn-xs pull-right cancel" data-key="comment">취소</button>
                   </div>
                 </div>
               </div>
