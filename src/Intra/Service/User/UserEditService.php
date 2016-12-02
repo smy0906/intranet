@@ -1,11 +1,10 @@
 <?php
-
 namespace Intra\Service\User;
 
+use Intra\Model\LightFileModel;
+use Intra\Model\UserModel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Intra\Model\UserModel;
-use Intra\Model\LightFileModel;
 
 /**
  * Class UserEditService
