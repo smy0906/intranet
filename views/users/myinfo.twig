@@ -43,6 +43,9 @@
             cancelBtn.attr("disabled", false);
             self.text("저장");
             setEditMode(false, key);
+          },
+          error: function (xhr, status, error) {
+            alert("업데이트 실패! status:"+status+" error:"+error);
           }
         });
 
@@ -193,8 +196,8 @@
                 <div class="edit" style="display: none;">
                   <textarea rows="5" cols="100" class="content" type="text">{{ info.comment }}</textarea>
                   <div class="pull-right">
-                    <button class="btn btn-xs pull-right save" data-key="comment">저장</button>
-                    <button class="btn btn-xs pull-right cancel" data-key="comment">취소</button>
+                    <button class="btn btn-xs save" data-key="comment">저장</button>
+                    <button class="btn btn-xs cancel" data-key="comment">취소</button>
                   </div>
                 </div>
               </div>
