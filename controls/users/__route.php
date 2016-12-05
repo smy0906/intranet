@@ -13,3 +13,6 @@ $this->matchIf('/join')
 
 $this->matchIf('/{uid}/image')
 	->query('/image');
+
+$this->matchIf('/{uid}/thumb')
+	->query('/thumb');

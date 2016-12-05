@@ -2,14 +2,26 @@
 /** @var $this Intra\Core\Control */
 
 use Intra\Service\User\UserEditService;
+use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 $request = $this->getRequest();
-$file = $request->files->get('files')[0];
+$uploadedFile = $request->files->get('files')[0];
 
-if (UserEditService::updateImageFile($file) !== null) {
-	return JsonResponse::create('success');
-
-} else {
+$self = UserSession::getSelfDto();
+if (!$self) {
 	return JsonResponse::create('file upload failed', 500);
 }
+
+$uid = $self->uid;
+$savedFile = UserEditService::saveImage($uid, $uploadedFile);
+if ($savedFile != null) {
+	$thumbFile = UserEditService::createThumb($uid, 60, 60);
+	if ($thumbFile != null) {
+		if (UserEditService::updateInfo($uid, 'image', '/users/'.$uid.'/image') != null) {
+			return JsonResponse::create('success');
+		}
+	}
+}
+
+return JsonResponse::create('file upload failed', 500);
