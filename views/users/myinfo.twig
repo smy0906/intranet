@@ -131,22 +131,22 @@
             <div class="panel-heading">
               <div class="row">
                 <div class="col-lg-12">
-                  {#<div class="col-xs-12 col-sm-4">#}
-                    {#<figure>#}
-                      {#<img class="img-responsive"#}
-                          {#{% if info.image %}#}
-                            {#src={{ info.image }}#}
-                          {#{% else %}#}
-                            {#src="http://placehold.it/300x300">#}
-                          {#{% endif %}#}
-                    {#</figure>#}
+                  <div class="col-xs-12 col-sm-4">
+                    <figure>
+                      <img class="img-responsive"
+                          {% if info.image %}
+                            src={{ info.image }}
+                          {% else %}
+                            src="http://placehold.it/300x300">
+                          {% endif %}
+                    </figure>
 
-                    {#<span class="btn btn-xs btn-primary upload-button";>#}
-                      {#<i class="glyphicon glyphicon-upload"></i>#}
-                      {#<span>사진 변경..</span>#}
-                      {#<input id="edit-img" type="file">#}
-                    {#</span>#}
-                  {#</div>#}
+                    <span class="btn btn-xs btn-primary upload-button";>
+                      <i class="glyphicon glyphicon-upload"></i>
+                      <span>사진 변경..</span>
+                      <input id="edit-img" type="file">
+                    </span>
+                  </div>
 
                   <div class="col-xs-12 col-sm-10">
                     <dl class="dl-horizontal">

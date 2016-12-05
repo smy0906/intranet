@@ -1,0 +1,19 @@
+<div class='js_user btn btn-primary'
+     style='left:{{ user.extra.posX }}px;top:{{ user.extra.posY }}px;
+       {% if user.extra.width %} width:  {{ user.extra.width }}px; {% endif %}
+       {% if user.extra.height %} height: {{ user.extra.height }}px; {% endif %}
+       {% if user.extra.color %} background-color: {{ user.extra.color}}; {% endif %}'
+     data-userid='{{ user.uid }}'>
+  <div class='contextmenu_trigger' data-userid='{{ user.uid }}'>
+  </div>
+  <div class='content'>
+    <span class='glyphicon glyphicon-user'></span>
+    {{ user.name }}
+    <div>
+      {#<img class="img-responsive" src="http://placehold.it/60x60">#}
+      {% if user.image %}
+        <img class="img-responsive" src="/users/{{ user.uid }}/thumb">
+      {% endif %}
+    </div>
+  </div>
+</div>

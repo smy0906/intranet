@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 $request = $this->getRequest();
 $uid = $request->get('uid');
 
-$file =  UserEditService::getImageLocation($uid);
+$file =  UserEditService::getThumbLocation($uid);
 if ($file !== null) {
 	return BinaryFileResponse::create($file, 200);
 

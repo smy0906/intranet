@@ -10,23 +10,58 @@ use Intra\Model\UserModel;
  */
 class UserEditService
 {
-	/**
-	 * @param $file
-	 * @return bool
-	 */
-	public static function updateImageFile($file)
-	{
-		$self = UserSession::getSelfDto();
-
+	public static function getImageLocation($uid) {
 		$file_model = new LightFileModel('user_img');
-		$dest = $file_model->getUploadableLocation($self->uid);
-		if (!$file->move(dirname($dest), basename($dest))) {
-			return null;
+		return $file_model->getUploadableLocation($uid);
+	}
+
+	public static function getThumbLocation($uid) {
+		$file_model = new LightFileModel('user_img');
+		return $file_model->getUploadableLocation($uid . '.' . 'jpeg');
+	}
+
+	public static function saveImage($uid, $uploadedFile) {
+		$dest = UserEditService::getImageLocation($uid);
+		if ($uploadedFile->move(dirname($dest), basename($dest))) {
+			return $dest;
 		}
 
-		$dto = UserSession::getSelfDto();
-		$uid = $dto->uid;
-		return UserEditService::updateInfo($uid, 'image', '/users/' . $uid . '/image');
+		return null;
+	}
+
+	public static function createThumb($uid, $width, $height) {
+		$source = UserEditService::getImageLocation($uid);
+		if (!is_file($source)) {
+			return false;
+		}
+
+		$image_type = exif_imagetype($source);
+		if(!in_array($image_type , array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG)))
+		{
+			return false;
+		}
+
+		$source_image = null;
+		switch ($image_type) {
+			case IMAGETYPE_GIF:
+				$source_image = imagecreatefromgif($source);
+				break;
+			case IMAGETYPE_JPEG:
+				$source_image = imagecreatefromjpeg($source);
+				break;
+			case IMAGETYPE_PNG:
+				$source_image = imagecreatefrompng($source);
+				break;
+		}
+
+		$width_origin = imagesx($source_image);
+		$height_origin = imagesy($source_image);
+
+		$virtual_image = imagecreatetruecolor($width, $height);
+		imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $width, $height, $width_origin, $height_origin); //사이즈 변경하여 복사
+
+		$dest = UserEditService::getThumbLocation($uid);
+		return imagejpeg($virtual_image, $dest);
 	}
 
 	/**
