@@ -30,6 +30,6 @@
     "commit": "392020557b31c044f3b64a99e2f8360436f15ecf"
   },
   "_source": "https://github.com/gauravspatel/jqueryte.git",
-  "_target": "^1.4",
+  "_target": "1.4.0",
   "_originalSource": "jqueryte"
 }

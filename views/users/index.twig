@@ -59,180 +59,178 @@
 
     <script>
       require(["jquery", "jquery-ui", "bootstrap"], function ($) {
-        if (location.search == '?after_login' && window.innerWidth < 980) {
-          location.href = '/Rooms';
-        }
-
-        $('.nav-tabs li').each(function () {
-          if (!$(this).hasClass('active')) {
-            var tabTarget = $(this).find('a').attr('href');
-            $(tabTarget+' .js_user').hide();
+          if (location.search == '?after_login' && window.innerWidth < 980) {
+            location.href = '/Rooms';
           }
-        });
 
-        $('a[data-toggle=tab]').on('show.bs.tab', function (e) {
-          var activated = $(e.target).attr('href');
-          var deactivated = $(e.relatedTarget).attr('href');
-          $(activated+' .js_user').show();
-          $(deactivated+' .js_user').hide();
-        });
+          $('.nav-tabs li').each(function () {
+            if (!$(this).hasClass('active')) {
+              var tabTarget = $(this).find('a').attr('href');
+              $(tabTarget + ' .js_user').hide();
+            }
+          });
 
-        $(document).on('mouseover', '.js_user', function (e) {
-          var id = $(this).data('userid');
-          $('.js_user_popup[data-userid=' + id + ']').show(0);
-          e.stopPropagation();
-          return false;
-        });
+          $('a[data-toggle=tab]').on('show.bs.tab', function (e) {
+            var activated = $(e.target).attr('href');
+            var deactivated = $(e.relatedTarget).attr('href');
+            $(activated + ' .js_user').show();
+            $(deactivated + ' .js_user').hide();
+          });
 
-        $(document).on('mouseout', '.js_user', function (e) {
-          var id = $(this).data('userid');
-          $('.js_user_popup[data-userid=' + id + ']').hide(0);
-          e.stopPropagation();
-          return false;
-        });
+          $(document).on('mouseover', '.js_user', function (e) {
+            var id = $(this).data('userid');
+            $('.js_user_popup[data-userid=' + id + ']').show(0);
+            e.stopPropagation();
+            return false;
+          });
 
-        $(document).on('mousemove', '.js_user', function (e) {
-          var id = $(this).data('userid');
-          $('.js_user_popup[data-userid=' + id + ']')
-            .css({
-              position: "absolute",
-              left: e.pageX + 'px',
-              top: (e.pageY) + 'px'
-            });
-          return true;
-        });
+          $(document).on('mouseout', '.js_user', function (e) {
+            var id = $(this).data('userid');
+            $('.js_user_popup[data-userid=' + id + ']').hide(0);
+            e.stopPropagation();
+            return false;
+          });
 
-        {% if replaceable %}
+          $(document).on('mousemove', '.js_user', function (e) {
+            var id = $(this).data('userid');
+            $('.js_user_popup[data-userid=' + id + ']')
+              .css({
+                position: "absolute",
+                left: e.pageX + 'px',
+                top: (e.pageY) + 'px'
+              });
+            return true;
+          });
 
-            $('.js_user').draggable({
-              snap: true,
-              containment: '#user_map',
-              stop: function (e, ui) {
-                var id = $(this).data('userid');
-                var x = parseInt(ui.position.left);
-                var y = parseInt(ui.position.top);
-                $.post('/users/' + id + '/updateExtra/posX/' + x);
-                $.post('/users/' + id + '/updateExtra/posY/' + y);
-              }
-            });
+            {% if replaceable %}
 
-            $('.js_user').resizable({
-              grid: 10,
-              maxHeight: 240,
-              maxWidth: 240,
-              minHeight: 20,
-              minWidth: 40,
-              stop: function (e, ui) {
-                var id = $(this).data('userid');
-                var w = parseInt(ui.size.width);
-                var h = parseInt(ui.size.height);
-                $.post('/users/' + id + '/updateExtra/width/' + w);
-                $.post('/users/' + id + '/updateExtra/height/' + h);
-              }
-            });
+          $('.js_user').draggable({
+            snap: true,
+            containment: '#user_map',
+            stop: function (e, ui) {
+              var id = $(this).data('userid');
+              var x = parseInt(ui.position.left);
+              var y = parseInt(ui.position.top);
+              $.post('/users/' + id + '/updateExtra/posX/' + x);
+              $.post('/users/' + id + '/updateExtra/posY/' + y);
+            }
+          });
 
-            $.fn.setContextMenu = function _contextMenu(settings) {
-              return this.each(function () {
-                $(this).on('contextmenu', function (e) {
-                  if (e.ctrlKey) {
-                    return;
-                  }
+          $('.js_user').resizable({
+            grid: 10,
+            maxHeight: 240,
+            maxWidth: 240,
+            minHeight: 20,
+            minWidth: 40,
+            stop: function (e, ui) {
+              var id = $(this).data('userid');
+              var w = parseInt(ui.size.width);
+              var h = parseInt(ui.size.height);
+              $.post('/users/' + id + '/updateExtra/width/' + w);
+              $.post('/users/' + id + '/updateExtra/height/' + h);
+            }
+          });
 
-                  var $menu = $(settings.menuSelector)
-                    .data("invokedOn", $(e.target))
-                    .show()
-                    .css({
-                      position: "absolute",
-                      left: getMenuPosition(e.clientX, 'width', 'scrollLeft'),
-                      top: getMenuPosition(e.clientY, 'height', 'scrollTop')
-                    })
-                    .off('click')
-                    .on('click', 'a', function (e) {
-                      $menu.hide();
+          $.fn.setContextMenu = function _contextMenu(settings) {
+            return this.each(function () {
+              $(this).on('contextmenu', function (e) {
+                if (e.ctrlKey) {
+                  return;
+                }
 
-                      var $invokedOn = $menu.data("invokedOn");
-                      var $selectedMenu = $(e.target);
+                var $menu = $(settings.menuSelector)
+                  .data("invokedOn", $(e.target))
+                  .show()
+                  .css({
+                    position: "absolute",
+                    left: getMenuPosition(e.clientX, 'width', 'scrollLeft'),
+                    top: getMenuPosition(e.clientY, 'height', 'scrollTop')
+                  })
+                  .off('click')
+                  .on('click', 'a', function (e) {
+                    $menu.hide();
 
-                      settings.menuSelected.call(this, $invokedOn, $selectedMenu);
-                    });
+                    var $invokedOn = $menu.data("invokedOn");
+                    var $selectedMenu = $(e.target);
 
-                  return false;
-                });
+                    settings.menuSelected.call(this, $invokedOn, $selectedMenu);
+                  });
 
-                //for menu cancel
-                $('body').click(function () {
-                  $(settings.menuSelector).hide();
-                });
+                return false;
               });
 
-              function getMenuPosition(mouse, direction, scrollDir) {
-                var win = $(window)[direction](),
-                  scroll = $(window)[scrollDir](),
-                  menu = $(settings.menuSelector)[direction](),
-                  position = mouse + scroll;
-
-                if (mouse + menu > win && menu < mouse)
-                  position -= menu;
-
-                return position;
-              }
-            };
-
-            function setUserArea(userId, area) {
-              var userElem = $('.js_user[data-userid='+userId+']');
-              userElem.attr('disabled', true);
-
-              $.post('/users/' + userId + '/updateExtra/area/' + area)
-                .done( () => {
-                  userElem.detach().appendTo('#'+area);
-                })
-                .fail( () => {
-                  alert('MoveUserTo: 서버와 통신에 실패했습니다');
-                })
-                .always( () => {
-                  userElem.attr('disabled', false);
-                })
-            }
-
-            function setUserColor(userId, colorCode) {
-              var colorCodeUri = encodeURIComponent(colorCode);
-              var userElem = $('.js_user[data-userid='+userId+']');
-              userElem.attr('disabled', true);
-
-              $.post('/users/' + userId + '/updateExtra/color/' + colorCodeUri)
-                .done( () => {
-                  userElem.css('background-color', colorCode);
-                })
-                .fail( () => {
-                  alert('MoveUserTo: 서버와 통신에 실패했습니다');
-                })
-                .always( () => {
-                  userElem.attr('disabled', false);
-                })
-            }
-
-            //context menu setting
-            $('div.contextmenu_trigger').setContextMenu({
-              menuSelector: "#userMenu",
-              menuSelected: function (invokedOn, selectedMenu) {
-                var userId = invokedOn.attr('data-userid');
-                var menuIndex = selectedMenu.attr('tabindex');
-
-                if (menuIndex == '0') {
-                  setUserArea(userId, 'floor10');
-
-                } else if (menuIndex == '1') {
-                  setUserArea(userId, 'floor11');
-
-                } else {
-                  var colorCode = selectedMenu.text();
-                  setUserColor(userId, colorCode);
-
-                }
-              }
+              //for menu cancel
+              $('body').click(function () {
+                $(settings.menuSelector).hide();
+              });
             });
 
-        {% endif %}
+            function getMenuPosition(mouse, direction, scrollDir) {
+              var win = $(window)[direction](),
+                scroll = $(window)[scrollDir](),
+                menu = $(settings.menuSelector)[direction](),
+                position = mouse + scroll;
+
+              if (mouse + menu > win && menu < mouse)
+                position -= menu;
+
+              return position;
+            }
+          };
+
+          function setUserArea(userId, area) {
+            var userElem = $('.js_user[data-userid=' + userId + ']');
+            userElem.attr('disabled', true);
+
+            $.post('/users/' + userId + '/updateExtra/area/' + area)
+              .done(() => {
+                userElem.detach().appendTo('#' + area);
+              })
+              .fail(() => {
+                alert('MoveUserTo: 서버와 통신에 실패했습니다');
+              })
+              .always(() => {
+                userElem.attr('disabled', false);
+              })
+          }
+
+          function setUserColor(userId, colorCode) {
+            var colorCodeUri = encodeURIComponent(colorCode);
+            var userElem = $('.js_user[data-userid=' + userId + ']');
+            userElem.attr('disabled', true);
+
+            $.post('/users/' + userId + '/updateExtra/color/' + colorCodeUri)
+              .done(() => {
+                userElem.css('background-color', colorCode);
+              })
+              .fail(() => {
+                alert('MoveUserTo: 서버와 통신에 실패했습니다');
+              })
+              .always(() => {
+                userElem.attr('disabled', false);
+              })
+          }
+
+          //context menu setting
+          $('div.contextmenu_trigger').setContextMenu({
+            menuSelector: "#userMenu",
+            menuSelected: function (invokedOn, selectedMenu) {
+              var userId = invokedOn.attr('data-userid');
+              var menuIndex = selectedMenu.attr('tabindex');
+
+              if (menuIndex == '0') {
+                setUserArea(userId, 'floor10');
+
+              } else if (menuIndex == '1') {
+                setUserArea(userId, 'floor11');
+
+              } else {
+                var colorCode = selectedMenu.text();
+                setUserColor(userId, colorCode);
+
+              }
+            }
+          });
       });
     </script>
 
@@ -271,6 +269,7 @@
               <div><strong>내선</strong> {{ user.inner_call }}</div>
             {% endif %}
             <div><strong>긴급</strong> {{ user.mobile }}</div>
+            <div>{{ user.comment }}</div>
           </div>
       {% endfor %}
 
