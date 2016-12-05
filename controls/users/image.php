@@ -10,8 +10,8 @@ $uid = $request->get('uid');
 
 $file =  UserEditService::getImageLocation($uid);
 if ($file !== null) {
-	return BinaryFileResponse::create($file, 200);
+	return BinaryFileResponse::create($file, Response::HTTP_OK);
 
 } else {
-	return Response::create('file not exist', 404);
+	return Response::create('file not exist', Response::HTTP_NOT_FOUND);
 }
