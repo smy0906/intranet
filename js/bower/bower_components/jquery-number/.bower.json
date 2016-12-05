@@ -20,6 +20,6 @@
     "commit": "371cc507f05323844d6bd120cef20d847df16abd"
   },
   "_source": "https://github.com/teamdf/jquery-number.git",
-  "_target": "^2.1",
+  "_target": "2.1.6",
   "_originalSource": "jquery-number"
 }
