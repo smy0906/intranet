@@ -289,7 +289,7 @@
               <div id="floor10" class="tab-pane fade in active">
                 {% for user in users %}
                   {% if user.extra.area is null or user.extra.area == 'floor10' %}
-                    {% include 'users/user_control.twig' with {user:user} %}
+                    {% include 'users/index_user.twig' with {user:user} %}
                   {% endif %}
                 {% endfor %}
               </div>
@@ -297,7 +297,7 @@
               <div id="floor11" class="tab-pane fade">
                 {% for user in users %}
                   {% if user.extra.area == 'floor11' %}
-                    {% include 'users/user_control.twig' with {user:user} %}
+                    {% include 'users/index_user.twig' with {user:user} %}
                   {% endif %}
                 {% endfor %}
               </div>
