@@ -10,7 +10,7 @@ $uploadedFile = $request->files->get('files')[0];
 
 $self = UserSession::getSelfDto();
 if (!$self) {
-	return JsonResponse::create('file upload failed', 500);
+	return JsonResponse::create('unknown user', JsonResponse::HTTP_UNAUTHORIZED);
 }
 
 $uid = $self->uid;
@@ -24,4 +24,4 @@ if ($savedFile != null) {
 	}
 }
 
-return JsonResponse::create('file upload failed', 500);
+return JsonResponse::create('file upload failed', JsonResponse::HTTP_SERVICE_UNAVAILABLE);

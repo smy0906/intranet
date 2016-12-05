@@ -10,8 +10,8 @@ $key = $request->get('key');
 $value = $request->get('value');
 
 if (UserEditService::updateInfo($uid, $key, $value) !== null) {
-	return Response::create($value, 200);
+	return Response::create($value, Response::HTTP_UNAUTHORIZED);
 
 } else {
-	return Response::create("server error", 503);
+	return Response::create("server error", Response::HTTP_SERVICE_UNAVAILABLE);
 }
