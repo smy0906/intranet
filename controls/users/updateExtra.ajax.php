@@ -8,7 +8,7 @@ $request = $this->getRequest();
 
 $uid = $request->get('userid');
 $key = $request->get('key');
-$value = $request->get('value');
+$value = rawurldecode($request->get('value'));
 
 $user = new UserDtoHandler(UserDtoFactory::createByUid($uid));
 $user->setExtra($key, $value);
