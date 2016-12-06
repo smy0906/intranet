@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Raven_' => array($vendorDir . '/raven/raven/lib'),
+    'Raven_' => array($vendorDir . '/sentry/sentry/lib'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Mailgun\\Tests' => array($vendorDir . '/mailgun/mailgun-php/tests'),
