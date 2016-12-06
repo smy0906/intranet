@@ -16,7 +16,7 @@ if (!$self) {
 $uid = $self->uid;
 $savedFile = UserEditService::saveImage($uid, $uploadedFile);
 if ($savedFile != null) {
-	$thumbFile = UserEditService::createThumb($uid, 60, 60);
+	$thumbFile = UserEditService::createThumb($uid, 180, 180);
 	if ($thumbFile != null) {
 		if (UserEditService::updateInfo($uid, 'image', '/users/'.$uid.'/image') != null) {
 			return JsonResponse::create('success');
