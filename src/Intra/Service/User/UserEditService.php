@@ -3,6 +3,7 @@ namespace Intra\Service\User;
 
 use Intra\Model\LightFileModel;
 use Intra\Model\UserModel;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class UserEditService
@@ -20,7 +21,7 @@ class UserEditService
 		return $file_model->getUploadableLocation($uid . '.' . 'jpeg');
 	}
 
-	public static function saveImage($uid, $uploadedFile) {
+	public static function saveImage($uid, File $uploadedFile) {
 		$dest = UserEditService::getImageLocation($uid);
 		if ($uploadedFile->move(dirname($dest), basename($dest))) {
 			return $dest;

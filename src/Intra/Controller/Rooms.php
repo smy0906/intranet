@@ -173,6 +173,7 @@ class Rooms implements ControllerProviderInterface
 	/**
 	 * @param $from
 	 * @param $datas
+	 * @param $room_ids
 	 *
 	 * @return array
 	 */
