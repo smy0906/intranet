@@ -66,7 +66,6 @@
           location.href = '/Rooms';
         }
 
-        //popup ui
         $('.nav-tabs li').each(function () {
           if (!$(this).hasClass('active')) {
             var tabTarget = $(this).find('a').attr('href');
@@ -81,6 +80,7 @@
           $(deactivated + ' .js_user').hide();
         });
 
+        //popup ui
         $(document).on('mouseover', '.js_user', function (e) {
           var id = $(this).data('userid');
           $('.js_user_popup[data-userid=' + id + ']').show(0);
@@ -274,6 +274,9 @@
               <div><strong>내선</strong> {{ user.inner_call }}</div>
             {% endif %}
             <div><strong>긴급</strong> {{ user.mobile }}</div>
+            {% if user.image %}
+              <img class="img-responsive" src="/users/{{ user.uid }}/thumb">
+            {% endif %}
             <div>{{ user.comment }}</div>
           </div>
       {% endfor %}

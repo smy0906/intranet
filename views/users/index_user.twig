@@ -10,7 +10,6 @@
     <span class='glyphicon glyphicon-user'></span>
     {{ user.name }}
     <div>
-      {#<img class="img-responsive" src="http://placehold.it/60x60">#}
       {% if user.image %}
         <img class="img-responsive" src="/users/{{ user.uid }}/thumb">
       {% endif %}
