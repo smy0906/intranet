@@ -1,15 +1,15 @@
 {
   "require": {
-    "gnf/gnfcache": "~0.1",
-    "gnf/gnfdb": "~0.1",
-    "mailgun/mailgun-php": "~1.7.2",
-    "phpoffice/phpexcel": "~1.8",
-    "twig/twig": "1.*",
-    "raven/raven": "0.12.0",
+    "gnf/gnfcache": "^0.1",
+    "gnf/gnfdb": "^0.1",
+    "gnf/namespace-router": "0.1",
     "illuminate/database": "^5.1",
     "illuminate/pagination": "^5.1",
-    "silex/silex": "~2.0",
-    "gnf/namespace-router": "0.1"
+    "mailgun/mailgun-php": "~1.7.2",
+    "phpoffice/phpexcel": "^1.8",
+    "sentry/sentry": "^1.5",
+    "silex/silex": "^2.0",
+    "twig/twig": "^1.28"
   },
   "config": {
     "preferred-install": "dist"
