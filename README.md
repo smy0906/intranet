@@ -10,6 +10,8 @@
 
 1. /etc/hhvm/server.ini 파일 수정
     ```
+    hhvm.php7.all = 1
+    
     hhvm.server.port = 9000
     hhvm.server.type = proxygen  ;fastcgi
     
@@ -17,5 +19,5 @@
     hhvm.virtual_host[default][rewrite_rules][common][to] = "index.php/$1"
     hhvm.virtual_host[default][rewrite_rules][common][qsa] = true
     ```
-2. hhvm -m server
+2. hhvm -m server -c /etc/hhvm/server.ini
 3. 브라우저에서 localhost:9000 접속
