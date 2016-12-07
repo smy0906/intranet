@@ -114,6 +114,9 @@
         {% for user in users %}
           userInfos[{{ user.uid }}] = {
             name: '{{ user.name }}',
+            {% if user.image %}
+              image: '{{ user.image }}',
+            {% endif %}
             team: '{{ user.team }}',
             email: '{{ user.email }}',
             inner_call: '{{ user.inner_call }}',
@@ -306,6 +309,13 @@
           }
 
           var userId = $(this).attr('data-userid');
+
+          if (userInfos[userId].image) {
+            $('#infoModal img').attr('src', userInfos[userId].image);
+          } else {
+            $('#infoModal img').attr('src', 'http://placehold.it/300x300');
+          }
+
           $('#infoModal .modal-title').text(userInfos[userId].name);
           $('#team').text(userInfos[userId].team);
           $('#email').text(userInfos[userId].email);
