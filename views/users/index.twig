@@ -27,7 +27,7 @@
         position: absolute;
         padding: 0;
         width: 60px;
-        height: 100px;
+        height: 60px;
         color: #fff;
         border: 1px solid;
         border-color: #fff;
@@ -36,26 +36,27 @@
         text-align: center;
       }
 
-      .js_user_popup {
-        position: absolute;
-        display: none;
-        z-index: 100;
-        margin: 10px;
-        padding: 5px;
-        background-color: white;
-        border: 1px dotted #aaa;
-      }
+      /*.js_user_popup {*/
+        /*position: absolute;*/
+        /*display: none;*/
+        /*z-index: 100;*/
+        /*margin: 10px;*/
+        /*padding: 5px;*/
+        /*background-color: white;*/
+        /*border: 1px dotted #aaa;*/
+      /*}*/
 
       .js_user .content {
-        position: absolute;
-        top: 0;
-        align-content: center;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
       }
 
-      .contextmenu_trigger {
-        width: 100%;
-        height: 100%;
-      }
+      /*.contextmenu_trigger {*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+      /*}*/
 
       #user_map {
         position: relative;
@@ -189,20 +190,20 @@
             }
           });
 
-          $('.js_user').resizable({
-            grid: 10,
-            maxHeight: 240,
-            maxWidth: 240,
-            minHeight: 20,
-            minWidth: 40,
-            stop: function (e, ui) {
-              var id = $(this).data('userid');
-              var w = parseInt(ui.size.width);
-              var h = parseInt(ui.size.height);
-              $.post('/users/' + id + '/updateExtra/width/' + w);
-              $.post('/users/' + id + '/updateExtra/height/' + h);
-            }
-          });
+//          $('.js_user').resizable({
+//            grid: 10,
+//            maxHeight: 240,
+//            maxWidth: 240,
+//            minHeight: 20,
+//            minWidth: 40,
+//            stop: function (e, ui) {
+//              var id = $(this).data('userid');
+//              var w = parseInt(ui.size.width);
+//              var h = parseInt(ui.size.height);
+//              $.post('/users/' + id + '/updateExtra/width/' + w);
+//              $.post('/users/' + id + '/updateExtra/height/' + h);
+//            }
+//          });
 
           $.fn.setContextMenu = function _contextMenu(settings) {
             return this.each(function () {

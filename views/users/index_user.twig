@@ -4,14 +4,9 @@
        {#{% if user.extra.height %} height: {{ user.extra.height }}px; {% endif %}#}
        {% if user.extra.color %} background-color: {{ user.extra.color}}; {% endif %}'
      data-userid='{{ user.uid }}'>
-  <div class='contextmenu_trigger' data-userid='{{ user.uid }}'>
-  </div>
+  {#<div class='contextmenu_trigger' data-userid='{{ user.uid }}'>#}
+  {#</div>#}
   <div class='content'>
     {{ user.name }}
-    <div>
-      {% if user.image %}
-        <img class="img-responsive" src="/users/{{ user.uid }}/thumb">
-      {% endif %}
-    </div>
   </div>
 </div>
