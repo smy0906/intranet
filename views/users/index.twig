@@ -164,24 +164,16 @@
 //          return true;
 //        });
 
-        $('.js_user').on('click', function (e) {
-          var userId = $(this).attr('data-userid');
-          $('#infoModal .modal-title').text(userInfos[userId].name);
-          $('#team').text(userInfos[userId].team);
-          $('#email').text(userInfos[userId].email);
-          $('#inner_call').text(userInfos[userId].inner_call);
-          $('#outer_call').text(userInfos[userId].outer_call);
-          $('#position').text(userInfos[userId].position);
-          $('#birth').text(userInfos[userId].birth);
-          $('#infoModal').modal();
-        });
-
         {% if replaceable %}
 
           $('.js_user').draggable({
             snap: true,
             containment: '#user_map',
+            start: function (e, ui) {
+              $(this).isDragging = true;
+            },
             stop: function (e, ui) {
+              $(this).isDragging = false;
               var id = $(this).data('userid');
               var x = parseInt(ui.position.left);
               var y = parseInt(ui.position.top);
@@ -306,6 +298,22 @@
             }
           });
         {% endif %}
+
+        $('.js_user').on('click', function (e) {
+          if ($(this).isDragging) {
+            return;
+          }
+
+          var userId = $(this).attr('data-userid');
+          $('#infoModal .modal-title').text(userInfos[userId].name);
+          $('#team').text(userInfos[userId].team);
+          $('#email').text(userInfos[userId].email);
+          $('#inner_call').text(userInfos[userId].inner_call);
+          $('#outer_call').text(userInfos[userId].outer_call);
+          $('#position').text(userInfos[userId].position);
+          $('#birth').text(userInfos[userId].birth);
+          $('#infoModal').modal();
+        });
       });
     </script>
 
