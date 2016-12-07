@@ -56,10 +56,10 @@ class MenuService
 				}
 			} else {
 				$left_menu_list = [
-					new Link('공지사항', '/posts/notice'),
-					new Link('휴가신청', '/holidays'),
-					new Link('비용정산', '/receipts'),
-					new Link('회의실', '/Rooms'),
+					new Link('공지사항', '/posts/notice', new PublicAuth),
+					new Link('휴가신청', '/holidays', new PublicAuth),
+					new Link('비용정산', '/receipts', new PublicAuth),
+					new Link('회의실', '/Rooms', new PublicAuth),
 					new Link('포커스룸', '/Rooms?type=focus'),
 					new Link('리디 생활 가이드', '/users'),
 					new Link('급여관리', 'http://htms.himgt.net', new ExceptTaAuth, '_blank'),
