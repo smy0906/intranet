@@ -25,10 +25,13 @@
 
       .js_user {
         position: absolute;
-        padding:0;
+        padding: 0;
         width: 60px;
         height: 100px;
-        border-color:#000;
+        color: #fff;
+        border: 1px solid;
+        border-color: #fff;
+        background-color: #337ab7;
         overflow: hidden;
         text-align: center;
       }
@@ -58,6 +61,46 @@
         position: relative;
         height: 1000px;
       }
+
+      .modal-content {
+        border-radius: 5px;
+      }
+
+      .modal-header {
+        padding: 10px;
+        border-bottom: 0;
+      }
+
+      .modal-footer {
+        padding: 10px;
+        border-top: 0;
+      }
+
+      .dl-horizontal dt {
+        text-align: left;
+        width: 80px;
+      }
+
+      .dl-horizontal dd {
+        margin-left: 80px;
+      }
+
+      .modal-content-header {
+        padding: 10px;
+      }
+
+      .modal-content-body {
+        padding: 10px;
+      }
+
+      .modal-dialog {
+        margin-top: 100px;
+      }
+
+      dt {
+        font-weight: 300;
+        color: #bbb;
+      }
     </style>
 
     <script>
@@ -65,6 +108,20 @@
         if (location.search == '?after_login' && window.innerWidth < 980) {
           location.href = '/Rooms';
         }
+
+        var userInfos = {};
+        {% for user in users %}
+          userInfos[{{ user.uid }}] = {
+            name: '{{ user.name }}',
+            team: '{{ user.team }}',
+            email: '{{ user.email }}',
+            inner_call: '{{ user.inner_call }}',
+            outer_call: '{{ user.outer_call }}',
+            position: '{{ user.position }}',
+            birth: '{{ user.birth }}'
+          };
+        {% endfor %}
+
 
         $('.nav-tabs li').each(function () {
           if (!$(this).hasClass('active')) {
@@ -80,30 +137,42 @@
           $(deactivated + ' .js_user').hide();
         });
 
-        //popup ui
-        $(document).on('mouseover', '.js_user', function (e) {
-          var id = $(this).data('userid');
-          $('.js_user_popup[data-userid=' + id + ']').show(0);
-          e.stopPropagation();
-          return false;
-        });
+//        //popup ui
+//        $(document).on('mouseover', '.js_user', function (e) {
+//          var id = $(this).data('userid');
+//          $('.js_user_popup[data-userid=' + id + ']').show(0);
+//          e.stopPropagation();
+//          return false;
+//        });
+//
+//        $(document).on('mouseout', '.js_user', function (e) {
+//          var id = $(this).data('userid');
+//          $('.js_user_popup[data-userid=' + id + ']').hide(0);
+//          e.stopPropagation();
+//          return false;
+//        });
+//
+//        $(document).on('mousemove', '.js_user', function (e) {
+//          var id = $(this).data('userid');
+//          $('.js_user_popup[data-userid=' + id + ']')
+//            .css({
+//              position: "absolute",
+//              left: e.pageX + 'px',
+//              top: (e.pageY) + 'px'
+//            });
+//          return true;
+//        });
 
-        $(document).on('mouseout', '.js_user', function (e) {
-          var id = $(this).data('userid');
-          $('.js_user_popup[data-userid=' + id + ']').hide(0);
-          e.stopPropagation();
-          return false;
-        });
-
-        $(document).on('mousemove', '.js_user', function (e) {
-          var id = $(this).data('userid');
-          $('.js_user_popup[data-userid=' + id + ']')
-            .css({
-              position: "absolute",
-              left: e.pageX + 'px',
-              top: (e.pageY) + 'px'
-            });
-          return true;
+        $('.js_user').on('click', function (e) {
+          var userId = $(this).attr('data-userid');
+          $('#infoModal .modal-title').text(userInfos[userId].name);
+          $('#team').text(userInfos[userId].team);
+          $('#email').text(userInfos[userId].email);
+          $('#inner_call').text(userInfos[userId].inner_call);
+          $('#outer_call').text(userInfos[userId].outer_call);
+          $('#position').text(userInfos[userId].position);
+          $('#birth').text(userInfos[userId].birth);
+          $('#infoModal').modal();
         });
 
         {% if replaceable %}
@@ -243,6 +312,51 @@
 
 {% block body %}
   {% if globalDomain == "ridi.com" %}
+      <!-- Modal -->
+      <div class="modal fade" id="infoModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="row">
+              <div class="col-md-6">
+                <img class="img-responsive" src="http://placehold.it/300x300">
+              </div>
+              <div class="col-md-6">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <div class="modal-content-header">
+                    <h4 class="modal-title"></h4>
+                  </div>
+                  <div class="modal-content-body">
+                    <dl class="dl-horizontal">
+                      <dt>부서</dt>
+                      <dd id="team"></dd>
+                      <dt>이메일</dt>
+                      <dd id="email"></dd>
+                      <dt>내선번호</dt>
+                      <dd id="inner_call"></dd>
+                      <dt>휴대전화</dt>
+                      <dd id="outer_call"></dd>
+                      <dt>직무</dt>
+                      <dd id="position"></dd>
+                      <dt>생일</dt>
+                      <dd id="birth"></dd>
+                    </dl>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  {#<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <ul id="userMenu" class="dropdown-menu" role="menu" style="display:none">
         <li class="dropdown-submenu">
           <li class="dropdown-submenu">
@@ -264,22 +378,22 @@
           </li>
       </ul>
 
-      {% for user in users %}
-          <div class='js_user_popup' data-userid='{{ user.uid }}'>
-            <div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>
-            {% if user.outer_call %}
-              <div><strong>외선</strong> {{ user.outer_call }}</div>
-            {% endif %}
-            {% if user.inner_call %}
-              <div><strong>내선</strong> {{ user.inner_call }}</div>
-            {% endif %}
-            <div><strong>긴급</strong> {{ user.mobile }}</div>
-            {% if user.image %}
-              <img class="img-responsive" src="/users/{{ user.uid }}/thumb">
-            {% endif %}
-            <div>{{ user.comment }}</div>
-          </div>
-      {% endfor %}
+      {#{% for user in users %}#}
+          {#<div class='js_user_popup' data-userid='{{ user.uid }}'>#}
+            {#<div>{{ user.name }} <sub>{{ user.id }}@{{ globalDomain }}</sub></div>#}
+            {#{% if user.outer_call %}#}
+              {#<div><strong>외선</strong> {{ user.outer_call }}</div>#}
+            {#{% endif %}#}
+            {#{% if user.inner_call %}#}
+              {#<div><strong>내선</strong> {{ user.inner_call }}</div>#}
+            {#{% endif %}#}
+            {#<div><strong>긴급</strong> {{ user.mobile }}</div>#}
+            {#{% if user.image %}#}
+              {#<img class="img-responsive" src="/users/{{ user.uid }}/thumb">#}
+            {#{% endif %}#}
+            {#<div>{{ user.comment }}</div>#}
+          {#</div>#}
+      {#{% endfor %}#}
 
       <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#floor10">10층</a></li>
