@@ -64,12 +64,12 @@ class Post
 				$receivers = [];
 				$receivers[] = 'everyone@' . Config::$domain;
 
-				$mg = new Mailgun("***REMOVED***");
+				$mg = new Mailgun(Config::$mailgun_api_key);
 				$domain = "ridi.com";
 				$result = $mg->sendMessage(
 					$domain,
 					[
-						'from' => '***REMOVED***',
+						'from' => Config::$mailgun_from,
 						'to' => implode(', ', $receivers),
 						'subject' => $mail_title,
 						'text' => strip_tags($mail_bodys),

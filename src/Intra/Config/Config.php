@@ -23,56 +23,33 @@ class Config
 	public static $is_dev = false;
 	public static $test_mails = [];
 
+	public static $azure = [
+		'clientId' => [],
+		'password' => [],
+		'redirectURI' => [],
+		'resourceURI' => [],
+		'appTenantDomainName' => [],
+		'apiVersion' => []
+	];
+
 	public static $recipients = [
-		'payment' => [
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***'
-		],
-		'payment_admin' => [
-			'***REMOVED***',
-			'***REMOVED***'
-		],
-		'holiday' => [
-			'***REMOVED***',
-			'***REMOVED***'
-		]
+		'payment' => [],
+		'payment_admin' => [],
+		'holiday' => []
 	];
 
 	public static $user_policy = [
-		'first_page_editable' => [
-			'***REMOVED***',
-			'***REMOVED***',
-		],
-		'holiday_editable' => [
-			'***REMOVED***',
-		],
-		'press_manager' => [
-			'***REMOVED***',
-			'***REMOVED***',
-		],
-		'user_manager' => [
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-		],
-		'post_admin' => [
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-		],
-		'payment_admin' => [
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-		],
-		'receipts_admin' => [
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-		]
+		'first_page_editable' => [],
+		'holiday_editable' => [],
+		'press_manager' => [],
+		'user_manager' => [],
+		'post_admin' => [],
+		'payment_admin' => [],
+		'receipts_admin' => []
 	];
+
+	public static $ridi_ips = [];
+
+	public static $mailgun_api_key;
+	public static $mailgun_from;
 }

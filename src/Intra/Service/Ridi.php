@@ -15,28 +15,7 @@ class Ridi
 
 	public static function isRidiIP()
 	{
-		/*
-		 * 정규식으로 되어있으니 찾기 힘들어서 주석을 추가
-		 * ***REMOVED*** (KIDC NAS VPN)
-		 * ***REMOVED*** (어반벤치 #1)
-		 * ***REMOVED*** (어반벤치 #2)
-		 * ***REMOVED*** (어반벤치 #3)
-		 * ***REMOVED*** (어반벤치 #4)
-		 */
-		$ridi_ips = [
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***',
-			'***REMOVED***'
-		];
-		foreach ($ridi_ips as $pattern) {
+		foreach (Config::$ridi_ips as $pattern) {
 			if (preg_match($pattern, $_SERVER['REMOTE_ADDR'])) {
 				return true;
 			}
