@@ -67,6 +67,10 @@
         border-radius: 5px;
       }
 
+      .modal-content img {
+        margin: auto;
+      }
+
       .modal-header {
         padding: 10px;
         border-bottom: 0;
@@ -77,30 +81,35 @@
         border-top: 0;
       }
 
-      .dl-horizontal dt {
-        text-align: left;
-        width: 80px;
-      }
-
-      .dl-horizontal dd {
-        margin-left: 80px;
-      }
-
       .modal-content-header {
         padding: 10px;
       }
 
       .modal-content-body {
+        margin: auto;
         padding: 10px;
       }
 
-      .modal-dialog {
-        margin-top: 100px;
+      .dl-horizontal dt {
+        text-align: left;
+        width: 80px;
       }
 
       dt {
         font-weight: 300;
         color: #bbb;
+      }
+
+      @media (min-width: 768px) {
+        .modal-dialog {
+          width: 650px;
+          margin-top: 100px;
+        }
+
+
+        .dl-horizontal dd {
+          margin-left: 80px;
+        }
       }
     </style>
 
