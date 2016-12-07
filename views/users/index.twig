@@ -131,7 +131,7 @@
             inner_call: '{{ user.inner_call }}',
             outer_call: '{{ user.outer_call }}',
             position: '{{ user.position }}',
-            birth: '{{ user.birth }}'
+            birth: '{{ user.birth|date('n월 j일') }}'
           };
         {% endfor %}
 
