@@ -15,6 +15,7 @@ return array(
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
     'Silex\\' => array($vendorDir . '/silex/silex/src/Silex'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support'),
     'Illuminate\\Pagination\\' => array($vendorDir . '/illuminate/pagination'),
     'Illuminate\\Database\\' => array($vendorDir . '/illuminate/database'),
