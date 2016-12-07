@@ -30,6 +30,10 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         array (
             'Psr\\Log\\' => 8,
         ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+        ),
         'I' => 
         array (
             'Illuminate\\Support\\' => 19,
@@ -91,6 +95,10 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
         'Illuminate\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/support',
@@ -145,7 +153,7 @@ class ComposerStaticInit57df06a3821c37ead6edae1ffbef0e95
         array (
             'Raven_' => 
             array (
-                0 => __DIR__ . '/..' . '/raven/raven/lib',
+                0 => __DIR__ . '/..' . '/sentry/sentry/lib',
             ),
         ),
         'P' => 
