@@ -34,6 +34,7 @@
         background-color: #337ab7;
         overflow: hidden;
         text-align: center;
+        cursor: pointer;
       }
 
       .js_user .content {
@@ -49,10 +50,6 @@
 
       .modal-content {
         border-radius: 5px;
-      }
-
-      .modal-content img {
-        margin: auto;
       }
 
       .modal-header {
@@ -84,15 +81,32 @@
         color: #bbb;
       }
 
+      .modal {
+        text-align: center;
+        padding: 0;
+      }
+
+      .modal:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -4px;
+      }
+
+      .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+        width: 300px;
+      }
+
+      .dl-horizontal dd {
+        margin-left: 80px;
+      }
       @media (min-width: 768px) {
         .modal-dialog {
           width: 650px;
-          margin-top: 100px;
-        }
-
-
-        .dl-horizontal dd {
-          margin-left: 80px;
         }
       }
     </style>
@@ -292,10 +306,10 @@
           <!-- Modal content-->
           <div class="modal-content">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-sm-6 col-md-6 col-lg-6">
                 <img class="img-responsive" src="http://placehold.it/300x300">
               </div>
-              <div class="col-md-6">
+              <div class="col-sm-6 col-md-6 col-lg-6">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
