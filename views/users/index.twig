@@ -167,6 +167,7 @@
         {% if replaceable %}
 
           $('.js_user').draggable({
+            grid: [20, 20],
             snap: true,
             containment: '#user_map',
             start: function (e, ui) {
@@ -278,7 +279,7 @@
           }
 
           //context menu setting
-          $('div.contextmenu_trigger').setContextMenu({
+          $('.js_user').setContextMenu({
             menuSelector: "#userMenu",
             menuSelected: function (invokedOn, selectedMenu) {
               var userId = invokedOn.attr('data-userid');
