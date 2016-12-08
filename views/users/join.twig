@@ -4,9 +4,8 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/css/screen.css" media="screen"/>
-  <link rel="stylesheet" href="/css/print.css" media="print"/>
   <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap.min.css" media="screen"/>
+  <link rel="stylesheet" href="/css/style.css">
   <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
   <script>
@@ -45,73 +44,14 @@
       window.Raven.config(sentry_public_key).install();
   </script>
 
-  <style>
-    body, div, td, p {
-      font-size: 12px;
-    }
 
-    body {
-      width: 100%;
-    }
-
-    thead td {
-      background-color: #888;
-      color: #eee;
-    }
-
-    tbody td {
-      text-align: right;
-      padding-left: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-  </style>
-
-  <script>
-    require(["jquery"], function ($) {
-      $('.box').each(function () {
-        var _this = $(this);
-        var d = 10;
-        var color = '#e77';
-
-        if (_this.hasClass('_1'))
-          d = 30;
-        else if (_this.hasClass('_2'))
-          d = 20;
-
-        if (_this.hasClass('_blue'))
-          color = '#77e';
-        else if (_this.hasClass('_green'))
-          color = '#7e7';
-
-        var dL = d + parseInt(_this.css('padding-left'));
-        var dT = d + parseInt(_this.css('padding-top'));
-        var obj;
-        obj = $('<div />')
-          .css('position', 'absolute')
-          .css('border', '0px')
-          .css('margin-left', '-' + dL + 'px')
-          .css('margin-top', '-' + dT + 'px')
-          .css('width', d + 'px')
-          .css('height', (d * 2) + 'px')
-          .css('background-color', color);
-        _this.prepend(obj);
-        obj = obj.clone()
-          .css('margin-left', '0px')
-          .css('margin-top', '-' + dT + 'px')
-          .css('margin-left', '-' + _this.css('padding-left'))
-          .css('width', d + 'px')
-          .css('height', d + 'px');
-        _this.prepend(obj);
-        _this.css('border', '1px solid ' + color);
-      });
-    });
-  </script>
 </head>
-<body>
+
+<body class="account-pages">
 
 {% macro input(name, value, type, size) %}
   {% if type != 'textarea' %}
-    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}"
+    <input type="{{ type|default('text') }}" name="{{ name }}" placeholder="{{ value|e }}" size="{{ size|default(20) }}"
            title="{{ name }}"/>
   {% else %}
     <textarea name="{{ name }}" style="width:200px;height:150px;" title="">{{ value|e }}</textarea>
@@ -119,46 +59,27 @@
 {% endmacro %}
 
 {% block body %}
-  <div style='width:100%'>
-    <div class='box _blue' style='width:300px;margin: 100px auto 0;padding:20px;'>
-      <form id="js_join">
-        <table>
-          <tr>
-            <td>
-              이메일
-            </td>
-            <td>
-              {{ _self.input('email', null, 'text') }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              이름
-            </td>
-            <td>
-              {{ _self.input('name', null, 'text') }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              생년월일
-            </td>
-            <td>
-              {{ _self.input('birth', '0000/00/00', 'text') }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              휴대전화
-            </td>
-            <td>
-              {{ _self.input('mobile', '010-0000-0000', 'text') }}
-            </td>
-          </tr>
-        </table>
-        <div>
-          <div>
-            <button
+    <form id="js_join">
+    <div class="outer">
+      <div class="fader"></div>
+      <div class="inner">
+        
+        <div class="box">
+          <img src="/img/ridi-logo.png" alt="" class="logo">
+          
+          <label for="">이메일 주소</label>
+          {{ _self.input('email', null, 'text') }}
+
+          <label for="">이름</label>
+          {{ _self.input('name', null, 'text') }}
+
+          <label for="">생년월일</label>
+          {{ _self.input('birth', '1980/01/01', 'text') }}
+
+          <label for="">휴대전화</label>
+          {{ _self.input('mobile', '010-0000-0000', 'text') }}
+
+          <button
               attrajax
               data-aa-url='/users/join'
               data-aa-method="post"
@@ -169,17 +90,16 @@
               data-aa-onsuccess-msg="가입되었습니다. 인사팀의 가입승인 후 이용가능합니다."
               data-aa-onsuccess="refresh"
               data-aa-onfail-alert
+              class="blue-button"
             >
-              Join
+              회원가입
             </button>
-            <A onclick="history.go(-1)">
-              <button>Back</button>
-            </A>
-          </div>
         </div>
-      </form>
-    </div>
-  </div>
+
+      </div>
+    </div><!-- /outer -->
+  
+    </form>
 {% endblock %}
 </body>
 </html>

@@ -6,51 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/css/style.css">
   <script src="/js/bower/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <style>
-    body {
-      padding-top: 40px;
-      padding-bottom: 40px;
-      background-color: #eee;
-    }
-
-    .form-signin {
-      max-width: 330px;
-      padding: 15px;
-      margin: 0 auto;
-    }
-
-    .form-signin input[type="text"] {
-      margin-bottom: -1px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .form-signin input[type="password"] {
-      margin-bottom: 10px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-  </style>
 </head>
-<body>
+
+<body class="account-pages">
 {% block body %}
-  <div class="container">
+    <div class="outer">
+      <div class="fader"></div>
+      <div class="inner">
+        
+        <div class="box">
+          <img src="/img/ridi-logo.png" alt="" class="logo">
+          <a href='{{ azure_login }}' class="blue-button">
+            로그인
+          </a>
+          <a href='/users/join' class="sub-link">
+            회원가입
+          </a>
+        </div>
 
-    <div class="form-signin text-center">
-      <a href='{{ azure_login }}'>
-        <button class="btn btn-primary">
-          Login
-        </button>
-      </a>
-      <a href='/users/join'>
-        <button class="btn btn-primary">
-          Join
-        </button>
-      </a>
-    </div>
-
-  </div> <!-- /container -->
+      </div>
+    </div><!-- /outer -->
 {% endblock %}
 </body>
 </html>
