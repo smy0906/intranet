@@ -5,46 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap.min.css" media="screen"/>
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
-  <script>
-    requirejs.config({
-      baseUrl: "/js/bower/bower_components",
-      paths: {
-        "jquery": "jquery/dist/jquery.min",
-        "jquery-ui": "jquery-ui/jquery-ui.min",
-        "jquery.attrajax": "jquery.attrajax/jquery.attrajax",
-        "jquery.jeditable": "jquery.jeditable/jquery.jeditable",
-        "jquery.tmpl": "jquery.tmpl/jquery.tmpl",
-        "jquery-form": "jquery-form/jquery.form",
-        "jquery-number": "jquery-number/jquery.number.min",
-        "bootstrap": "bootstrap/dist/js/bootstrap.min",
-        "jquery.cookie": "jquery.cookie/jquery.cookie",
-        "jqueryte": "jqueryte/dist/jquery-te-1.4.0.min"
-      },
-      shim: {
-        "jquery-ui": ["jquery"],
-        "jquery.attrajax": ["jquery", "jquery-form"],
-        "jquery.jeditable": ["jquery"],
-        "jquery.tmpl": ["jquery"],
-        "jquery-form": ["jquery"],
-        "jquery-number": ["jquery"],
-        "bootstrap": ["jquery"],
-        "jquery.cookie": ["jquery"],
-        "jqueryte": ["jquery"]
-      }
-    });
-
-  </script>
+  <link rel="stylesheet" href="/css/style.css?v=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+  {% include 'require.config.twig' %}
   <script type="text/javascript" src="/js/common.js"></script>
-  <script>
-    var sentry_public_key = '{{ sentryPublicKey }}';
-    if (sentry_public_key.length && window.Raven)
-      window.Raven.config(sentry_public_key).install();
-  </script>
-
-
 </head>
 
 <body class="account-pages">
@@ -59,14 +23,14 @@
 {% endmacro %}
 
 {% block body %}
-    <form id="js_join">
+  <form id="js_join">
     <div class="outer">
       <div class="fader"></div>
       <div class="inner">
-        
+
         <div class="box">
           <img src="/img/ridi-logo.png" alt="" class="logo">
-          
+
           <label for="">이메일 주소</label>
           {{ _self.input('email', null, 'text') }}
 
@@ -98,8 +62,8 @@
 
       </div>
     </div><!-- /outer -->
-  
-    </form>
+
+  </form>
 {% endblock %}
 </body>
 </html>
