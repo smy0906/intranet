@@ -46,48 +46,9 @@
   <link rel="stylesheet" href="/js/bower/bower_components/datatables/media/css/dataTables.bootstrap.min.css" media="screen">
   <link rel="stylesheet" href="/js/bower/bower_components/select2/select2.css">
   <link rel="stylesheet" href="/js/bower/bower_components/smalot-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
-  <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
-  <script>
-    requirejs.config({
-      baseUrl: "/js/bower/bower_components",
-      paths: {
-        "jquery": "jquery/dist/jquery.min",
-        "jquery-ui": "jquery-ui/jquery-ui.min",
-        "jquery.attrajax": "jquery.attrajax/jquery.attrajax",
-        "jquery.jeditable": "jquery.jeditable/jquery.jeditable",
-        "jquery.tmpl": "jquery.tmpl/jquery.tmpl",
-        "jquery-form": "jquery-form/jquery.form",
-        "jquery-number": "jquery-number/jquery.number.min",
-        "jquery.cookie": "jquery.cookie/jquery.cookie",
-        "jqueryte": "jqueryte/dist/uncompressed/jquery-te-1.4.0",
-        "jquery.fileupload": "blueimp-file-upload/js/jquery.fileupload",
-        'datatables.net': 'datatables/media/js/jquery.dataTables',
-        "bootstrap": "bootstrap/dist/js/bootstrap.min",
-        'bootstrap.datatables': 'datatables/media/js/dataTables.bootstrap',
-        'select2': 'select2/select2.min',
-
-        // jquery.fileupload bug hotfix
-        "jquery-ui/widget": "../empty"
-      },
-      shim: {
-        "jquery-ui": ["jquery"],
-        "jquery.attrajax": ["jquery", "jquery-form"],
-        "jquery.jeditable": ["jquery"],
-        "jquery.tmpl": ["jquery"],
-        "jquery-form": ["jquery"],
-        "jquery-number": ["jquery"],
-        "select2": ["jquery"],
-        "bootstrap": ["jquery"],
-        "bootstrap.datatables": ["datatables.net", "bootstrap"],
-        "datatables.net": ["jquery"],
-        "jquery.cookie": ["jquery"],
-        "jqueryte": ["jquery"],
-        "jquery.fileupload": ["jquery", "jquery-ui"]
-      }
-    });
-
-  </script>
+  <script src="https://cdn.ravenjs.com/3.9.0/raven.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+  {% include 'require.config.twig' %}
   <script type="text/javascript" src="/js/common.js"></script>
   <script>
     var sentry_public_key = '{{ sentryPublicKey }}';
