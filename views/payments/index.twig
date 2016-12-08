@@ -137,7 +137,7 @@
             category_detail = '기타(' + category_detail + ')';
           }
           $('option:selected', this).text(category_detail);
-          $(this).trigger("change");
+          //$(this).trigger("change");
           category = category_detail;
         }
         $('input[name=category]').val(category);
