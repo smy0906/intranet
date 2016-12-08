@@ -42,12 +42,12 @@ class Settings
 	public static function getAppTenantDomainName()
 	{
 		$domain = self::getDomain();
-		return Config::$azure['$appTenantDomainName'][$domain];
+		return Config::$azure['appTenantDomainName'][$domain];
 	}
 
 	public static function getApiVersion()
 	{
 		$domain = self::getDomain();
-		return Config::$azure['$apiVersion'][$domain];
+		return Config::$azure['apiVersion'][$domain];
 	}
 }
