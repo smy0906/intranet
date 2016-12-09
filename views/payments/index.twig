@@ -487,9 +487,13 @@
         </td>
         <td class="alert alert-info">
           <label>
-            <select id='js_category_input' js_cookie_save js_data_chosen style="width:350px;">
+            <select id='js_category_input' js_data_chosen style="width:350px;">
               {% for category in const.category %}
-                <option value='{{ category }}'>{{ category }}</option>
+                {% if loop.first %}
+                  <option value='{{ category }}' selected>{{ category }}</option>
+                {% else %}
+                  <option value='{{ category }}'>{{ category }}</option>
+                {% endif %}
               {% endfor %}
             </select>
             <input type='hidden' name='category'/>
