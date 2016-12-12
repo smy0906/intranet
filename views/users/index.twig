@@ -127,7 +127,7 @@
             team: '{{ user.team }}',
             email: '{{ user.email }}',
             inner_call: '{{ user.inner_call }}',
-            outer_call: '{{ user.outer_call }}',
+            mobile: '{{ user.mobile }}',
             position: '{{ user.position }}',
             birth: '{{ user.birth|date('n월 j일') }}'
           };
@@ -286,7 +286,7 @@
           $('#team').text(userInfos[userId].team);
           $('#email').text(userInfos[userId].email);
           $('#inner_call').text(userInfos[userId].inner_call);
-          $('#outer_call').text(userInfos[userId].outer_call);
+          $('#mobile').text(userInfos[userId].mobile);
           $('#position').text(userInfos[userId].position);
           $('#birth').text(userInfos[userId].birth);
           $('#infoModal').modal();
@@ -326,7 +326,7 @@
                       <dt>내선번호</dt>
                       <dd id="inner_call"></dd>
                       <dt>휴대전화</dt>
-                      <dd id="outer_call"></dd>
+                      <dd id="mobile"></dd>
                       <dt>직무</dt>
                       <dd id="position"></dd>
                       <dt>생일</dt>
