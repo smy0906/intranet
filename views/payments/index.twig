@@ -692,7 +692,18 @@ B. 결제정보
           </td>
           <td>
             <form action="/payments/downloadTaxDate" method="post">
-              <input type="month" name="month" placeholder="2016-01"/>
+              <input type="text" name="month" placeholder="2016-01"/>
+              <input type="submit" value="받기"/>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            귀속월 기준 조회
+          </td>
+          <td>
+            <form action="/payments/downloadActiveMonth" method="post">
+              <input type="text" name="month" placeholder="2016-01"/>
               <input type="submit" value="받기"/>
             </form>
           </td>
