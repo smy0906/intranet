@@ -69,6 +69,7 @@ class PaymentModel extends BaseModel
 	public function todayQueuedCost()
 	{
 		$where = $this->getTodayQueuedWhere();
+
 		return number_format(
 			$this->db->sqlData(
 				'select sum(price) from payments where ? order by `pay_date` asc, paymentid asc',
@@ -101,6 +102,7 @@ class PaymentModel extends BaseModel
 	public function add($payment_insert)
 	{
 		$this->db->sqlInsert('payments', $payment_insert);
+
 		return $this->db->insert_id();
 	}
 
@@ -111,6 +113,7 @@ class PaymentModel extends BaseModel
 		$tables = [
 			'payments.uid' => 'users.uid'
 		];
+
 		return $this->db->sqlDicts(
 			'select users.name, payments.* from ? where `pay_date` between ? and ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
@@ -126,6 +129,7 @@ class PaymentModel extends BaseModel
 		$tables = [
 			'payments.uid' => 'users.uid'
 		];
+
 		return $this->db->sqlDicts(
 			'select users.name, payments.* from ? where `tax_date` between ? and ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
@@ -156,12 +160,14 @@ class PaymentModel extends BaseModel
 			)
 
 		];
+
 		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));
 	}
 
 	public function getPaymentWithoutUid($paymentid)
 	{
 		$where = compact('paymentid');
+
 		return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));
 	}
 
@@ -173,6 +179,7 @@ class PaymentModel extends BaseModel
 			'pay_date' => sqlBetween($on_3days_ago, $on_2days_ago),
 			'payments.status' => sqlNot('결제 완료'),
 		];
+
 		return self::getDb()->sqlDicts('select * from payments where ?', sqlWhere($where));
 	}
 
@@ -185,6 +192,7 @@ class PaymentModel extends BaseModel
 			'payment_accept.id' => null,
 			'payments.status' => sqlNot('결제 완료'),
 		];
+
 		return self::getDb()->sqlDicts('select payments.* from ? where ?', sqlLeftJoin($table), sqlWhere($where));
 	}
 
@@ -236,5 +244,20 @@ class PaymentModel extends BaseModel
 			'paymentid' => $paymentid
 		];
 		$this->db->sqlUpdate('payments', $update, $where);
+	}
+
+	public function getAllPaymentsByActiveMonth($month)
+	{
+		$month_str = date('Y-m', strtotime($month));
+
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where `month` = ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$month_str
+		);
 	}
 }
