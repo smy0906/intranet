@@ -69,18 +69,24 @@ class SupportDtoFilter
 				$flower_type_column = '기타';
 			}
 
-			if ($support_dto->dict[$columns['화환 종류']->key] == '자동선택') {
-				if ($support_dto->dict[$columns['대상자']->key] == '외부') {
-					throw new MsgException('대상자가 외부일 경우, 화환 종류를 직접 선택해주세요.');
+			if ($support_dto->dict[$columns['대상자']->key] == '외부') {
+				if ($support_dto->dict[$columns['화환 종류']->key] != '기타') {
+					throw new MsgException('대상자가 외부일 경우, 화환 종류를 기타로 선택 후 직접 입력해주세요.');
 				}
-				$support_dto->dict[$columns['화환 종류']->key] = $flower_type_column;
+			} else {
+				if ($support_dto->dict[$columns['화환 종류']->key] == '자동선택') {
+					$support_dto->dict[$columns['화환 종류']->key] = $flower_type_column;
+				}
 			}
 
-			if (in_array($category, [
-				'결혼',
-				'자녀출생',
-				'사망-부모 (배우자 부모 포함)',
-			])) {
+			if (in_array(
+				$category,
+				[
+					'결혼',
+					'자녀출생',
+					'사망-부모 (배우자 부모 포함)',
+				]
+			)) {
 				$cash = '1000000';
 				$support_dto->dict[$columns['경조금']->key] = $cash;
 			}
@@ -109,6 +115,7 @@ class SupportDtoFilter
 		}
 
 		$support_dto->dict['uuid'] = self::getUuidHeader($support_dto->target);
+
 		return $support_dto;
 	}
 
@@ -123,6 +130,7 @@ class SupportDtoFilter
 			SupportPolicy::TYPE_DEVICE => 'hp',
 		];
 		$code = $codes[$target];
+
 		return "ridi-{$code}-{$year}";
 	}
 }
