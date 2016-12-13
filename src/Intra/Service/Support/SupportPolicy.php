@@ -54,6 +54,7 @@ class SupportPolicy
 	public static function getColumnFields($target)
 	{
 		self::initColumnFields();
+
 		return self::$column_fields[$target];
 	}
 
@@ -78,6 +79,7 @@ class SupportPolicy
 	public static function getColumnTitle($target)
 	{
 		self::initColumnFields();
+
 		return self::$column_titles[$target];
 	}
 
@@ -142,23 +144,26 @@ class SupportPolicy
 				'거래처 경조 사유(외부)' => new SupportColumnText('outer_receiver_detail'),
 				'귀속부서' => new SupportColumnTeam('team'),
 				'대상자(직원)' => new SupportColumnWorker('receiver_worker_uid'),
-				'분류' => new SupportColumnCategory('category', [
-					'졸업',
-					'결혼',
-					'자녀출생',
-					'장기근속(3년)',
-					'사망-형제자매 (배우자 형제자매포함)',
-					'사망-부모 (배우자 부모 포함)',
-					'사망-조부모 (배우자 조부모 포함)',
-					'기타'
-				]),
+				'분류' => new SupportColumnCategory(
+					'category',
+					[
+						'졸업',
+						'결혼',
+						'자녀출생',
+						'장기근속(3년)',
+						'사망-형제자매 (배우자 형제자매포함)',
+						'사망-부모 (배우자 부모 포함)',
+						'사망-조부모 (배우자 조부모 포함)',
+						'기타'
+					]
+				),
 				'분류 상세' => (new SupportColumnText('category_detail'))->placeholder('나리디님 결혼'),
 				'경조금' => (new SupportColumnMoney('cash'))->placeholder('미입력시 자동입력')->isVisibleIf($callback_is_human_manage_team),
 				'경조일자' => new SupportColumnDate('request_date', date('Y/m/d'), true),
 				'화환 종류' => new SupportColumnCategory('flower_category', ['자동선택', '화환', '과일바구니', '조화', '기타']),
 				'화환 상세' => new SupportColumnTextDetail('flower_category_detail', 'flower_category', ['기타', '화환']),
-				'화환 수령자' => new SupportColumnText('flower_receiver', '', '홍길동'),
-				'화환 연락처' => new SupportColumnText('flower_call', '', '010-1234-5678'),
+				'화환 수령자' => (new SupportColumnText('flower_receiver', '', '홍길동'))->isRequired(),
+				'화환 연락처' => (new SupportColumnText('flower_call', '', '010-1234-5678'))->isRequired(),
 				'화환 주소' => (new SupportColumnText('flower_address'))->isRequired(),
 				'화환 도착일시' => (new SupportColumnDatetime('flower_datetime'))->placeholder('2016-01-02 07:10')->setTextInputType('datetime-local'),
 				'비고' => new SupportColumnText('note', '', '비고'),
@@ -217,18 +222,21 @@ class SupportPolicy
 				),
 				'사용자(직원)' => new SupportColumnWorker('receiver_uid'),
 				'사용자(현재 미입사)' => new SupportColumnText('name'),
-				'분류' => new SupportColumnCategory('category', [
-					'일반구매 (사무용품, IT비품, 기타 소모품 등)',
-					'데스크탑 (개발/UX)',
-					'데스크탑 (디자이너)',
-					'노트북 (일반)',
-					'MAC (IMAC)',
-					'MAC (MACBOOK)',
-					'MAC (MAC MINI)',
-					'모니터 (24인치)',
-					'모니터 (27인치)',
-					'기기 (테블릿, 와콤 등)'
-				]),
+				'분류' => new SupportColumnCategory(
+					'category',
+					[
+						'일반구매 (사무용품, IT비품, 기타 소모품 등)',
+						'데스크탑 (개발/UX)',
+						'데스크탑 (디자이너)',
+						'노트북 (일반)',
+						'MAC (IMAC)',
+						'MAC (MACBOOK)',
+						'MAC (MAC MINI)',
+						'모니터 (24인치)',
+						'모니터 (27인치)',
+						'기기 (테블릿, 와콤 등)'
+					]
+				),
 				'상세내역' => new SupportColumnText('detail'),
 				'세팅(예정)일' => (new SupportColumnDate('request_date', date('Y/m/d', strtotime('+7 day')), true))->setTextInputType('date'),
 				'비고' => new SupportColumnText('note', '', '구매 사이트 링크 / 비고'),
