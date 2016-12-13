@@ -39,7 +39,7 @@ class MailSendService
 	 */
 	public static function send($dto)
 	{
-		$mg = new Mailgun("***REMOVED***");
+		$mg = new Mailgun(Config::$mailgun_api_key);
 		$domain = "ridibooks.com";
 
 		$html = $dto->body_header . DictsUtils::convertDictsToHtmlTable($dto->dicts) . $dto->body_footer;
