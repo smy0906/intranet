@@ -71,7 +71,7 @@ class UserHolidayNotification
 			}
 		}
 
-		$mg = new Mailgun("***REMOVED***");
+		$mg = new Mailgun(Config::$mailgun_api_key);
 		$domain = "ridibooks.com";
 		$ret = $mg->sendMessage(
 			$domain,

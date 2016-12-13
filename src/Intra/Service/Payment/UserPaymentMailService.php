@@ -60,7 +60,7 @@ class UserPaymentMailService
 			}
 		}
 
-		$mg = new Mailgun("***REMOVED***");
+		$mg = new Mailgun(Config::$mailgun_api_key);
 		$domain = "ridibooks.com";
 		$mg->sendMessage(
 			$domain,
