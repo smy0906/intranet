@@ -49,17 +49,19 @@ class CronMaster
 		}
 	}
 
-	private function getLastExecutedDatetime($cron_class_name)
+	private static function getLastExecutedDatetime($cron_class_name)
 	{
 		$datetime = CronHistoryModel::getLastTime($cron_class_name);
 		if ($datetime) {
 			return new \DateTime($datetime);
 		}
+
 		return new \DateTime('1000-00-00 00:00:00');
 	}
 
 	/**
 	 * @param $lock_unique_name
+	 *
 	 * @return bool
 	 */
 	private static function tryLockAndIfFailed($lock_unique_name)
@@ -68,6 +70,7 @@ class CronMaster
 		if (!flock($lock, LOCK_EX | LOCK_NB)) {
 			return true;
 		}
+
 		return false;
 	}
 }
