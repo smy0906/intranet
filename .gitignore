@@ -3,3 +3,4 @@ composer.lock
 ConfigRelease.php
 _ConfigRelease.php
 /upload/*
+/node_modules/*
