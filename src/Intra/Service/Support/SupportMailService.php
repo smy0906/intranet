@@ -28,7 +28,7 @@ class SupportMailService
 	 *
 	 * @return MailingDto[]
 	 */
-	private function getMailContents($target, $type, $support_dto)
+	private static function getMailContents($target, $type, $support_dto)
 	{
 		$support_view_dto = SupportViewDto::create($support_dto);
 		$title = SupportPolicy::getColumnTitle($target);
@@ -49,11 +49,14 @@ class SupportMailService
 
 		$title = "[{$title}][{$type}][{$working_date}] {$register_name}님의 요청";
 		$link = 'http://intra.' . Config::$domain . '/Support/' . $target;
-		$html = Application::$view->render('support/template/mail', [
-			'dto' => $support_view_dto,
-			'columns' => $column_fields,
-			'link' => $link,
-		]);
+		$html = Application::$view->render(
+			'support/template/mail',
+			[
+				'dto' => $support_view_dto,
+				'columns' => $column_fields,
+				'link' => $link,
+			]
+		);
 
 		$receivers = [
 			$register_name,

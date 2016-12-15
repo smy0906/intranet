@@ -22,7 +22,7 @@ class UserPaymentMailService
 	 *
 	 * @return array
 	 */
-	private function getMailContents($type, PaymentDto $dto)
+	private static function getMailContents($type, PaymentDto $dto)
 	{
 		$title = "[{$type}][{$dto->team}][{$dto->month}] {$dto->register_name}님의 요청, {$dto->category}";
 		$html = Application::$view->render('payments/template/add', ['item' => $dto]);
@@ -48,7 +48,7 @@ class UserPaymentMailService
 	 * @param $title
 	 * @param $html
 	 */
-	private function sendMailRaw($receivers, $title, $html)
+	private static function sendMailRaw($receivers, $title, $html)
 	{
 		$receivers = array_merge($receivers, Config::$recipients['payment']);
 
