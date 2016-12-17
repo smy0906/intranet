@@ -4,3 +4,4 @@ ConfigRelease.php
 _ConfigRelease.php
 /upload/*
 /node_modules/*
+/js/node_modules/*

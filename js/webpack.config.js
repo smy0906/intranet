@@ -1,8 +1,8 @@
 module.exports = {
-    entry: './js/press.js',
+    entry: './press.js',
  
     output: {
-        path: __dirname + '/js/',
+        path: __dirname,
         filename: 'bundle.js'
     },
  
