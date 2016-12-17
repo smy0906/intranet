@@ -37,6 +37,8 @@ class UserPaymentStatService
 			'입금금액',
 			'결제예정일',
 			'세금계산서수취여부',
+			'세금계산서일자',
+			'장부반영여부',
 			'비고',
 			'결제수단',
 			'상태'
@@ -60,6 +62,8 @@ class UserPaymentStatService
 				$payment->price,
 				$payment->pay_date,
 				$payment->tax,
+				$payment->tax_date,
+				$payment->is_account_book_registered,
 				$payment->note,
 				$payment->paytype,
 				$payment->status,
