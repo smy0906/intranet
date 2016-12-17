@@ -710,6 +710,53 @@ B. 결제정보
         </tr>
         <tr>
           <td>
+            귀속부서 기준 조회
+          </td>
+          <td>
+            <form action="/payments/downloadActiveTeam" method="post">
+              <select name='team' js_cookie_save js_data_chosen style="width:250px;">
+                {% for team in const.team %}
+                  <option value='{{ team }}'>{{ team }}</option>
+                {% endfor %}
+              </select>
+              <input type="submit" value="받기"/>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            분류 기준 조회
+          </td>
+          <td>
+            <form action="/payments/downloadActiveCategory" method="post">
+              <select name='category_condition' js_data_chosen style="width:350px;">
+                {% for category in const.category %}
+                  {% if loop.first %}
+                    <option value='{{ category }}' selected>{{ category }}</option>
+                  {% else %}
+                    <option value='{{ category }}'>{{ category }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+              <input type="submit" value="받기"/>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            기간별 기준 조회
+          </td>
+          <td>
+            <form action="/payments/downloadActiveRequestDate" method="post">
+              <input type="text" name="request_date_start" placeholder="2016-01-01"/>
+              <span>~</span>
+              <input type="text" name="request_date_end" placeholder="2016-12-01"/>
+              <input type="submit" value="받기"/>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>
             다른 사람 편집하기
           </td>
           <td>

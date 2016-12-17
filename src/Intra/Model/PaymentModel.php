@@ -260,4 +260,44 @@ class PaymentModel extends BaseModel
 			$month_str
 		);
 	}
+
+	public function getAllPaymentsByActiveTeam($team)
+	{
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where `team` = ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$team
+		);
+	}
+
+	public function getAllPaymentsByActiveCategory($category)
+	{
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where `category` = ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$category
+		);
+	}
+
+	public function getAllPaymentsByActiveRequestDate($requestDateStart, $requestDateEnd)
+	{
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where `request_date` >= ? and `request_date` <= ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$requestDateStart,
+			$requestDateEnd
+		);
+	}
 }
