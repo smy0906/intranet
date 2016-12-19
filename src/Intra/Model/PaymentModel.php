@@ -255,7 +255,7 @@ class PaymentModel extends BaseModel
 		];
 
 		return $this->db->sqlDicts(
-			'select users.name, payments.* from ? where `month` = ? order by pay_date asc, uid asc',
+			'select users.name, payments.* from ? where payments.`month` = ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
 			$month_str
 		);
@@ -268,7 +268,7 @@ class PaymentModel extends BaseModel
 		];
 
 		return $this->db->sqlDicts(
-			'select users.name, payments.* from ? where `team` = ? order by pay_date asc, uid asc',
+			'select users.name, payments.* from ? where payments.`team` = ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
 			$team
 		);
@@ -281,7 +281,7 @@ class PaymentModel extends BaseModel
 		];
 
 		return $this->db->sqlDicts(
-			'select users.name, payments.* from ? where `category` = ? order by pay_date asc, uid asc',
+			'select users.name, payments.* from ? where payments.`category` = ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
 			$category
 		);
@@ -294,7 +294,7 @@ class PaymentModel extends BaseModel
 		];
 
 		return $this->db->sqlDicts(
-			'select users.name, payments.* from ? where `request_date` >= ? and `request_date` <= ? order by pay_date asc, uid asc',
+			'select users.name, payments.* from ? where payments.`request_date` >= ? and `request_date` <= ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
 			$requestDateStart,
 			$requestDateEnd
