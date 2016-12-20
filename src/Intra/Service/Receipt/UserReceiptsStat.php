@@ -18,7 +18,7 @@ class UserReceiptsStat
 			'receipts.uid' => 'users.uid'
 		];
 		$receipts = $db->sqlDicts(
-			'select users.name, users.team, receipts.* from ? where str_to_date(?, "%Y-%m-%d") <= `date` and date < str_to_date(?, "%Y-%m-%d") order by uid asc, `date` asc, receiptid asc',
+			'select users.personcode, users.name, users.team, receipts.* from ? where str_to_date(?, "%Y-%m-%d") <= `date` and date < str_to_date(?, "%Y-%m-%d") order by uid asc, `date` asc, receiptid asc',
 			sqlLeftJoin($tables),
 			$month,
 			$nextmonth
@@ -27,11 +27,12 @@ class UserReceiptsStat
 		$csvs = [];
 		//header
 		{
-			$arr = ['이름', '팀', '날짜', '상호', '금액', '적요', '분류', '지불방식', '용도'];
+			$arr = ['사원번호', '이름', '팀', '날짜', '상호', '금액', '적요', '분류', '지불방식', '용도'];
 			$csvs[] = $arr;
 		}
 		foreach ($receipts as $receipt) {
 			$arr = [
+				$receipt['personcode'],
 				$receipt['name'],
 				$receipt['team'],
 				$receipt['date'],
@@ -57,7 +58,7 @@ class UserReceiptsStat
 			'receipts.uid' => 'users.uid'
 		];
 		$receipts = $db->sqlDicts(
-			'select SUBSTR(`date`, 1, 7 ) as yearmonth, users.name, users.team, title, scope, type, payment, sum(cost) as cost from ? where year(`date`) = ? group by yearmonth, users.name, scope, type, payment ',
+			'select SUBSTR(`date`, 1, 7 ) as yearmonth, users.personcode, users.name, users.team, title, scope, type, payment, sum(cost) as cost from ? where year(`date`) = ? group by yearmonth, users.name, scope, type, payment ',
 			sqlLeftJoin($tables),
 			$year
 		);
@@ -65,12 +66,13 @@ class UserReceiptsStat
 		$csvs = [];
 		//header
 		{
-			$arr = ['월', '이름', '팀', '상호', '금액', '적요', '분류', '지불방식', '용도'];
+			$arr = ['월', '사원번호', '이름', '팀', '상호', '금액', '적요', '분류', '지불방식', '용도'];
 			$csvs[] = $arr;
 		}
 		foreach ($receipts as $receipt) {
 			$arr = [
 				$receipt['yearmonth'] . '월',
+				$receipt['personcode'],
 				$receipt['name'],
 				$receipt['team'],
 				$receipt['title'],

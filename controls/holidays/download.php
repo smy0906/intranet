@@ -24,6 +24,7 @@ $holidays = $user_holiday->getHolidaysAllUsers($year);
 
 $csvs = [
 	'신청날짜' => 'request_date',
+	'사원번호' => 'personcode',
 	'신청자' => 'uid_name',
 	'결재자' => 'manager_uid_name',
 	'종류' => 'type',
