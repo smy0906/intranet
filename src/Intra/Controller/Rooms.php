@@ -59,11 +59,16 @@ class Rooms implements ControllerProviderInterface
 			'focus' => ' - FOCUS ROOM은 업무 집중 및 개인 휴식 공간입니다',
 		];
 
+		$warning = [
+			'focus' => ' 임직원이 공용으로 사용하는 파티션이므로 임의로 구조 변경하지 말아 주세요.'
+		];
+
 		return $app['twig']->render('Rooms/index.twig', [
 			'rooms' => $rooms,
 			'name' => $name,
 			'description' => $descriptions[$type],
 			'notice' => $notices[$type],
+			'warning' => $warning[$type]
 		]);
 	}
 
