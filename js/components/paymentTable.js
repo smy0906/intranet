@@ -8,72 +8,173 @@ class PaymentTable extends React.Component {
   constructor(props) {
     super(props);
 
-    this.isAllSelected = false;
-    this.state = {
-      selects: {}
-    };
+    // this.isAllSelected = false;
+    // this.state = {
+    //   selects: {}
+    // };
+
+    for (let dataKey in this.props.schema) {
+      if (this.props.schema[dataKey].isKey) {
+        this.keyName = dataKey;
+        break;
+      }
+    }
+
+    // this.selected = {};
+    // if (this.props.selectProps && this.props.selectProps.selectedRows) {
+    //   for (let i = 0; i < this.props.selectProps.selectedRows.length; ++i) {
+    //     this.selected[this.props.selectProps.selectedRows[i]] = true;
+    //   }
+    // }
   }
 
   selectVal(index) {
-    return this.state.selects[index]? this.state.selects[index] : false;
+    //return this.state.selects[index]? this.state.selects[index] : false;
+    //return this.props.selectedRows? (this.props.selectedRows[index]? this.props.selectedRows[index] : false) : false;
+    return this.selected[index]? this.selected[index] : false;
   }
 
-  onSelect(index) {
-    this.setState({
-      selects: update(this.state.selects, {[index]:{$set:!this.selectVal(index)}})
-    });
+  handleSelect(e, index) {
+    if (!this.props.selectProps || !this.props.selectProps.onSelect) {
+      return;
+    }
+
+    // this.setState({
+    //   selects: update(this.state.selects, {[index]:{$set:!this.selectVal(index)}})
+    // });
+    const isChecked = e.currentTarget.checked;
+    const data = this.props.datas[index];
+    this.props.selectProps.onSelect(isChecked, index, data);
   }
 
-  onSelectAll() {
-    this.isAllSelected = !this.isAllSelected;
+  handleSelectAll(e) {
+    // this.isAllSelected = !this.isAllSelected;
+    //
+    // if (this.isAllSelected) {
+    //   let selects = {};
+    //   for (let i=0; i<this.props.datas.length; ++i) {
+    //     selects[i] = true;
+    //   }
+    //   this.setState({selects: selects});
+    //
+    // } else {
+    //   this.setState({selects: {}});
+    //
+    // }
 
-    if (this.isAllSelected) {
-      let selects = {};
+    let isChecked = e.currentTarget.checked;
+
+    // if (isChecked) {
+    //   let selects = {};
+    //   for (let i=0; i<this.props.datas.length; ++i) {
+    //     selects[i] = true;
+    //   }
+    //   this.setState({selects: selects});
+    //
+    // } else {
+    //   this.setState({selects: {}});
+    //
+    // }
+
+    let indexes;
+    if (isChecked) {
+      indexes = [];
       for (let i=0; i<this.props.datas.length; ++i) {
-        selects[i] = true;
+        indexes.push(i);
       }
-      this.setState({selects: selects});
-
     } else {
-      this.setState({selects: {}});
+      indexes = this.getNowSelected();
+    }
 
+    const selectedDatas = indexes.map(index => {
+      return this.props.datas[index];
+    });
+
+    if (this.props.selectProps && this.props.selectProps.onSelectAll) {
+      this.props.selectProps.onSelectAll(isChecked, indexes, selectedDatas)
     }
   }
 
-  onMultiEdit() {
-    let selected = [];
-    for (let index in this.state.selects) {
-      if (this.state.selects[index]) {
-        selected.push(parseInt(index));
-      }
-    };
-
-    if (selected.length > 0) {
-      this.props.onEdit(selected);
+  handleAdd() {
+    if (!this.props.updateProps || !this.props.updateProps.onAdd) {
+      return;
     }
+
+    this.props.updateProps.onAdd();
   }
 
-  onMultiDel() {
-    let selected = [];
-    for (let index in this.state.selects) {
-      if (this.state.selects[index]) {
-        selected.push(parseInt(index));
-      }
-    };
-
-    if (selected.length > 0) {
-      this.props.onDel(selected);
+  handleEdit(index) {
+    if (!this.props.updateProps || !this.props.updateProps.onEdit) {
+      return;
     }
+
+    let data = this.props.datas[index];
+    this.props.updateProps.onEdit(data);
   }
 
-  componentWillReceiveProps(nextProps) {
-    let selects = {};
-    for (let i=0; i<nextProps.datas.length; ++i) {
-      selects[i] = this.selectVal(i);
+  handleDel(index) {
+    if (!this.props.updateProps || !this.props.updateProps.onDel) {
+      return;
     }
-    console.log(selects);
-    this.state.selects = selects;
+
+    this.props.updateProps.onDel(index, this.props.datas[index]);
   }
+
+  handleMultiEdit() {
+    if (!this.props.updateProps || !this.props.updateProps.onMultiEdit) {
+      return;
+    }
+
+    let indexes = this.getNowSelected();
+    const selectedDatas = indexes.map(index => {
+      return this.props.datas[index];
+    });
+
+    this.props.updateProps.onMultiEdit(indexes, selectedDatas);
+
+    // let selected = [];
+    // for (let index in this.selected) {
+    //   if (this.selected[index]) {
+    //     selected.push(parseInt(index));
+    //   }
+    // };
+    //
+    // if (selected.length > 0) {
+    //   this.props.updateProps.onMultiEdit(selected);
+    // }
+  }
+
+  handleMultiDel() {
+    if (!this.props.updateProps || !this.props.updateProps.onMultiDel) {
+      return;
+    }
+
+    let indexes = this.getNowSelected();
+    const selectedDatas = indexes.map(index => {
+      return this.props.datas[index];
+    });
+
+    this.props.updateProps.onMultiDel(indexes, selectedDatas);
+
+    // let selected = [];
+    // for (let index in this.selected) {
+    //   if (this.selected[index]) {
+    //     selected.push(parseInt(index));
+    //   }
+    // };
+    //
+    // if (selected.length > 0) {
+    //   this.props.updateProps.onMultiDel(selected);
+    // }
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   let selects = {};
+  //   for (let i=0; i<nextProps.datas.length; ++i) {
+  //     selects[i] = this.selectVal(i);
+  //   }
+  //   this.state.selects = selects;
+  // }
 
   render() {
     let headers = Object.values(this.props.schema);
@@ -84,12 +185,12 @@ class PaymentTable extends React.Component {
 
     let rows = [];
     this.props.datas.forEach((data, index) => {
-      rows.push(<PaymentRow key={index}
+      rows.push(<PaymentRow key={data[this.keyName]}
                             data={data}
-                            selected={this.selectVal(index)}
-                            onSelect={this.onSelect.bind(this, index)}
-                            onEdit={this.props.onEdit.bind(undefined, [index])}
-                            onDel={this.props.onDel.bind(undefined, [index])}/>);
+                            //selected={this.selectVal(index)}
+                            onSelect={e => this.handleSelect(e, index)}
+                            onEdit={() => {this.handleEdit(index)}}
+                            onDel={() => {this.handleDel(index)}}/>);
     });
 
     return (
@@ -99,7 +200,7 @@ class PaymentTable extends React.Component {
         <Table>
           <thead>
             <tr>
-              <th><Checkbox onChange={this.onSelectAll.bind(this)}/></th>
+              <th><Checkbox onChange={e => this.handleSelectAll(e)}/></th>
               {headers}
             </tr>
           </thead>
@@ -108,9 +209,9 @@ class PaymentTable extends React.Component {
           </tbody>
         </Table>
 
-        <Button onClick={this.onMultiEdit.bind(this)}>편집</Button>
-        <Button onClick={this.onMultiDel.bind(this)}>삭제</Button>
-        <Button onClick={this.props.onAdd}>추가</Button>
+        <Button onClick={this.handleMultiEdit.bind(this)}>편집</Button>
+        <Button onClick={this.handleMultiDel.bind(this)}>삭제</Button>
+        <Button onClick={this.handleAdd.bind(this)}>추가</Button>
       </div>
     );
   }

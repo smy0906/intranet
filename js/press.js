@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Test from './components/test';
 
 let tableSchema = {
-  'uuid': {name:'UUID'},
+  'uuid': {name:'UUID', isKey:true},
   'request_date': {name:'요청일'},
   'register_name': {name:'요청자'},
   'manager_name': {name:'승인자'},
