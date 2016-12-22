@@ -49,3 +49,30 @@ $this->matchIf('file/{fileid}')
 	->assertAsInt('fileid')
 	->isMethod('delete')
 	->query('file_delete');
+
+
+/*
+ * /test get => page
+ * /payments/uid/{uid}/month/{month} get => get json
+ * /payments/uid/{uid}/month/{month} post => post json
+ */
+
+$this->matchIf('uid/{uid}')
+	->assertAsInt('uid')
+	->isMethod('get')
+	->query('payments');
+
+$this->matchIf('uid/{uid}/month/{month}')
+	->assertAsInt('uid')
+	->isMethod('get')
+	->query('payments');
+
+$this->matchIf('uid/{uid}')
+	->assertAsInt('uid')
+	->isMethod('post')
+	->query('payments');
+
+$this->matchIf('uid/{uid}/month/{month}')
+	->assertAsInt('uid')
+	->isMethod('post')
+	->query('payments');

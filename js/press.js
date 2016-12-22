@@ -1,6 +1,60 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Test from './components/test';
+import PaymentTable from './components/PaymentTable';
+
+// let payments = [{
+//   uuid:'1',
+//   request_date:'request_date',
+//   register_name:'register_name',
+//   manager_name:'manager_name',
+//   manger_accept_datetime:'manager_accept_datetime',
+//   co_accpeter_name:'co_accpeter_name',
+//   co_accept_datetime:'co_accept_datetime',
+//   month:'month',
+//   team:'team',
+//   product:'product',
+//   category:'category',
+//   desc:'desc',
+//   company_name:'company_name',
+//   price:'price',
+//   pay_date:'pay_date',
+//   tax:'tax',
+//   tax_export:'tax_export',
+//   tax_date:'tax_date',
+//   is_account_book_registered:'is_account_book_registered',
+//   bank:'bank',
+//   bank_account:'bank_account',
+//   bank_account_owner:'bank_account_owner',
+//   note:'note',
+//   paytype:'paytype',
+//   status:'status'
+// },{
+//   uuid:'2',
+//   request_date:'request_date',
+//   register_name:'register_name',
+//   manager_name:'manager_name',
+//   manger_accept_datetime:'manager_accept_datetime',
+//   co_accpeter_name:'co_accpeter_name',
+//   co_accept_datetime:'co_accept_datetime',
+//   month:'month',
+//   team:'team',
+//   product:'product',
+//   category:'category',
+//   desc:'desc',
+//   company_name:'company_name',
+//   price:'price',
+//   pay_date:'pay_date',
+//   tax:'tax',
+//   tax_export:'tax_export',
+//   tax_date:'tax_date',
+//   is_account_book_registered:'is_account_book_registered',
+//   bank:'bank',
+//   bank_account:'bank_account',
+//   bank_account_owner:'bank_account_owner',
+//   note:'note',
+//   paytype:'paytype',
+//   status:'status'
+// }];
 
 let tableSchema = {
   'uuid': {name:'UUID', isKey:true},
@@ -28,59 +82,43 @@ let tableSchema = {
   'status': {name:'상태'},
 };
 
-let payments = [{
-  uuid:'1',
-  request_date:'request_date',
-  register_name:'register_name',
-  manager_name:'manager_name',
-  manger_accept_datetime:'manager_accept_datetime',
-  co_accpeter_name:'co_accpeter_name',
-  co_accept_datetime:'co_accept_datetime',
-  month:'month',
-  team:'team',
-  product:'product',
-  category:'category',
-  desc:'desc',
-  company_name:'company_name',
-  price:'price',
-  pay_date:'pay_date',
-  tax:'tax',
-  tax_export:'tax_export',
-  tax_date:'tax_date',
-  is_account_book_registered:'is_account_book_registered',
-  bank:'bank',
-  bank_account:'bank_account',
-  bank_account_owner:'bank_account_owner',
-  note:'note',
-  paytype:'paytype',
-  status:'status'
-},{
-  uuid:'2',
-  request_date:'request_date',
-  register_name:'register_name',
-  manager_name:'manager_name',
-  manger_accept_datetime:'manager_accept_datetime',
-  co_accpeter_name:'co_accpeter_name',
-  co_accept_datetime:'co_accept_datetime',
-  month:'month',
-  team:'team',
-  product:'product',
-  category:'category',
-  desc:'desc',
-  company_name:'company_name',
-  price:'price',
-  pay_date:'pay_date',
-  tax:'tax',
-  tax_export:'tax_export',
-  tax_date:'tax_date',
-  is_account_book_registered:'is_account_book_registered',
-  bank:'bank',
-  bank_account:'bank_account',
-  bank_account_owner:'bank_account_owner',
-  note:'note',
-  paytype:'paytype',
-  status:'status'
-}];
-
 const rootElement = document.getElementById('root');
-ReactDOM.render(<Test schema={tableSchema} datas={payments}/>, rootElement);
+
+fetch('/payments/payments', {credentials: 'same-origin'})
+  .then(
+    response => response.json(),
+    error => console.log('error1:', error)
+  )
+  .then(
+    payments => {
+      //console.log('payments=', payments);
+      ReactDOM.render(
+        <PaymentTable schema={tableSchema} datas={payments}>
+          {/*<TableHead dataField='uuid' isKey>UUID</TableHead>*/}
+          {/*<TableHead dataField='request_date'>요청일</TableHead>*/}
+          {/*<TableHead dataField='register_name'>요청자</TableHead>*/}
+          {/*<TableHead dataField='manager_name'>승인자</TableHead>*/}
+          {/*<TableHead dataField='manger_accept_datetime'>승인자 확인</TableHead>*/}
+          {/*<TableHead dataField='co_accpeter_name'>재무팀 확인</TableHead>*/}
+          {/*<TableHead dataField='month'>귀속월</TableHead>*/}
+          {/*<TableHead dataField='team'>귀속부서</TableHead>*/}
+          {/*<TableHead dataField='product'>프로덕트</TableHead>*/}
+          {/*<TableHead dataField='category'>분류</TableHead>*/}
+          {/*<TableHead dataField='desc'>상세내역</TableHead>*/}
+          {/*<TableHead dataField='company_name'>업체명</TableHead>*/}
+          {/*<TableHead dataField='price'>입금금액</TableHead>*/}
+          {/*<TableHead dataField='pay_date'>결제(예정)일</TableHead>*/}
+          {/*<TableHead dataField='tax_export'>세금계산서수취여부</TableHead>*/}
+          {/*<TableHead dataField='tax_date'>세금계산서일자</TableHead>*/}
+          {/*<TableHead dataField='is_account_book_registered'>장부반영여부</TableHead>*/}
+          {/*<TableHead dataField='bank'>입금은행</TableHead>*/}
+          {/*<TableHead dataField='bank_account'>입금계좌번호</TableHead>*/}
+          {/*<TableHead dataField='bank_account_owner'>예금주</TableHead>*/}
+          {/*<TableHead dataField='note'>비고</TableHead>*/}
+          {/*<TableHead dataField='paytype'>결제수단</TableHead>*/}
+          {/*<TableHead dataField='status'>상태</TableHead>*/}
+        </PaymentTable>,
+        rootElement);
+    },
+    error => console.log('error2:', error)
+);
