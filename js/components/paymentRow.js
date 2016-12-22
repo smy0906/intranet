@@ -8,9 +8,8 @@ class PaymentRow extends React.Component {
 
     return (
       <tr>
-        {/*<td><Checkbox checked={this.props.selected}*/}
-                      {/*onChange={this.props.onSelect}/></td>*/}
-        <td><Checkbox onChange={this.props.onSelect}/></td>
+        <td><Checkbox checked={this.props.selected}
+                      onChange={this.props.onSelect}/></td>
         <td>{payment.uuid}</td>
         <td>{payment.request_date}</td>
         <td>{payment.register_name}</td>

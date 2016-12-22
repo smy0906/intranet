@@ -2,17 +2,6 @@ import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 class PaymentModal extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showAddModal: false
-    };
-
-    this.onConfirm = this.props.onClose.bind(undefined, true);
-    this.onCancel = this.props.onClose.bind(undefined, false);
-  }
-
   render() {
     let data = {
       uuid:Math.random(),
@@ -43,7 +32,7 @@ class PaymentModal extends React.Component {
     };
 
     return (
-      <Modal show={this.props.isOpen} onHide={this.onCancel}>
+      <Modal show={this.props.isOpen} onHide={() => this.props.onClose(false)}>
         <Modal.Header closeButton>
           <Modal.Title>This is Title</Modal.Title>
         </Modal.Header>
@@ -51,8 +40,8 @@ class PaymentModal extends React.Component {
           <p>{JSON.stringify(this.props.data)}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.onConfirm.bind(undefined, data)}>Confirm</Button>
-          <Button onClick={this.onCancel}>Close</Button>
+          <Button onClick={() => this.props.onClose(true, data)}>Confirm</Button>
+          <Button onClick={() => this.props.onClose(false)}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
