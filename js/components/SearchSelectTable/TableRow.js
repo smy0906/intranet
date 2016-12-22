@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Checkbox} from 'react-bootstrap';
 
-class PaymentRow extends React.Component {
+class TableRow extends React.Component {
 
   render() {
     const payment = this.props.data;
@@ -40,4 +40,4 @@ class PaymentRow extends React.Component {
   }
 }
 
-export default PaymentRow;
+export default TableRow;

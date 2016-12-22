@@ -1,7 +1,7 @@
 import React from 'react';
-import PaymentTable from './paymentTable'
+import SearchTable from './SearchSelectTable/SearchSelectTable'
 
-class App extends React.Component {
+class PaymentTable extends React.Component {
   handleSelect(isSelected, index, data) {
     console.log('handleSelect:', isSelected, index, data);
     console.log('now select:', this.selected);
@@ -40,7 +40,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <PaymentTable schema={this.props.schema}
+        <SearchTable schema={this.props.schema}
                       datas={this.props.datas}
                       selectProps={{
                         selected: [],
@@ -59,4 +59,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default PaymentTable;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-class PaymentModal extends React.Component {
+class EditModal extends React.Component {
   render() {
     let data = {
       uuid:Math.random(),
@@ -48,4 +48,4 @@ class PaymentModal extends React.Component {
   }
 }
 
-export default PaymentModal;
+export default EditModal;

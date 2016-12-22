@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import update from 'react-addons-update'
 import { Table, Checkbox, Button } from 'react-bootstrap';
-import SearchBar from './searchBar';
-import PaymentRow from './paymentRow';
-import PaymentModal from './paymentModal';
+import SearchBar from './SearchBar';
+import TableRow from './TableRow';
+import EditModal from './EditModal';
 
-class PaymentTable extends React.Component {
+class SearchSelectTable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -210,7 +210,7 @@ class PaymentTable extends React.Component {
 
     let rows = [];
     this.state.datas.forEach((data, index) => {
-      rows.push(<PaymentRow key={data[this.keyName]}
+      rows.push(<TableRow key={data[this.keyName]}
                             data={data}
                             selected={this.state.selected.indexOf(index) !== -1}
                             onSelect={e => this.handleSelect(e, index)}
@@ -238,7 +238,7 @@ class PaymentTable extends React.Component {
         <Button onClick={this.handleMultiDel.bind(this)}>삭제</Button>
         <Button onClick={this.handleAdd.bind(this)}>추가</Button>
 
-        <PaymentModal data={this.state.modalContent}
+        <EditModal data={this.state.modalContent}
                       isOpen={this.state.showModal}
                       onClose={this.handleCloseModal.bind(this)}/>
       </div>
@@ -246,7 +246,7 @@ class PaymentTable extends React.Component {
   }
 }
 
-PaymentTable.propTypes = {
+SearchSelectTable.propTypes = {
   schema: PropTypes.object,
   datas: PropTypes.array,
   selectProps: PropTypes.shape({
@@ -263,7 +263,7 @@ PaymentTable.propTypes = {
   })
 };
 
-PaymentTable.defaultProps = {
+SearchSelectTable.defaultProps = {
   schema: {},
   datas: [],
   selectProps: {
@@ -280,4 +280,4 @@ PaymentTable.defaultProps = {
   }
 };
 
-export default PaymentTable;
+export default SearchSelectTable;
