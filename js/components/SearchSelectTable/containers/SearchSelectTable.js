@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { delRow, toggleRow, openModal } from '../actions'
-import SearchSelectTable from '../SearchSelectTable';
+import SearchSelectTable from '../components/SearchSelectTable';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -87,7 +87,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       onAdd: () => {
         let newData = {
           uuid:Math.random(),
-            request_date:'request_date',
+          request_date:'request_date',
           register_name:'register_name',
           manager_name:'manager_name',
           manger_accept_datetime:'manager_accept_datetime',
@@ -111,7 +111,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           note:'note',
           paytype:'paytype',
           status:'status'
-        }
+        };
         dispatch(openModal(-1, newData, 'add'))
       },
 

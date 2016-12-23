@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { closeModalAndUpsert, closeModal, addRow, editRow } from '../actions'
-import EditModal from '../EditModal';
+import EditModal from '../components/EditModal';
 
 const mapStateToProps = (state) => {
   return {
