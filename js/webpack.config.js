@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './press.js',
+    entry: './payments.js',
  
     output: {
         path: __dirname,
