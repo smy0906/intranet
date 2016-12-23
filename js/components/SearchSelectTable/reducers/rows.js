@@ -54,8 +54,11 @@ const rows = (state = [], action) => {
       return state.map(r => row(r, action));
 
     case 'DEL_ROW':
-      action.id = state[action.rowIndex].id;
-      return state.filter(row => row.id!==action.id);
+      let rowId = state[action.rowIndex].id;
+      return state.filter(row => row.id!==rowId);
+
+    case 'DEL_SEL_ROWS':
+      return state.filter(row => !row.isSelected);
 
     case 'TOGGLE_ROW':
       action.id = state[action.rowIndex].id;

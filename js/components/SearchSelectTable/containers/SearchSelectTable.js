@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { delRow, toggleRow, toggleAllRows, openModal } from '../actions'
+import { delRow, delSelRows, toggleRow, toggleAllRows, openModal } from '../actions'
 import SearchSelectTable from '../components/SearchSelectTable';
 
 const mapStateToProps = (state) => {
@@ -96,15 +96,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           paytype:'paytype',
           status:'status'
         };
-        dispatch(openModal(-1, newData, 'add'))
+        dispatch(openModal('add'))
       },
 
-      onEdit: (rowIndex) => dispatch(openModal(rowIndex, ownProps.datas[rowIndex], 'edit')),
-
+      onEdit: (rowIndex) => dispatch(openModal('edit', rowIndex)),
       onDel: (rowIndex) => dispatch(delRow(rowIndex)),
-
-      onMultiEdit: () => dispatch(openModal(-1, undefined, 'add')),
-      onMultiDel: () => dispatch(openModal(-1, undefined, 'add')),
+      onMultiEdit: () => dispatch(openModal('add')),
+      onMultiDel: () => dispatch(delSelRows()),
     //}
   };
 };

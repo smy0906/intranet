@@ -2,7 +2,7 @@ const initialState = {
   data: {},
   isOpen: false,
   editMode: 'add',
-  rowIndex: -1
+  rowIndex: undefined
 };
 
 const modal = (state=initialState, action) => {
@@ -12,7 +12,7 @@ const modal = (state=initialState, action) => {
         data: action.data,
         isOpen:true,
         editMode: action.editMode,
-        rowIndex: action.rowIndex? action.rowIndex : -1
+        rowIndex: action.rowIndex? action.rowIndex : undefined
       };
 
     case 'CLOSE_MODAL':

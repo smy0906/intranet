@@ -33,8 +33,10 @@ class TableRow extends React.Component {
         <td>{payment.note}</td>
         <td>{payment.paytype}</td>
         <td>{payment.status}</td>
-        <td><Button onClick={this.props.onEdit}>편집</Button></td>
-        <td><Button onClick={this.props.onDel}>삭제</Button></td>
+        <td>
+          <Button onClick={this.props.onEdit}>편집</Button>
+          <Button onClick={this.props.onDel}>삭제</Button>
+        </td>
       </tr>
     );
   }

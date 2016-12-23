@@ -15,6 +15,7 @@ const TableHead = ({colDefines, onSelectAll}) => {
       <tr>
         <th><Checkbox onChange={e => onSelectAll(e)}/></th>
         {cols}
+        <th/>
       </tr>
     </thead>
   );
