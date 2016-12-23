@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {SearchSelectTable, TableColumn} from './components/SearchSelectTable';
+import {Table, TableColumn} from './components/SearchSelectTable';
 
 
 
@@ -16,7 +16,7 @@ fetch('/payments/payments', {credentials: 'same-origin'})
       //console.log('payments=', payments);
 
       render(
-        <SearchSelectTable datas={payments}>
+        <Table datas={payments}>
           <TableColumn dataField='uuid' isKey>UUID</TableColumn>
           <TableColumn dataField='request_date'>요청일</TableColumn>
           <TableColumn dataField='register_name'>요청자</TableColumn>
@@ -40,7 +40,7 @@ fetch('/payments/payments', {credentials: 'same-origin'})
           <TableColumn dataField='note'>비고</TableColumn>
           <TableColumn dataField='paytype'>결제수단</TableColumn>
           <TableColumn dataField='status'>상태</TableColumn>
-        </SearchSelectTable>,
+        </Table>,
         rootElement
       );
     },

@@ -8,6 +8,11 @@ export const addRow = (data) => ({
   data
 });
 
+export const addRows = (datas) => ({
+  type: 'ADD_ROWS',
+  datas
+});
+
 export const editRow = (rowIndex, data) => ({
   type: 'EDIT_ROW',
   data
@@ -21,6 +26,11 @@ export const delRow = (rowIndex) => ({
 export const toggleRow = (rowIndex) => ({
   type: 'TOGGLE_ROW',
   rowIndex
+});
+
+export const toggleAllRows = (select) => ({
+  type: 'TOGGLE_ALL_ROWS',
+  select
 });
 
 export const openModal = (rowIndex, data, editMode) => ({
@@ -42,7 +52,7 @@ export const closeModal = (isConfirm) => {
         return dispatch(addRow(state.modal.data));
 
       } else if (state.modal.editMode == 'edit') {
-        return dispatch(editRow(state.modal.editingIndex, state.modal.data));
+        return dispatch(editRow(state.modal.rowIndex, state.modal.data));
       }
 
     }

@@ -1,15 +1,18 @@
 import { connect } from 'react-redux'
-import { delRow, toggleRow, openModal } from '../actions'
+import { delRow, toggleRow, toggleAllRows, openModal } from '../actions'
 import SearchSelectTable from '../components/SearchSelectTable';
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
+  let newSelected = [];
+  state.rows.forEach((row, i) => {
+    if (row.isSelected) {
+      newSelected.push(i);
+    }
+  });
+
   return {
     datas: state.rows.map(row => row.data),
-    //selectProps:{
-      selected: state.rows
-        .filter(row => !!row.isSelected)
-        .map(row => row.id)
-    //}
+    selected: newSelected
   }
 };
 
@@ -17,26 +20,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     //selectProps: {
       onSelect: (e, rowIndex) => dispatch(toggleRow(rowIndex)),
-      onSelectAll: (e) => {
-        let isChecked = e.currentTarget.checked;
-
-        let changed = undefined;
-        if (isChecked) {
-          changed = [];
-          for (let i=0; i<ownProps.datas.length; ++i) {
-            if (ownProps.selectedProps.selected.indexOf(i)===-1){
-              changed.push(i);
-            }
-          }
-
-        } else {
-          changed = ownProps.selectedProps.selected.slice();
-        }
-
-        changed.forEach((rowIndex) => {
-          dispatch(toggleRow(rowIndex));
-        });
-      },
+      onSelectAll: (e) => dispatch(toggleAllRows(e.currentTarget.checked)),
       // onSelect: (e, rowIndex) => {
       //   let isChecked = e.currentTarget.checked;
       //

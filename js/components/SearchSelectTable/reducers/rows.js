@@ -1,16 +1,14 @@
-const initialState = {
-  isSelected: false,
-  id: -1,
-  data:{}
-};
+import {addRow} from '../actions';
 
-const row = (state = initialState, action) => {
+let rowIndexIncrementer = 0;
+
+const row = (state, action) => {
   switch(action.type) {
     case 'ADD_ROW':
       return {
         isSelected: false,
         id: action.id,
-        data: action.data
+        data: action.data,
       };
 
     case 'EDIT_ROW':
@@ -19,12 +17,17 @@ const row = (state = initialState, action) => {
       });
 
     case 'TOGGLE_ROW':
-      if (state.id !== action.rowIndex) {
+      if (state.id !== action.id) {
         return state;
       }
 
       return Object.assign({}, state, {
         isSelected: !state.isSelected
+      });
+
+    case 'TOGGLE_ALL_ROWS':
+      return Object.assign({}, state, {
+        isSelected: action.select
       });
 
     default:
@@ -35,16 +38,30 @@ const row = (state = initialState, action) => {
 const rows = (state = [], action) => {
   switch(action.type) {
     case 'ADD_ROW':
-      action.id = state.length;
+      action.id = rowIndexIncrementer++;
       return [...state, row(undefined, action)];
+
+    case 'ADD_ROWS':
+      const rowStates = action.datas.map(data => {
+        let addRowAction = addRow(data);
+        addRowAction.id = rowIndexIncrementer++;
+        return row(undefined, addRowAction);
+      });
+
+      return [...state, ...rowStates];
 
     case 'EDIT_ROW':
       return state.map(r => row(r, action));
 
     case 'DEL_ROW':
-      return state.splice(action.rowIndex, 1);
+      action.id = state[action.rowIndex].id;
+      return state.filter(row => row.id!==action.id);
 
     case 'TOGGLE_ROW':
+      action.id = state[action.rowIndex].id;
+      return state.map(r => row(r, action));
+
+    case 'TOGGLE_ALL_ROWS':
       return state.map(r => row(r, action));
 
     default:
