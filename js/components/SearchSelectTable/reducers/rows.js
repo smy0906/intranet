@@ -37,18 +37,27 @@ const row = (state, action) => {
 
 const rows = (state = [], action) => {
   switch(action.type) {
-    case 'ADD_ROW':
-      action.id = rowIndexIncrementer++;
-      return [...state, row(undefined, action)];
-
-    case 'ADD_ROWS':
-      const rowStates = action.datas.map(data => {
+    case 'INIT_ROWS':
+      const initRowStates = action.datas.map(data => {
         let addRowAction = addRow(data);
         addRowAction.id = rowIndexIncrementer++;
         return row(undefined, addRowAction);
       });
 
-      return [...state, ...rowStates];
+      return [...initRowStates];
+
+    case 'ADD_ROW':
+      action.id = rowIndexIncrementer++;
+      return [...state, row(undefined, action)];
+
+    case 'ADD_ROWS':
+      const addRowStates = action.datas.map(data => {
+        let addRowAction = addRow(data);
+        addRowAction.id = rowIndexIncrementer++;
+        return row(undefined, addRowAction);
+      });
+
+      return [...state, ...addRowStates];
 
     case 'EDIT_ROW':
       return state.map(r => row(r, action));

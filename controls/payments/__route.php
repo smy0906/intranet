@@ -57,22 +57,27 @@ $this->matchIf('file/{fileid}')
  * /payments/uid/{uid}/month/{month} post => post json
  */
 
-$this->matchIf('uid/{uid}')
+$this->matchIf('test/payments')
 	->assertAsInt('uid')
 	->isMethod('get')
 	->query('payments');
 
-$this->matchIf('uid/{uid}/month/{month}')
+$this->matchIf('test/uid/{uid}')
 	->assertAsInt('uid')
 	->isMethod('get')
 	->query('payments');
 
-$this->matchIf('uid/{uid}')
+$this->matchIf('test/uid/{uid}/month/{month}')
+	->assertAsInt('uid')
+	->isMethod('get')
+	->query('payments');
+
+$this->matchIf('test/uid/{uid}')
 	->assertAsInt('uid')
 	->isMethod('post')
 	->query('payments');
 
-$this->matchIf('uid/{uid}/month/{month}')
+$this->matchIf('test/uid/{uid}/month/{month}')
 	->assertAsInt('uid')
 	->isMethod('post')
 	->query('payments');

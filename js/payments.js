@@ -15,15 +15,27 @@ fetch('/payments/payments', {credentials: 'same-origin'})
     payments => {
       //console.log('payments=', payments);
 
+      let registerOptions = [
+        {name:'register1', value:'register1'},
+        {name:'register2', value:'register2'},
+        {name:'register3', value:'register3'},
+      ];
+
+      let managerOptions = [
+        {name:'manager1', value:'manager1'},
+        {name:'manager2', value:'manager2'},
+        {name:'manager3', value:'manager3'},
+      ];
+
       render(
         <Table datas={payments}>
           <TableColumn dataField='uuid' isKey>UUID</TableColumn>
-          <TableColumn dataField='request_date'>요청일</TableColumn>
-          <TableColumn dataField='register_name'>요청자</TableColumn>
-          <TableColumn dataField='manager_name'>승인자</TableColumn>
+          <TableColumn dataField='request_date' type="date">요청일</TableColumn>
+          <TableColumn dataField='register_name' type="select" options={registerOptions}>요청자</TableColumn>
+          <TableColumn dataField='manager_name' type="select" options={managerOptions}>승인자</TableColumn>
           <TableColumn dataField='manger_accept_datetime'>승인자 확인</TableColumn>
           <TableColumn dataField='co_accpeter_name'>재무팀 확인</TableColumn>
-          <TableColumn dataField='month'>귀속월</TableColumn>
+          <TableColumn dataField='month' type="month">귀속월</TableColumn>
           <TableColumn dataField='team'>귀속부서</TableColumn>
           <TableColumn dataField='product'>프로덕트</TableColumn>
           <TableColumn dataField='category'>분류</TableColumn>

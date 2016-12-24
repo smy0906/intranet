@@ -39,6 +39,8 @@ class SearchSelectTable extends React.Component {
         // columnTitle: column.props.columnTitle,
         width: column.props.width,
         name: column.props.children,
+        type: column.props.type,
+        options: column.props.options,
         // sortFunc: column.props.sortFunc,
         // sortFuncExtraData: column.props.sortFuncExtraData,
         // export: column.props.export,
@@ -73,7 +75,7 @@ class SearchSelectTable extends React.Component {
         <Button onClick={this.props.onMultiDel}>삭제</Button>
         <Button onClick={this.props.onAdd}>추가</Button>
 
-        <EditModal data={{}}/>
+        <EditModal dataDefines={this.colDefines} data={{}}/>
 
         {/*<Detail />*/}
       </div>
