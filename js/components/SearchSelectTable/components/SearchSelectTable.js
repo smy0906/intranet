@@ -1,20 +1,22 @@
 import React, { PropTypes } from 'react';
 import { Table, Button } from 'react-bootstrap';
 
-import SearchBar from './SearchBar';
+import SearchBar from '../containers/SearchBar';
 import TableHead from './TableHead';
 import TableBody from './TableBody';
 import EditModal from '../containers/EditModal';
+
+import { setFilter } from '../actions';
 
 class SearchSelectTable extends React.Component {
   constructor(props) {
     super(props);
 
-    React.Children.forEach(props.children, column => {
-      if (column.props.isKey) {
-        this.keyField = column.props.dataField;
-      }
-    });
+    // React.Children.forEach(props.children, column => {
+    //   if (column.props.isKey) {
+    //     this.keyField = column.props.dataField;
+    //   }
+    // });
 
     this.colDefines = this.createColumnDefines(props.children);
   }
@@ -50,15 +52,20 @@ class SearchSelectTable extends React.Component {
     });
   }
 
-  render() {
-    const options = this.colDefines.map(data => ({
-      name: data.name,
-      value: data.dataField
-    }));
+  componentWillMount() {
+    if (this.colDefines.length > 0) {
+      let {dispatch} = this.props;
 
+      dispatch(setFilter({
+        dataField: this.colDefines[0].dataField
+      }));
+    }
+  }
+
+  render() {
     return (
       <div>
-        <SearchBar options={options}/>
+        <SearchBar options={this.colDefines}/>
 
         <Table bordered={true} hover={true} responsive>
           <TableHead colDefines={this.colDefines}

@@ -2,6 +2,26 @@ import { connect } from 'react-redux'
 import { delRow, delSelRows, toggleRow, toggleAllRows, openModal } from '../actions'
 import SearchSelectTable from '../components/SearchSelectTable';
 
+const getFilteredRows = (rows, searchFilter) => {
+  let datas = rows.map(row => row.data);
+
+  if (searchFilter.dataField && searchFilter.param) {
+    datas = datas.filter(data => {
+      let value = data[searchFilter.dataField];
+      if (value == undefined) {
+        return false;
+      }
+
+      if (searchFilter.op == 'eq') {
+        return value.toString() == searchFilter.param;
+      } else { // default == 'in'
+        return value.toString().indexOf(searchFilter.param) !== -1;
+      }
+    });
+  }
+  return datas;
+};
+
 const mapStateToProps = (state) => {
   let newSelected = [];
   state.rows.forEach((row, i) => {
@@ -11,13 +31,14 @@ const mapStateToProps = (state) => {
   });
 
   return {
-    datas: state.rows.map(row => row.data),
+    datas: getFilteredRows(state.rows, state.filter),
     selected: newSelected
   }
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+      dispatch: dispatch,
     //selectProps: {
       onSelect: (e, rowIndex) => dispatch(toggleRow(rowIndex)),
       onSelectAll: (e) => dispatch(toggleAllRows(e.currentTarget.checked)),

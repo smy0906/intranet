@@ -3,10 +3,15 @@ import {addRow2, editRow} from './rowActions';
 export const openModal = (editMode, rowIndex) => {
   return (dispatch, getState) => {
     let state = getState();
+    let data = undefined;
+    if (rowIndex && rowIndex > 0 ) {
+      data = state.rows[rowIndex].data;
+    }
+
     dispatch({
       type: 'OPEN_MODAL',
       editMode,
-      data: state.rows[rowIndex].data,
+      data: data,
       rowIndex
     });
   };

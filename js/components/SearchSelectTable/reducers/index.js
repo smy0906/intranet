@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import rows from './rows';
 import modal from './modal';
+import filter from './filter';
 
 const tableApp = combineReducers({
   rows,
-  modal
+  modal,
+  filter
 });
 
 export default tableApp;
