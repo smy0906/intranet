@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 $autoloader = require_once(__DIR__ . "/vendor/autoload.php");
 $autoloader->add('Intra', __DIR__ . '/src');
 
-Config::loadIfExist(__DIR__ . '/ConfigDevelop.php');
+if (!Config::loadIfExist(__DIR__ . '/ConfigDeployer.php')) {
+	Config::loadIfExist(__DIR__ . '/ConfigDevelop.php');
+}
 Config::loadIfExist(__DIR__ . '/ConfigRelease.php');
 
 date_default_timezone_set('Asia/Seoul');
