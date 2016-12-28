@@ -122,6 +122,27 @@ class Rooms implements ControllerProviderInterface
 		$uid = $user->uid;
 
 		$db = IntraDb::getGnfDb();
+
+		$where = [
+			'room_id' => $room_id,
+			'deleted' => 0,
+			sqlOr(
+				[
+					'from' => sqlLesserEqual($from),
+					'to' => sqlGreaterEqual($from),
+				],
+				[
+					'from' => sqlLesserEqual($to),
+					'to' => sqlGreaterEqual($to),
+				]
+			),
+		];
+
+		$overlapped_events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
+		if (count($overlapped_events) > 0) {
+			return '이미 예약된 시간입니다.';
+		}
+
 		$dat = [
 			'room_id' => $room_id,
 			'desc' => $desc,
