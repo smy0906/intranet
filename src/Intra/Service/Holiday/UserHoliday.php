@@ -68,6 +68,7 @@ class UserHoliday
 	public static function filterHolidays($holidays)
 	{
 		foreach ($holidays as $holiday) {
+			$holiday->personcode = self::getPersonCodeSafe($holiday->uid);
 			$holiday->uid_name = self::getUserNameSafe($holiday->uid);
 			$holiday->manager_uid_name = self::getUserNameSafe($holiday->manager_uid);
 			$holiday->keeper_uid_name = self::getUserNameSafe($holiday->keeper_uid);
@@ -293,6 +294,16 @@ class UserHoliday
 	public static function getUserNameSafe($keeper_uid)
 	{
 		return UserJoinService::getNameByUidSafe($keeper_uid);
+	}
+
+	/**
+	 * @param $keeper_uid
+	 *
+	 * @return mixed
+	 */
+	public static function getPersonCodeSafe($keeper_uid)
+	{
+		return UserJoinService::getPersonCodeByUidSafe($keeper_uid);
 	}
 
 	/**

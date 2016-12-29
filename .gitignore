@@ -1,3 +1,4 @@
+/.vagrant
 /.idea
 composer.lock
 ConfigRelease.php
@@ -6,3 +7,5 @@ _ConfigRelease.php
 /node_modules/*
 /js/node_modules/*
 /js/bundle.js
+/docs/deployer/upload/*
+/docs/deployer/stage/*

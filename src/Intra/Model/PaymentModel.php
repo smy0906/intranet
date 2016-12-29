@@ -255,9 +255,49 @@ class PaymentModel extends BaseModel
 		];
 
 		return $this->db->sqlDicts(
-			'select users.name, payments.* from ? where `month` = ? order by pay_date asc, uid asc',
+			'select users.name, payments.* from ? where payments.`month` = ? order by pay_date asc, uid asc',
 			sqlLeftJoin($tables),
 			$month_str
+		);
+	}
+
+	public function getAllPaymentsByActiveTeam($team)
+	{
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where payments.`team` = ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$team
+		);
+	}
+
+	public function getAllPaymentsByActiveCategory($category)
+	{
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where payments.`category` = ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$category
+		);
+	}
+
+	public function getAllPaymentsByActiveRequestDate($requestDateStart, $requestDateEnd)
+	{
+		$tables = [
+			'payments.uid' => 'users.uid'
+		];
+
+		return $this->db->sqlDicts(
+			'select users.name, payments.* from ? where payments.`request_date` >= ? and `request_date` <= ? order by pay_date asc, uid asc',
+			sqlLeftJoin($tables),
+			$requestDateStart,
+			$requestDateEnd
 		);
 	}
 }

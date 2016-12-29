@@ -59,11 +59,16 @@ class Rooms implements ControllerProviderInterface
 			'focus' => ' - FOCUS ROOM은 업무 집중 및 개인 휴식 공간입니다',
 		];
 
+		$warning = [
+			'focus' => ' 임직원이 공용으로 사용하는 파티션이므로 임의로 구조 변경하지 말아 주세요.'
+		];
+
 		return $app['twig']->render('Rooms/index.twig', [
 			'rooms' => $rooms,
 			'name' => $name,
 			'description' => $descriptions[$type],
 			'notice' => $notices[$type],
+			'warning' => $warning[$type]
 		]);
 	}
 
@@ -117,6 +122,27 @@ class Rooms implements ControllerProviderInterface
 		$uid = $user->uid;
 
 		$db = IntraDb::getGnfDb();
+
+		$where = [
+			'room_id' => $room_id,
+			'deleted' => 0,
+			sqlOr(
+				[
+					'from' => sqlLesserEqual($from),
+					'to' => sqlGreaterEqual($from),
+				],
+				[
+					'from' => sqlLesserEqual($to),
+					'to' => sqlGreaterEqual($to),
+				]
+			),
+		];
+
+		$overlapped_events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
+		if (count($overlapped_events) > 0) {
+			return '이미 다른 사람이 예약한 시간입니다. 새로고침 해주세요.';
+		}
+
 		$dat = [
 			'room_id' => $room_id,
 			'desc' => $desc,

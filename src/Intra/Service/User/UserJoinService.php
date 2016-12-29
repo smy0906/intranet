@@ -64,24 +64,44 @@ class UserJoinService
 		}
 	}
 
-	public static function getNameByUidSafe($uid)
+	private static function getDtoByUidSafe($uid)
 	{
 		if (!UserModel::isExistByUid($uid)) {
 			return null;
 		}
 		$dict = UserModel::getDictWithUid($uid);
 		$dto = UserDto::importFromDatabase($dict);
+		return $dto;
+	}
+
+	public static function getNameByUidSafe($uid)
+	{
+		$dto = self::getDtoByUidSafe($uid);
+		if ($dto == null) {
+			return null;
+		}
+
 		return $dto->name;
 	}
 
 	public static function getEmailByUidSafe($uid)
 	{
-		if (!UserModel::isExistByUid($uid)) {
+		$dto = self::getDtoByUidSafe($uid);
+		if ($dto == null) {
 			return null;
 		}
-		$dict = UserModel::getDictWithUid($uid);
-		$dto = UserDto::importFromDatabase($dict);
+
 		return $dto->email;
+	}
+
+	public static function getPersonCodeByUidSafe($uid)
+	{
+		$dto = self::getDtoByUidSafe($uid);
+		if ($dto == null) {
+			return null;
+		}
+
+		return $dto->personcode;
 	}
 
 	public static function getEmailsByTeam($team)

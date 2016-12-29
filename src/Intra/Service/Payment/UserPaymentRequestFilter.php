@@ -29,4 +29,14 @@ class UserPaymentRequestFilter
 		}
 		return $month;
 	}
+
+	public static function parseDate($date)
+	{
+		if ($date == null) {
+			$date = date('Y-m-d');
+		} else {
+			$date = date('Y-m-d', strtotime($date));
+		}
+		return $date;
+	}
 }

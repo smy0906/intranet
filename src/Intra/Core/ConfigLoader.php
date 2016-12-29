@@ -9,8 +9,9 @@ trait ConfigLoader
 	public static function loadIfExist($config_file)
 	{
 		if (!is_readable($config_file)) {
-			return;
+			return false;
 		}
+
 		require_once($config_file);
 		$config_basename = basename($config_file);
 		$config_basename = preg_replace('/\.php$/i', '', $config_basename);
@@ -22,5 +23,7 @@ trait ConfigLoader
 				$config_class->setStaticPropertyValue($key, $value);
 			}
 		}
+
+		return true;
 	}
 }
