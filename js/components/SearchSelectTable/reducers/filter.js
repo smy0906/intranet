@@ -1,7 +1,9 @@
 const initialState = {
-  dataField: undefined,
+  options: [],
+  selected: 0,
   op: undefined,
-  param: undefined
+  param1: undefined,
+  param2: undefined
 };
 
 const filter = (state=initialState, action) => {

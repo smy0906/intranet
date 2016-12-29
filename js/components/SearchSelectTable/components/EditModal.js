@@ -10,13 +10,11 @@ class EditModal extends React.Component {
   }
 
   renderBody() {
-    //return <p>{JSON.stringify(this.props.data)}</p>;
-
     let controls = this.dataDefines.map((define, i) => {
       let control;
       let value = this.props.data? this.props.data[define.dataField]: undefined;
 
-      switch(define.type) {
+      switch(define.dataType) {
         case 'select':
           let options = define.options.map((option, index) => {
             return <option key={index} value={option.value}>{option.name}</option>;

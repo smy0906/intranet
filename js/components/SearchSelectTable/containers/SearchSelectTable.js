@@ -1,24 +1,40 @@
-import { connect } from 'react-redux'
-import { delRow, delSelRows, toggleRow, toggleAllRows, openModal } from '../actions'
+import { connect } from 'react-redux';
+import { delRow, delSelRows, toggleRow, toggleAllRows, openModal } from '../actions';
 import SearchSelectTable from '../components/SearchSelectTable';
 
 const getFilteredRows = (rows, searchFilter) => {
   let datas = rows.map(row => row.data);
+  let option = searchFilter.options[searchFilter.selected];
 
-  if (searchFilter.dataField && searchFilter.param) {
-    datas = datas.filter(data => {
-      let value = data[searchFilter.dataField];
-      if (value == undefined) {
-        return false;
-      }
-
-      if (searchFilter.op == 'eq') {
-        return value.toString() == searchFilter.param;
-      } else { // default == 'in'
-        return value.toString().indexOf(searchFilter.param) !== -1;
-      }
-    });
+  if (!option || (!searchFilter.param1 && !searchFilter.param2)) {
+    return datas;
   }
+
+  datas = datas.filter(data => {
+    let value = data[option.dataField];
+    if (value == undefined) {
+      return false;
+    }
+
+    if (option.dataType == 'date') {
+      let fromDate = new Date('1970-01-01');
+      if (searchFilter.param1) {
+        fromDate = new Date(searchFilter.param1);
+      }
+
+      let toDate = new Date('2030-12-31');
+      if (searchFilter.param2) {
+        toDate = new Date(searchFilter.param2);
+      }
+
+      let targetDate = new Date(value);
+      return fromDate <= targetDate && targetDate <= toDate;
+
+    } else {
+      return value.toString().indexOf(searchFilter.param1) !== -1;
+    }
+  });
+
   return datas;
 };
 

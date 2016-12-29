@@ -1,15 +1,22 @@
 import React from 'react';
 import TableRow from './TableRow';
 
-const TableBody = ({datas, selected, onSelect, onEdit, onDel}) => {
-  const rows = datas.map((data, i) =>
-    <TableRow key={i}
-              data={data}
+const TableBody = ({colDefines, datas, selected, onSelect, onEdit, onDel}) => {
+  const rows = datas.map((data, i) => {
+    let dataFiltered = {};
+    colDefines.forEach((define) => {
+      dataFiltered[define.dataField] = data[define.dataField];
+    });
+
+    return (
+      <TableRow key={i}
+              data={dataFiltered}
               selected={selected? (selected.indexOf(i) !== -1) : false}
               onSelect={e => onSelect(e, i)}
               onEdit={() => onEdit(i)}
               onDel={() => onDel(i)}/>
-  );
+    )
+  });
 
   return (
     <tbody>

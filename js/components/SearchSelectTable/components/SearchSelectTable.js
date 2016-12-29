@@ -25,6 +25,7 @@ class SearchSelectTable extends React.Component {
     return React.Children.map(children, (column, i) => {
       return {
         dataField: column.props.dataField,
+        dataType: column.props.dataType,
         // align: column.props.dataAlign,
         // sort: column.props.dataSort,
         // format: column.props.dataFormat,
@@ -41,7 +42,6 @@ class SearchSelectTable extends React.Component {
         // columnTitle: column.props.columnTitle,
         width: column.props.width,
         name: column.props.children,
-        type: column.props.type,
         options: column.props.options,
         // sortFunc: column.props.sortFunc,
         // sortFuncExtraData: column.props.sortFuncExtraData,
@@ -57,7 +57,7 @@ class SearchSelectTable extends React.Component {
       let {dispatch} = this.props;
 
       dispatch(setFilter({
-        dataField: this.colDefines[0].dataField
+        options: this.colDefines
       }));
     }
   }
@@ -71,7 +71,8 @@ class SearchSelectTable extends React.Component {
           <TableHead colDefines={this.colDefines}
                      onSelectAll={e => this.props.onSelectAll(e)}/>
 
-          <TableBody datas={this.props.datas}
+          <TableBody colDefines={this.colDefines}
+                     datas={this.props.datas}
                      selected={this.props.selected}
                      onSelect={this.props.onSelect}
                      onEdit={this.props.onEdit}
@@ -93,35 +94,27 @@ class SearchSelectTable extends React.Component {
 SearchSelectTable.propTypes = {
   schema: PropTypes.object,
   datas: PropTypes.array,
-  //selectProps: PropTypes.shape({
-    selected: PropTypes.array,
-    onSelect: PropTypes.func,
-    onSelectAll: PropTypes.func,
-  //}),
-  //updateProps: PropTypes.shape({
-    onAdd: PropTypes.func,
-    onEdit: PropTypes.func,
-    onDel: PropTypes.func,
-    onMultiEdit:PropTypes.func,
-    onMultiDel: PropTypes.func
-  //})
+  selected: PropTypes.array,
+  onSelect: PropTypes.func,
+  onSelectAll: PropTypes.func,
+  onAdd: PropTypes.func,
+  onEdit: PropTypes.func,
+  onDel: PropTypes.func,
+  onMultiEdit:PropTypes.func,
+  onMultiDel: PropTypes.func
 };
 
 SearchSelectTable.defaultProps = {
   schema: {},
   datas: [],
-  //selectProps: {
-    selected: [],
-    onSelect: undefined,
-    onSelectAll: undefined,
-  //},
-  //updateProps: {
-    onAdd: undefined,
-    onEdit: undefined,
-    onDel: undefined,
-    onMultiEdit: undefined,
-    onMultiDel: undefined
-  //}
+  selected: [],
+  onSelect: undefined,
+  onSelectAll: undefined,
+  onAdd: undefined,
+  onEdit: undefined,
+  onDel: undefined,
+  onMultiEdit: undefined,
+  onMultiDel: undefined
 };
 
 export default SearchSelectTable;
