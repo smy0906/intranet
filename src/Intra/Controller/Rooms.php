@@ -138,10 +138,10 @@ class Rooms implements ControllerProviderInterface
 			),
 		];
 
-		$overlapped_events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
-		if (count($overlapped_events) > 0) {
-			return '이미 다른 사람이 예약한 시간입니다. 새로고침 해주세요.';
-		}
+//		$overlapped_events = $db->sqlDicts('select * from room_events where ?', sqlWhere($where));
+//		if (count($overlapped_events) > 0) {
+//			return '이미 다른 사람이 예약한 시간입니다. 새로고침 해주세요.';
+//		}
 
 		$dat = [
 			'room_id' => $room_id,
