@@ -51,7 +51,7 @@ class UserPaymentConst
 			self::CATEGORY_OFFICE_SUPPLIES,
 			self::CATEGORY_ASSETS,
 			'도서구입 및 인쇄비 (쿠폰, 상품권, 명함등 인쇄, 도서구입비)',
-			'저작권료 (마케팅용X, 콘텐츠 매절, 저작권 양수)',
+			'저작권료 (마케팅용X, 저작권 양수)',
 			'저작권료 (마케팅용O, 콘텐츠 매절)',
 			'선인세',
 			'제작비용 (표지, 일러스트, 편집료 등)',
