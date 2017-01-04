@@ -1,12 +1,12 @@
 {
   "require": {
-    "gnf/gnfcache": "^0.1",
-    "gnf/gnfdb": "^0.1",
+    "gnf/gnfcache": "^0.1.0",
     "gnf/namespace-router": "0.1",
     "illuminate/database": "^5.1",
     "illuminate/pagination": "^5.1",
-    "mailgun/mailgun-php": "~1.7.2",
+    "mailgun/mailgun-php": "^1.7.2",
     "phpoffice/phpexcel": "^1.8",
+    "ridibooks/platform-gnfdb": "^0.1.0",
     "sentry/sentry": "^1.5",
     "silex/silex": "^2.0",
     "twig/twig": "^1.28"

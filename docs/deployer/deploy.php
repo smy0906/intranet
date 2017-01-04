@@ -1,5 +1,6 @@
 <?php
 namespace Deployer;
+
 require 'recipe/common.php';
 
 // Configuration
@@ -17,13 +18,11 @@ set('use_relative_symlink', false);
 set('default_stage', 'dev');
 
 
-
 // Servers
 
 foreach (glob(__DIR__ . '/stage/*.yml') as $filename) {
 	serverList($filename);
 }
-
 
 
 // Tasks
@@ -33,13 +32,10 @@ task('test', function () {
 });
 
 
-
 task('deploy:git_fetch', function () {
 	run("cd {{current_path}} && {{bin/git}} reset --hard origin/master");
 	run("cd {{current_path}} && {{bin/git}} fetch --all");
 });
-
-
 
 
 desc('Update');
@@ -53,7 +49,6 @@ task('git_fetch', [
 after('git_fetch', 'success');
 
 
-
 desc('Deploy your project');
 task('deploy', [
 	'deploy:prepare',
@@ -62,8 +57,8 @@ task('deploy', [
 	'deploy:update_code',
 	'deploy:shared',
 	'deploy:writable',
-	//'deploy:vendors',
-	'deploy:clear_paths',
+	'deploy:vendors',
+	//'deploy:clear_paths',
 	'deploy:symlink',
 	'deploy:unlock',
 	'cleanup'
