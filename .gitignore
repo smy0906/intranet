@@ -6,4 +6,5 @@ _ConfigRelease.php
 /upload/*
 /docs/deployer/upload/*
 /docs/deployer/stage/*
-/vender/*
+/vendor
+/js/node_modules
