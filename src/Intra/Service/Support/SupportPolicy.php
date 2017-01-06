@@ -180,23 +180,15 @@ class SupportPolicy
 				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
-				'대상자' => new SupportColumnMutual(
-					'receiver_area',
-					[
-						'직원' => ['대상자(직원)'],
-						'현재 미입사' => ['대상자(현재 미입사)'],
-					]
-				),
 				'대상자(직원)' => new SupportColumnWorker('receiver_uid'),
-				'대상자(현재 미입사)' => new SupportColumnText('name', '', '홍길동'),
 				'영문명' => new SupportColumnText('name_in_english', '', 'Gildong Hong'),
 				'부서명' => new SupportColumnTeam('team'),
 				'부서명(기타)' => new SupportColumnText('team_detail', '', '외부노출용 직함'),
 				'직급(한글)' => new SupportColumnText('grade_korean'),
 				'직급(영문)' => new SupportColumnText('grade_english'),
-				'MOBILE' => new SupportColumnText('call_extenal'),
-				'E-MAIL' => (new SupportColumnText('email'))->setTextInputType('email'),
-				'PHONE(내선)' => new SupportColumnText('call_interal'),
+				'MOBILE' => new SupportColumnText('call_extenal', '', '010-1234-5678'),
+				'E-MAIL' => (new SupportColumnText('email', '', 'gd.hong@ridi.com'))->setTextInputType('email'),
+				'PHONE(내선)' => new SupportColumnText('call_interal', '', '010-1234-5678'),
 				'FAX' => new SupportColumnText('fax', '02-565-0332'),
 				'주소' => new SupportColumnCategory('address', ['어반벤치빌딩 10층', '어반벤치빌딩 11층']),
 				'수량' => new SupportColumnCategory('count', [50, 100, 150, 200, '기타 - 50매 단위']),
@@ -231,7 +223,6 @@ class SupportPolicy
 						'MAC (맥북, 아이맥)',
 						'노트북',
 						'데스크탑',
-						'상품권 제작'
 					]
 				),
 				'품목/수량' => new SupportColumnText('detail'),
