@@ -47,7 +47,7 @@ class MenuService
 					new Link('회의실', '/Rooms', new PublicAuth),
 					new Link('포커스룸', '/Rooms?type=focus'),
 					new Link('휴가신청', '/holidays', new PublicAuth),
-					'지원요청(테스트 중)' => [
+					'지원요청' => [
 						new Link('업무환경 불편사항 문의', '/Support/' . SupportPolicy::TYPE_DEVICE),
 						new Link('경조 지원', '/Support/' . SupportPolicy::TYPE_FAMILY_EVENT),
 						new Link('명함 신청', '/Support/' . SupportPolicy::TYPE_BUSINESS_CARD),
@@ -60,9 +60,6 @@ class MenuService
 					new Link('보도자료 관리', '/press', new OnlyPressManager),
 					new Link('조직도', '/organization/chart', new ExceptTaAuth, '_blank'),
 				];
-				if (!Config::$is_dev) {
-					unset($left_menu_list['지원요청(테스트 중)']);
-				}
 			} else {
 				$left_menu_list = [
 					new Link('공지사항', '/posts/notice', new PublicAuth),
