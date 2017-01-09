@@ -3,7 +3,6 @@ namespace Intra\Service\Payment;
 
 class PaymentAcceptDtoFactory
 {
-
     public static function createFromDatabaseDicts($payment_accepts_dicts)
     {
         $return = [];

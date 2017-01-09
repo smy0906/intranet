@@ -11,7 +11,7 @@ class UserModel extends BaseModel
 {
     use ClassLightFunctionCache;
 
-    static private $table = 'users';
+    private static $table = 'users';
 
     /**
      * @param $userJoinDto UserDto

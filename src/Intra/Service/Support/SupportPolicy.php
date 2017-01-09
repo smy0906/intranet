@@ -108,7 +108,7 @@ class SupportPolicy
 -사무환경 및 사무집기 장애 문의';
 
             //'경조 지원'
-        } else if ($target == self::TYPE_FAMILY_EVENT) {
+        } elseif ($target == self::TYPE_FAMILY_EVENT) {
             return
 '1. 공통
 -화환 수령 정보 상세 기재
@@ -128,7 +128,7 @@ C. 비상연락망 : 본인 -> 팀장 -> 인사팀 -> 대표이사
 -경조휴가일 계산 : 휴일포함 (경조사 발생일 기준, 결혼에 한해 평일 기준 5일 적용)';
 
             //'명함 신청'
-        } else if ($target == self::TYPE_BUSINESS_CARD) {
+        } elseif ($target == self::TYPE_BUSINESS_CARD) {
             return
 '1. 공통
 -매월 말일 제작 (불가피하게 급한 건만 제작(예정)일 설정)
@@ -144,13 +144,13 @@ B. 현재 미입사 : 입사 예정인 직원
 -PHONE(내선) : 내선번호 있는 경우 기재';
 
             //'구매 요청'
-        } else if ($target == self::TYPE_DEPOT) {
+        } elseif ($target == self::TYPE_DEPOT) {
             return
 '1. 업무 상 필요한 자산 및 비품 구매 요청
 2. 수령희망일은 배송기간 감안하여 설정';
 
             //'상품권 제작'
-        } else if ($target == self::TYPE_GIFT_CARD) {
+        } elseif ($target == self::TYPE_GIFT_CARD) {
             return
 '1. 권종, 유효기간, 수량에 맞는 난수번호 파일 업로드
 2. 권종, 유효기간에 맞는 이미지 파일 업로드

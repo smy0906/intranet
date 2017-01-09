@@ -11,17 +11,20 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class UserEditService
 {
-    public static function getImageLocation($uid) {
+    public static function getImageLocation($uid)
+    {
         $file_model = new LightFileModel('user_img');
         return $file_model->getUploadableLocation($uid);
     }
 
-    public static function getThumbLocation($uid) {
+    public static function getThumbLocation($uid)
+    {
         $file_model = new LightFileModel('user_img');
         return $file_model->getUploadableLocation($uid . '.' . 'jpeg');
     }
 
-    public static function saveImage($uid, File $uploadedFile) {
+    public static function saveImage($uid, File $uploadedFile)
+    {
         $dest = UserEditService::getImageLocation($uid);
         if ($uploadedFile->move(dirname($dest), basename($dest))) {
             return $dest;
@@ -30,15 +33,15 @@ class UserEditService
         return null;
     }
 
-    public static function createThumb($uid, $width, $height) {
+    public static function createThumb($uid, $width, $height)
+    {
         $source = UserEditService::getImageLocation($uid);
         if (!is_file($source)) {
             return false;
         }
 
         $image_type = exif_imagetype($source);
-        if(!in_array($image_type , array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG)))
-        {
+        if (!in_array($image_type, array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG))) {
             return false;
         }
 

@@ -10,8 +10,8 @@ namespace Intra\Model\Base;
  */
 trait ClassLightFunctionCache
 {
-    static private $cacheHashesByKey = [];
-    static private $cache = [];
+    private static $cacheHashesByKey = [];
+    private static $cache = [];
 
     /**
      * @param $domain_primary_keys array|string

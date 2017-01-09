@@ -96,7 +96,6 @@ class SupportDtoFilter
             if ($flower_datetime_parsed === false) {
                 throw new MsgException('화환 도착일시를 다시 확인해주세요');
             }
-
         } elseif ($support_dto->target == SupportPolicy::TYPE_BUSINESS_CARD) {
             if ($support_dto->dict[$columns['제작(예정)일']->key] == '') {
                 $support_dto->dict[$columns['제작(예정)일']->key] = date("Y-m-t");
