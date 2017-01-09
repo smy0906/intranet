@@ -26,7 +26,7 @@ class UserHolidayDto extends BaseDto
      */
     public static function importAddRequest($request, $yearly)
     {
-        $holiday_raw = new self;
+        $holiday_raw = new self();
         $holiday_raw->date = $request->get('date');
         $holiday_raw->keeper_uid = $request->get('keeper_uid');
         $holiday_raw->manager_uid = $request->get('manager_uid');

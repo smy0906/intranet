@@ -158,7 +158,6 @@ class PaymentModel extends BaseModel
                 ['uid' => $uid],
                 ['manager_uid' => $uid]
             )
-
         ];
 
         return $this->db->sqlDict('select * from payments where ?', sqlWhere($where));

@@ -96,7 +96,6 @@ class DictsUtils
      *      [t_id => '111', 'point' => 123, 'cash' => 456],
      *      [t_id => '112', 'point' => 124, 'cash' => 457],
      * ]
-     *
      */
     public static function join(
         $left_dicts,

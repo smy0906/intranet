@@ -31,7 +31,7 @@ class Route
         $this->request = $request;
         $this->query = $query;
 
-        include($this->routeFile);
+        include $this->routeFile;
         $this->postProcessLastMatchIfExist();
 
         return $this->query;

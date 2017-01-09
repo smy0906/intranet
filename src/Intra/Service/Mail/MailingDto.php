@@ -5,35 +5,35 @@ namespace Intra\Service\Mail;
 class MailingDto
 {
     /**
-     * @var $receiver string[]
+     * @var string[]
      */
     public $receiver;
     /**
-     * @var $replyTo string[]
+     * @var string[]
      */
     public $replyTo;
     /**
-     * @var $CC string[]
+     * @var string[]
      */
     public $CC;
     /**
-     * @var $BCC string[]
+     * @var string[]
      */
     public $BCC;
     /**
-     * @var $title string
+     * @var string
      */
     public $title;
     /**
-     * @var $body_header string
+     * @var string
      */
     public $body_header;
     /**
-     * @var $dicts array[]
+     * @var array[]
      */
     public $dicts;
     /**
-     * @var $body_footer string
+     * @var string
      */
     public $body_footer;
 }

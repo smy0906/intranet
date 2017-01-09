@@ -46,7 +46,7 @@ class Control
             throw new \Exception("unknown control query : " . $this->remain_query);
         }
         try {
-            return include($this->target_file);
+            return include $this->target_file;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

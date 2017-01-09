@@ -7,7 +7,6 @@ class FileUploadModel extends BaseModel
 {
     /**
      * @param $file_upload_dto FileUploadDto
-     * @return null
      */
     public static function insert($file_upload_dto)
     {

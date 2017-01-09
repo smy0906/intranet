@@ -7,7 +7,7 @@ use Intra\Service\IntraDb;
 class BaseModel
 {
     /**
-     * @var base $db
+     * @var base
      */
     protected $db;
 

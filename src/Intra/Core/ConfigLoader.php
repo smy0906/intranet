@@ -12,7 +12,7 @@ trait ConfigLoader
             return false;
         }
 
-        require_once($config_file);
+        require_once $config_file;
         $config_basename = basename($config_file);
         $config_basename = preg_replace('/\.php$/i', '', $config_basename);
         if (class_exists($config_basename)) {

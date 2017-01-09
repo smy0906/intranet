@@ -37,7 +37,6 @@ class UserHoliday
      *
      * @return UserHolidayDto[]
      */
-
     public function getUserHolidays($yearly)
     {
         $begin = date('Y/m/d', $this->user_holiday_policy->getYearlyBeginTimestamp($yearly));
@@ -250,7 +249,6 @@ class UserHoliday
      *
      * @return int
      */
-
     public function getYearly($timestamp = null)
     {
         $fromDate = $this->user->on_date;
@@ -261,7 +259,6 @@ class UserHoliday
         $toDate = date('Y', $timestamp);
         return max(0, $toDate - $fromYear);
     }
-
 
     public function getYearByYearly($yearly)
     {
@@ -325,7 +322,7 @@ class UserHoliday
             }
 
             while ($days > 0) {
-                $days--;
+                --$days;
                 $holiday_raw->cost = $cost;
                 $holiday_raw->date = $date;
                 $return[] = clone $holiday_raw;
@@ -367,10 +364,10 @@ class UserHoliday
         $am_count = $pm_count = 0;
         foreach ([$type_1, $type_2] as $type) {
             if (strpos($type, '오전반차') !== false) {
-                $am_count++;
+                ++$am_count;
             }
             if (strpos($type, '오후반차') !== false) {
-                $pm_count++;
+                ++$pm_count;
             }
         }
         if ($am_count >= 2) {

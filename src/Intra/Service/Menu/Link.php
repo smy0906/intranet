@@ -26,10 +26,10 @@ class Link
     public function __construct($title, $url, $auth_checker = null, $target = null, $glyphicon = null)
     {
         /**
-         * @var AuthMultiplexer $auth_checker_instacne
+         * @var AuthMultiplexer
          */
         if (is_null($auth_checker)) {
-            $auth_checker = new ExceptTaAuth;
+            $auth_checker = new ExceptTaAuth();
         }
 
         $this->title = $title;

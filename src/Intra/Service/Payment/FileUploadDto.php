@@ -26,7 +26,7 @@ class FileUploadDto extends BaseDto
      */
     public static function importFromUploadReqeust($uid, $file, $group, $key, $count)
     {
-        $return = new self;
+        $return = new self();
         $return->uid = $uid;
         $return->group = $group;
         $return->key = $key;
@@ -38,7 +38,7 @@ class FileUploadDto extends BaseDto
 
     public static function importFromDatabaseDict($payment_files_dict)
     {
-        $return = new self;
+        $return = new self();
         $return->initFromArray($payment_files_dict);
         return $return;
     }

@@ -96,7 +96,6 @@ class Rooms implements ControllerProviderInterface
         $datas = [];
         $datas = $this->addDefaultReservation($from, $datas, $room_ids);
 
-
         foreach ($events as $event) {
             $datas[] = [
                 'id' => $event['id'],

@@ -2,9 +2,9 @@
 
 namespace Intra\Lib\Azure;
 
-#session_start();
-#error_reporting(E_ALL | E_STRICT);
-#ini_set('display_errors', 1);
+//session_start();
+//error_reporting(E_ALL | E_STRICT);
+//ini_set('display_errors', 1);
 
 // A class that provides authortization token for apps that need to access Azure Active Directory Graph Service.
 class AuthorizationHelperForAADGraphService
@@ -29,7 +29,6 @@ class AuthorizationHelperForAADGraphService
             "redirect_uri=" . Settings::getRediectURI() . "&" .
             "client_secret=" . urlencode(Settings::getPassword()) . "&" .
             "code=" . $code;
-
 
         //Using curl to post the information to STS and get back the authentication response
         $ch = curl_init();
@@ -57,13 +56,13 @@ class AuthorizationHelperForAADGraphService
         $tokenOutput = json_decode($output);
         $tokenType = $tokenOutput->{'token_type'};
         $accessToken = $tokenOutput->{'access_token'};
-        #$tokenScope = $tokenOutput->{'scope'};
+        //$tokenScope = $tokenOutput->{'scope'};
 
-        #print("\t Token Type: " . $tokenType . "\n AccessToken: " . $accessToken);
+        //print("\t Token Type: " . $tokenType . "\n AccessToken: " . $accessToken);
         // Add the token information to the session header so that we can use it to access Graph
-        #$_SESSION['token_type'] = $tokenType;
-        #$_SESSION['access_token'] = $accessToken;
-        #$_SESSION['tokenOutput'] = $tokenOutput;
+        //$_SESSION['token_type'] = $tokenType;
+        //$_SESSION['access_token'] = $accessToken;
+        //$_SESSION['tokenOutput'] = $tokenOutput;
 
         // it is possible to decode (base64) the accessToken and search claims, such as the user's upn
         // value.

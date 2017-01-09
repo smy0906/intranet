@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class Application
 {
     /**
-     * @var $view View
+     * @var View
      */
     public static $view;
 
@@ -20,13 +20,13 @@ class Application
             $request->enableHttpMethodParameterOverride();
         }
         $query = $request->getPathInfo();
-        $response = new TwigResponse;
+        $response = new TwigResponse();
 
         $control = new QueryProcessor($control_dir, $query, $request, $response);
         $return_by_controler = $control->__act();
         if ($return_by_controler === false) {
             return false;
-            #throw new Exception('control action error');
+            //throw new Exception('control action error');
         }
         if ($return_by_controler instanceof Response) {
             $return_by_controler->prepare($request);

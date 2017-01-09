@@ -33,7 +33,6 @@ class PaymentDto extends BaseDto
     public $tax_date;
     public $is_account_book_registered;
 
-
     /**
      * html view only
      */
@@ -42,24 +41,23 @@ class PaymentDto extends BaseDto
     public $manager_name;
 
     /**
-     * @var $manger_accept PaymentAcceptDto
+     * @var PaymentAcceptDto
      */
     public $manger_accept;
     public $is_manager_accepted;
 
     /**
-     * @var $co_accept PaymentAcceptDto
+     * @var PaymentAcceptDto
      */
     public $co_accept;
     public $co_accpeter_name;
     public $is_co_accepted;
 
     /**
-     * @var $files FileUploadDto[]
+     * @var FileUploadDto[]
      */
     public $files;
     public $is_file_uploadable;
-
 
     /**
      * @param array $payment_row []
@@ -69,7 +67,7 @@ class PaymentDto extends BaseDto
      */
     public static function importFromDatabase(array $payment_row, array $payment_accepts_dtos, $payment_files_dtos)
     {
-        $return = new self;
+        $return = new self();
         $return->initFromArray($payment_row);
         $return->register_name = UserJoinService::getNameByUidSafe($return->uid);
         $return->manager_name = UserJoinService::getNameByUidSafe($return->manager_uid);
@@ -99,13 +97,12 @@ class PaymentDto extends BaseDto
             $return->is_editable = false;
         }
 
-
         return $return;
     }
 
     public static function importFromAddRequest(Request $request, $uid, $is_admin)
     {
-        $return = new self;
+        $return = new self();
         $keys = [
             'month',
             'manager_uid',

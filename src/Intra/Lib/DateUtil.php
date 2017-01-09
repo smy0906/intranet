@@ -6,6 +6,6 @@ class DateUtil
 {
     public static function isWeekend($date)
     {
-        return (date('N', strtotime($date)) >= 6);
+        return date('N', strtotime($date)) >= 6;
     }
 }
