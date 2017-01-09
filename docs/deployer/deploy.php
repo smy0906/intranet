@@ -2,6 +2,7 @@
 namespace Deployer;
 
 require 'recipe/common.php';
+require 'vendor/deployer/recipes/slack.php';
 
 // Configuration
 
@@ -29,8 +30,9 @@ foreach (glob(__DIR__ . '/stage/*.yml') as $filename) {
 
 task('test', function () {
 	writeln("deploy_path: " . get('deploy_path'));
+	writeln("current_path: " . get("current_path"));
+	writeln(run("cd {{current_path}} && {{bin/git}} show -s")->toString());
 });
-
 
 task('deploy:git_fetch', function () {
 	run("cd {{current_path}} && {{bin/git}} reset --hard origin/master");
@@ -64,3 +66,4 @@ task('deploy', [
 	'cleanup'
 ]);
 after('deploy', 'success');
+after('deploy', 'deploy:slack');

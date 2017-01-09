@@ -180,7 +180,15 @@ class SupportPolicy
 				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
+				'대상자' => new SupportColumnMutual(
+					'receiver_area',
+					[
+						'직원' => ['대상자(직원)'],
+						'현재 미입사' => ['대상자(현재 미입사)'],
+					]
+				),
 				'대상자(직원)' => new SupportColumnWorker('receiver_uid'),
+				'대상자(현재 미입사)' => new SupportColumnText('name', '', '홍길동'),
 				'영문명' => new SupportColumnText('name_in_english', '', 'Gildong Hong'),
 				'부서명' => new SupportColumnTeam('team'),
 				'부서명(기타)' => new SupportColumnText('team_detail', '', '외부노출용 직함'),
@@ -206,15 +214,7 @@ class SupportPolicy
 				'인사팀 처리' => new SupportColumnComplete('is_completed', $callback_is_human_manage_team),
 				'인사팀 처리자' => new SupportColumnCompleteUser('completed_uid', 'is_completed'),
 				'인사팀 처리시각' => new SupportColumnCompleteDatetime('completed_datetime', 'is_completed'),
-				'사용자' => new SupportColumnMutual(
-					'receiver_area',
-					[
-						'직원' => ['사용자(직원)'],
-						'현재 미입사' => ['사용자(현재 미입사)'],
-					]
-				),
 				'사용자(직원)' => new SupportColumnWorker('receiver_uid'),
-				'사용자(현재 미입사)' => new SupportColumnText('name'),
 				'분류' => new SupportColumnCategory(
 					'category',
 					[
