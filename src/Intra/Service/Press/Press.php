@@ -5,6 +5,7 @@ use Intra\Core\JsonDto;
 use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserSession;
+use Intra\Model\Press as PressModel;
 
 class Press
 {
@@ -20,13 +21,11 @@ class Press
 
 	public function index()
 	{
-		$db = IntraDb::getGnfDb();
-
 		$return = [
 			'user' => $this->user,
-			'press' => $db->sqlDicts('select * from press order by date desc'),
+			'press' => PressModel::orderBy('date', 'desc')->get(),
 			'manager' => UserSession::isPressManager()
-		];
+        ];
 
 		return $return;
 	}
