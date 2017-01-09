@@ -20,13 +20,9 @@ class Press
 
     public function index()
     {
-        $return = [
-            'user' => $this->user,
-            'press' => $this->getAll(),
-            'manager' => UserSession::isPressManager()
-        ];
+        $press = $this->getAll();
 
-        return $return;
+        return $this->makeRespone($press);
     }
 
     public function add($date, $media, $title, $link_url, $note)
@@ -79,35 +75,45 @@ class Press
 
     public function getAllPress()
     {
-        $json_dto = new JsonDto();
-        $json_dto->data = [
-            'user' => $this->user,
-            'press' => $this->getAll(),
-            'manager' => UserSession::isPressManager()
-        ];
+        $press = $this->getAll();
 
-        return json_encode(
-            (array)$json_dto
-        );
+        return $this->makeRespone($press);
     }
 
     public function getPressByPage($page, $ITEMS_PER_PAGE)
     {
-        $json_dto = new JsonDto();
-        $json_dto->data = [
-            'user' => $this->user,
-            'press' => PressModel::orderBy('date', 'desc')->skip(($page - 1) * $ITEMS_PER_PAGE)->take($ITEMS_PER_PAGE)->get(),
-            'count' => $this->getPressCount(),
-            'manager' => UserSession::isPressManager()
-        ];
+        $press = PressModel::orderBy('date', 'desc')->skip(($page - 1) * $ITEMS_PER_PAGE)->take($ITEMS_PER_PAGE)->get();
+        $count = $this->getPressCount();
 
-        return json_encode(
-            (array)$json_dto
-        );
+        return $this->makeRespone($press, $count);
     }
 
     private function getPressCount()
     {
         return PressModel::count();
+    }
+
+    private function makeRespone($press, $count = null) {
+        $json_dto = new JsonDto();
+
+        // if it works even there is needless 'count', it can be one. I am not sure.
+        if (is_null($count)) {
+            $json_dto->data = [
+                'user' => $this->user,
+                'press' => $press,
+                'manager' => UserSession::isPressManager()
+            ];
+        } else {
+            $json_dto->data = [
+                'user' => $this->user,
+                'press' => $press,
+                'count' => $count,
+                'manager' => UserSession::isPressManager()
+            ];
+        }
+
+        return json_encode(
+            (array)$json_dto
+        );
     }
 }
