@@ -32,18 +32,16 @@ class Press
 
     public function add($date, $media, $title, $link_url, $note)
     {
-        $db = IntraDb::getGnfDb();
-
-        $row = [
-            'date' => $date,
-            'media' => $media,
-            'title' => $title,
-            'link_url' => $link_url,
-            'note' => $note
-        ];
-
         try {
-            $db->sqlInsert('press', $row);
+            $press = new PressModel();
+
+            $press->date = $date;
+            $press->media = $media;
+            $press->title = $title;
+            $press->link_url = $link_url;
+            $press->note = $note;
+
+            $press->save();
         } catch (\Exception $e) {
             return '자료를 추가할 수 없습니다. 다시 확인해 주세요';
         }
@@ -53,14 +51,8 @@ class Press
 
     public function del($press_id)
     {
-        $db = IntraDb::getGnfDb();
-
-        $where = [
-            'id' => $press_id
-        ];
-
         try {
-            $db->sqlDelete('press', $where);
+            PressModel::destroy($press_id);
         } catch (\Exception $e) {
             return '삭제가 실패했습니다!';
         }
@@ -70,17 +62,12 @@ class Press
 
     public function edit($press_id, $key, $value)
     {
-        $db = IntraDb::getGnfDb();
-
-        $update = [$key => $value];
-        $where = [
-            'id' => $press_id
-        ];
-
-        $db->sqlUpdate('press', $update, $where);
-        $new_value = $db->sqlData('select ? from press where ?', sqlColumn($key), sqlWhere($where));
-
-        return $new_value;
+        try {
+            PressModel::where('id', $press_id)->update([$key => $value]);
+            return $value;
+        } catch (\Exception $e) {
+            return '수정을 실패했습니다!';
+        }
     }
 
     public function getAllPress()
