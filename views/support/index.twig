@@ -425,10 +425,52 @@
   <div class="progress-bar progress-bar-success"></div>
 </div>
 
-<div style="width: 800px">
-        <pre>
-{{ explain }}
-        </pre>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-6">
+            <pre>
+    {{ explain }}
+            </pre>
+    </div>
+  
+  {% if target == 'FamilyEvent' %}
+    <div class="col-xs-6">
+      <div class="panel panel-default" style="width: 800px">
+        <div class="panel-heading"><h4>경조지원</h4></div>
+        <table class="table table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th colspan="2">구분</th><th>경조상여금</th><th>경조휴가</th><th>증빙서류</th><th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="active" colspan="2">본인결혼</td><td>1,000,000원</td><td>5일</td><td>안내장</td><td>화환추가</td>
+            </tr>
+            <tr>
+              <td class="active" colspan="2">자녀출생</td><td>1,000,000원</td><td>5일</td><td>출생확인서</td><td>과일바구니</td>
+            </tr>
+            <tr>
+              <td class="active" rowspan="3">사망</td><td class="active">부모</td><td>1,000,000원</td><td>5일</td><td>사망진단서 혹은 부고장</td><td>조화추가</td>
+            </tr>
+            <tr>
+              <td class="active">조부모</td><td></td><td>3일</td><td></td><td>조화추가</td>
+            </tr>
+            <tr>
+              <td class="active">형제자매</td><td></td><td>3일</td><td></td><td>조화추가</td>
+            </tr>
+            <tr>
+              <td class="active" colspan="2">본인졸업</td><td></td><td>1일</td><td>졸업증명서</td><td>과일바구니</td>
+            </tr>
+            <tr>
+              <td class="active">장기근속</td><td class="active">3년</td><td></td><td></td><td></td><td>과일바구니</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {%  endif %}
+  </div>
 </div>
 
 

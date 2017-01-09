@@ -93,6 +93,71 @@ class SupportPolicy
 		throw new \Exception('invalid column ' . $target . ', ' . $key);
 	}
 
+	public static function getExplain($target)
+	{
+		//'업무환경 불편사항 문의',
+		if ($target == self::TYPE_DEVICE) {
+			return
+'1. 사내 전산 H/W 장애문의
+-업무용 PC 및 노트북 등 H/W 장애 문의
+
+2. SW 설치문의
+-업무용 SW 설치 필요 시 문의
+
+3. 기타 장애문의
+-사무환경 및 사무집기 장애 문의';
+
+			//'경조 지원'
+		} else if ($target == self::TYPE_FAMILY_EVENT) {
+			return
+'1. 공통
+-화환 수령 정보 상세 기재
+-증빙서류 업로드 필수
+
+2. 거래처
+-거래처 [화환 종류]는 ‘기타’ 선택 후 [화환 상세]에 기재 (ex. 조화)
+
+3. 임직원
+-적용 대상 : 수습직원을 포함한 정직원 (TA 의 경우 사망에 한해 유급휴가만 적용)
+
+-경조사 발생시 절차
+A. 본인 or 해당 부서장을 통한 경조사 등록
+B. 긴급하게 발생하는 조사의 경우 비상 연락망에 따라 연락 주시면, 선 경조규정 적용 후 등록 가능
+C. 비상연락망 : 본인 -> 팀장 -> 인사팀 -> 대표이사
+
+-경조휴가일 계산 : 휴일포함 (경조사 발생일 기준, 결혼에 한해 평일 기준 5일 적용)';
+
+			//'명함 신청'
+		} else if ($target == self::TYPE_BUSINESS_CARD) {
+			return
+'1. 공통
+-매월 말일 제작 (불가피하게 급한 건만 제작(예정)일 설정)
+-필요한 정보만 입력하고 나머지 공란으로 둠
+
+2. 항목 설명
+-대상자
+A. 직원 : 재직 중인 직원
+B. 현재 미입사 : 입사 예정인 직원
+
+-영문명 : 이름, 성의 각 첫 글자만 대문자로 입력 (ex.Gildong Hong)
+-직급(한글/영문) : 필요한 경우 기재
+-PHONE(내선) : 내선번호 있는 경우 기재';
+
+			//'구매 요청'
+		} else if ($target == self::TYPE_DEPOT) {
+			return
+'1. 업무 상 필요한 자산 및 비품 구매 요청
+2. 수령희망일은 배송기간 감안하여 설정';
+
+			//'상품권 제작'
+		} else if ($target == self::TYPE_GIFT_CARD) {
+			return
+'1. 권종, 유효기간, 수량에 맞는 난수번호 파일 업로드
+2. 권종, 유효기간에 맞는 이미지 파일 업로드
+3. 기본으로 상품권 1장당 봉투 1장 제작. 변경 필요 시 비고에 기재';
+		}
+	}
+
 	private static function initColumnFields()
 	{
 		self::$column_titles = [
