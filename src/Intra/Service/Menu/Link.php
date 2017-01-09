@@ -25,7 +25,7 @@ class Link
      */
     public function __construct($title, $url, $auth_checker = null, $target = null, $glyphicon = null)
     {
-        /**
+        /*
          * @var AuthMultiplexer
          */
         if (is_null($auth_checker)) {

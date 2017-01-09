@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class UserEditService
- * @package Intra\Service\User
  */
 class UserEditService
 {
@@ -25,7 +24,7 @@ class UserEditService
 
     public static function saveImage($uid, File $uploadedFile)
     {
-        $dest = UserEditService::getImageLocation($uid);
+        $dest = self::getImageLocation($uid);
         if ($uploadedFile->move(dirname($dest), basename($dest))) {
             return $dest;
         }
@@ -35,13 +34,13 @@ class UserEditService
 
     public static function createThumb($uid, $width, $height)
     {
-        $source = UserEditService::getImageLocation($uid);
+        $source = self::getImageLocation($uid);
         if (!is_file($source)) {
             return false;
         }
 
         $image_type = exif_imagetype($source);
-        if (!in_array($image_type, array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG))) {
+        if (!in_array($image_type, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG])) {
             return false;
         }
 
@@ -64,7 +63,7 @@ class UserEditService
         $virtual_image = imagecreatetruecolor($width, $height);
         imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $width, $height, $width_origin, $height_origin); //사이즈 변경하여 복사
 
-        $dest = UserEditService::getThumbLocation($uid);
+        $dest = self::getThumbLocation($uid);
         return imagejpeg($virtual_image, $dest);
     }
 

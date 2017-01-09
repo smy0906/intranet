@@ -2,11 +2,7 @@
 namespace Intra\Model\Base;
 
 /**
- * Class DomainCacheModel
- * @package Intra\Model
- *
  * 모델 객체에대해 pk 기준으로 캐시를 보장하기위한 시스템
- *
  */
 trait ClassLightFunctionCache
 {

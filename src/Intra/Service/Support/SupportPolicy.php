@@ -41,7 +41,7 @@ class SupportPolicy
     ];
 
     /**
-     * @var $column_fields SupportColumn[][]
+     * @var SupportColumn[][]
      */
     private static $column_fields;
     private static $column_titles;

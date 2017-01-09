@@ -2,9 +2,6 @@
 namespace Intra\Lib;
 
 /**
- * Class DictsUtils
- * @package Ridibooks\Platform\Common
- *
  * sqlDicts 통해서 얻어진 배열에 대해 자주 사용하는 함수들
  */
 class DictsUtils

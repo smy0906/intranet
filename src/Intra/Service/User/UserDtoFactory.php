@@ -37,9 +37,8 @@ class UserDtoFactory
     public static function createAvailableUserDtos()
     {
         $dicts = UserModel::getDictsAvailable();
-        return UserDtoFactory::createFromDatabaseDicts($dicts);
+        return self::createFromDatabaseDicts($dicts);
     }
-
 
     /**
      * @return UserDto[]
@@ -47,7 +46,7 @@ class UserDtoFactory
     public static function createAllUserDtos()
     {
         $dicts = UserModel::getAllDicts();
-        return UserDtoFactory::createFromDatabaseDicts($dicts);
+        return self::createFromDatabaseDicts($dicts);
     }
 
     /**
@@ -56,7 +55,7 @@ class UserDtoFactory
     public static function createManagerUserDtos()
     {
         $dicts = UserModel::getDictsOfManager();
-        return UserDtoFactory::createFromDatabaseDicts($dicts);
+        return self::createFromDatabaseDicts($dicts);
     }
 
     /**
@@ -73,7 +72,6 @@ class UserDtoFactory
         }
         return $return;
     }
-
 
     /**
      * @param $id

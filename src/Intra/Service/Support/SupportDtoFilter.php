@@ -8,7 +8,6 @@ use Intra\Service\Support\Column\SupportColumnMutual;
 
 class SupportDtoFilter
 {
-
     /**
      * @param SupportDto $support_dto
      *

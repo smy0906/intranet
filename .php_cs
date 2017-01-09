@@ -6,16 +6,23 @@ $finder = PhpCsFixer\Finder::create()
 return PhpCsFixer\Config::create()
     ->setRules([
         '@Symfony' => true,
-        'array_syntax' => ['syntax' => 'short'],
+
+        // ignored rules from @Symfony
         'blank_line_after_opening_tag' => false,
         'blank_line_before_return' => false,
         'cast_spaces' => false,
         'concat_space' => ['spacing' => 'one'],
-        'ordered_imports' => true,
+        'phpdoc_align' => false,
         'phpdoc_annotation_without_dot' => false,
+        'phpdoc_indent' => false,
         'phpdoc_separation' => false,
+        'phpdoc_summary' => false,
         'single_quote' => false,
-        'trailing_comma_in_multiline_array' => false
+        'trailing_comma_in_multiline_array' => false,
+
+        // additional rules
+        'array_syntax' => ['syntax' => 'short'],
+        'ordered_imports' => true,
     ])
     //->setIndent("\t")
     ->setFinder($finder);
