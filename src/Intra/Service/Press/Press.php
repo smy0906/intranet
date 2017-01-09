@@ -3,7 +3,6 @@ namespace Intra\Service\Press;
 
 use Intra\Core\JsonDto;
 use Intra\Model\Press as PressModel;
-use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserSession;
 
@@ -23,7 +22,7 @@ class Press
     {
         $return = [
             'user' => $this->user,
-            'press' => PressModel::orderBy('date', 'desc')->get(),
+            'press' => $this->getAll(),
             'manager' => UserSession::isPressManager()
         ];
 
@@ -70,12 +69,22 @@ class Press
         }
     }
 
+    public function getAll() {
+        try {
+            return PressModel::orderBy('date', 'desc')->get();
+        } catch (\Exception $e) {
+            return '데이터 불러오기를 실패했습니다!';
+        }
+    }
+
     public function getAllPress()
     {
-        $press = $this->index();
-
         $json_dto = new JsonDto();
-        $json_dto->data = $press;
+        $json_dto->data = [
+            'user' => $this->user,
+            'press' => $this->getAll(),
+            'manager' => UserSession::isPressManager()
+        ];
 
         return json_encode(
             (array)$json_dto
@@ -84,14 +93,10 @@ class Press
 
     public function getPressByPage($page, $ITEMS_PER_PAGE)
     {
-        $db = IntraDb::getGnfDb();
-
         $json_dto = new JsonDto();
         $json_dto->data = [
             'user' => $this->user,
-            'press' => $db->sqlDicts(
-                'select * from press order by date desc limit ' . ($page - 1) * $ITEMS_PER_PAGE . ', ' . $ITEMS_PER_PAGE
-            ),
+            'press' => PressModel::orderBy('date', 'desc')->skip(($page - 1) * $ITEMS_PER_PAGE)->take($ITEMS_PER_PAGE)->get(),
             'count' => $this->getPressCount(),
             'manager' => UserSession::isPressManager()
         ];
@@ -103,8 +108,6 @@ class Press
 
     private function getPressCount()
     {
-        $db = IntraDb::getGnfDb();
-
-        return $db->sqlData('select count(*) from press');
+        return PressModel::count();
     }
 }
