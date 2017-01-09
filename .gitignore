@@ -1,10 +1,10 @@
-/.vagrant
 /.idea
-composer.lock
-ConfigRelease.php
-_ConfigRelease.php
-/upload/*
-/docs/deployer/upload/*
+/.vagrant
 /docs/deployer/stage/*
-/vendor
+/docs/deployer/upload/*
 /js/node_modules
+/upload/*
+/vendor
+composer.lock
+ConfigDevelop.php
+ConfigRelease.php
