@@ -22,7 +22,7 @@ class Press
     {
         $press = $this->getAll();
 
-        return $this->makeRespone($press);
+        return $this->makeJsonRespone($press);
     }
 
     public function add($date, $media, $title, $link_url, $note)
@@ -77,7 +77,7 @@ class Press
     {
         $press = $this->getAll();
 
-        return $this->makeRespone($press);
+        return $this->makeJsonRespone($press);
     }
 
     public function getPressByPage($page, $ITEMS_PER_PAGE)
@@ -85,7 +85,7 @@ class Press
         $press = PressModel::orderBy('date', 'desc')->skip(($page - 1) * $ITEMS_PER_PAGE)->take($ITEMS_PER_PAGE)->get();
         $count = $this->getPressCount();
 
-        return $this->makeRespone($press, $count);
+        return $this->makeJsonRespone($press, $count);
     }
 
     private function getPressCount()
@@ -93,23 +93,17 @@ class Press
         return PressModel::count();
     }
 
-    private function makeRespone($press, $count = null) {
+    private function makeJsonRespone($press, $count = null) {
         $json_dto = new JsonDto();
 
-        // if it works even there is needless 'count', it can be one. I am not sure.
-        if (is_null($count)) {
-            $json_dto->data = [
-                'user' => $this->user,
-                'press' => $press,
-                'manager' => UserSession::isPressManager()
-            ];
-        } else {
-            $json_dto->data = [
-                'user' => $this->user,
-                'press' => $press,
-                'count' => $count,
-                'manager' => UserSession::isPressManager()
-            ];
+        $json_dto->data = [
+            'user' => $this->user,
+            'press' => $press,
+            'manager' => UserSession::isPressManager()
+        ];
+
+        if (!is_null($count)) {
+            $json_dto->data['count'] = $count;
         }
 
         return json_encode(
