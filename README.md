@@ -1,3 +1,10 @@
+## Developement Settings
+### Composer
+Run command below in root directory.
+```
+composer install
+```
+
 ## 실행법
 
 ### PHP Built-in server
