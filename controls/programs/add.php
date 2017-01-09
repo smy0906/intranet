@@ -12,10 +12,10 @@ var_dump($value);
 
 $db = IntraDb::getGnfDb();
 $insert = [
-	$key => $value
+    $key => $value
 ];
 if ($db->sqlInsert($key . 's', $insert)) {
-	return "추가 되었습니다";
+    return "추가 되었습니다";
 } else {
-	return "추가 되지않았습니다";
+    return "추가 되지않았습니다";
 }

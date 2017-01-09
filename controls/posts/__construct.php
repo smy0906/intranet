@@ -8,10 +8,10 @@ use Intra\Service\User\UserSession;
 
 $response = $this->getResponse();
 $response->add(
-	['isPostAdmin' => UserPolicy::isPostAdmin(UserSession::getSelfDto())]
+    ['isPostAdmin' => UserPolicy::isPostAdmin(UserSession::getSelfDto())]
 );
 
 $schema = Capsule::schema();
 if (!$schema->hasTable('posts')) {
-	PostModel::init();
+    PostModel::init();
 }

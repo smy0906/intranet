@@ -7,83 +7,83 @@ use Intra\Model\UserModel;
 
 class UserDtoFactory
 {
-	/**
-	 * @param $uid
-	 *
-	 * @return UserDto
-	 * @throws Exception
-	 */
-	public static function createByUid($uid)
-	{
-		if (!UserModel::isExistByUid($uid)) {
-			throw new Exception("Database Row Not Exist");
-		}
-		$dict = UserModel::getDictWithUid($uid);
-		return UserDto::importFromDatabase($dict);
-	}
+    /**
+     * @param $uid
+     *
+     * @return UserDto
+     * @throws Exception
+     */
+    public static function createByUid($uid)
+    {
+        if (!UserModel::isExistByUid($uid)) {
+            throw new Exception("Database Row Not Exist");
+        }
+        $dict = UserModel::getDictWithUid($uid);
+        return UserDto::importFromDatabase($dict);
+    }
 
-	public static function createFromDatabaseDicts($dicts)
-	{
-		$return = [];
-		foreach ($dicts as $dict) {
-			$return[] = UserDto::importFromDatabase($dict);
-		}
-		return $return;
-	}
+    public static function createFromDatabaseDicts($dicts)
+    {
+        $return = [];
+        foreach ($dicts as $dict) {
+            $return[] = UserDto::importFromDatabase($dict);
+        }
+        return $return;
+    }
 
-	/**
-	 * @return UserDto[]
-	 */
-	public static function createAvailableUserDtos()
-	{
-		$dicts = UserModel::getDictsAvailable();
-		return UserDtoFactory::createFromDatabaseDicts($dicts);
-	}
-
-
-	/**
-	 * @return UserDto[]
-	 */
-	public static function createAllUserDtos()
-	{
-		$dicts = UserModel::getAllDicts();
-		return UserDtoFactory::createFromDatabaseDicts($dicts);
-	}
-
-	/**
-	 * @return UserDto[]
-	 */
-	public static function createManagerUserDtos()
-	{
-		$dicts = UserModel::getDictsOfManager();
-		return UserDtoFactory::createFromDatabaseDicts($dicts);
-	}
-
-	/**
-	 * @param $uids
-	 *
-	 * @return UserDto[]
-	 */
-	public static function createDtosByUid($uids)
-	{
-		$return = [];
-		$dicts = UserModel::getDictWithUids($uids);
-		foreach ($dicts as $dict) {
-			$return[] = UserDto::importFromDatabase($dict);
-		}
-		return $return;
-	}
+    /**
+     * @return UserDto[]
+     */
+    public static function createAvailableUserDtos()
+    {
+        $dicts = UserModel::getDictsAvailable();
+        return UserDtoFactory::createFromDatabaseDicts($dicts);
+    }
 
 
-	/**
-	 * @param $id
-	 *
-	 * @return UserDto
-	 * @throws Exception
-	 */
-	public static function importFromDatabaseWithId($id)
-	{
-		$uid = UserModel::convertUidFromId($id);
-		return self::createByUid($uid);
-	}
+    /**
+     * @return UserDto[]
+     */
+    public static function createAllUserDtos()
+    {
+        $dicts = UserModel::getAllDicts();
+        return UserDtoFactory::createFromDatabaseDicts($dicts);
+    }
+
+    /**
+     * @return UserDto[]
+     */
+    public static function createManagerUserDtos()
+    {
+        $dicts = UserModel::getDictsOfManager();
+        return UserDtoFactory::createFromDatabaseDicts($dicts);
+    }
+
+    /**
+     * @param $uids
+     *
+     * @return UserDto[]
+     */
+    public static function createDtosByUid($uids)
+    {
+        $return = [];
+        $dicts = UserModel::getDictWithUids($uids);
+        foreach ($dicts as $dict) {
+            $return[] = UserDto::importFromDatabase($dict);
+        }
+        return $return;
+    }
+
+
+    /**
+     * @param $id
+     *
+     * @return UserDto
+     * @throws Exception
+     */
+    public static function importFromDatabaseWithId($id)
+    {
+        $uid = UserModel::convertUidFromId($id);
+        return self::createByUid($uid);
+    }
 }

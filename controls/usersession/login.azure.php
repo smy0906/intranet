@@ -11,7 +11,7 @@ $user = GraphServiceAccessHelper::getMeEntry($azure_login_token_array);
 $id = $user->mailNickname;
 
 if (UserSession::loginByAzure($id)) {
-	return new RedirectResponse('/?after_login');
+    return new RedirectResponse('/?after_login');
 } else {
-	return new RedirectResponse('/users/join');
+    return new RedirectResponse('/users/join');
 }

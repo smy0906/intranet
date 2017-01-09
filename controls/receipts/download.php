@@ -8,7 +8,7 @@ use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\Response;
 
 if (!UserPolicy::isReceiptsAdmin(UserSession::getSelfDto())) {
-	return new Response("권한이 없습니다", 403);
+    return new Response("권한이 없습니다", 403);
 }
 
 $request = $this->getRequest();

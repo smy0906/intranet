@@ -13,11 +13,11 @@ $self = UserSession::getSelfDto();
 
 $uid = $request->get('uid');
 if (!intval($uid) || !UserPolicy::isPaymentAdmin($self)) {
-	$uid = $self->uid;
+    $uid = $self->uid;
 }
 $month = $request->get('month');
 if (!strlen($month)) {
-	$month = date('Y-m');
+    $month = date('Y-m');
 }
 $type = ($request->get('type'));
 

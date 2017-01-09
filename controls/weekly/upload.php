@@ -10,7 +10,7 @@ $filename = Weekly::getFilename();
 $outfile = $filebag->getLocation($filename);
 
 if ($infile) {
-	Weekly::dumpToHtml($infile, $outfile);
+    Weekly::dumpToHtml($infile, $outfile);
 }
 
 return [];

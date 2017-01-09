@@ -6,13 +6,13 @@ use Intra\Service\User\UserDto;
 
 class PublicAuth extends AuthMultiplexer
 {
-	/**
-	 * @param UserDto $user_dto
-	 *
-	 * @return bool
-	 */
-	protected function hasAuth(UserDto $user_dto)
-	{
-		return true;
-	}
+    /**
+     * @param UserDto $user_dto
+     *
+     * @return bool
+     */
+    protected function hasAuth(UserDto $user_dto)
+    {
+        return true;
+    }
 }

@@ -9,8 +9,8 @@ $self = UserSession::getSelfDto();
 $replaceable = UserPolicy::isFirstPageEditable($self);
 
 return [
-	'replaceable' => $replaceable,
-	'users' => UserDtoFactory::createAvailableUserDtos(),
-	'allUsers' => UserDtoFactory::createAllUserDtos(),
-	'allCurrentUsers' => UserDtoFactory::createAvailableUserDtos()
+    'replaceable' => $replaceable,
+    'users' => UserDtoFactory::createAvailableUserDtos(),
+    'allUsers' => UserDtoFactory::createAllUserDtos(),
+    'allCurrentUsers' => UserDtoFactory::createAvailableUserDtos()
 ];

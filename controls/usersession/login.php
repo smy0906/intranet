@@ -8,8 +8,8 @@ use Intra\Service\User\UserSession;
 $azure_login = AuthorizationHelperForAADGraphService::getAuthorizatonURL();
 
 if (Config::$is_dev) {
-	UserSession::loginByAzure('test');
-	$azure_login = '/';
+    UserSession::loginByAzure('test');
+    $azure_login = '/';
 }
 
 return compact('azure_login');

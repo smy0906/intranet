@@ -8,34 +8,34 @@ use Intra\Service\User\UserSession;
 
 class Link
 {
-	public $is_visible;
-	public $title;
-	public $url;
-	public $target;
-	public $glyphicon;
+    public $is_visible;
+    public $title;
+    public $url;
+    public $target;
+    public $glyphicon;
 
-	/**
-	 * Link constructor.
-	 *
-	 * @param                      $title
-	 * @param                      $url
-	 * @param AuthMultiplexer      $auth_checker
-	 * @param null                 $target
-	 * @param null                 $glyphicon
-	 */
-	public function __construct($title, $url, $auth_checker = null, $target = null, $glyphicon = null)
-	{
-		/**
-		 * @var AuthMultiplexer $auth_checker_instacne
-		 */
-		if (is_null($auth_checker)) {
-			$auth_checker = new ExceptTaAuth;
-		}
+    /**
+     * Link constructor.
+     *
+     * @param                      $title
+     * @param                      $url
+     * @param AuthMultiplexer      $auth_checker
+     * @param null                 $target
+     * @param null                 $glyphicon
+     */
+    public function __construct($title, $url, $auth_checker = null, $target = null, $glyphicon = null)
+    {
+        /**
+         * @var AuthMultiplexer $auth_checker_instacne
+         */
+        if (is_null($auth_checker)) {
+            $auth_checker = new ExceptTaAuth;
+        }
 
-		$this->title = $title;
-		$this->url = $url;
-		$this->is_visible = $auth_checker->multiplexingAuth(UserSession::getSelfDto());
-		$this->target = $target;
-		$this->glyphicon = $glyphicon;
-	}
+        $this->title = $title;
+        $this->url = $url;
+        $this->is_visible = $auth_checker->multiplexingAuth(UserSession::getSelfDto());
+        $this->target = $target;
+        $this->glyphicon = $glyphicon;
+    }
 }

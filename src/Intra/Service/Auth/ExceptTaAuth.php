@@ -8,13 +8,13 @@ use Intra\Service\User\UserPolicy;
 
 class ExceptTaAuth extends AuthMultiplexer
 {
-	/**
-	 * @param UserDto $user_dto
-	 *
-	 * @return bool
-	 */
-	protected function hasAuth(UserDto $user_dto)
-	{
-		return !(UserPolicy::isTa($user_dto));
-	}
+    /**
+     * @param UserDto $user_dto
+     *
+     * @return bool
+     */
+    protected function hasAuth(UserDto $user_dto)
+    {
+        return !(UserPolicy::isTa($user_dto));
+    }
 }

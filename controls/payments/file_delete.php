@@ -11,11 +11,11 @@ $self = UserSession::getSelfDto();
 
 $fileid = $request->get('fileid');
 if (!intval($fileid)) {
-	throw new MsgException("invalid fileid");
+    throw new MsgException("invalid fileid");
 }
 
 if (UserPaymentService::deleteFile($self, $fileid)) {
-	return Response::create('1');
+    return Response::create('1');
 } else {
-	return Response::create('삭제실패했습니다.');
+    return Response::create('삭제실패했습니다.');
 }

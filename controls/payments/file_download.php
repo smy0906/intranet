@@ -10,7 +10,7 @@ $self = UserSession::getSelfDto();
 
 $fileid = $request->get('fileid');
 if (!intval($fileid)) {
-	throw new MsgException("invalid fileid");
+    throw new MsgException("invalid fileid");
 }
 
 return UserPaymentService::downloadFile($self, $fileid);

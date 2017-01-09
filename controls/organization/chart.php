@@ -5,7 +5,7 @@ use Intra\Service\User\UserSession;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 if (!Ridi::isRidiIP() || UserSession::isTa()) {
-	throw new Exception('권한이 없습니다.');
+    throw new Exception('권한이 없습니다.');
 }
 
 $filebag = new LightFileModel('organization');

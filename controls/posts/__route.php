@@ -2,34 +2,34 @@
 /** @var $this Intra\Core\Route */
 
 $this->matchIf('/{group}')
-	->query('index');
+    ->query('index');
 
 $this->matchIf('/{group}/write')
-	->isMethod('get')
-	->query('write');
+    ->isMethod('get')
+    ->query('write');
 
 $this->matchIf('/{group}/write')
-	->isMethod('post')
-	->query('write.ajax');
+    ->isMethod('post')
+    ->query('write.ajax');
 
 $this->matchIf('/{group}/sendAll')
-	->query('sendAll');
+    ->query('sendAll');
 
 $this->matchIf('/{group}/{id}/modify')
-	->assertAsInt('id')
-	->isMethod('get')
-	->query('modify');
+    ->assertAsInt('id')
+    ->isMethod('get')
+    ->query('modify');
 
 $this->matchIf('/{group}/{id}/modify')
-	->assertAsInt('id')
-	->isMethod('post')
-	->query('modify.ajax');
+    ->assertAsInt('id')
+    ->isMethod('post')
+    ->query('modify.ajax');
 
 $this->matchIf('/{group}/{id}')
-	->assertAsInt('id')
-	->isMethod('delete')
-	->query('delete');
+    ->assertAsInt('id')
+    ->isMethod('delete')
+    ->query('delete');
 
 $this->matchIf('/{group}/{id}')
-	->assertAsInt('id')
-	->query('view');
+    ->assertAsInt('id')
+    ->query('view');

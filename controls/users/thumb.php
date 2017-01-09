@@ -10,8 +10,8 @@ $uid = $request->get('uid');
 
 $file =  UserEditService::getThumbLocation($uid);
 if ($file !== null) {
-	return BinaryFileResponse::create($file, Response::HTTP_OK);
+    return BinaryFileResponse::create($file, Response::HTTP_OK);
 
 } else {
-	return Response::create('file not exist', Response::HTTP_NOT_FOUND);
+    return Response::create('file not exist', Response::HTTP_NOT_FOUND);
 }

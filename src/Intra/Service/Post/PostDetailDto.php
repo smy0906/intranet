@@ -11,70 +11,70 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PostDetailDto extends BaseDto
 {
-	public $group;
-	public $id;
-	public $uid;
-	public $title;
-	public $content_html;
-	public $is_sent;
-	public $updated_at;
+    public $group;
+    public $id;
+    public $uid;
+    public $title;
+    public $content_html;
+    public $is_sent;
+    public $updated_at;
 
-	public $is_new;
+    public $is_new;
 
-	/**
-	 * @param PostModel|EloquentBaseModel| $post
-	 *
-	 * @return PostDetailDto
-	 */
-	public static function importFromModel($post)
-	{
-		$return = new self;
-		$return->initFromArray($post->getAttributes());
-		if (strtotime('-7 day') < strtotime($return->updated_at)) {
-			$return->is_new = true;
-		} else {
-			$return->is_new = false;
-		}
+    /**
+     * @param PostModel|EloquentBaseModel| $post
+     *
+     * @return PostDetailDto
+     */
+    public static function importFromModel($post)
+    {
+        $return = new self;
+        $return->initFromArray($post->getAttributes());
+        if (strtotime('-7 day') < strtotime($return->updated_at)) {
+            $return->is_new = true;
+        } else {
+            $return->is_new = false;
+        }
 
-		return $return;
-	}
+        return $return;
+    }
 
-	public static function importFromWriteRequest(Request $request)
-	{
-		$return = new self;
-		$return->initFromRequest($request);
-		$return->uid = UserSession::getSelfDto()->uid;
+    public static function importFromWriteRequest(Request $request)
+    {
+        $return = new self;
+        $return->initFromRequest($request);
+        $return->uid = UserSession::getSelfDto()->uid;
 
-		return $return;
-	}
+        return $return;
+    }
 
-	public function exportAsArrayForDetailView()
-	{
-		$return = $this->exportAsArrayExceptNull();
-		$return['name'] = UserDtoHandler::importFromDto(UserDtoFactory::createByUid($this->uid))->getName();
-		$return['content_html'] = nl2br($return['content_html']);
-		return $return;
-	}
+    public function exportAsArrayForDetailView()
+    {
+        $return = $this->exportAsArrayExceptNull();
+        $return['name'] = UserDtoHandler::importFromDto(UserDtoFactory::createByUid($this->uid))->getName();
+        $return['content_html'] = nl2br($return['content_html']);
+        return $return;
+    }
 
-	public function exportAsModelForInsertDb()
-	{
-		$array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html']);
-		$return = new PostModel;
-		$return->setRawAttributes($array);
-		return $return;
-	}
+    public function exportAsModelForInsertDb()
+    {
+        $array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html']);
+        $return = new PostModel;
+        $return->setRawAttributes($array);
+        return $return;
+    }
 
-	public function exportAsArrayForModify()
-	{
-		$return = $this->exportAsArrayExceptNull();
-		return $return;
-	}
+    public function exportAsArrayForModify()
+    {
+        $return = $this->exportAsArrayExceptNull();
+        return $return;
+    }
 
-	public function exportAsModelForModifyDb()
-	{
-		$array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html', 'id']);
-		$return = new PostModel;
-		$return->setRawAttributes($array);
-		return $return;
-	}
+    public function exportAsModelForModifyDb()
+    {
+        $array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html', 'id']);
+        $return = new PostModel;
+        $return->setRawAttributes($array);
+        return $return;
+    }
 }

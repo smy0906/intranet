@@ -15,7 +15,7 @@ $month = UserReceipts::parseMonth($month);
 $uid = $request->get('uid');
 
 if (!intval($uid) || !UserPolicy::isReceiptsAdmin($self)) {
-	$uid = $self->uid;
+    $uid = $self->uid;
 }
 
 $user_dto_object = new UserDtoHandler(UserDtoFactory::createByUid($uid));

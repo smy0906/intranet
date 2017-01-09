@@ -12,7 +12,7 @@ $self = UserSession::getSelfDto();
 
 $paymentid = $request->get('paymentid');
 if (!intval($paymentid)) {
-	throw new MsgException("invalid paymentid");
+    throw new MsgException("invalid paymentid");
 }
 /**
  * @var $file UploadedFile
@@ -20,7 +20,7 @@ if (!intval($paymentid)) {
 $file = $request->files->get('files')[0];
 
 if (UserPaymentService::addFiles($paymentid, $file)) {
-	return JsonResponse::create('success');
+    return JsonResponse::create('success');
 } else {
-	return JsonResponse::create('file upload failed', 500);
+    return JsonResponse::create('file upload failed', 500);
 }

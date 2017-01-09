@@ -12,9 +12,9 @@ $value = $request->get('value');
 $payment_service = new UserPaymentService(UserSession::getSelfDto());
 $row = $payment_service->getRowService($paymentid);
 if ($key == 'is_manager_accepted') {
-	return $row->acceptManageer();
+    return $row->acceptManageer();
 } elseif ($key == 'is_co_accepted') {
-	return $row->acceptCO();
+    return $row->acceptCO();
 } else {
-	return $row->edit($key, $value);
+    return $row->edit($key, $value);
 }

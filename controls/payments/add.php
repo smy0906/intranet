@@ -13,7 +13,7 @@ $self = UserSession::getSelfDto();
 
 $uid = $request->get('uid');
 if (!intval($uid) || !UserPolicy::isPaymentAdmin($self)) {
-	$uid = $self->uid;
+    $uid = $self->uid;
 }
 
 $payment_dto = PaymentDto::importFromAddRequest($request, $uid, UserPolicy::isPaymentAdmin($self));

@@ -10,10 +10,10 @@ use Intra\Service\User\UserSession;
 $request = $this->getRequest();
 
 if (UserPolicy::isHolidayEditable(UserSession::getSelfDto())) {
-	$uid = $request->get('uid');
-	$dto = UserDtoFactory::createByUid($uid);
+    $uid = $request->get('uid');
+    $dto = UserDtoFactory::createByUid($uid);
 } else {
-	$dto = UserSession::getSelfDto();
+    $dto = UserSession::getSelfDto();
 }
 
 $holidayid = $request->get('holidayid');
@@ -26,9 +26,9 @@ $db = IntraDb::getGnfDb();
 $db->sqlBegin();
 $ret = $user_holiday->edit($holidayid, $key, $value);
 if ($user_holiday->sendNotification([$holidayid], "휴가수정")) {
-	if ($db->sqlEnd()) {
-		return $ret;
-	}
+    if ($db->sqlEnd()) {
+        return $ret;
+    }
 }
 
 return 'error';
