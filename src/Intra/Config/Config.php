@@ -48,6 +48,17 @@ class Config
         'receipts_admin' => []
     ];
 
+    public static $supports = [
+		'mails' => [
+			'all' => [],
+			'device' => [],
+			'family_event' => [],
+			'business_card' => [],
+			'depot' => [],
+			'gift_card' => [],
+		],
+	];
+
     public static $ridi_ips = [];
 
     public static $mailgun_api_key;

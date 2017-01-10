@@ -64,9 +64,12 @@ class SupportMailService
         foreach ($uids as $uid) {
             $receivers[] = UserJoinService::getEmailByUidSafe($uid);
         }
-
-        $receivers_append = UserJoinService::getEmailsByTeam(UserConstant::TEAM_DEVICE);
-        $receivers = array_merge($receivers, $receivers_append);
+		foreach (Config::$supports['mails']['all'] as $mail) {
+			$receivers[] = $mail;
+		}
+		foreach (Config::$supports['mails'][$target] as $mail) {
+			$receivers[] = $mail;
+		}
         $receivers = array_unique($receivers);
 
         $mailing_dto = new MailingDto();
