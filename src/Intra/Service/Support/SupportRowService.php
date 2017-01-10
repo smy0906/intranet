@@ -35,7 +35,7 @@ class SupportRowService
     public static function add($target_user_dto, $support_dto)
     {
         return JsonDtoWrapper::create(function () use ($target_user_dto, $support_dto) {
-            $support_dto = SupportDtoFilter::filterAddingDto($support_dto);
+            $support_dto = SupportDtoFilter::filterAddingDto($target_user_dto, $support_dto);
             $insert_id = SupportModel::add($support_dto);
             if (!$insert_id) {
                 throw new MsgException('자료추가 실패했습니다');

@@ -5,16 +5,18 @@ namespace Intra\Service\Support;
 use Intra\Core\MsgException;
 use Intra\Service\Support\Column\SupportColumnCategory;
 use Intra\Service\Support\Column\SupportColumnMutual;
+use Intra\Service\User\UserDto;
 
 class SupportDtoFilter
 {
     /**
-     * @param SupportDto $support_dto
+     * @param UserDto $target_user_dto
+	 * @param SupportDto $support_dto
      *
      * @return SupportDto
      * @throws MsgException
      */
-    public static function filterAddingDto($support_dto)
+    public static function filterAddingDto($target_user_dto, $support_dto)
     {
         $columns = SupportPolicy::getColumnFields($support_dto->target);
 
@@ -39,6 +41,10 @@ class SupportDtoFilter
             if (in_array($column_name, $disabled_column_names)) {
                 continue;
             }
+
+			if (!$column->isVisible($target_user_dto)) {
+				continue;
+			}
 
             if ($column->required) {
                 $column_value = $support_dto->dict[$column->key];
@@ -100,15 +106,10 @@ class SupportDtoFilter
                 $support_dto->dict[$columns['제작(예정)일']->key] = date("Y-m-t");
             }
         } elseif ($support_dto->target == SupportPolicy::TYPE_DEPOT) {
-            $request_date = $support_dto->dict[$columns['세팅(예정)일']->key];
+            $request_date = $support_dto->dict[$columns['수령희망일']->key];
             $request_datetime = date_create($request_date);
             if ($request_datetime === false) {
                 throw new MsgException('날짜입력을 다시 확인해주세요');
-            }
-            $request_datetime_ymd = $request_datetime->format('Ymd');
-            $after_5_day = date_create('+5 day')->format('Ymd');
-            if ($request_datetime_ymd < $after_5_day) {
-                throw new MsgException('5일이내의 날짜로 요청할 수 없습니다');
             }
         }
 
