@@ -224,9 +224,8 @@ class SupportModel extends BaseModel
      *
      * @return string
      * @throws \Exception
-     *
      */
-    private static function getTableName($target):string
+    private static function getTableName($target): string
     {
         $target = SupportPolicy::DB_TABLE[$target];
         if (!$target) {

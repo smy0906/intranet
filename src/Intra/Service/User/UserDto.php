@@ -31,7 +31,7 @@ class UserDto extends BaseDto
 
     public static function importFromDatabase(array $user_row)
     {
-        $return = new self;
+        $return = new self();
         if ($user_row) {
             $obj = json_decode($user_row['extra']);
             if (is_object($obj)) {
@@ -50,7 +50,7 @@ class UserDto extends BaseDto
      */
     public static function importFromJoinRequest($request)
     {
-        $return = new self;
+        $return = new self();
         $keys = ['name', 'email', 'mobile', 'birth'];
         foreach ($keys as $key) {
             $return->$key = $request->get($key);

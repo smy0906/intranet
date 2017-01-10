@@ -50,8 +50,8 @@ class ControlRouteMatch
     public function assertAsInt($string)
     {
         if (!preg_match('/^\d+$/', $this->parameters[$string])) {
-            return new ControlRouteNull;
-            #throw new \Exception("parameter $string is not integer");
+            return new ControlRouteNull();
+            //throw new \Exception("parameter $string is not integer");
         }
         return $this;
     }
@@ -59,8 +59,8 @@ class ControlRouteMatch
     public function assertInArray($string, $array)
     {
         if (!in_array($this->parameters[$string], $array)) {
-            return new ControlRouteNull;
-            #throw new \Exception("parameter $string is not valid");
+            return new ControlRouteNull();
+            //throw new \Exception("parameter $string is not valid");
         }
         return $this;
     }
@@ -75,7 +75,7 @@ class ControlRouteMatch
         if ($this->request->isMethod($string)) {
             return $this;
         }
-        return new ControlRouteNull;
+        return new ControlRouteNull();
     }
 
     /**

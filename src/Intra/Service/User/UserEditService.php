@@ -7,22 +7,24 @@ use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class UserEditService
- * @package Intra\Service\User
  */
 class UserEditService
 {
-    public static function getImageLocation($uid) {
+    public static function getImageLocation($uid)
+    {
         $file_model = new LightFileModel('user_img');
         return $file_model->getUploadableLocation($uid);
     }
 
-    public static function getThumbLocation($uid) {
+    public static function getThumbLocation($uid)
+    {
         $file_model = new LightFileModel('user_img');
         return $file_model->getUploadableLocation($uid . '.' . 'jpeg');
     }
 
-    public static function saveImage($uid, File $uploadedFile) {
-        $dest = UserEditService::getImageLocation($uid);
+    public static function saveImage($uid, File $uploadedFile)
+    {
+        $dest = self::getImageLocation($uid);
         if ($uploadedFile->move(dirname($dest), basename($dest))) {
             return $dest;
         }
@@ -30,15 +32,15 @@ class UserEditService
         return null;
     }
 
-    public static function createThumb($uid, $width, $height) {
-        $source = UserEditService::getImageLocation($uid);
+    public static function createThumb($uid, $width, $height)
+    {
+        $source = self::getImageLocation($uid);
         if (!is_file($source)) {
             return false;
         }
 
         $image_type = exif_imagetype($source);
-        if(!in_array($image_type , array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG)))
-        {
+        if (!in_array($image_type, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG])) {
             return false;
         }
 
@@ -61,7 +63,7 @@ class UserEditService
         $virtual_image = imagecreatetruecolor($width, $height);
         imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $width, $height, $width_origin, $height_origin); //사이즈 변경하여 복사
 
-        $dest = UserEditService::getThumbLocation($uid);
+        $dest = self::getThumbLocation($uid);
         return imagejpeg($virtual_image, $dest);
     }
 

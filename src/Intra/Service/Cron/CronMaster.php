@@ -25,9 +25,9 @@ class CronMaster
         foreach (self::$CRON_CLASSES as $cron_class) {
             try {
                 /**
-                 * @var $cron CronInterface
+                 * @var CronInterface
                  */
-                $cron = new $cron_class;
+                $cron = new $cron_class();
                 $cron_unique_name = $cron->getUniqueName();
                 if (strlen($cron_unique_name) <= 0) {
                     throw new MsgException('invalid $cron_unique_name : ' . $cron_class);

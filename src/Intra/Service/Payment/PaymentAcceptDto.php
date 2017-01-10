@@ -16,14 +16,14 @@ class PaymentAcceptDto extends BaseDto
 
     public static function importFromDatabaseDict(array $payment_accept_row)
     {
-        $return = new self;
+        $return = new self();
         $return->initFromArray($payment_accept_row);
         return $return;
     }
 
     public static function importFromAddRequest($paymentid, $uid, $user_type)
     {
-        $return = new self;
+        $return = new self();
         $return->paymentid = $paymentid;
         $return->uid = $uid;
         $return->user_type = $user_type;

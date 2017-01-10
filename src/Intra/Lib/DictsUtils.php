@@ -2,9 +2,6 @@
 namespace Intra\Lib;
 
 /**
- * Class DictsUtils
- * @package Ridibooks\Platform\Common
- *
  * sqlDicts 통해서 얻어진 배열에 대해 자주 사용하는 함수들
  */
 class DictsUtils
@@ -96,7 +93,6 @@ class DictsUtils
      *      [t_id => '111', 'point' => 123, 'cash' => 456],
      *      [t_id => '112', 'point' => 124, 'cash' => 457],
      * ]
-     *
      */
     public static function join(
         $left_dicts,

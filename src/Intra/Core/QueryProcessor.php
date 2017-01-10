@@ -44,7 +44,7 @@ class QueryProcessor
 
         //control
         if ($this->isSubfolder($matched_query)) {
-            $subQueryProcessor = new QueryProcessor(
+            $subQueryProcessor = new self(
                 $this->controller_root . '/' . $matched_query,
                 $unmatched_query_tail,
                 $this->request,

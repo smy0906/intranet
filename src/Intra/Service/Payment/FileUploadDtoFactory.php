@@ -5,7 +5,6 @@ use Intra\Core\MsgException;
 
 class FileUploadDtoFactory
 {
-
     public static function createFromDatabaseDicts($payment_files_dicts)
     {
         $return = [];

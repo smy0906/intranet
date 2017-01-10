@@ -22,7 +22,7 @@ class IntraDb
     public static function bootDB()
     {
         if (self::$gnfdb === null) {
-            $capsule = new Capsule;
+            $capsule = new Capsule();
             $capsule->addConnection(
                 [
                     'driver' => 'mysql',

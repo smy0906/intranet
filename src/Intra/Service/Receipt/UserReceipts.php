@@ -34,9 +34,8 @@ class UserReceipts
 
     private static function isWeekend($date)
     {
-        return (date('N', strtotime($date)) >= 6);
+        return date('N', strtotime($date)) >= 6;
     }
-
 
     public function index($month = null)
     {
@@ -59,7 +58,6 @@ class UserReceipts
             $month,
             $nextmonth
         );
-
 
         //용도별 통계
 
@@ -87,7 +85,6 @@ class UserReceipts
             $month,
             $nextmonth
         );
-
 
         $columns = [
             '합계' => 1
@@ -155,9 +152,8 @@ class UserReceipts
         }
         $return['paymentCosts'][] = ['payment' => '합계', 'cost' => $sum];
 
-
         $return['currentUid'] = $this->user->uid;
-        $return['editable'] = (UserReceipts::parseMonth() <= $month);
+        $return['editable'] = (self::parseMonth() <= $month);
         if (UserSession::getSelfDto()->is_admin) {
             $return['isSuperAdmin'] = 1;
             $return['editable'] |= 1;

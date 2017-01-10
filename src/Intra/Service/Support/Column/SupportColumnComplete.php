@@ -5,7 +5,7 @@ namespace Intra\Service\Support\Column;
 class SupportColumnComplete extends SupportColumn
 {
     /**
-     * @var callable $callback_has_user_auth
+     * @var callable
      */
     public $callback_has_user_auth;
 

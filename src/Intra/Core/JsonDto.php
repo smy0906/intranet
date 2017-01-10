@@ -6,7 +6,6 @@ use Intra\Service\Ridi;
 /**
  * Json 객체를 위한 Dto class
  * Class JsonDto
- * @package Ridibooks\Platform\Common\Base
  */
 class JsonDto
 {

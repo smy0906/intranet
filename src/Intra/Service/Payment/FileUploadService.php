@@ -48,7 +48,7 @@ class FileUploadService
                     if (FileUploadModel::insert($file_upload_dto)) {
                         $return = $file_upload_dto;
                     }
-                };
+                }
             }
         );
         return $return;
