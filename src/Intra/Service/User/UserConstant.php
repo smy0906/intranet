@@ -34,7 +34,6 @@ class UserConstant
     const TEAM_STORY_OPERATION = '리디연재 / 콘텐츠그룹 / 콘텐츠그룹';
     const TEAM_STORY_DEVELOP = '리디연재 / 서비스개발그룹 / 서비스개발그룹';
 
-
     // Team Detail
     const TEAM_DETAIL_HUMAN_MANAGE = '인사팀';
 

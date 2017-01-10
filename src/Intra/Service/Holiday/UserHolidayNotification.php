@@ -82,7 +82,7 @@ class UserHolidayNotification
                 'text' => $contents
             ]
         );
-        return ($ret->http_response_code == 200);
+        return $ret->http_response_code == 200;
     }
 
     /**

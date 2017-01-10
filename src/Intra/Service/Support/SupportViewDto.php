@@ -19,23 +19,23 @@ use Intra\Service\User\UserSession;
 class SupportViewDto
 {
     /**
-     * @var SupportDto $support_dto
+     * @var SupportDto
      */
     public $support_dto;
     /**
-     * @var FileUploadDto[][] $files
+     * @var FileUploadDto[][]
      */
     public $files = [];
     /**
-     * @var $display_dict
+     * @var
      */
     public $display_dict;
     /**
-     * @var $completes_dict
+     * @var
      */
     public $completes_dict;
     /**
-     * @var $is_all_complted
+     * @var
      */
     public $is_all_complted;
 

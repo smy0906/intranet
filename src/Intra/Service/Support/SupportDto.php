@@ -39,7 +39,7 @@ class SupportDto
      */
     public static function importFromAddRequest($request, $uid, $columns)
     {
-        $dto = new self;
+        $dto = new self();
         $dto->target = $request->get('target');
         $dto->dict = [];
 
@@ -79,7 +79,7 @@ class SupportDto
      */
     public static function importFromDict($target, $columns, $dict)
     {
-        $dto = new self;
+        $dto = new self();
         $dto->id = $dict['id'];
         $dto->target = $target;
         $dto->dict = $dict;

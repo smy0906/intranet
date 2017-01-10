@@ -8,7 +8,6 @@ use Intra\Service\User\UserDto;
 
 class UserHolidayPolicy
 {
-
     /**
      * @var UserDto
      */
@@ -36,7 +35,6 @@ class UserHolidayPolicy
      *
      * @return int
      */
-
     public function getAvailableCost($yearly)
     {
         $info = $this->getDetailInfomationByYearly($yearly);
@@ -141,7 +139,6 @@ class UserHolidayPolicy
      *
      * @return int
      */
-
     public function getUsedCost($yearly)
     {
         $begin = date('Y/m/d', $this->getYearlyBeginTimestamp($yearly));

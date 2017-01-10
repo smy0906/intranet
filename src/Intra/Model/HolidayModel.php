@@ -83,7 +83,6 @@ class HolidayModel
      *
      * @return UserHolidayDto
      */
-
     public function get($holidayid, $uid)
     {
         return head($this->gets([$holidayid], $uid));
@@ -95,7 +94,6 @@ class HolidayModel
      *
      * @return UserHolidayDto[]
      */
-
     public function gets(array $holidayids, $uid)
     {
         $where = ['holidayid' => $holidayids, 'uid' => $uid];

@@ -41,7 +41,7 @@ class PaymentNoticeCronMailing extends CronMailingInterface
      */
     public function getMailContentsDtos()
     {
-        $dto_template = new MailingDto;
+        $dto_template = new MailingDto();
         $dto_template->replyTo = Config::$recipients['payment_admin'];
         $dto_template->title = '[확인요청] ' . date('Y-m-d') . ' 결제 예정 내역';
         $dto_template->body_header = date('Y-m-d') . "에 아래 결제가 완료될 예정입니다.<br/>

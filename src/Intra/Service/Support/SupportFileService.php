@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SupportFileService
 {
-
     /**
      * @param $target
      * @param $id

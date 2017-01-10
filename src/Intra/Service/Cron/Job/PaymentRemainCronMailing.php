@@ -41,7 +41,7 @@ class PaymentRemainCronMailing extends CronMailingInterface
      */
     public function getMailContentsDtos()
     {
-        $dto_template = new MailingDto;
+        $dto_template = new MailingDto();
         $dto_template->replyTo = Config::$recipients['payment_admin'];
         $dto_template->title = '[승인요청] ' . date('Y-m-d') . ' 결제 미승인 내역';
         $dto_template->body_header = date('Y-m-d') . " 현재, 아래 결제 요청이 승인되지 않았습니다.<br/>

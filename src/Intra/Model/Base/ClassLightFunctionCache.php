@@ -2,16 +2,12 @@
 namespace Intra\Model\Base;
 
 /**
- * Class DomainCacheModel
- * @package Intra\Model
- *
  * 모델 객체에대해 pk 기준으로 캐시를 보장하기위한 시스템
- *
  */
 trait ClassLightFunctionCache
 {
-    static private $cacheHashesByKey = [];
-    static private $cache = [];
+    private static $cacheHashesByKey = [];
+    private static $cache = [];
 
     /**
      * @param $domain_primary_keys array|string

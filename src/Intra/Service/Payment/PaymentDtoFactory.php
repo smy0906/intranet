@@ -38,7 +38,6 @@ class PaymentDtoFactory
         $payment_files_dicts = FileUploadModel::getDictsByGroupAndKeys('payment_files', $paymentids);
         $payment_files_dicts_by_payment_id = DictsUtils::alignListByKey($payment_files_dicts, 'key');
 
-
         $return = [];
         foreach ($payment_dicts as $payment_dict) {
             $paymentid = $payment_dict['paymentid'];

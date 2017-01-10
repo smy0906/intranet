@@ -28,7 +28,7 @@ class PostDetailDto extends BaseDto
      */
     public static function importFromModel($post)
     {
-        $return = new self;
+        $return = new self();
         $return->initFromArray($post->getAttributes());
         if (strtotime('-7 day') < strtotime($return->updated_at)) {
             $return->is_new = true;
@@ -41,7 +41,7 @@ class PostDetailDto extends BaseDto
 
     public static function importFromWriteRequest(Request $request)
     {
-        $return = new self;
+        $return = new self();
         $return->initFromRequest($request);
         $return->uid = UserSession::getSelfDto()->uid;
 
@@ -59,7 +59,7 @@ class PostDetailDto extends BaseDto
     public function exportAsModelForInsertDb()
     {
         $array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html']);
-        $return = new PostModel;
+        $return = new PostModel();
         $return->setRawAttributes($array);
         return $return;
     }
@@ -73,7 +73,7 @@ class PostDetailDto extends BaseDto
     public function exportAsModelForModifyDb()
     {
         $array = $this->exportAsArrayByKeys(['group', 'uid', 'title', 'content_html', 'id']);
-        $return = new PostModel;
+        $return = new PostModel();
         $return->setRawAttributes($array);
         return $return;
     }

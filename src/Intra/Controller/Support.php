@@ -29,7 +29,7 @@ class Support implements ControllerProviderInterface
     public function connect(Application $app)
     {
         /**
-         * @var ControllerCollection $controller_collection
+         * @var ControllerCollection
          */
         $controller_collection = $app['controllers_factory'];
 
@@ -217,7 +217,6 @@ class Support implements ControllerProviderInterface
             throw new MsgException("invalid fileid");
         }
 
-
         if (SupportFileService::deleteFile($self, $target, $fileid)) {
             return Response::create('1');
         } else {
@@ -248,7 +247,7 @@ class Support implements ControllerProviderInterface
             throw new MsgException("invalid paymentid");
         }
         /**
-         * @var $file UploadedFile
+         * @var UploadedFile
          */
         $file = $request->files->get('files')[0];
 

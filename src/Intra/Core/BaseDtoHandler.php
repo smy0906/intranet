@@ -18,6 +18,6 @@ class BaseDtoHandler
 
     public function exportDto()
     {
-        return clone($this->dto);
+        return clone $this->dto;
     }
 }

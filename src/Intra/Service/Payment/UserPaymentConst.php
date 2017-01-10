@@ -23,11 +23,11 @@ class UserPaymentConst
             }
             return json_encode($ret);
         }
-        if (!UserPaymentConst::isExistByKey($key)) {
+        if (!self::isExistByKey($key)) {
             return null;
         }
         $ret = [];
-        foreach (UserPaymentConst::getByKey($key) as $v) {
+        foreach (self::getByKey($key) as $v) {
             $ret[$v] = $v;
         }
         return json_encode($ret);

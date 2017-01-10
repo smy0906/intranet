@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SupportRowService
 {
-
     /**
      * @param UserDto    $target_user_dto
      * @param SupportDto $support_dto
