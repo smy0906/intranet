@@ -5,10 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/js/bower/bower_components/bootstrap/dist/css/bootstrap.min.css" media="screen"/>
-  <link rel="stylesheet" href="/css/style.css?v=1">
+  <link rel="stylesheet" href="/static/css/style.css?v=1">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
   {% include 'require.config.twig' %}
-  <script type="text/javascript" src="/js/common.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
 </head>
 
 <body class="account-pages">
@@ -29,7 +29,7 @@
       <div class="inner">
 
         <div class="box">
-          <img src="/img/ridi-logo.png" alt="" class="logo">
+          <img src="/static/img/ridi-logo.png" alt="" class="logo">
 
           <label for="">이메일 주소</label>
           {{ _self.input('email', null, 'text') }}
