@@ -14,6 +14,9 @@ require(["jquery", "jquery.attrajax", 'jquery-ui', "jquery-number", "jquery.cook
         val = $this.is(":checked");
       } else {
         val = $this.val();
+        if (val === null) {
+          val = $this.children().first().val();
+        }
       }
       $.cookie(key, val);
     })
