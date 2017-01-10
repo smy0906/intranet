@@ -22,7 +22,7 @@ class Press
     {
         $press = $this->getAll();
 
-        return $this->makeJsonRespone($press);
+        return $this->makeJsonResponse($press);
     }
 
     public function add($date, $media, $title, $link_url, $note)
@@ -77,7 +77,7 @@ class Press
     {
         $press = $this->getAll();
 
-        return $this->makeJsonRespone($press);
+        return $this->makeJsonResponse($press);
     }
 
     public function getPressByPage($page, $ITEMS_PER_PAGE)
@@ -85,7 +85,7 @@ class Press
         $press = PressModel::orderBy('date', 'desc')->skip(($page - 1) * $ITEMS_PER_PAGE)->take($ITEMS_PER_PAGE)->get();
         $count = $this->getPressCount();
 
-        return $this->makeJsonRespone($press, $count);
+        return $this->makeJsonResponse($press, $count);
     }
 
     private function getPressCount()
@@ -93,7 +93,7 @@ class Press
         return PressModel::count();
     }
 
-    private function makeJsonRespone($press, $count = null) {
+    private function makeJsonResponse($press, $count = null) {
         $json_dto = new JsonDto();
 
         $json_dto->data = [
