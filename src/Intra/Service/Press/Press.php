@@ -3,7 +3,6 @@ namespace Intra\Service\Press;
 
 use Intra\Core\JsonDto;
 use Intra\Model\Press as PressModel;
-use Intra\Service\IntraDb;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserSession;
 
@@ -21,29 +20,23 @@ class Press
 
     public function index()
     {
-        $return = [
-            'user' => $this->user,
-            'press' => PressModel::orderBy('date', 'desc')->get(),
-            'manager' => UserSession::isPressManager()
-        ];
+        $press = $this->getAll();
 
-        return $return;
+        return $this->makeJsonResponse($press);
     }
 
     public function add($date, $media, $title, $link_url, $note)
     {
-        $db = IntraDb::getGnfDb();
-
-        $row = [
-            'date' => $date,
-            'media' => $media,
-            'title' => $title,
-            'link_url' => $link_url,
-            'note' => $note
-        ];
-
         try {
-            $db->sqlInsert('press', $row);
+            $press = new PressModel();
+
+            $press->date = $date;
+            $press->media = $media;
+            $press->title = $title;
+            $press->link_url = $link_url;
+            $press->note = $note;
+
+            $press->save();
         } catch (\Exception $e) {
             return '자료를 추가할 수 없습니다. 다시 확인해 주세요';
         }
@@ -53,14 +46,8 @@ class Press
 
     public function del($press_id)
     {
-        $db = IntraDb::getGnfDb();
-
-        $where = [
-            'id' => $press_id
-        ];
-
         try {
-            $db->sqlDelete('press', $where);
+            PressModel::destroy($press_id);
         } catch (\Exception $e) {
             return '삭제가 실패했습니다!';
         }
@@ -70,54 +57,57 @@ class Press
 
     public function edit($press_id, $key, $value)
     {
-        $db = IntraDb::getGnfDb();
+        try {
+            PressModel::where('id', $press_id)->update([$key => $value]);
+            return $value;
+        } catch (\Exception $e) {
+            return '수정을 실패했습니다!';
+        }
+    }
 
-        $update = [$key => $value];
-        $where = [
-            'id' => $press_id
-        ];
-
-        $db->sqlUpdate('press', $update, $where);
-        $new_value = $db->sqlData('select ? from press where ?', sqlColumn($key), sqlWhere($where));
-
-        return $new_value;
+    public function getAll() {
+        try {
+            return PressModel::orderBy('date', 'desc')->get();
+        } catch (\Exception $e) {
+            return '데이터 불러오기를 실패했습니다!';
+        }
     }
 
     public function getAllPress()
     {
-        $press = $this->index();
+        $press = $this->getAll();
 
-        $json_dto = new JsonDto();
-        $json_dto->data = $press;
-
-        return json_encode(
-            (array)$json_dto
-        );
+        return $this->makeJsonResponse($press);
     }
 
     public function getPressByPage($page, $ITEMS_PER_PAGE)
     {
-        $db = IntraDb::getGnfDb();
+        $press = PressModel::orderBy('date', 'desc')->skip(($page - 1) * $ITEMS_PER_PAGE)->take($ITEMS_PER_PAGE)->get();
+        $count = $this->getPressCount();
 
-        $json_dto = new JsonDto();
-        $json_dto->data = [
-            'user' => $this->user,
-            'press' => $db->sqlDicts(
-                'select * from press order by date desc limit ' . ($page - 1) * $ITEMS_PER_PAGE . ', ' . $ITEMS_PER_PAGE
-            ),
-            'count' => $this->getPressCount(),
-            'manager' => UserSession::isPressManager()
-        ];
-
-        return json_encode(
-            (array)$json_dto
-        );
+        return $this->makeJsonResponse($press, $count);
     }
 
     private function getPressCount()
     {
-        $db = IntraDb::getGnfDb();
+        return PressModel::count();
+    }
 
-        return $db->sqlData('select count(*) from press');
+    private function makeJsonResponse($press, $count = null) {
+        $json_dto = new JsonDto();
+
+        $json_dto->data = [
+            'user' => $this->user,
+            'press' => $press,
+            'manager' => UserSession::isPressManager()
+        ];
+
+        if (!is_null($count)) {
+            $json_dto->data['count'] = $count;
+        }
+
+        return json_encode(
+            (array)$json_dto
+        );
     }
 }
