@@ -16,6 +16,7 @@ require(["jquery", "jquery.attrajax", 'jquery-ui', "jquery-number", "jquery.cook
         val = $this.val();
         if (val === null) {
           val = $this.children().first().val();
+          $this.val(val);
         }
       }
       $.cookie(key, val);
