@@ -22,7 +22,7 @@ Ridi::enableSentry();
 IntraDb::bootDB();
 SessionModel::init();
 
-if (Application::run(__DIR__ . "/controls", __DIR__ . "/views")) {
+if (Application::run(__DIR__ . "/assets/controls", __DIR__ . "/assets/views")) {
 	exit;
 }
 
@@ -33,6 +33,6 @@ $app->before(function (Request $request) {
 	return UserPolicy::assertRestrictedPath($request);
 });
 $app['debug'] = Config::$is_dev;
-$app['twig.path'] = [__DIR__ . '/views'];
+$app['twig.path'] = [__DIR__ . '/assets/views'];
 
 $app->run();
