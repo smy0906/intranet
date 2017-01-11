@@ -15,7 +15,7 @@ abstract class Repository implements RepositoryInterface
 
     abstract public function model();
 
-    public function makeModel()
+    private function makeModel()
     {
         $modelName = $this->model();
 
