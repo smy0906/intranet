@@ -92,14 +92,9 @@ class Press
 
         $press = $this->press->paginate($take, $skip);
 
-        $count = $this->getPressCount();
+        $count = $this->press->count();
 
         return $this->makeJsonResponse($press, $count);
-    }
-
-    private function getPressCount()
-    {
-        return $this->press->count();
     }
 
     private function makeJsonResponse($press, $count = null)
