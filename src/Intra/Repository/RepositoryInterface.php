@@ -2,8 +2,8 @@
 
 namespace Intra\Repository;
 
-interface RepositoryInterface {
-
+interface RepositoryInterface
+{
     public function all($columns = ['*'], $order = 'date', $orderType = 'desc');
 
     public function paginate($take = 10, $skip = 0, $columns = ['*'], $order = 'date', $orderType = 'desc');
@@ -17,5 +17,4 @@ interface RepositoryInterface {
     public function find($id, $columns = ['*']);
 
     public function count();
-
 }

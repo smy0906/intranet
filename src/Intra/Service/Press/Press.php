@@ -2,10 +2,9 @@
 namespace Intra\Service\Press;
 
 use Intra\Core\JsonDto;
+use Intra\Repository\PressRepository as PressRepository;
 use Intra\Service\User\UserDto;
 use Intra\Service\User\UserSession;
-
-use Intra\Repository\PressRepository as PressRepository;
 
 class Press
 {
@@ -15,7 +14,6 @@ class Press
     /**
      * @param $user UserDto
      */
-
     public function __construct($user, $press = null)
     {
         if ($press == null) {
@@ -72,7 +70,8 @@ class Press
         }
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         try {
             return $this->press->all();
         } catch (\Exception $e) {
@@ -103,7 +102,8 @@ class Press
         return $this->press->count();
     }
 
-    private function makeJsonResponse($press, $count = null) {
+    private function makeJsonResponse($press, $count = null)
+    {
         $json_dto = new JsonDto();
 
         $json_dto->data = [
